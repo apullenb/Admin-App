@@ -1,26 +1,129 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Switch, Route, NavLink } from 'react-router-dom';
+import axios from 'axios';
+import Home from './components/home';
+import Products from './components/products';
+import Categories from './components/categories';
 import './App.css';
+import Styled from 'styled-components';
 
-function App() {
+
+const SideBarTitleWrapper = Styled.div `
+  font-size:25px;
+  color:white;
+  bottom-border:2px solid black;
+`
+
+
+
+class App extends React.Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+      products: []
+    }
+  }
+
+
+   routes = [
+    {
+      path: "/",
+      exact: true,
+      sidebar: () => <SideBarTitleWrapper>Home</SideBarTitleWrapper>,
+      main: () => <Home/>
+    },
+    {
+      path: "/categories",
+      sidebar: () => <SideBarTitleWrapper>Categories</SideBarTitleWrapper>,
+      main: () => <Categories/>
+    },
+    {
+      path: "/products",
+      sidebar: () => <SideBarTitleWrapper>Products</SideBarTitleWrapper>,
+      main: () => <Products handlegetAllProducts= {this.handlegetAllProducts} products={this.state.products}/>
+    }
+  ];
+
+
+  handlegetAllProducts = () =>{
+      axios.get('http://localhost:4000/api/products')
+      .then(res => {
+          this.setState({
+              products: res.data
+          });
+          console.log("Successful products fetch: ", res)
+      })
+      .catch(error => {
+        console.log("There was an error fetching products", error);
+      })
+  }
+  
+
+render(){
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+
+  <div style={{ display: "flex" }}>
+        <div
+          style={{
+            padding: "10px",
+            width: "15%",
+            height:"100vh",
+            background: "#343a40"
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          <Switch>
+            {this.routes.map((route, index) => (
+              // You can render a <Route> in as many places
+              // as you want in your app. It will render along
+              // with any other <Route>s that also match the URL.
+              // So, a sidebar or breadcrumbs or anything else
+              // that requires you to render multiple things
+              // in multiple places at the same URL is nothing
+              // more than multiple <Route>s.
+              <Route
+                key={index}
+                path={route.path}
+                exact={route.exact}
+                children={<route.sidebar />}
+              />
+            ))}
+          </Switch>
+
+          <ul style={{ listStyleType: "none", padding: 0,}}>
+            <li className='side-nav-item' >
+              <NavLink exact to="/" activeClassName="selected">Home</NavLink>
+            </li>
+            <li className='side-nav-item'>
+              <NavLink to="/categories" activeClassName="selected">Categories</NavLink>
+            </li>
+            <li className='side-nav-item'>
+              <NavLink to="/products" activeClassName="selected">Products</NavLink>
+            </li>
+          </ul>
+
+        </div>
+
+        <div style={{ flex: 1, width:'75%', padding: "10px" }}>
+          <Switch>
+            {this.routes.map((route, index) => (
+              // Render more <Route>s with the same paths as
+              // above, but different components this time.
+              <Route
+                key={index}
+                path={route.path}
+                exact={route.exact}
+                children={<route.main />}
+              />
+            ))}
+          </Switch>
+        </div>
+      </div>
+
     </div>
   );
-}
+  }
+};
 
 export default App;
+
