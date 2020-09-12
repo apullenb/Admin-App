@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import Home from './components/home';
-import Products from './components/products';
+import Products from './components/product/products';
 import Categories from './components/categories';
 import './App.css';
 import Styled from 'styled-components';
@@ -20,7 +20,8 @@ class App extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
-      products: []
+      products: [],
+      isLoading:false
     }
   }
 
@@ -40,21 +41,30 @@ class App extends React.Component{
     {
       path: "/products",
       sidebar: () => <SideBarTitleWrapper>Products</SideBarTitleWrapper>,
-      main: () => <Products handlegetAllProducts= {this.handlegetAllProducts} products={this.state.products}/>
+      main: () => <Products handlegetAllProducts= {this.handlegetAllProducts} products={this.state.products} isLoading={this.state.isLoading}/>
     }
   ];
 
 
   handlegetAllProducts = () =>{
+
+    this.setState({
+      isLoading:true
+    })
+
       axios.get('http://localhost:4000/api/products')
       .then(res => {
           this.setState({
               products: res.data
-          });
-          console.log("Successful products fetch: ", res)
+          }); 
       })
       .catch(error => {
         console.log("There was an error fetching products", error);
+      })
+      .finally(()=>{
+        this.setState({
+          isLoading:false
+        })
       })
   }
   
