@@ -4,7 +4,9 @@ import { useToasts } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
 import Product from './product';
 import AddProduct from './addProduct';
-
+import Form from "react-bootstrap/Form";
+import InputGroup from 'react-bootstrap/InputGroup'
+import FormControl from 'react-bootstrap/FormControl'
 
 import {
   Link,
@@ -15,6 +17,7 @@ import {
 } from "react-router-dom";
 import Styled from "styled-components";
 
+
 const ProductBodyWrapper = Styled.div`
     display:flex;
     flex-direction:row ;
@@ -24,7 +27,8 @@ const ProductsWrapper = Styled.div`
     display:flex;
     flex-direction:column;
     overflow: auto;
-    width:275px;
+    min-width:300px;
+    max-width:300px;
     height:500px;
     box-shadow: 0 5px 8px 0 rgba(0,0,0,0.3);
 `;
@@ -35,6 +39,7 @@ const ListWrapper = Styled.div`
 `;
 
 const ProductWapper = Styled.div`
+    background-color: #F0F1F2;
     width:100%;
     height:100vh;
     margin: 0 10px;
@@ -52,6 +57,7 @@ const AddProductWrapper = Styled.div`
 `;
 
 const AddProductButtonWrapper = Styled.span`
+  width:100%;
   background-color: rgba(52,58,64,0.8);
   border:2px solid rgba(0,0,0,0.5);
   border-radius:8px;
@@ -62,12 +68,35 @@ const AddProductButtonWrapper = Styled.span`
 
 const Products = (props) => {
   let { path, url } = useRouteMatch();
-    
+
+  const products = props.products;
+  const [productsArray, setProducts] = useState(products);
+
+  useEffect(()=>{
+      setProducts(products);  // we use this in order to force reload of products on reload or if the porducts from parent props update
+  },[products])
+
+  const filterItems = (filter) => { //search products
+      const filterdItems = products.filter(item => { 
+        if (item.sku.includes(filter.toUpperCase())){
+           return item;
+          }
+      });
+      setProducts(filterdItems);
+  }
 
   return (
     <ProductBodyWrapper>
       <ProductsWrapper>
         <h2>Products page</h2>
+
+        <InputGroup className="mb-2 mr-sm-2">
+        <InputGroup.Prepend>
+        <InputGroup.Text><i class="fas fa-binoculars"></i></InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl type='text' name='search' onChange={(e)=>{filterItems(e.target.value)}} placeholder="Search..."  />
+        </InputGroup>
+
         <Button
           variant="primary"
           onClick={() => {
@@ -77,7 +106,7 @@ const Products = (props) => {
           {props.isLoading? 'Loading...'  :  'Get all Products'}
         </Button>
         <ListWrapper>
-          {props.products.map((product) => {
+          {productsArray.map((product) => {
             return (
               <li key={product.id}>
                 <Link to={`${url}/${product.id}`}>{product.sku}</Link>

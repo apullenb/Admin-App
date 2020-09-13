@@ -5,6 +5,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import ProductModal from './productModal';
+import ModalType from './modalTypes';
 
 import {
     Link,
@@ -12,14 +14,18 @@ import {
     Switch,
     useRouteMatch,
     useParams,
+    useHistory
   } from "react-router-dom";
 
 
 
 const Product = (props) => {
     const { id } = useParams();
+    const history = useHistory()
     var product = props.products.find((prod) => `${prod.id}` === id);
     const [data, setData] = useState(product);
+    const [showModal, setShowModal] = useState(false);
+    const [deletePassword, setdeletePassword] = useState('null');
     const { addToast } = useToasts();
   
     useEffect(() => {
@@ -62,11 +68,39 @@ const Product = (props) => {
           });
         });
     };
+
+  const handleAyncDeleteProduct = () => {
+        axios.delete(`http://localhost:4000/api/products/delete-product/by-sku/${data.sku}/${deletePassword}`)
+        .then((res)=>{
+            addToast(`Product: ${data.sku} has been deleted successfully`, {
+                appearance: "success",
+                autoDismiss: true,
+              });
+        })
+        .catch((error) => {
+            addToast(`Uh Oh! Product was not deleted: ${error}`, {
+                appearance: "error",
+                autoDismiss: true,
+              });
+        }).finally(()=>{
+            props.handlegetAllProducts();
+            history.push('/products')
+        })
+    }
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        handleShowModal();
+    }
+
+    const handleCloseModal = () => setShowModal(false);
+    const handleShowModal = () => setShowModal(true);
+  
   
     if (product !== undefined) {
       return (
         <div style={{ margin: "0 auto", width: "80%" }}>
-         <h2 style={{ marginBottom:'4%', borderBottom:'2px solid black'}}>EDIT or DELETE: {data.sku}</h2>
+         <h2 style={{ marginBottom:'4%', borderBottom:'2px solid black'}}>EDIT / DELETE: {data.sku}</h2>
           <Form
             style={{
               display: "flex",
@@ -229,6 +263,19 @@ const Product = (props) => {
                 />
               </Col>
             </Form.Group>
+            <Form.Group as={Row} controlId="formweight">
+              <Form.Label className='form-labels' column sm="2">
+                Create At
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control
+                  type="text"
+                  placeholder="Create At"
+                  name="create_at"
+                  value={data.created_at}
+                />
+              </Col>
+            </Form.Group>
   
             <Form.Group as={Row} controlId="Buttons">
               <Form.Label className='form-labels' column sm="2"></Form.Label>
@@ -245,7 +292,7 @@ const Product = (props) => {
                     </Button>
                   </Col>
                   <Col sm="6">
-                    <Button style={{ width: "80%" }} variant="danger" size="lg">
+                    <Button style={{ width: "80%" }} variant="danger" size="lg" onClick={(e)=> {handleDelete(e)}}>
                       Delete
                     </Button>
                   </Col>
@@ -253,6 +300,14 @@ const Product = (props) => {
               </Col>
             </Form.Group>
           </Form>
+
+          <ProductModal
+                  showModal={showModal}
+                  handleCloseModal={handleCloseModal}
+                  modalType= {ModalType.DELETE}
+                  handleAyncDeleteProduct={handleAyncDeleteProduct}
+                  setdeletePassword={setdeletePassword}
+                />
         </div>
       );
     } else {
