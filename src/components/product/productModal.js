@@ -34,10 +34,10 @@ const ProductModal = props => {
                      </Form.Label>
                       <Col sm="8">
                        <Form.Control
-                       type="password"
-                       placeholder="Enter Password..."
-                       name="password"
-                       onChange={(e)=>{props.setdeletePassword(e.target.value)}}
+                    type="password"
+                    placeholder="Enter Password..."
+                    name="password"
+                    onChange={(e)=>{props.setdeletePassword(e.target.value)}}
                      />
               </Col>
             </Form.Group>
