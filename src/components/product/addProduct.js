@@ -10,6 +10,7 @@ const AddProduct = props => {
     var product = {
         sku:'',
         fk_category:null,
+        description:'',
         image_one_link:'',
         image_two_link:'',
         video_one_link:'',
@@ -26,11 +27,16 @@ const AddProduct = props => {
     const handleUpdateProductData = (event) => {
       setData({ ...data, [event.target.name]: event.target.value });
     };
-  
+    
+
     const handleSave = (e) => {
       e.preventDefault();
-
-      Number(data.fk_category);
+      
+      if (data.hasOwnProperty("category_name")) {
+        delete data.category_name;
+      }
+       
+      parseInt(data.fk_category);
 
       axios
         .post(
@@ -76,6 +82,20 @@ const AddProduct = props => {
                           onChange={(e) => handleUpdateProductData(e)}
                         />
                       </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="formDescription">
+                    <Form.Label className='form-labels' column sm="2">
+                      Description
+                    </Form.Label>
+                    <Col sm="10">
+                      <Form.Control
+                        type="text"
+                        placeholder="Description"
+                        name="description"
+                        value={data.description}
+                        onChange={(e) => handleUpdateProductData(e)}
+                      />
+                    </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formCategory">
                       <Form.Label className='form-labels' column sm="2">

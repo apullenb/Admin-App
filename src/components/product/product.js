@@ -46,9 +46,8 @@ const Product = (props) => {
       if (data.hasOwnProperty("category_name")) {
         delete data.category_name;
       }
-       
       Number(data.fk_category);
-
+      
       axios
         .put(
           `http://localhost:4000/api/products/update-product/by-id/${data.id}`,
@@ -119,6 +118,20 @@ const Product = (props) => {
                   placeholder="SKU"
                   name="sku"
                   value={data.sku}
+                  onChange={(e) => handleUpdateProductData(e)}
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formDescription">
+              <Form.Label className='form-labels' column sm="2">
+                Description
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control
+                  type="text"
+                  placeholder="Description"
+                  name="description"
+                  value={data.description}
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
