@@ -37,6 +37,7 @@ const AddProduct = props => {
       }
        
       parseInt(data.fk_category);
+      parseInt(data.sort_rank);
 
       axios
         .post(
@@ -121,6 +122,20 @@ const AddProduct = props => {
                           placeholder="Add FK Category ID..."
                           name="fk_category"
                           value={String(data.fk_category)}
+                          onChange={(e) => handleUpdateProductData(e)}
+                        />
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="formSort_Rank">
+                      <Form.Label className='form-labels' column sm="2">
+                        Sort Order
+                      </Form.Label>
+                      <Col sm="10">
+                        <Form.Control
+                          type="text"
+                          placeholder="Sort Order"
+                          name="sort_rank"
+                          value={String(data.sort_rank)}
                           onChange={(e) => handleUpdateProductData(e)}
                         />
                       </Col>

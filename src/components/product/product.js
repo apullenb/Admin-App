@@ -46,8 +46,8 @@ const Product = (props) => {
       if (data.hasOwnProperty("category_name")) {
         delete data.category_name;
       }
-      Number(data.fk_category);
-      
+      parseInt(data.fk_category);
+      parseInt(data.sort_rank);
       axios
         .put(
           `http://localhost:4000/api/products/update-product/by-id/${data.id}`,
@@ -117,7 +117,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="SKU"
                   name="sku"
-                  value={data.sku}
+                  value={data.sku? data.sku : ''}
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -131,7 +131,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="Description"
                   name="description"
-                  value={data.description}
+                  value={data.description? data.description : '' }
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -145,7 +145,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="Category"
                   name="category_name"
-                  value={data.category_name}
+                  value={data.category_name? data.category_name: ''}
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -159,7 +159,21 @@ const Product = (props) => {
                   type="text"
                   placeholder="FK Category ID"
                   name="fk_category"
-                  value={String(data.fk_category)}
+                  value={data.fk_category? String(data.fk_category): ''}
+                  onChange={(e) => handleUpdateProductData(e)}
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="form_Rank">
+              <Form.Label className='form-labels' column sm="2">
+                Sort Order 
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control
+                  type="text"
+                  placeholder="FK Category ID"
+                  name="sort_rank"
+                  value={data.sort_rank? String(data.sort_rank): ''}
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -173,7 +187,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="Image One"
                   name="image_one_link"
-                  value={data.image_one_link}
+                  value={data.image_one_link? data.image_one_link: '' }
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -187,7 +201,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="Image Two"
                   name="image_two_link"
-                  value={data.image_two_link}
+                  value={data.image_two_link? data.image_two_link: '' }
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -201,7 +215,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="Video One"
                   name="video_one_link"
-                  value={data.video_one_link}
+                  value={data.video_one_link? data.video_one_link: ''}
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -215,7 +229,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="Video Two"
                   name="video_two_link"
-                  value={data.video_two_link}
+                  value={data.video_two_link? data.video_two_link: ''}
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -271,7 +285,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="Weight"
                   name="weight"
-                  value={data.weight}
+                  value={data.weight? data.weight: ''}
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
@@ -285,7 +299,7 @@ const Product = (props) => {
                   type="text"
                   placeholder="Create At"
                   name="create_at"
-                  value={data.created_at}
+                  value={data.created_at? data.created_at: ''}
                 />
               </Col>
             </Form.Group>
