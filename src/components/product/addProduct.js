@@ -17,6 +17,7 @@ const AddProduct = props => {
         video_two_link:'',
         link_one:'',
         link_two:'',
+        ['json-data'] :'',
         weight:''
 
     }
@@ -38,6 +39,7 @@ const AddProduct = props => {
        
       parseInt(data.fk_category);
       parseInt(data.sort_rank);
+      JSON.stringify(data.json)
 
       axios
         .post(
@@ -231,9 +233,9 @@ const AddProduct = props => {
                       <Col sm="10">
                         <Form.Control
                           type="text"
-                          placeholder="Add JSON Data..."
+                          placeholder='JSON Data: Example {name: "Joe", Age: 38}'
                           name="json-data"
-                          value={data.json-data ? JSON.stringify(data.json-data) : ""}
+                          value={data['json-data']}
                           onChange={(e) => handleUpdateProductData(e)}
                         />
                       </Col>

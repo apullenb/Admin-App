@@ -27,7 +27,8 @@ const Product = (props) => {
     const [showModal, setShowModal] = useState(false);
     const [deletePassword, setdeletePassword] = useState('null');
     const { addToast } = useToasts();
-  
+
+
     useEffect(() => {
       updateId();
     }, [id, props.products]);
@@ -48,6 +49,9 @@ const Product = (props) => {
       }
       parseInt(data.fk_category);
       parseInt(data.sort_rank);
+      JSON.stringify(data.json-data);
+
+
       axios
         .put(
           `http://localhost:4000/api/products/update-product/by-id/${data.id}`,
@@ -108,6 +112,20 @@ const Product = (props) => {
             }}
             onSubmit={(e) => handleSave(e)}
           >
+            <Form.Group as={Row} controlId="formSKU">
+              <Form.Label className='form-labels' column sm="2">
+                ID
+              </Form.Label>
+              <Col sm="10">
+                <Form.Control
+                  type="text"
+                  placeholder="ID"
+                  name="id"
+                  value={data.id? data.id : ''}
+                />
+            </Col>
+            </Form.Group>
+
             <Form.Group as={Row} controlId="formSKU">
               <Form.Label className='form-labels' column sm="2">
                 SKU
@@ -171,7 +189,7 @@ const Product = (props) => {
               <Col sm="10">
                 <Form.Control
                   type="text"
-                  placeholder="FK Category ID"
+                  placeholder="Sort Order"
                   name="sort_rank"
                   value={data.sort_rank? String(data.sort_rank): ''}
                   onChange={(e) => handleUpdateProductData(e)}
@@ -269,9 +287,9 @@ const Product = (props) => {
               <Col sm="10">
                 <Form.Control
                   type="text"
-                  placeholder="JSON Data"
+                  placeholder='JSON Data: Example {name: "Joe", Age: 38}'
                   name="json-data"
-                  value={data.json - data ? JSON.stringify(data.json - data) : ""}
+                  value= {data['json-data'] ? data['json-data'] : ''  }
                   onChange={(e) => handleUpdateProductData(e)}
                 />
               </Col>
