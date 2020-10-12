@@ -40,6 +40,7 @@ const Country = props => {
       };
 
       const handleSave = () => {}
+      
       const handleUpdateCountriesData = (event) => { 
         setData({ ...data, [event.target.name]: event.target.value });
       }
