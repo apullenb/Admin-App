@@ -5,6 +5,7 @@ import Home from './components/home';
 import Products from './components/product/products';
 import Categories from './components/categories';
 import Kits from './components/kits/kits';
+import Countries from './components/countries/countries';
 import './App.css';
 import Styled from 'styled-components';
 
@@ -48,6 +49,11 @@ class App extends React.Component{
       path:"/Kits",
       sidebar: ()=> <SideBarTitleWrapper>Kits</SideBarTitleWrapper>,
       main: () => <Kits/>
+    },
+    {
+      path:"/countries",
+      sidebar: ()=> <SideBarTitleWrapper>Countries</SideBarTitleWrapper>,
+      main: () => <Countries/>
     }
   ];
 
@@ -114,6 +120,9 @@ render(){
           <ul style={{ listStyleType: "none", padding: 0,}}>
             <li className='side-nav-item' >
               <NavLink exact to="/" activeClassName="selected">Home</NavLink>
+            </li>
+            <li className='side-nav-item'>
+              <NavLink to="/countries" activeClassName="selected">Countries</NavLink>
             </li>
             <li>
             <NavLink to="/kits" activeClassName="selected">Kits</NavLink>
