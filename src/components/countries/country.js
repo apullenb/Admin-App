@@ -17,8 +17,6 @@ import {
     useHistory
   } from "react-router-dom";
 
-
-
 const Country = props => {
     const { id } = useParams();
     const history = useHistory()
@@ -30,7 +28,6 @@ const Country = props => {
 
     useEffect(() => {
         updateId();
-        console.log(country)
       }, [id, props.countries]);
 
       
@@ -38,13 +35,58 @@ const Country = props => {
         country = props.countries.find((country) => `${country.id}` === id);
         setData(country);
       };
+      const CountryId = data.id;
+      const handleSave = (e) => {
+        e.preventDefault();
+        if(data.hasOwnProperty('id')){
+          delete data.id
+        }
+        if(data.hasOwnProperty('created_at')){
+          delete data.created_at
+        }
+        if(data.hasOwnProperty('updated_at')){
+          delete data.updated_at
+        }
 
-      const handleSave = () => {}
-      
+        Axios.put(`http://localhost:4000/api/countries/${CountryId}`, data)
+        .then((res) => {
+          addToast(`Country: ${data.name} has been updated successfully`, {
+            appearance: "success",
+            autoDismiss: true,
+          });
+        })
+        .catch((error) => {
+          addToast(`Uh Oh! Country could not be updated: ${error.message}`, {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }).finally(()=>{
+          props.getAsyncCountries()
+      })
+
+      }
+
       const handleUpdateCountriesData = (event) => { 
         setData({ ...data, [event.target.name]: event.target.value });
       }
-      const handleDelete = () =>{}
+      const handleDelete = () => {
+          Axios.delete(`http://localhost:4000/api/countries/${data.id}`)
+          .then((res) => {
+            addToast(`Product: ${data.name} has been Deleted successfully`, {
+              appearance: "success",
+              autoDismiss: true,
+            });
+          })
+          .catch((error) => {
+            addToast(`Uh Oh! Country could not be added: ${error.message}`, {
+              appearance: "error",
+              autoDismiss: true,
+            });
+          }).finally(()=>{
+            props.getAsyncCountries()
+            history.push('/countries')
+        })
+      }
     
       const handleToggleActive = (event) => {
            setData({ ...data, [event.target.name]: !data.active });
@@ -118,6 +160,20 @@ const Country = props => {
                       />
                     </Col>
                   </Form.Group>
+                  <Form.Group as={Row} controlId="formTaxRate">
+                    <Form.Label className='form-labels' column sm="2">
+                      Tax Tare
+                    </Form.Label>
+                    <Col sm="10">
+                      <Form.Control
+                        type="text"
+                        placeholder="Tax Rate"
+                        name="tax_rate"
+                        value={data.tax_rate? data.tax_rate: ''}
+                        onChange={(e) => handleUpdateCountriesData(e)}
+                      />
+                    </Col>
+                  </Form.Group>
                   <Form.Group as={Row} controlId="formActive">
                     <Form.Label className='form-labels' column sm="2">
                       Active 
@@ -160,8 +216,6 @@ const Country = props => {
                 </div>
                 )
             }
-    
-
 }
 
 

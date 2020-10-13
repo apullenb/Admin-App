@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Country from './country';
+import AddCountry from './addCounrty';
 import {
     Link,
     Route,
@@ -69,6 +70,7 @@ const AdCountryButtonWrapper = Styled.span`
 const Countries = props => {
 let { path, url } = useRouteMatch();
 const [countries, setCountries] = useState([]);
+
 const getAsyncCountries = () => { Axios.get('http://localhost:4000/api/countries').then(res => {
     setCountries(res.data);
 }).catch(error => {
@@ -82,12 +84,16 @@ useEffect(()=>{
 },[])
 
 
-  const filterItems = (filter) => { //search products
+  const filterItems = (filter) => {
+
     const filterdItems = countries.filter(item => { 
       if (item.name.includes(filter.toUpperCase())){
          return item;
         }
     });
+
+   
+
     setCountries(filterdItems);
 }
 
@@ -133,15 +139,15 @@ useEffect(()=>{
   <Switch>
     <Route exact path={path}></Route>
     <Route  path={`${path}/addCountry`}>
-       {/* <AddProduct 
-        handlegetAllProducts={props.handlegetAllProducts}
-       /> */}
+        <AddCountry
+        getAsyncCountries = {getAsyncCountries}
+       /> 
     </Route>
 
     <Route  path={`${path}/:id`}>
       <Country
         countries={countries}
-        handlegetAllProducts={props.handlegetAllProducts}
+        getAsyncCountries={getAsyncCountries}
       />
     </Route>
   </Switch>
