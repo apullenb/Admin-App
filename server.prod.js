@@ -44,7 +44,7 @@ server.get('*', function(req, res){
     res.status(404).send('OOPS, Sorry that route does not exist...');
   });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 80;
 app.listen(PORT);
 
 server.listen(PORT,()=>{
@@ -52,5 +52,5 @@ server.listen(PORT,()=>{
 });
 
 const requestListener = function (req, res) {res.writeHead(200); res.end('Hello, World!'); } 
-const server = http.createServer(requestListener); server.listen(8080)
+const server = http.createServer(requestListener); server.listen(80)
 
