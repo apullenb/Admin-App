@@ -50,3 +50,6 @@ server.listen(PORT,()=>{
     console.log(`Magic Man listening on port: ${PORT} in ${process.env.NODE_ENV}`)
 });
 
+const requestListener = function (req, res) {res.writeHead(200); res.end('Hello, World!'); } 
+const server = http.createServer(requestListener); server.listen(8080)
+
