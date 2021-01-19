@@ -6,9 +6,9 @@ import path from 'path';
 const DIST_DIR = __dirname,
       HTML_FILE = path.join(DIST_DIR, './index.html'); 
 
-app.listen(8080);
+app.listen(8181);
 const requestListener = function (req, res) {res.writeHead(200); res.end('Hello, World!'); } 
-const server = http.createServer(requestListener); server.listen(8080)
+const server = http.createServer(requestListener); server.listen(8181)
 
 //Middleware Setup
 const cors = require('cors');
@@ -46,7 +46,7 @@ server.get('*', function(req, res){
     res.status(404).send('OOPS, Sorry that route does not exist...');
   });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8181;
 //app.listen(8080);
 
 server.listen(PORT,()=>{
