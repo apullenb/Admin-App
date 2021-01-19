@@ -44,7 +44,7 @@ server.get('*', function(req, res){
     res.status(404).send('OOPS, Sorry that route does not exist...');
   });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8080;
 
 server.listen(PORT,()=>{
     console.log(`Magic Man listening on port: ${PORT} in ${process.env.NODE_ENV}`)
