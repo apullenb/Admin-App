@@ -45,6 +45,7 @@ server.get('*', function(req, res){
   });
 
 const PORT = process.env.PORT || 8080;
+app.listen(PORT);
 
 server.listen(PORT,()=>{
     console.log(`Magic Man listening on port: ${PORT} in ${process.env.NODE_ENV}`)
