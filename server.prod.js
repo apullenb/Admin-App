@@ -39,9 +39,6 @@ server.get('/', (req, res) => {
 
 server.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
-const requestListener = function (req, res) {res.writeHead(200); res.end('Hello, World!'); } 
-const serverport = http.createServer(requestListener); serverport.listen(8080)
-
 //The 404 Route (ALWAYS Keep this as the last route)
 server.get('*', function(req, res){
     res.status(404).send('OOPS, Sorry that route does not exist...');
@@ -53,4 +50,6 @@ server.listen(PORT,()=>{
     console.log(`Magic Man listening on port: ${PORT} in ${process.env.NODE_ENV}`)
 });
 
+const requestListener = function (req, res) {res.writeHead(200); res.end('Hello, World!'); } 
+const server = http.createServer(requestListener); server.listen(8080)
 
