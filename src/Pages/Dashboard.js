@@ -1,6 +1,6 @@
 import React from 'react'
-import Page from './global components/Page'
-import TopNav from './global components/TopNav'
+import Page from '../GlobalComponents/PageWrapper'
+
 
 function Dashboard() {
 

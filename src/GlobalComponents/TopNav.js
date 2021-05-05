@@ -6,12 +6,11 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import styled from 'styled-components';
 import ProfileImage from '../assets/person_palceholder_img.png'
-import Categories from '../components/categories'
+import Categories from '../ShoppingConfiguration/categories'
 
 function TopNav() {
   const navLinks = [
         
-    {name:"Skincare Challenge", link:'/Skincare-Challenge', isPrivate: false},
     {name:"Event Calendar", link:'/Event-Calendar', isPrivate: true},
     {name:"Incentive Trip", link:'/Incentive-Trip', isPrivate: true},
 ];
@@ -25,9 +24,8 @@ function TopNav() {
       <img src={ProfileImage} style={{maxWidth:'70px', margin: '1px 1%'}}/>
       </Top>
       <MainNavWrapper>
-      <NavigationWrapper>
-            <TopNavWrapper className='top-nav-wrapper'>
             <Navbar expand='lg' className='app-nav-wrapper' >
+            <DropDownWrapper>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
@@ -39,31 +37,46 @@ function TopNav() {
       </NavDropdown>    
       </Nav>     
       </Navbar.Collapse>
+      </DropDownWrapper>
       </Navbar>
-     
+      <Navbar expand='lg' className='app-nav-wrapper' >
+            <DropDownWrapper>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+          <NavDropdown title="Skincare Challenge" id="basic-nav-dropdown">
+        <NavDropdown.Item href="/Skincare-Challenge-Accounts">Accounts</NavDropdown.Item>
+        <NavDropdown.Item href="/Skincare-Challenge-Entries">Entries</NavDropdown.Item>
+       
+      </NavDropdown>    
+      </Nav>     
+      </Navbar.Collapse>
+      </DropDownWrapper>
+      </Navbar>
       <Navbar>
       <Nav>
     {navLinks.map ((link, i) => {
        return (
-        <Nav.Link key={i} href={link.link} >{link.name}</Nav.Link>
+        <LinkWrap><Nav.Link key={i} href={link.link} >{link.name}</Nav.Link></LinkWrap>
     )
     })
     }
 </Nav>
 </Navbar>
-<Navbar>
-     <Navbar.Collapse>
-<Nav>
-<NavDropdown title="Admin Settings" id="basic-nav-dropdown">
-        <NavDropdown.Item><Link to= '/Permissions'>Permissions</Link></NavDropdown.Item>
-        <NavDropdown.Item href="/Roles">Roles</NavDropdown.Item>
-        </NavDropdown>
-  </Nav>
-</Navbar.Collapse>
-</Navbar>
-</TopNavWrapper>  
-            </NavigationWrapper>
-            </MainNavWrapper>
+<Navbar expand='lg' className='app-nav-wrapper' >
+            <AdDropDownWrapper>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+          <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
+        <NavDropdown.Item href="/Skincare-Challenge-Accounts">Permissions</NavDropdown.Item>
+        <NavDropdown.Item href="/Skincare-Challenge-Entries">Roles</NavDropdown.Item>
+      </NavDropdown>    
+      </Nav>     
+      </Navbar.Collapse>
+      </AdDropDownWrapper>
+      </Navbar>
+ </MainNavWrapper>
     </div>
   )
 }
@@ -71,31 +84,36 @@ function TopNav() {
 export default TopNav;
 
 
-const NavigationWrapper = styled.div`
-    width:100%;
-`;
 
-const TopNavWrapper = styled.div`
-    display:flex;
-    justify-content:center;
-    flex-direction: row;
-    width:100%;
+const DropDownWrapper = styled.div`
     height: 40px;
+    padding: 0px 5px;
+     margin: 0px 1%
 `;
 const MainNavWrapper = styled.div`
     display:flex;
     justify-content:center;
     flex-direction: row;
-    width:100%;
     font-size:18px;
-    font-weight: 500
+    font-weight: 500;
+    margin: 1px 3%;
+    padding: 1px 5%;
+`;
+
+const LinkWrap = styled.div`
+padding:0px 12px;
+margin: 0px 8px;
 `;
 const Top = styled.div`
-border-bottom: 3px solid #043769;;
+border-bottom: 3px solid #043769;
 margin: 5px 3%;
 padding: 1% 10px;
 display: flex;
 justify-content: center;
+`;
 
-
-`
+const AdDropDownWrapper = styled.div`
+    height: 40px;
+    padding: 0px 0px 0px 95px;
+     margin: 0px 10px 0 5%;
+`;

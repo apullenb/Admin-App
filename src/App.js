@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import TopNav from './global components/TopNav'
+import TopNav from './GlobalComponents/TopNav'
 import {
     BrowserRouter as Router,
     Switch,
@@ -7,17 +7,18 @@ import {
     Redirect,
   } from "react-router-dom";
   import Login from './Login';
-  import Home from './components/home';
-  import Dashboard from './Dashboard';
-import footer from './components/footer'
-import Categories from "./components/categories";
+  import Home from './Pages/Home';
+  import Dashboard from './Pages/Dashboard';
+import footer from './GlobalComponents/footer'
+import Categories from "./ShoppingConfiguration/categories";
+import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 
 function App() {
    
    
    
 // SAMPLE USER VALIDATION (Needs to be created)---------->
-
+    // Currently defaulted to true..needs to default to false once authentication is set up
     const [isAuthenticated, setIsAuthenticated] = useState(true);
 
     // function to verify if the user is logged in.. once user is verified, this function should call the setAuth function to return true
@@ -60,7 +61,7 @@ const setAuth = (boolean) => {
           <Route exact path="/Permissions" component={Categories} />
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
-
+          <Route exact path="/Skincare-Challenge-Accounts" component={AccountList} />
        
         </div>
     )

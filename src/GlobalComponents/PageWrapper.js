@@ -1,24 +1,26 @@
 import React from 'react'
 import TopNav from './TopNav'
 import styled from 'styled-components';
-
-function Page(props) {
+import Footer from './footer';
+import './Page.css'
+function PageWrapper(props) {
     return (
-        <div>
+        <div className='page'>
             <TopNav />
-            <PageWrapper>
+            <PageWrap>
             {props.children}
-            </PageWrapper>
+            </PageWrap>
+            <Footer />
         </div>
     )
 }
 
-export default Page
+export default PageWrapper;
 
-const PageWrapper = styled.div`
+const PageWrap = styled.div`
     display:flex;
     justify-content:space-around;
     align-items:flex-start;
     flex-direction: column;
-    width:100%;
+    margin: 2% 4%;
  `
