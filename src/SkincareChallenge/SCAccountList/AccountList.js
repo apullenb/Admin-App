@@ -9,8 +9,7 @@ function AccountList() {
   const [filter, setFilter] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");
-  
-  
+
   const getUsers = async () => {
     // needs to be created once the backend for this is finished
     setUsers(data);
@@ -31,15 +30,14 @@ function AccountList() {
   };
 
   const handlePrevPage = () => {
-      // send request to backend
-      // save response to users with setUsers()
-  }
+    // send request to backend
+    // save response to users with setUsers()
+  };
 
   const handleNextPage = () => {
     // send request to backend
     // save response to users with setUsers()
-}
-
+  };
 
   return (
     <div>
@@ -56,20 +54,40 @@ function AccountList() {
                 />
               </th>
               <th id="filter">
-                <input type="text" defaultValue="Name"  onChange={(e) => handleChange(e, "name")}/>
+                <input
+                  type="text"
+                  defaultValue="Name"
+                  onChange={(e) => handleChange(e, "name")}
+                />
               </th>
               <th id="filter">
-                <input type="text" defaultValue="Email"  onChange={(e) => handleChange(e, "email")} />
+                <input
+                  type="text"
+                  defaultValue="Email"
+                  onChange={(e) => handleChange(e, "email")}
+                />
               </th>
               <th id="filter">
-                <input type="text" defaultValue="Ambassador ID"  onChange={(e) => handleChange(e, "ambassadorID")} />
+                <input
+                  type="text"
+                  defaultValue="Ambassador ID"
+                  onChange={(e) => handleChange(e, "ambassadorID")}
+                />
               </th>
               <th id="filter">
-                <input type="text" defaultValue="Last Login"  onChange={(e) => handleChange(e, "lastLogin")}/>
+                <input
+                  type="text"
+                  defaultValue="Last Login"
+                  onChange={(e) => handleChange(e, "lastLogin")}
+                />
               </th>
               <th id="filter">
                 <select id="filter">
-                  <option selected value="Challenge"  onChange={(e) => handleChange(e, "lastChallenge")}>
+                  <option
+                    selected
+                    value="Challenge"
+                    onChange={(e) => handleChange(e, "lastChallenge")}
+                  >
                     Challenge
                   </option>
                   <option value="2020 Q3">2020 Q3</option>
@@ -79,7 +97,9 @@ function AccountList() {
                   <option value="2021 Q3">2021 Q3</option>
                 </select>
               </th>
-              <th id='filter'><button className="add-account-btn">+ New Account</button></th>
+              <th id="filter">
+                <button className="add-account-btn">+ New Account</button>
+              </th>
             </tr>
             <tr>
               <th className="head">Account ID</th>
@@ -90,9 +110,10 @@ function AccountList() {
               <th className="head">Last Challenge </th>
               <th className="head">Actions </th>
             </tr>
-            {users !== "" && users.map((user) => {
-                  return <Accounts users={user} />;
-                })}
+            {users !== "" &&
+              users.map((user) => {
+                return <Accounts users={user} />;
+              })}
           </table>
           <h3>{message}</h3>
         </section>
