@@ -22,5 +22,6 @@ const PageWrap = styled.div`
     justify-content:space-around;
     align-items:flex-start;
     flex-direction: column;
-    margin: 2% 4%;
+    margin: 1% 9%;
+    
  `
