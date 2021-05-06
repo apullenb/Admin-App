@@ -10,6 +10,8 @@ function AccountList() {
   const [category, setCategory] = useState("");
   const [filteredUsers, setFilteredUseres] = useState([]);
   const [message, setMessage] = useState("");
+  
+  
   const getUsers = () => {
     // needs to be created once the backend for this is finished
     setUsers(data);
