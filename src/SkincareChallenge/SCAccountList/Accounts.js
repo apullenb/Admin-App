@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import {Link} from 'react-router-dom'
 
 function Accounts(props) {
 
@@ -13,7 +14,7 @@ function Accounts(props) {
                 <td>{user.ambassadorID}</td>
                 <td>{user.lastLogin}</td>
                 <td>{user.lastChallenge}</td>
-                <td><input type='checkbox' /></td>
+                <td><Link to={{ pathname: `/Skincare-Challenge-Account-Edit/${user.accountId}`, state: user}} ><button id='edit'>Edit</button></Link></td>
             </tr>
         
     )

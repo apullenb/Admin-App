@@ -12,6 +12,7 @@ import {
 import footer from './GlobalComponents/footer'
 import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
+import AccountEdit from "./SkincareChallenge/AccountEdit";
 
 function App() {
    
@@ -62,6 +63,7 @@ const setAuth = (boolean) => {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/Skincare-Challenge-Accounts" component={AccountList} />
+          <Route exact path="/Skincare-Challenge-Account-Edit/:accountid" component={AccountEdit} />
        
         </div>
     )

@@ -2,8 +2,8 @@
 
 .account-table {
     padding: 1px;
-    margin: 1px;
-    border: 1px solid rgba(128, 128, 128, 0.089);  
+    margin: 2% 5%;
+    
 }
 
 
@@ -11,20 +11,20 @@
     font-size: 18px;
     font-weight: 400;
     color: rgb(94, 93, 93);
-    margin: 1px 5vw;
-    padding: 3px 1vw;
+    margin: 1px 1vw;
+    padding: 5px 1vw;
     border-bottom: 1px solid #094a8a;
     
 }
 .account-table #filter {
     text-align: center;
-    margin: 2px;
-    padding: 3px;
+    margin: 0px;
+    padding: 0px 5px;
 }
 
 .account-table td {
     font-size: 16px;
-    padding: 5px 1vw;
+    padding: 7px 1vw;
     text-align: left;
 }
 
@@ -51,23 +51,34 @@
     color:#0d3053
 }
 
+
+
 .add-account-btn {
     background-color: #02337c;
     color: white;
     font-size: 13px;
     border: none;
-    padding: 5px 10px;
+    padding: 5px 15px;
     font-weight: 500;
     align-self: flex-end;
-    margin: 10px 10%;
+   
 }
 
 .button-row {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
    align-content: center;
    width: 100%;
+}
+.button-row button {
+    background-color: white;
+    border:1px solid #02337c;
+    color: #094a8a;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 2px 5px;
+    margin: 1px 5%;
 }
 #search {
     font-size: 13px;
@@ -77,4 +88,12 @@
     color: #02337c;
     background: white;
     text-decoration: underline;
+}
+
+#edit {
+    background: none;
+    border: none;
+    color: #02337c;
+    text-decoration: underline;
+    font-size: 14px;
 }

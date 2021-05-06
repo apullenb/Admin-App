@@ -19,9 +19,9 @@ export default PageWrapper;
 
 const PageWrap = styled.div`
     display:flex;
-    justify-content:space-around;
-    align-items:flex-start;
+    justify-content:space-between;
+    align-items: baseline;
     flex-direction: column;
-    margin: 1% 9%;
+    margin: 1% 11%;
     
  `

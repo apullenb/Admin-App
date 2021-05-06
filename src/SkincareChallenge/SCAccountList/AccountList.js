@@ -8,11 +8,10 @@ function AccountList() {
   const [users, setUsers] = useState("");
   const [filter, setFilter] = useState("");
   const [category, setCategory] = useState("");
-  const [filteredUsers, setFilteredUseres] = useState([]);
   const [message, setMessage] = useState("");
   
   
-  const getUsers = () => {
+  const getUsers = async () => {
     // needs to be created once the backend for this is finished
     setUsers(data);
     console.log(data);
@@ -25,30 +24,27 @@ function AccountList() {
   const handleChange = (e, cat) => {
     setFilter(e.target.value);
     setCategory(cat);
-    setFilteredUseres([])
-    filterUsers();
+    // Send category and filter to the backend as parameters
+    // Set the response to users
+    // setUsers(response)
+    // If no results are found, set message to "no results"
   };
 
-  const filterUsers = () => {
-    setMessage('')
-    console.log(filteredUsers, 'before')
-    users.every((user) => {
-      if (category !== "" && user[category].includes(filter)) {
-       console.log(user[category], category, filter)
-       return setFilteredUseres([...filteredUsers, user]);
-      } 
-    }) 
-    console.log(filteredUsers)
-     if (filter !== '' && filteredUsers.length == 0) {
-      setMessage("No Results Found");
-      }
-  };
+  const handlePrevPage = () => {
+      // send request to backend
+      // save response to users with setUsers()
+  }
+
+  const handleNextPage = () => {
+    // send request to backend
+    // save response to users with setUsers()
+}
+
 
   return (
     <div>
       <PageWrapper>
         <h1>Skincare Challenge Accounts</h1>
-        <button className="add-account-btn">+ New Account</button>
         <section className="account-table">
           <table>
             <tr>
@@ -83,7 +79,7 @@ function AccountList() {
                   <option value="2021 Q3">2021 Q3</option>
                 </select>
               </th>
-              <th></th>
+              <th id='filter'><button className="add-account-btn">+ New Account</button></th>
             </tr>
             <tr>
               <th className="head">Account ID</th>
@@ -94,21 +90,15 @@ function AccountList() {
               <th className="head">Last Challenge </th>
               <th className="head">Actions </th>
             </tr>
-
-            <h3>{message}</h3>
-            {users !== "" && filteredUsers.length == 0
-              ? users.map((user) => {
-                  return <Accounts users={user} />;
-                })
-              : filteredUsers.length &&
-                filteredUsers.map((user) => {
+            {users !== "" && users.map((user) => {
                   return <Accounts users={user} />;
                 })}
           </table>
+          <h3>{message}</h3>
         </section>
         <section className="button-row">
-          <button>{"< Prev"}</button>
-          <button>{"Next >"}</button>
+          <button onClick={handlePrevPage}>{"< Prev"}</button>
+          <button onClick={handleNextPage}>{"Next >"}</button>
         </section>
       </PageWrapper>
     </div>
