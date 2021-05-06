@@ -23,21 +23,25 @@ function AccountList() {
   }, []);
 
   const handleChange = (e, cat) => {
-     
     setFilter(e.target.value);
     setCategory(cat);
+    setFilteredUseres([])
     filterUsers();
   };
 
   const filterUsers = () => {
     setMessage('')
-    users.forEach((user) => {
+    console.log(filteredUsers, 'before')
+    users.every((user) => {
       if (category !== "" && user[category].includes(filter)) {
-        setFilteredUseres([user]);
-      } else 
+       console.log(user[category], category, filter)
+       return setFilteredUseres([...filteredUsers, user]);
+      } 
+    }) 
+    console.log(filteredUsers)
+     if (filter !== '' && filteredUsers.length == 0) {
       setMessage("No Results Found");
-    });
-   setMessage('')
+      }
   };
 
   return (
@@ -56,20 +60,20 @@ function AccountList() {
                 />
               </th>
               <th id="filter">
-                <input type="text" defaultValue="Name" />
+                <input type="text" defaultValue="Name"  onChange={(e) => handleChange(e, "name")}/>
               </th>
               <th id="filter">
-                <input type="text" defaultValue="Email" />
+                <input type="text" defaultValue="Email"  onChange={(e) => handleChange(e, "email")} />
               </th>
               <th id="filter">
-                <input type="text" defaultValue="Ambassador ID" />
+                <input type="text" defaultValue="Ambassador ID"  onChange={(e) => handleChange(e, "ambassadorID")} />
               </th>
               <th id="filter">
-                <input type="text" defaultValue="Last Login" />
+                <input type="text" defaultValue="Last Login"  onChange={(e) => handleChange(e, "lastLogin")}/>
               </th>
               <th id="filter">
                 <select id="filter">
-                  <option selected value="Challenge">
+                  <option selected value="Challenge"  onChange={(e) => handleChange(e, "lastChallenge")}>
                     Challenge
                   </option>
                   <option value="2020 Q3">2020 Q3</option>
