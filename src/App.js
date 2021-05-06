@@ -12,7 +12,7 @@ import {
 import footer from './GlobalComponents/footer'
 import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
-import AccountEdit from "./SkincareChallenge/AccountEdit";
+import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
 
 function App() {
    
