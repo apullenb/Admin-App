@@ -7,6 +7,14 @@ import {Link} from 'react-router-dom'
 function AccountEdit(props) {
 const user = props.location.state
 
+const handleSubmit = () => {
+// Send the new info to the backend
+}
+
+const handlePasswordReset = () => {
+    // Needs to be implemented
+}
+
 
     return (
         <div>
