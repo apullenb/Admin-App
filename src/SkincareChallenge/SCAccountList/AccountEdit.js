@@ -2,10 +2,21 @@ import React, { useState } from "react";
 import PageWrapper from "../../GlobalComponents/PageWrapper";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import "./AccountList.css";
 
 function AccountEdit(props) {
+  const [inputs, setInputs] = useState({
+    ambassadorID: '',  
+    name: '',
+    email: ''
+  });
+
+  const { ambassadorID, name, email } = inputs;
+
   const user = props.location.state;
 
+  const handleChange = (e) => setInputs({ ...inputs, [e.target.name]: e.target.value });
+  
   const handleSubmit = () => {
     // Send the new info to the backend
   };
@@ -13,6 +24,8 @@ function AccountEdit(props) {
   const handlePasswordReset = () => {
     // Needs to be implemented
   };
+
+  
 
   return (
     <div>
@@ -27,16 +40,21 @@ function AccountEdit(props) {
           <h5 style={div}>Account ID: {user.accountId}</h5>
           <div style={div}>
             Ambassador ID:{" "}
-            <input type="text" defaultValue={user.ambassadorID} />
+            <input type="text" defaultValue={user.ambassadorID} name='ambassadorID' onChange={handleChange}/>
           </div>
           <div style={div}>
-            Name: <input type="text" defaultValue={user.name} />
+            Name: <input type="text" defaultValue={user.name} name='name' onChange={handleChange}/>
           </div>
           <div style={div}>
-            Email: <input type="text" defaultValue={user.email} />
+            Email: <input type="text" defaultValue={user.email} name='email' onChange={handleChange}/>
           </div>
           <div style={div}>
-            <button>Save</button> <button>Send Password Reset</button>
+            <button className="add-account-btn" onclick={handleSubmit}>
+              Save
+            </button>{" "}
+            <button className="add-account-btn" onClick={handlePasswordReset}>
+              Send Password Reset
+            </button>
           </div>
         </Main>
       </PageWrapper>
@@ -58,7 +76,6 @@ const Main = styled.section`
 `;
 const div = {
   margin: "1% 0px",
-  padding: "5px",
-
-  width: "250px",
+  padding: "7px",
+  width: "450px",
 };
