@@ -5,11 +5,13 @@ import Footer from './footer';
 import './Page.css'
 function PageWrapper(props) {
     return (
-        <div className='page'>
+        <div>
             <TopNav />
+            <div className='page'>
             <PageWrap>
             {props.children}
             </PageWrap>
+            </div>
             <Footer />
         </div>
     )
@@ -18,10 +20,15 @@ function PageWrapper(props) {
 export default PageWrapper;
 
 const PageWrap = styled.div`
-    display:flex;
-    justify-content:space-between;
-    align-items: baseline;
+    display: flex;
     flex-direction: column;
-    margin: 1% 11%;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin: 1% 0% 1% 1%;
+    padding: 1% 10% 1% 1%;
+    max-width: 1550px;
+
+   
     
  `

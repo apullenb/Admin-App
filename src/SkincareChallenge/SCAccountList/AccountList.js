@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PageWrapper from "../../GlobalComponents/PageWrapper";
-import data from "./testaccountsdata";
-import "./AccountList.css";
+
+import "./AccountList.scss";
 import Accounts from "./Accounts";
+import axios from 'axios';
+import BASEURL from '../../config/config'
+import Pagination from "./Pagination";
 
 function AccountList() {
   const [users, setUsers] = useState("");
@@ -11,15 +14,26 @@ function AccountList() {
   const [message, setMessage] = useState("");
 
   const getUsers = async () => {
-    // needs to be created once the backend for this is finished
-    setUsers(data);
+    try{
+     const requestOptions = {
+        method: 'GET',
+      };
+    const response = await fetch(`${BASEURL}/api/challenge/all-users?perPage=25&pageNo=1&orderBy=users.id`, requestOptions)
+    console.log('response', response);
+   
+    const data = await response.json();
+    setUsers(data.data);
     console.log(data);
+    
+    } catch (err){
+      console.error(err.message)
+    }
   };
 
   useEffect(() => {
     getUsers();
   }, []);
-
+  console.log(users)
   const handleChange = (e, cat) => {
     setFilter(e.target.value);
     setCategory(cat);
@@ -50,7 +64,7 @@ function AccountList() {
                 <input
                   type="text"
                   defaultValue="Account ID"
-                  onChange={(e) => handleChange(e, "accountId")}
+                  onChange={(e) => handleChange(e, "id")}
                 />
               </th>
               <th id="filter">
@@ -71,7 +85,7 @@ function AccountList() {
                 <input
                   type="text"
                   defaultValue="Ambassador ID"
-                  onChange={(e) => handleChange(e, "ambassadorID")}
+                  onChange={(e) => handleChange(e, "ambassador_id")}
                 />
               </th>
               <th id="filter">
@@ -110,7 +124,7 @@ function AccountList() {
               <th className="head">Last Challenge </th>
               <th className="head">Actions </th>
             </tr>
-            {users !== "" &&
+            {users.length > 1 &&
               users.map((user) => {
                 return <Accounts users={user} />;
               })}
@@ -122,8 +136,12 @@ function AccountList() {
           <button onClick={handleNextPage}>{"Next >"}</button>
         </section>
       </PageWrapper>
+      {/* <Pagination /> */}
     </div>
   );
 }
 
 export default AccountList;
+
+
+

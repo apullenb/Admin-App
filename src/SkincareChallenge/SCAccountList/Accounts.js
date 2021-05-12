@@ -6,16 +6,16 @@ function Accounts(props) {
 
   return (
     <tr id="row">
-      <td>{user.accountId}</td>
+      <td>{user.id}</td>
       <td>{user.name}</td>
       <td>{user.email}</td>
-      <td>{user.ambassadorID}</td>
-      <td>{user.lastLogin}</td>
+      <td>{user.ambassadorId}</td>
+      <td>{user.lastLoginDate}</td>
       <td>{user.lastChallenge}</td>
       <td>
         <Link
           to={{
-            pathname: `/Skincare-Challenge-Account-Edit/${user.accountId}`,
+            pathname: `/Skincare-Challenge-Account-Edit/${user.id}`,
             state: user,
           }}
         >

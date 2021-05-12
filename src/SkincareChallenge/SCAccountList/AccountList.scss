@@ -1,6 +1,7 @@
+
 .account-table {
   padding: 1px;
-  margin: 2% 5%;
+  margin: 3% 12px;
 }
 
 .account-table .head {
@@ -90,3 +91,54 @@
   text-decoration: underline;
   font-size: 15px;
 }
+
+
+.paginationCtrls {
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 2%;
+    background: white;
+    width: 100%;
+    background: #104c8e;
+    color: white;
+    cursor: pointer;
+  
+    select {
+      user-select: none;
+      padding: 5px 5px;
+      border: 1px solid gray;
+      display: inline-block;
+      margin: 0 5px;
+    }
+  
+    .btn {
+      user-select: none;
+      padding: 3px 5px;
+      border: 1px solid gray;
+      display: inline-block;
+      margin: 3px 5px;
+      min-width: 30px;
+      background: white;
+      color: black;
+  
+      &:hover {
+        background: #e0e0f0;
+      }
+  
+      &.activePage {
+        background: #c0c0ff;
+      }
+  
+      &.disable {
+        background: rgba(255, 255, 255, 0.1);
+        color: lightgray;
+        border-color: rgba(255, 255, 255, 0.2);
+        cursor: not-allowed;
+  
+        &:hover {
+          background: rgba(255, 255, 255, 0.5);
+        }
+      }
+    }
+  }

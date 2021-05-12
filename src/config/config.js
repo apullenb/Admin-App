@@ -1,3 +1,5 @@
-const BASEURL= 'http://localhost:4000/'
 
-export default BASEURL;
+    const BASEURL= 'http://localhost:4000'
+ 
+
+    export default BASEURL

@@ -2,24 +2,39 @@ import React, { useState } from "react";
 import PageWrapper from "../../GlobalComponents/PageWrapper";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import "./AccountList.css";
-
+import "./AccountList.scss";
+import BASEURL from '../../config/config'
 function AccountEdit(props) {
   const [inputs, setInputs] = useState({
-    ambassadorID: '',  
+    ambassadorId: '',  
     name: '',
+    username: '',
     email: ''
   });
 
-  const { ambassadorID, name, email } = inputs;
+  const { ambassadorId, username, name, email } = inputs;
 
   const user = props.location.state;
 
   const handleChange = (e) => setInputs({ ...inputs, [e.target.name]: e.target.value });
+
   
-  const handleSubmit = () => {
-    // Send the new info to the backend
-  };
+  const handleSubmit = async () => {
+      try{
+        const body = {ambassadorId, username, name, email}
+       const requestOptions = {
+          method: 'PUT',
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(body)
+        };
+      const response = await fetch(`${BASEURL}/api/challenge/update-user/${user.id}`, requestOptions)
+      console.log('response', response);
+      
+      } catch (err){
+        console.error(err.message)
+      }
+    };
+  
 
   const handlePasswordReset = () => {
     // Needs to be implemented
@@ -30,32 +45,35 @@ function AccountEdit(props) {
   return (
     <div>
       <PageWrapper>
-        <h1>Skincare Challenge Edit Account</h1>
-        <div style={{ alignSelf: "flex-end", margin: "3px 30%" }}>
+      <h1>Skincare Challenge Edit Account</h1>
+        <div style={{ alignSelf: "flex-end", margin: "15px 1%" }}>
           <Link to="/Skincare-Challenge-Accounts">
             <button id="edit">Back to list</button>
           </Link>
         </div>
         <Main>
-          <h5 style={div}>Account ID: {user.accountId}</h5>
+          <h5 style={div}>Account ID: {user.id}</h5>
           <div style={div}>
-            Ambassador ID:{" "}
-            <input type="text" defaultValue={user.ambassadorID} name='ambassadorID' onChange={handleChange}/>
+            Ambassador ID:
+            <input type="text" defaultValue={user.ambassadorId} name='ambassadorId' onChange={handleChange}/>
           </div>
           <div style={div}>
             Name: <input type="text" defaultValue={user.name} name='name' onChange={handleChange}/>
           </div>
           <div style={div}>
+            Username: <input type="text" defaultValue={user.username} name='username' onChange={handleChange}/>
+          </div>
+          <div style={div}>
             Email: <input type="text" defaultValue={user.email} name='email' onChange={handleChange}/>
           </div>
           <div style={div}>
-            <button className="add-account-btn" onclick={handleSubmit}>
+            <button className="add-account-btn" onClick={handleSubmit}>
               Save
             </button>{" "}
             <button className="add-account-btn" onClick={handlePasswordReset}>
               Send Password Reset
             </button>
-          </div>
+            </div>
         </Main>
       </PageWrapper>
     </div>
@@ -65,17 +83,19 @@ function AccountEdit(props) {
 export default AccountEdit;
 
 const Main = styled.section`
-  margin: 1% 5%;
   color: rgb(94, 93, 93);
   font-weight: 400;
   font-size: 17px;
-  display: flex;
-  flex-direction: column;
-  align-items: baseline;
-  justify-content: space-around;
+  padding: 1px 1%;
+  
 `;
 const div = {
-  margin: "1% 0px",
-  padding: "7px",
-  width: "450px",
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent:'space-between',
+  alignItems:'center',
+  margin: "3% 0%",
+  padding: '5px 10px',
+  width: "355px",
+
 };

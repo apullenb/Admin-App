@@ -22,12 +22,13 @@ const Footer = props => {
 }
 
 const FooterStyle = styled.div `
-
+display: flex;
+justify-content: flex-start;
 border-top: 1px solid #043769;
 margin: 5% 3%;
 padding: 10px 5%;
-display: flex;
-justify-content: flex-start;
+
+
 `
 export default Footer;
 

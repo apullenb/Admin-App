@@ -20,7 +20,7 @@ function TopNav() {
   return (
     <div>
       <Top>
-      <img src={Logo} style={{maxWidth:'170px', margin: '1px 25%'}} />
+      <img src={Logo} style={{maxWidth:'170px', margin: '1px 23%'}} />
       <img src={ProfileImage} style={{maxWidth:'70px', margin: '1px 1%'}}/>
       </Top>
       <MainNavWrapper>
@@ -87,33 +87,35 @@ export default TopNav;
 
 const DropDownWrapper = styled.div`
     height: 40px;
-    padding: 0px 5px;
-     margin: 0px 1%
+    padding: 0px 1px;
+     margin: 0px 1px
 `;
 const MainNavWrapper = styled.div`
     display:flex;
-    justify-content:center;
     flex-direction: row;
+    justify-content:center;
+    align-items: center;
     font-size:18px;
     font-weight: 500;
-    margin: 1px 3%;
-    padding: 1px 5%;
+    margin: 2px 0px;
+    
 `;
 
 const LinkWrap = styled.div`
-padding:0px 12px;
-margin: 0px 8px;
+padding:0px 1px;
+margin: 0px 20px;
 `;
 const Top = styled.div`
-border-bottom: 3px solid #043769;
-margin: 5px 3%;
-padding: 1% 10px;
 display: flex;
 justify-content: center;
+border-bottom: 3px solid #043769;
+padding: 10px 1px;
+margin: 5px 25px;
+
 `;
 
 const AdDropDownWrapper = styled.div`
     height: 40px;
-    padding: 0px 0px 0px 95px;
-     margin: 0px 10px 0 5%;
+    padding: 0px 50px 0px 95px;
+     margin: 0px 10px 0 15%;
 `;
