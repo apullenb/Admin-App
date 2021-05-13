@@ -38,22 +38,19 @@ function App() {
     <div className='app'>
       <Switch>
         <Route
-          exact
           path="/Dashboard"
           render={(props) =>
             isAuthenticated ? <Dashboard /> : <Redirect to="/login" />
           }
         />
-      <Route exact path="/Permissions" component={Categories} />
+      <Route  path="/Permissions" component={Categories} />
       <Route exact path="/" component={Home} />
-      <Route exact path="/login" component={Login} />
+      <Route  path="/login" component={Login} />
       <Route
-        exact
         path="/Skincare-Challenge-Accounts"
         component={AccountList}
       />
       <Route
-        exact
         path="/Skincare-Challenge-Account-Edit/:accountid"
         component={AccountEdit}
       />
