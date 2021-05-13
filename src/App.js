@@ -44,7 +44,6 @@ function App() {
             isAuthenticated ? <Dashboard /> : <Redirect to="/login" />
           }
         />
-      </Switch>
       <Route exact path="/Permissions" component={Categories} />
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
@@ -58,6 +57,7 @@ function App() {
         path="/Skincare-Challenge-Account-Edit/:accountid"
         component={AccountEdit}
       />
+       </Switch>
     </div>
   );
 }
