@@ -12,13 +12,18 @@ function AccountList() {
   const [filter, setFilter] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");
+  const [totalUsers, setTotalUsers] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [pageOptions, setPageOptions] = useState([10, 15, 20])
 
-  const getUsers = async () => {
+
+  const getUsers = async (perPage = 10, pageNo = 1) => {
     try{
      const requestOptions = {
         method: 'GET',
       };
-    const response = await fetch(`${BASEURL}/api/challenge/all-users?perPage=25&pageNo=1&orderBy=users.id`, requestOptions)
+    const response = await fetch(`${BASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=users.id`, requestOptions)
     console.log('response', response);
    
     const data = await response.json();
@@ -42,6 +47,7 @@ function AccountList() {
     // setUsers(response)
     // If no results are found, set message to "no results"
   };
+
 
   const handlePrevPage = () => {
     // send request to backend
@@ -124,19 +130,17 @@ function AccountList() {
               <th className="head">Last Challenge </th>
               <th className="head">Actions </th>
             </tr>
-            {users.length > 1 &&
-              users.map((user) => {
-                return <Accounts users={user} />;
+            {users && users.length > 1 &&
+              users.map((user, i) => {
+                return <Accounts key={i} users={user} />;
               })}
           </table>
           <h3>{message}</h3>
         </section>
-        <section className="button-row">
-          <button onClick={handlePrevPage}>{"< Prev"}</button>
-          <button onClick={handleNextPage}>{"Next >"}</button>
-        </section>
+       
+        <Pagination getusers={getUsers}/>
       </PageWrapper>
-      {/* <Pagination /> */}
+      
     </div>
   );
 }
