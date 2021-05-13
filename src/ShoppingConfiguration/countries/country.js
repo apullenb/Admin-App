@@ -8,6 +8,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
+import config from '../../config/config'
 import {
     Link,
     Route,
@@ -48,7 +49,7 @@ const Country = props => {
           delete data.updated_at
         }
 
-        Axios.put(`http://localhost:4000/api/countries/${CountryId}`, data)
+        Axios.put(`${config.CHALLANGE_API_URL}/api/countries/${CountryId}`, data)
         .then((res) => {
           addToast(`Country: ${data.name} has been updated successfully`, {
             appearance: "success",
@@ -70,7 +71,7 @@ const Country = props => {
         setData({ ...data, [event.target.name]: event.target.value });
       }
       const handleDelete = () => {
-          Axios.delete(`http://localhost:4000/api/countries/${data.id}`)
+          Axios.delete(`${config.CHALLANGE_API_URL}/api/countries/${data.id}`)
           .then((res) => {
             addToast(`Product: ${data.name} has been Deleted successfully`, {
               appearance: "success",

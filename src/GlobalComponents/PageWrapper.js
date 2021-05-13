@@ -25,9 +25,9 @@ const PageWrap = styled.div`
     justify-content: center;
     align-items: center;
     align-content: center;
-    margin: 1% 0% 1% 1%;
-    padding: 1% 10% 1% 1%;
-    max-width: 1550px;
+    margin: 1%;
+    padding: 1%
+   
 
    
     

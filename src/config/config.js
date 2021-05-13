@@ -1,5 +1,11 @@
 
-    const BASEURL= 'http://localhost:4000'
+   export default {
+      CHALLANGE_API_URL: 'http://localhost:4000' || process.env.CHALLANGE_API_URL   
+
+   }
+   
+   
+
  
 
-    export default BASEURL
+    

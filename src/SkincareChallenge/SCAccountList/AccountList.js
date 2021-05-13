@@ -3,8 +3,8 @@ import PageWrapper from "../../GlobalComponents/PageWrapper";
 
 import "./AccountList.scss";
 import Accounts from "./Accounts";
-import axios from 'axios';
-import BASEURL from '../../config/config'
+import axios from "axios";
+import config from "../../config/config";
 import Pagination from "./Pagination";
 
 function AccountList() {
@@ -12,33 +12,34 @@ function AccountList() {
   const [filter, setFilter] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");
-  const [totalUsers, setTotalUsers] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [pageOptions, setPageOptions] = useState([10, 15, 20])
-
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pageOptions, setPageOptions] = useState([10, 15, 20]);
 
   const getUsers = async (perPage = 10, pageNo = 1) => {
-    try{
-     const requestOptions = {
-        method: 'GET',
+    try {
+      const requestOptions = {
+        method: "GET",
       };
-    const response = await fetch(`${BASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=users.id`, requestOptions)
-    console.log('response', response);
-   
-    const data = await response.json();
-    setUsers(data.data);
-    console.log(data);
-    
-    } catch (err){
-      console.error(err.message)
+      const response = await fetch(
+        `${config.CHALLANGE_API_URL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=users.id`,
+        requestOptions
+      );
+      console.log("response", response);
+
+      const data = await response.json();
+      setUsers(data.data);
+      console.log(data);
+    } catch (err) {
+      console.error(err.message);
     }
   };
 
   useEffect(() => {
     getUsers();
   }, []);
-  console.log(users)
+  console.log(users);
   const handleChange = (e, cat) => {
     setFilter(e.target.value);
     setCategory(cat);
@@ -47,7 +48,6 @@ function AccountList() {
     // setUsers(response)
     // If no results are found, set message to "no results"
   };
-
 
   const handlePrevPage = () => {
     // send request to backend
@@ -130,22 +130,19 @@ function AccountList() {
               <th className="head">Last Challenge </th>
               <th className="head">Actions </th>
             </tr>
-            {users && users.length > 1 &&
+            {users &&
+              users.length > 1 &&
               users.map((user, i) => {
                 return <Accounts key={i} users={user} />;
               })}
           </table>
           <h3>{message}</h3>
         </section>
-       
-        <Pagination getusers={getUsers}/>
+
+        <Pagination getusers={getUsers} />
       </PageWrapper>
-      
     </div>
   );
 }
 
 export default AccountList;
-
-
-

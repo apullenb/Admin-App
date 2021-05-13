@@ -14,12 +14,12 @@ const Home = (props) => {
       <section style={{ margin: "2% 6%" }}>
         <h2>Home / Landing Page</h2>
         <Link to="login">
-          <button>Click to Login</button>{" "}
+          <button>Click to Login</button>
         </Link>
 
         <h4 style={{ marginTop: "3%" }}>
-          {" "}
-          To See the Logged in Dashboard, go to{" "}
+          
+          To See the Logged in Dashboard, go to
         </h4>
         <p>
           <Link to="/Dashboard">

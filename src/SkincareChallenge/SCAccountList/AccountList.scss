@@ -1,10 +1,10 @@
 
 .account-table {
   padding: 1px;
-  margin: 3% 12px;
-}
+  margin: 3% 2px;
 
-.account-table .head {
+
+ .head {
   font-size: 18px;
   font-weight: 400;
   color: rgb(94, 93, 93);
@@ -12,41 +12,41 @@
   padding: 5px 1vw;
   border-bottom: 1px solid #094a8a;
 }
-.account-table #filter {
+ #filter {
   text-align: center;
   margin: 0px;
   padding: 0px 5px;
 }
 
-.account-table td {
+ td {
   font-size: 16px;
   padding: 7px 1vw;
   text-align: left;
 }
 
-.account-table #row:hover {
+ #row:hover {
   background-color: rgba(8, 56, 110, 0.13);
   box-shadow: 0px 1px 3px rgba(75, 75, 75, 0.596);
 }
 
-.account-table #filter input {
+ #filter input {
   border: 1px solid #09498a6c;
   font-size: 13px;
   color: #09498a4d;
 }
 
-.account-table #filter select {
+ #filter select {
   border: 1px solid #09498aa8;
   font-size: 13px;
   color: #09498a57;
 }
-.account-table #filter input[type="text"]:focus {
+ #filter input[type="text"]:focus {
   border: 1px solid #042e5828;
   border-radius: 0px;
   font-size: 13px;
   color: #0d3053;
 }
-
+}
 .add-account-btn {
   background-color: #02337c;
   color: white;
@@ -96,7 +96,6 @@
 .paginationCtrls {
     padding: 10px 2%;
     text-align: center;
-    
     background: white;
     width: 600px;
     background: #104c8e;
@@ -105,7 +104,7 @@
   
     select {
       user-select: none;
-      padding: 5px 5px;
+      padding: 5px 7px;
       border: 1px solid gray;
       display: inline-block;
       margin: 0 5px;

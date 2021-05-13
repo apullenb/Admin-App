@@ -16,6 +16,7 @@ import {
     useParams,
     useHistory
   } from "react-router-dom";
+  import config from '../../config/config'
 
 const CountryBodyWrapper = Styled.div`
     display:flex;
@@ -71,7 +72,7 @@ const Countries = props => {
 let { path, url } = useRouteMatch();
 const [countries, setCountries] = useState([]);
 
-const getAsyncCountries = () => { Axios.get('http://localhost:4000/api/countries').then(res => {
+const getAsyncCountries = () => { Axios.get(`${config.CHALLANGE_API_URL}/api/countries`).then(res => {
     setCountries(res.data);
 }).catch(error => {
     console.log(error);

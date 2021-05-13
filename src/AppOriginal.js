@@ -8,6 +8,7 @@ import Kits from './components/kits/kits';
 import Countries from './components/countries/countries';
 import './App.css';
 import Styled from 'styled-components';
+import config from './config/config'
 
 
 const SideBarTitleWrapper = Styled.div `
@@ -66,7 +67,7 @@ class App extends React.Component{
       isLoading:true
     })
 
-      axios.get('http://localhost:4000/api/products')
+      axios.get(`${config.CHALLANGE_API_URL}/api/products`)
       .then(res => {
           this.setState({
               products: res.data

@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-
+import config from '../../config/config'
 import {
     useHistory
   } from "react-router-dom";
@@ -34,7 +34,7 @@ const AddCountry = props => {
       e.preventDefault();
       axios
         .post(
-          `http://localhost:4000/api/countries`,
+          `${config.CHALLANGE_API_URL}/api/countries`,
           data
         )
         .then((res) => {

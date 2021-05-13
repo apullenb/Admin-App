@@ -13,6 +13,7 @@ import footer from "./GlobalComponents/footer";
 import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
+import './App.css'
 
 function App() {
   // SAMPLE USER VALIDATION (Needs to be created)---------->
@@ -34,7 +35,7 @@ function App() {
   // <------------ END SAMPLE USER VALIDATION SECTION
 
   return (
-    <div>
+    <div className='app'>
       <Switch>
         <Route
           exact

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import {Link, Switch, Route, useRouteMatch, useParams} from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
+import config from '../../config/config'
 
 
 
@@ -17,7 +18,7 @@ const Kits = (props) => {
 let { url, path } = useRouteMatch();
 const [kits, setKits] = useState([]);
 
-const getAllKits = () => axios.get('http://localhost:4000/api/kits')
+const getAllKits = () => axios.get(`${config.CHALLANGE_API_URL}/api/kits`)
                     .then(res =>{
                         setKits(res.data)
                         console.log(res.data)
@@ -94,7 +95,7 @@ const Kit = props => {
 
 
 
-    const getAllKitsProducts = () => { axios.get('http://localhost:4000/api/kits/kits-products/sorted')
+    const getAllKitsProducts = () => { axios.get(`${config.CHALLANGE_API_URL}/api/kits/kits-products/sorted`)
                             .then(res => {
                                 setkitsAndProducts(res.data)
                                 console.log(res.data)

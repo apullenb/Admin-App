@@ -20,7 +20,7 @@ function TopNav() {
   return (
     <div>
       <Top>
-      <img src={Logo} style={{maxWidth:'170px', margin: '1px 23%'}} />
+      <img src={Logo} style={{maxWidth:'170px', margin: '1px auto'}} />
       <img src={ProfileImage} style={{maxWidth:'70px', margin: '1px 1%'}}/>
       </Top>
       <MainNavWrapper>
@@ -98,7 +98,7 @@ const MainNavWrapper = styled.div`
     font-size:18px;
     font-weight: 500;
     margin: 2px 0px;
-    
+   
 `;
 
 const LinkWrap = styled.div`
