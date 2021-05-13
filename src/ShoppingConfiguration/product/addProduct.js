@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import config from '../../config/env-urls'
 
 const AddProduct = props => {
     var product = {
@@ -43,7 +44,7 @@ const AddProduct = props => {
 
       axios
         .post(
-          `http://localhost:4000/api/products`,
+          `${config.PRODUCTSBASEURL}/api/products`,
           data
         )
         .then((res) => {
