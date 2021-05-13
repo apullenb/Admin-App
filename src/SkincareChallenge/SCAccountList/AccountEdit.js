@@ -3,7 +3,7 @@ import PageWrapper from "../../GlobalComponents/PageWrapper";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import "./AccountList.scss";
-import config from '../../config/config'
+import config from '../../config/env-urls'
 function AccountEdit(props) {
   const [inputs, setInputs] = useState({
     ambassadorId: '',  
@@ -27,7 +27,7 @@ function AccountEdit(props) {
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(body)
         };
-      const response = await fetch(`${config.CHALLANGE_API_URL}/api/challenge/update-user/${user.id}`, requestOptions)
+      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-user/${user.id}`, requestOptions)
       console.log('response', response);
       
       } catch (err){

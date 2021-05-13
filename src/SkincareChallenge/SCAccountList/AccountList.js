@@ -4,7 +4,7 @@ import PageWrapper from "../../GlobalComponents/PageWrapper";
 import "./AccountList.scss";
 import Accounts from "./Accounts";
 import axios from "axios";
-import config from "../../config/config";
+import config from "../../config/env-urls";
 import Pagination from "./Pagination";
 
 function AccountList() {
@@ -23,7 +23,7 @@ function AccountList() {
         method: "GET",
       };
       const response = await fetch(
-        `${config.CHALLANGE_API_URL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=users.id`,
+        `${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=users.id`,
         requestOptions
       );
       console.log("response", response);
