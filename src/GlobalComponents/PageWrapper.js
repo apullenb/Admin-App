@@ -2,33 +2,31 @@ import React from 'react'
 import TopNav from './TopNav'
 import styled from 'styled-components';
 import Footer from './footer';
-import './Page.css'
+
 function PageWrapper(props) {
-    return (
-        <div>
-            <TopNav />
-            <div className='page'>
-            <PageWrap>
-            {props.children}
-            </PageWrap>
-            </div>
-            <Footer />
-        </div>
-    )
+  return (
+    <div>
+      <TopNav />
+      <PageWrap>
+        {props.children}
+      </PageWrap>
+      {/* <Footer /> */}
+    </div>
+  )
 }
 
 export default PageWrapper;
 
 const PageWrap = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    margin: 1%;
-    padding: 1%
-   
+  max-width: 1400px;
+  margin: 0 auto;
 
-   
-    
- `
+  h1,
+  .page-header {
+    font-size: 36px;
+    color:rgb(92, 90, 90);
+    font-weight: 450;
+    margin: 10px 0 30px;
+    align-self: flex-start;
+  }
+`

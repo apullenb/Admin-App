@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useToasts } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
 import Product from './product';
 import AddProduct from './addProduct';
-import Form from "react-bootstrap/Form";
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
-
+import Styled from "styled-components";
 import {
   Link,
   Route,
   Switch,
-  useRouteMatch,
-  useParams,
+  useRouteMatch
 } from "react-router-dom";
-import Styled from "styled-components";
 
 
 const ProductBodyWrapper = Styled.div`
@@ -106,7 +101,7 @@ const Products = (props) => {
           {props.isLoading? 'Loading...'  :  'Get all Products'}
         </Button>
         <ListWrapper>
-          {productsArray.map((product) => {
+          {(productsArray||[]).map((product) => {
             return (
               <li key={product.id}>
                 <Link to={`${url}/${product.id}`}>{product.sku}</Link>

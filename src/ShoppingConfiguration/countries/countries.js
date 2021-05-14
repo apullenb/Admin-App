@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Country from './country';
-import AddCountry from './addCounrty';
+import AddCountry from './addCountry';
 import {
     Link,
     Route,
@@ -106,7 +106,7 @@ useEffect(()=>{
 
   <InputGroup className="mb-2 mr-sm-2">
   <InputGroup.Prepend>
-  <InputGroup.Text><i class="fas fa-binoculars"></i></InputGroup.Text>
+  <InputGroup.Text><i className="fas fa-binoculars"></i></InputGroup.Text>
   </InputGroup.Prepend>
   <FormControl type='text' name='search' onChange={(e)=>{filterItems(e.target.value)}} placeholder="Search..."  />
   </InputGroup>

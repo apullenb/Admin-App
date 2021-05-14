@@ -44,38 +44,36 @@ function AccountEdit(props) {
 
   return (
     <div>
-      <PageWrapper>
       <h1>Skincare Challenge Edit Account</h1>
-        <div style={{ alignSelf: "flex-end", margin: "15px 1%" }}>
-          <Link to="/Skincare-Challenge-Accounts">
-            <button id="edit">Back to list</button>
-          </Link>
+      <div style={{ alignSelf: "flex-end", margin: "15px 1%" }}>
+        <Link to="/Challenge/Accounts">
+          <button id="edit">Back to list</button>
+        </Link>
+      </div>
+      <Main>
+        <h5 style={div}>Account ID: {user.id}</h5>
+        <div style={div}>
+          Ambassador ID:
+          <input type="text" defaultValue={user.ambassadorId} name='ambassadorId' onChange={handleChange}/>
         </div>
-        <Main>
-          <h5 style={div}>Account ID: {user.id}</h5>
-          <div style={div}>
-            Ambassador ID:
-            <input type="text" defaultValue={user.ambassadorId} name='ambassadorId' onChange={handleChange}/>
+        <div style={div}>
+          Name: <input type="text" defaultValue={user.name} name='name' onChange={handleChange}/>
+        </div>
+        <div style={div}>
+          Username: <input type="text" defaultValue={user.username} name='username' onChange={handleChange}/>
+        </div>
+        <div style={div}>
+          Email: <input type="text" defaultValue={user.email} name='email' onChange={handleChange}/>
+        </div>
+        <div style={div}>
+          <button className="add-account-btn" onClick={handleSubmit}>
+            Save
+          </button>{" "}
+          <button className="add-account-btn" onClick={handlePasswordReset}>
+            Send Password Reset
+          </button>
           </div>
-          <div style={div}>
-            Name: <input type="text" defaultValue={user.name} name='name' onChange={handleChange}/>
-          </div>
-          <div style={div}>
-            Username: <input type="text" defaultValue={user.username} name='username' onChange={handleChange}/>
-          </div>
-          <div style={div}>
-            Email: <input type="text" defaultValue={user.email} name='email' onChange={handleChange}/>
-          </div>
-          <div style={div}>
-            <button className="add-account-btn" onClick={handleSubmit}>
-              Save
-            </button>{" "}
-            <button className="add-account-btn" onClick={handlePasswordReset}>
-              Send Password Reset
-            </button>
-            </div>
-        </Main>
-      </PageWrapper>
+      </Main>
     </div>
   );
 }

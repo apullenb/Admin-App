@@ -32,11 +32,11 @@ useEffect(()=>{
 
 
 
-    return(
+    return (
         <KitWrapper>
             {kits.map((kit, index) => {
                 return (
-                    <li>
+                    <li key={index}>
                      <Link to={`${url}/${kit.id}`}>{ kit.sku }</Link>
                     </li>
                 )
@@ -50,11 +50,8 @@ useEffect(()=>{
                     />
                 </Route>
             </Switch>
-        
         </KitWrapper>
     )
-
-
 }
 
 

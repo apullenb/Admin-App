@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import PageWrapper from "../../GlobalComponents/PageWrapper";
 
 import "./AccountList.scss";
-import Accounts from "./Accounts";
-import axios from "axios";
 import config from "../../config/env-urls";
 import Pagination from "./Pagination";
+import { Link } from "react-router-dom";
+import styled from 'styled-components';
 
 function AccountList() {
   const [users, setUsers] = useState("");
@@ -61,11 +60,10 @@ function AccountList() {
 
   return (
     <div>
-      <PageWrapper>
         <h1>Skincare Challenge Accounts</h1>
-        <section className="account-table">
+        <AccountTable>
           <table>
-            <tr>
+            {/* <tr>
               <th id="filter">
                 <input
                   type="text"
@@ -120,29 +118,77 @@ function AccountList() {
               <th id="filter">
                 <button className="add-account-btn">+ New Account</button>
               </th>
-            </tr>
-            <tr>
-              <th className="head">Account ID</th>
-              <th className="head">Name</th>
-              <th className="head">Email</th>
-              <th className="head">Ambassador ID </th>
-              <th className="head">Last Login </th>
-              <th className="head">Last Challenge </th>
-              <th className="head">Actions </th>
-            </tr>
-            {users &&
-              users.length > 1 &&
-              users.map((user, i) => {
-                return <Accounts key={i} users={user} />;
+            </tr> */}
+            <thead>
+              <tr>
+                <th className="head">Account ID</th>
+                <th className="head">Name</th>
+                <th className="head">Email</th>
+                <th className="head">Ambassador ID </th>
+                <th className="head">Last Login </th>
+                <th className="head">Last Challenge </th>
+                <th className="head">Actions </th>
+              </tr>
+            </thead>
+            <tbody>
+              {users && users.length > 1 && users.map((user, i) => {
+                return (
+                  <tr key={i} id="row">
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.ambassadorId}</td>
+                    <td>{user.lastLoginDate}</td>
+                    <td>{user.lastChallenge}</td>
+                    <td>
+                      <Link
+                        to={{
+                          pathname: `/Challenge/Account/${user.id}`,
+                          state: user,
+                        }}
+                      >
+                        <button id="edit">Edit</button>
+                      </Link>
+                    </td>
+                  </tr>
+                )
               })}
+            </tbody>
           </table>
           <h3>{message}</h3>
-        </section>
+        </AccountTable>
 
         <Pagination getusers={getUsers} />
-      </PageWrapper>
     </div>
   );
 }
 
 export default AccountList;
+
+const AccountTable = styled.div`
+  padding: 1px;
+  margin: 0;
+
+  table {
+    width: 100%;
+    
+     tr {
+      &:nth-child(even) {
+        background: #F4FAFE;
+      }
+      
+      td {
+        padding: 5px 0;
+      }
+    }
+  }
+
+  .head {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgb(94, 93, 93);
+    margin: 1px 1vw;
+    padding: 5px 1vw;
+    border-bottom: 1px solid #094a8a;
+  }
+`

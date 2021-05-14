@@ -1,3 +1,4 @@
+import './App.scss';
 import React, { useState, useEffect } from "react";
 import TopNav from "./GlobalComponents/TopNav";
 import {
@@ -13,7 +14,11 @@ import footer from "./GlobalComponents/footer";
 import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
-import './App.css'
+import ShoppingCountries from "./ShoppingConfiguration/countries/countries";
+import ShoppingKits from "./ShoppingConfiguration/kits/kits";
+import ShoppingProducts from "./ShoppingConfiguration/product/products";
+import ShoppingCategories from "./ShoppingConfiguration/categories";
+import Page from './GlobalComponents/PageWrapper'
 
 function App() {
   // SAMPLE USER VALIDATION (Needs to be created)---------->
@@ -35,26 +40,30 @@ function App() {
   // <------------ END SAMPLE USER VALIDATION SECTION
 
   return (
-    <div className='app'>
-      <Switch>
-        <Route
-          path="/Dashboard"
-          render={(props) =>
-            isAuthenticated ? <Dashboard /> : <Redirect to="/login" />
-          }
-        />
-      <Route  path="/Permissions" component={Categories} />
-      <Route exact path="/" component={Home} />
-      <Route  path="/login" component={Login} />
-      <Route
-        path="/Skincare-Challenge-Accounts"
-        component={AccountList}
-      />
-      <Route
-        path="/Skincare-Challenge-Account-Edit/:accountid"
-        component={AccountEdit}
-      />
-       </Switch>
+    <div className='app'>      
+      <Page >
+        <Switch>
+
+          <Route exact path="/" render={(props) => isAuthenticated ? <Dashboard /> : <Redirect to="/login" /> } />
+          
+          {/* <Route exact path="/" component={Home} /> */}
+          <Route path="/login" component={Login} />
+
+          <Route path="/Shopping/Countries" component={ShoppingCountries} />
+          <Route path="/Shopping/Kits" component={ShoppingKits} />
+          <Route path="/Shopping/Categories" component={ShoppingCategories} />
+          <Route path="/Shopping/Products" component={ShoppingProducts} />
+
+          <Route path="/Challenge/Accounts" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
+          <Route path="/Challenge/Account/:accountid" component={AccountEdit} />
+          
+          <Route path="/Events" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
+
+          <Route path="/Incentive" render={(props) => isAuthenticated ? <AccountEdit /> : <Redirect to="/login" /> } />
+          
+          <Route path="/Permissions" render={(props) => isAuthenticated ? <Categories /> : <Redirect to="/login" /> } />
+        </Switch>       
+       </Page>
     </div>
   );
 }
