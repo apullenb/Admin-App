@@ -30,9 +30,9 @@ export default class EntryEdit extends React.Component {
 
   handleGetEntryData = () => {
     
-    axios.get(`${this.base_url}/api/challenge/all-products`).then(productResponse => {
+    axios.get(`${config.SKINCAREBASEURL}/api/challenge/all-products`).then(productResponse => {
       this.setState({ allProducts: productResponse.data.products });
-      axios.get(`${this.base_url}/api/challenge/entry-by-id/${this.state.entryId}`).then(res => {
+      axios.get(`${config.SKINCAREBASEURL}/api/challenge/entry-by-id/${this.state.entryId}`).then(res => {
         this.setState({ entry: res.data[0] });
       })
       .catch(err => {
