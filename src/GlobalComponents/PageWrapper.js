@@ -20,6 +20,7 @@ export default PageWrapper;
 const PageWrap = styled.div`
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
 
   h1,
   .page-header {
@@ -28,5 +29,16 @@ const PageWrap = styled.div`
     font-weight: 450;
     margin: 10px 0 30px;
     align-self: flex-start;
+  }
+
+  .page-header-link {
+    position: absolute;
+    display: inline;
+    right: 0;
+    font-size: 16px;
+
+    a {
+      text-decoration: underline;
+    }
   }
 `

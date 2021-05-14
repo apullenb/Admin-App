@@ -14,6 +14,7 @@ import footer from "./GlobalComponents/footer";
 import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
+import EntryEdit from "./SkincareChallenge/SCAccountList/EntryEdit";
 import ShoppingCountries from "./ShoppingConfiguration/countries/countries";
 import ShoppingKits from "./ShoppingConfiguration/kits/kits";
 import ShoppingProducts from "./ShoppingConfiguration/product/products";
@@ -56,6 +57,7 @@ function App() {
 
           <Route path="/Challenge/Accounts" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
           <Route path="/Challenge/Account/:accountid" component={AccountEdit} />
+          <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
           
           <Route path="/Events" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
 
