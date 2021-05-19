@@ -13,6 +13,7 @@ import footer from "./GlobalComponents/footer";
 import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
+import EntryList from "./SkincareChallenge/SCEntryList/EntryList";
 import './App.css'
 
 function App() {
@@ -52,6 +53,11 @@ function App() {
         exact
         path="/Skincare-Challenge-Accounts"
         component={AccountList}
+      />
+      <Route
+        exact
+        path="/Skincare-Challenge-Entries"
+        component={EntryList}
       />
       <Route
         exact
