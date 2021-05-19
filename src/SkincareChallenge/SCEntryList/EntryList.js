@@ -101,6 +101,17 @@ const EntryList = () => {
                                <button className="add-entry-btn">New Entry</button>
                            </th>
                        </tr>
+                       <tr>
+                           <th className="head">Entry ID</th>
+                           <th className="head">Entry Date</th>
+                           <th className="head">Ambassador ID</th>
+                           <th className="head">Name</th>
+                           <th className="head">Challenge</th>
+                           <th className="head">Pictures</th>
+                           <th className="head">Featured</th>
+                           <th className="head">Approved</th>
+                           <th className="head">Actions</th>
+                       </tr>
                    </table>
                </section>
            </PageWrapper>
