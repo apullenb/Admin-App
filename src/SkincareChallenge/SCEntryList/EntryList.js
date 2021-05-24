@@ -1,8 +1,36 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import "./EntryList.scss";
 import PageWrapper from "../../GlobalComponents/PageWrapper";
+import Entries from './Entries';
+import config from "../../config/config";
+
 
 const EntryList = () => {
+    const [entries, setentries] = useState("");
+    const [filter, setFilter] = useState("");
+
+const getEntries = async () => {
+    try{
+        const requestOptions = {
+            method:"GET",
+        };
+        const response = await fetch (
+            `${config.CHALLANGE_API_URL}/api/challenge/all-entries`,
+            requestOptions
+        );
+        console.log("Response", response);
+        
+        const data = await response.json();
+        setentries(data.data);
+        console.log("data", data);
+    } catch (err) {
+        console.log(err.message);
+    }
+};
+
+useEffect(() => {
+    getEntries();
+}, []);
 
     const handleChange= (e,cat) => {
 
@@ -65,7 +93,20 @@ const EntryList = () => {
                                value="Pictures"
                                onchange={(e) => handleChange(e, "pictures")} 
                                >
-                                  Pictures
+                                  Day 1 Photo
+                                </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                           </select>
+                           </th>
+                           <th id="filter">
+                           <select id="filter">
+                           <option
+                               selected
+                               value="Pictures"
+                               onchange={(e) => handleChange(e, "pictures")} 
+                               >
+                                  Day 30 Photo
                                 </option>
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
@@ -107,11 +148,17 @@ const EntryList = () => {
                            <th className="head">Ambassador ID</th>
                            <th className="head">Name</th>
                            <th className="head">Challenge</th>
-                           <th className="head">Pictures</th>
+                           <th className="head">Day 1 Photo</th>
+                           <th className="head">Day 30 Photo</th>
                            <th className="head">Featured</th>
                            <th className="head">Approved</th>
                            <th className="head">Actions</th>
                        </tr>
+                        {entries &&
+                        entries.length > 1 &&
+                        entries.map((entry, i) => {
+                            return <Entries key= {i} entries = {entry}/>;
+                        })}
                    </table>
                </section>
            </PageWrapper>
