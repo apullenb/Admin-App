@@ -10,7 +10,6 @@ import Categories from '../ShoppingConfiguration/categories'
 
 function TopNav() {
   const navLinks = [
-        
     {name:"Event Calendar", link:'/Event-Calendar', isPrivate: true},
     {name:"Incentive Trip", link:'/Incentive-Trip', isPrivate: true},
 ];

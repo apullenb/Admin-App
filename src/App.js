@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import TopNav from "./GlobalComponents/TopNav";
+import {useDispatch, useSelector} from 'react-redux';
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,15 +9,17 @@ import {
 import Login from "./Login";
 import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
-import footer from "./GlobalComponents/footer";
 import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
 import './App.css'
+import { APP_STARTED } from "./redux/actions/app/appActionTypes";
 
 function App() {
   // SAMPLE USER VALIDATION (Needs to be created)---------->
   // Currently defaulted to true..needs to default to false once authentication is set up
+  const dispatch = useDispatch();
+  const { fetching } = useSelector(state => state.app);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   // function to verify if the user is logged in.. once user is verified, this function should call the setAuth function to return true
@@ -27,6 +29,12 @@ function App() {
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
   };
+
+useEffect(()=>{
+  console.log("Test Action Dispatched")
+  dispatch({type:APP_STARTED}) 
+},[])
+
 
   useEffect(() => {
     isAuthCheck();
