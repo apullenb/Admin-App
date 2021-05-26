@@ -3,19 +3,20 @@ import "./EntryList.scss";
 import PageWrapper from "../../GlobalComponents/PageWrapper";
 import Entries from './Entries';
 import config from "../../config/config";
+import Pagination from "./Pagination";
 
 
 const EntryList = () => {
     const [entries, setentries] = useState("");
     const [filter, setFilter] = useState("");
 
-const getEntries = async () => {
+const getEntries = async (perPage = 10, pageNo = 1) => {
     try{
         const requestOptions = {
             method:"GET",
         };
         const response = await fetch (
-            `${config.CHALLANGE_API_URL}/api/challenge/all-entries`,
+            `${config.CHALLANGE_API_URL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=entries.id`,
             requestOptions
         );
         console.log("Response", response);
@@ -32,6 +33,11 @@ useEffect(() => {
     getEntries();
 }, []);
 
+const sortId = () => {
+entries.sort((a,b) => (a.id > b.id) ? 1: -1)
+
+}
+
     const handleChange= (e,cat) => {
 
     }
@@ -41,7 +47,8 @@ useEffect(() => {
                <h1>Skincare Challenge Entries</h1>
                <section className="entry-table">
                    <table>
-                       <tr>
+                       <tr> 
+                           {/*
                            <th id="filter">
                                <input 
                                type="text"
@@ -138,6 +145,7 @@ useEffect(() => {
                                 <option value="No">No</option>
                            </select>
                            </th>
+                           */}
                            <th id="filter">
                                <button className="add-entry-btn">New Entry</button>
                            </th>
@@ -161,6 +169,7 @@ useEffect(() => {
                         })}
                    </table>
                </section>
+               <Pagination getEntries={getEntries}/>
            </PageWrapper>
         </div>
     )
