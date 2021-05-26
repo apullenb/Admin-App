@@ -1,3 +1,6 @@
+$breakpoint-tablet: 768px; 
+$breakpoint-mobile: 550px;
+$breakpoint-laptop: 1624px;
 
 .entry-table {
     padding: 1px;
@@ -59,7 +62,42 @@
     display:flex;
     align-self: flex-end;
   }
-  
+  @media (max-width: $breakpoint-tablet) {
+
+  .add-entry-btn {
+    position: relative;
+    left:755px;
+    display:flex;
+    align-self: flex-end;
+  }
+}
+@media (max-width: $breakpoint-mobile) {
+
+  .add-entry-btn {
+    position: relative;
+    left:710px;
+    display:flex;
+    align-self: flex-end;
+  }
+}
+@media (max-width: $breakpoint-laptop) {
+
+  .add-entry-btn {
+    position: relative;
+    left:1060px;
+    display:flex;
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 1600px) {
+  .add-entry-btn {
+    position: relative;
+    left:1070px;
+    display:flex;
+    align-self: flex-end;
+  }
+}
   .button-row {
     display: flex;
     flex-direction: row;
