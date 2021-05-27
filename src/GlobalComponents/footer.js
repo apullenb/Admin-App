@@ -8,27 +8,22 @@ import styled from 'styled-components'
 
 
 const Footer = props => {
+const nowDate =new Date(Date.now());
 
-    return(
-        <div>
+    return(     
             <FooterStyle>
-            
-            <p style={{padding:'1px 1%'}}>   Zilis LLC  </p>  
-            <p style={{padding:'1px 1%'}}>  |   2021  </p>
-            <p style={{padding:'1px 1%'}}> | Footer Links  </p>
-            </FooterStyle>
-        </div>
+            <p>Zilis™ LLC | {nowDate.getFullYear().toString()} | Footer Links</p>
+            </FooterStyle>    
     )
 }
 
 const FooterStyle = styled.div `
 display: flex;
-justify-content: flex-start;
+justify-content: center;
 border-top: 1px solid #043769;
 margin: 5% 3%;
 padding: 10px 5%;
-
-
 `
+
 export default Footer;
 

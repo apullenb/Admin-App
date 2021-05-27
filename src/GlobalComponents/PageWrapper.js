@@ -28,7 +28,4 @@ const PageWrap = styled.div`
     margin: 1%;
     padding: 1%
    
-
-   
-    
- `
+ `;

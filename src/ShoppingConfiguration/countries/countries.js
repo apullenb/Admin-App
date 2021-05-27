@@ -8,6 +8,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Country from './country';
 import AddCountry from './addCounrty';
+import PageWrapper from '../../GlobalComponents/PageWrapper';
 import {
     Link,
     Route,
@@ -19,8 +20,12 @@ import {
   import config from '../../config/config'
 
 const CountryBodyWrapper = Styled.div`
+    width:90%;
     display:flex;
     flex-direction:row ;
+    justify-content:center;
+    margin: 0 auto;
+    padding: 2%;
  `;
 
 const CountriesWrapper = Styled.div`
@@ -93,13 +98,11 @@ useEffect(()=>{
         }
     });
 
-   
-
     setCountries(filterdItems);
 }
 
     return (
-
+<PageWrapper>
 <CountryBodyWrapper>
 <CountriesWrapper>
   <h2>Countries Page</h2>
@@ -130,6 +133,7 @@ useEffect(()=>{
   </ListWrapper>
 </CountriesWrapper>
 
+
 <CountryWapper>
   <AddCountryWrapper>
   <AdCountryButtonWrapper>
@@ -154,7 +158,7 @@ useEffect(()=>{
   </Switch>
 </CountryWapper>
 </CountryBodyWrapper>
-
+</PageWrapper>
 
 
     )

@@ -19,7 +19,6 @@ const AddCountry = props => {
         tax_rate:"",
     }
 
-
     const [data, setData] = useState(country);
     const { addToast } = useToasts();
     const history = useHistory()

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useDispatch, useSelector} from 'react-redux';
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
@@ -7,6 +8,8 @@ import AddProduct from './addProduct';
 import Form from "react-bootstrap/Form";
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
+import PageWrapper from '../../GlobalComponents/PageWrapper';
+import {handleFetchProductsAsync} from '../../redux/actions/ProductConfig/productConfig/productActions';
 
 import {
   Link,
@@ -19,8 +22,11 @@ import Styled from "styled-components";
 
 
 const ProductBodyWrapper = Styled.div`
+    width:90%;
     display:flex;
     flex-direction:row ;
+    margin: 0 auto;
+    padding:2%;
  `;
 
 const ProductsWrapper = Styled.div`
@@ -67,17 +73,23 @@ const AddProductButtonWrapper = Styled.span`
 `;
 
 const Products = (props) => {
+  const dispatch = useDispatch();
+  const { products, fetching } = useSelector(state => state.products)
   let { path, url } = useRouteMatch();
-
-  const products = props.products;
-  const [productsArray, setProducts] = useState(products);
+  const [productsArray, setProducts] = useState([]);
 
   useEffect(()=>{
-      setProducts(products);  // we use this in order to force reload of products on reload or if the porducts from parent props update
+    dispatch(handleFetchProductsAsync());
+  },[])
+
+  useEffect(()=>{
+    console.log(products)
+      setProducts(products); 
   },[products])
 
+
   const filterItems = (filter) => { //search products
-      const filterdItems = products.filter(item => { 
+      const filterdItems = productsArray.filter(item => { 
         if (item.sku.includes(filter.toUpperCase())){
            return item;
           }
@@ -86,6 +98,7 @@ const Products = (props) => {
   }
 
   return (
+    <PageWrapper>
     <ProductBodyWrapper>
       <ProductsWrapper>
         <h2>Products page</h2>
@@ -103,10 +116,10 @@ const Products = (props) => {
             props.handlegetAllProducts();
           }}
         >
-          {props.isLoading? 'Loading...'  :  'Get all Products'}
+          {fetching? 'Loading...'  :  'Get all Products'}
         </Button>
         <ListWrapper>
-          {productsArray.map((product) => {
+          {productsArray && productsArray.map((product) => {
             return (
               <li key={product.id}>
                 <Link to={`${url}/${product.id}`}>{product.sku}</Link>
@@ -131,7 +144,7 @@ const Products = (props) => {
              />
           </Route>
 
-          <Route  path={`${path}/:id`}>
+          <Route path={`${path}/:id`}>
             <Product
               products={props.products}
               handlegetAllProducts={props.handlegetAllProducts}
@@ -140,6 +153,7 @@ const Products = (props) => {
         </Switch>
       </ProductWapper>
     </ProductBodyWrapper>
+    </PageWrapper>
   );
 };
 

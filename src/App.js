@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
@@ -12,7 +11,9 @@ import Dashboard from "./Pages/Dashboard";
 import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
+import Countries from "./ShoppingConfiguration/countries/countries";
 import './App.css'
+import Products from "./ShoppingConfiguration/product/products";
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
 
 function App() {
@@ -53,6 +54,7 @@ useEffect(()=>{
           }
         />
       </Switch>
+
       <Route exact path="/Permissions" component={Categories} />
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
@@ -66,6 +68,8 @@ useEffect(()=>{
         path="/Skincare-Challenge-Account-Edit/:accountid"
         component={AccountEdit}
       />
+      <Route path="/countries" component={Countries} />
+      <Route path='/products' component={Products} />
     </div>
   );
 }
