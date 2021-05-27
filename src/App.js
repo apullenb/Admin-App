@@ -8,12 +8,13 @@ import {
 import Login from "./Login";
 import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
-import Categories from "./ShoppingConfiguration/categories";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
 import Countries from "./ShoppingConfiguration/countries/countries";
 import './App.css'
 import Products from "./ShoppingConfiguration/product/products";
+import Categories from './ShoppingConfiguration/categories';
+import Kits from './ShoppingConfiguration/kits/kits';
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
 
 function App() {
@@ -70,6 +71,8 @@ useEffect(()=>{
       />
       <Route path="/countries" component={Countries} />
       <Route path='/products' component={Products} />
+      <Route path="/categories" component={Categories} />
+      <Route path="/kits" component={Kits} />
     </div>
   );
 }

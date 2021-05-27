@@ -101,8 +101,7 @@ const Country = props => {
       const handleToggleActive = (event) => {
            setData({ ...data, [event.target.name]: !data.active });
       }
-  
-        
+    
             return (
               <div style={{ margin: "0 auto", width: "80%" }}>
                <h2 style={{ marginBottom:'4%', borderBottom:'2px solid black'}}>EDIT / DELETE: {data.name}</h2>
@@ -171,7 +170,7 @@ const Country = props => {
                   </Form.Group>
                   <Form.Group as={Row} controlId="formTaxRate">
                     <Form.Label className='form-labels' column sm="2">
-                      Tax Tare
+                      Tax / VAT 
                     </Form.Label>
                     <Col sm="10">
                       <Form.Control

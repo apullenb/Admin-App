@@ -2,7 +2,7 @@ import {
     GET_PRODUCTS_START,
     GET_PRODUCTS_SUCCESS,
     GET_PRODUCTS_FAILURE
-} from '../../actions/ProductConfig/productConfig/productActionTypes';
+} from '../../actions/Configuration/productConfig/productActionTypes';
 
 
 const initalState = {

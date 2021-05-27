@@ -2,7 +2,7 @@ import {
     GET_COUNTRIES_START,
     GET_COUNTRIES_SUCCESS,
     GET_COUNTRIES_FAILURE
-} from '../../actions/ProductConfig/countryConfig/countryActionTypes';
+} from '../../actions/Configuration/countryConfig/countryActionTypes';
 
 
 const initalState = {

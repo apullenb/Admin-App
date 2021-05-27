@@ -19,7 +19,7 @@ import {
   } from "react-router-dom";
   import config from '../../config/config'
 
-import { handleFetchCountriesAsync } from '../../redux/actions/ProductConfig/countryConfig/countryActions';
+import { handleFetchCountriesAsync } from '../../redux/actions/Configuration/countryConfig/countryActions';
 
 const CountryBodyWrapper = Styled.div`
     width:90%;

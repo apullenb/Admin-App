@@ -8,7 +8,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ProductModal from './productModal';
 import ModalType from './modalTypes';
-import config from '../../config/config'
+import config from '../../config/config';
+import styled from 'styled-components';
 
 import {
     Link,
@@ -105,7 +106,8 @@ const Product = (props) => {
   
     if (product !== undefined) {
       return (
-        <div style={{ margin: "0 auto", width: "80%" }}>
+        <div style={{ margin: "0 auto", width: "80%", postion:'relative' }}>
+          <SkuNameBackground>{data.sku}</SkuNameBackground>
          <h2 style={{ marginBottom:'4%', borderBottom:'2px solid black'}}>EDIT / DELETE: {data.sku}</h2>
           <Form
             style={{
@@ -364,3 +366,14 @@ const Product = (props) => {
   };
 
   export default Product;
+
+  const SkuNameBackground = styled.div`
+  font-size:3vh; 
+  position:absolute;
+  top:10;
+  text-orientation: upright;
+  writing-mode: vertical-rl;
+  color: rgba(120,121,123,0.1);
+  overFlow:hidden;
+  z-index:-1;
+  `;

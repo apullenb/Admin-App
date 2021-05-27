@@ -10,7 +10,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import PageWrapper from '../../GlobalComponents/PageWrapper';
 import ZilisLoader from '../../GlobalComponents/ZilisLoader';
-import {handleFetchProductsAsync} from '../../redux/actions/ProductConfig/productConfig/productActions';
+import {handleFetchProductsAsync} from '../../redux/actions/Configuration/productConfig/productActions';
 
 
 import {
@@ -54,6 +54,7 @@ const ProductWapper = Styled.div`
     overflow:auto;
     padding: 2%;
     box-shadow: 0 5px 8px 0 rgba(0,0,0,0.5);
+    z-index:1;
 `;
 
 const AddProductWrapper = Styled.div`
@@ -136,14 +137,11 @@ const Products = (props) => {
           <Route exact path={path}></Route>
           <Route  path={`${path}/addProduct`}>
              <AddProduct 
-              handlegetAllProducts={props.handlegetAllProducts}
              />
           </Route>
             
           <Route path={`${path}/:id`}>
             <Product
-              products={props.products}
-              handlegetAllProducts={props.handlegetAllProducts}
             />
           </Route>
         </Switch>
