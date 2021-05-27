@@ -6,41 +6,33 @@ import config from "../../config/config";
 import Pagination from "./Pagination";
 
 
-const EntryList = () => {
+const EntryList = (props) => {
     const [entries, setentries] = useState("");
     const [filter, setFilter] = useState("");
 
-const getEntries = async (perPage = 10, pageNo = 1) => {
-    try{
-        const requestOptions = {
-            method:"GET",
-        };
-        const response = await fetch (
-            `${config.CHALLANGE_API_URL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=entries.id`,
-            requestOptions
-        );
-        console.log("Response", response);
-        
-        const data = await response.json();
-        setentries(data.data);
-        console.log("data", data);
-    } catch (err) {
-        console.log(err.message);
-    }
-};
+    const getEntries = async (perPage = 10, pageNo = 1) => {
+        try{
+            const requestOptions = {
+                method:"GET",
+            };
+            const response = await fetch (
+                `${config.CHALLANGE_API_URL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=entries.id`,
+                requestOptions
+            );
+            console.log("Response", response);
+            
+            const data = await response.json();
+            setentries(data.data);
+            console.log("data", data);
+        } catch (err) {
+            console.log(err.message);
+        }
+    };
 
-useEffect(() => {
-    getEntries();
-}, []);
+    useEffect(() => {
+        getEntries();
+    }, []);
 
-const sortId = () => {
-entries.sort((a,b) => (a.id > b.id) ? 1: -1)
-
-}
-
-    const handleChange= (e,cat) => {
-
-    }
     return (
         <div>
            <PageWrapper>
@@ -151,14 +143,14 @@ entries.sort((a,b) => (a.id > b.id) ? 1: -1)
                            </th>
                        </tr>
                        <tr>
-                           <th className="head">Entry ID</th>
-                           <th className="head">Entry Date</th>
-                           <th className="head">Ambassador ID</th>
-                           <th className="head">Name</th>
-                           <th className="head">Challenge</th>
+                           <th className="head" >Entry ID</th>
+                           <th className="head" >Entry Date</th>
+                           <th className="head" >Ambassador ID</th>
+                           <th className="head" >Name</th>
+                           <th className="head" >Challenge</th>
                            <th className="head">Day 1 Photo</th>
                            <th className="head">Day 30 Photo</th>
-                           <th className="head">Featured</th>
+                           <th className="head" >Featured</th>
                            <th className="head">Approved</th>
                            <th className="head">Actions</th>
                        </tr>
@@ -175,4 +167,4 @@ entries.sort((a,b) => (a.id > b.id) ? 1: -1)
     )
 }
 
-export default EntryList
+export default EntryList;
