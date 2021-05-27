@@ -19,11 +19,8 @@ const EntryList = (props) => {
                 `${config.CHALLANGE_API_URL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=entries.id`,
                 requestOptions
             );
-            console.log("Response", response);
-            
             const data = await response.json();
             setentries(data.data);
-            console.log("data", data);
         } catch (err) {
             console.log(err.message);
         }
