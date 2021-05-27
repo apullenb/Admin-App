@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Styled from 'styled-components';
 import Axios from 'axios';
 import { useToasts } from "react-toast-notifications";
@@ -19,23 +20,32 @@ import {
   } from "react-router-dom";
 
 const Country = props => {
+    const dispatch = useDispatch();
+    const {countries} = useSelector(state => state.countries)
+    var country = countries.find((country) => `${country.id}` === id);
     const { id } = useParams();
     const history = useHistory()
-    var country = props.countries.find((country) => `${country.id}` === id);
-    const [data, setData] = useState(country);
+    const [data, setData] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [deletePassword, setdeletePassword] = useState('null');
     const { addToast } = useToasts();
 
     useEffect(() => {
-        updateId();
-      }, [id, props.countries]);
+      console.log(country)
+      console.log(countries)
+      //updateId();
+    }, []);
 
-      
+    useEffect(() => {
+        updateId();
+      }, [id]);
+
     const updateId = () => {
-        country = props.countries.find((country) => `${country.id}` === id);
+        country = countries.find((country) => `${country.id}` === id);
+        console.log(country)
         setData(country);
       };
+
       const CountryId = data.id;
       const handleSave = (e) => {
         e.preventDefault();
@@ -64,7 +74,6 @@ const Country = props => {
         }).finally(()=>{
           props.getAsyncCountries()
       })
-
       }
 
       const handleUpdateCountriesData = (event) => { 
@@ -93,7 +102,7 @@ const Country = props => {
            setData({ ...data, [event.target.name]: !data.active });
       }
   
-        if (country !== undefined) {
+        
             return (
               <div style={{ margin: "0 auto", width: "80%" }}>
                <h2 style={{ marginBottom:'4%', borderBottom:'2px solid black'}}>EDIT / DELETE: {data.name}</h2>
@@ -117,8 +126,7 @@ const Country = props => {
                         value={data.id? data.id : ''}
                       />
                   </Col>
-                  </Form.Group>
-      
+                  </Form.Group>    
                   <Form.Group as={Row} controlId="formName">
                     <Form.Label className='form-labels' column sm="2">
                       Name
@@ -216,7 +224,7 @@ const Country = props => {
                 </Form>
                 </div>
                 )
-            }
+            
 }
 
 

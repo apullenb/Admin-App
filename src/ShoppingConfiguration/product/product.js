@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
@@ -21,21 +22,22 @@ import {
 
 
 const Product = (props) => {
+    const dispatch = useDispatch();
+    const {products} = useSelector(state => state.products)
     const { id } = useParams();
-    const history = useHistory()
-    var product = props.products.find((prod) => `${prod.id}` === id);
+    const history = useHistory();
+    var product = products.find((prod) => `${prod.id}` === id);
     const [data, setData] = useState(product);
     const [showModal, setShowModal] = useState(false);
     const [deletePassword, setdeletePassword] = useState('null');
     const { addToast } = useToasts();
-
-
+ 
     useEffect(() => {
       updateId();
-    }, [id, props.products]);
+    }, [id]);
   
     const updateId = () => {
-      product = props.products.find((prod) => `${prod.id}` === id);
+      product = products.find((prod) => `${prod.id}` === id);
       setData(product);
     };
   

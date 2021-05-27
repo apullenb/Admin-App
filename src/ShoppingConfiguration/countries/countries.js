@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import Styled from 'styled-components';
 import Axios from 'axios';
 import { useToasts } from "react-toast-notifications";
@@ -9,15 +10,16 @@ import FormControl from 'react-bootstrap/FormControl'
 import Country from './country';
 import AddCountry from './addCounrty';
 import PageWrapper from '../../GlobalComponents/PageWrapper';
+import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 import {
     Link,
     Route,
     Switch,
     useRouteMatch,
-    useParams,
-    useHistory
   } from "react-router-dom";
   import config from '../../config/config'
+
+import { handleFetchCountriesAsync } from '../../redux/actions/ProductConfig/countryConfig/countryActions';
 
 const CountryBodyWrapper = Styled.div`
     width:90%;
@@ -74,21 +76,21 @@ const AdCountryButtonWrapper = Styled.span`
 
 
 const Countries = props => {
+const dispatch = useDispatch();
+const { countries, fetching } = useSelector(state => state.countries);
 let { path, url } = useRouteMatch();
-const [countries, setCountries] = useState([]);
-
-const getAsyncCountries = () => { Axios.get(`${config.CHALLANGE_API_URL}/api/countries`).then(res => {
-    setCountries(res.data);
-}).catch(error => {
-    console.log(error);
-});
-}
+const [countriesData, setCountriesData] = useState([]);
 
 useEffect(()=>{
-    getAsyncCountries();
+    dispatch(handleFetchCountriesAsync());
     console.log(countries);
 },[])
 
+
+useEffect(()=>{
+  setCountriesData(countries)
+  console.log(countries);
+},[countries])
 
   const filterItems = (filter) => {
 
@@ -98,7 +100,7 @@ useEffect(()=>{
         }
     });
 
-    setCountries(filterdItems);
+    setCountriesData(filterdItems);
 }
 
     return (
@@ -114,14 +116,9 @@ useEffect(()=>{
   <FormControl type='text' name='search' onChange={(e)=>{filterItems(e.target.value)}} placeholder="Search..."  />
   </InputGroup>
 
-  <Button
-    variant="primary"
-    onClick={() => {
-      getAsyncCountries();
-    }}
-  >
-    {props.isLoading? 'Loading...'  :  'Get all Products'}
-  </Button>
+  <div>
+    {fetching ? <ZilisLoader width={50} height={50}/>  :  <b>Countries List</b>}
+  </div>
   <ListWrapper>
     {countries.map((country) => {
       return (
@@ -143,19 +140,15 @@ useEffect(()=>{
 
   <Switch>
     <Route exact path={path}></Route>
-    <Route  path={`${path}/addCountry`}>
-        <AddCountry
-        getAsyncCountries = {getAsyncCountries}
-       /> 
+    <Route path={`${path}/addCountry`}>
+        <AddCountry /> 
     </Route>
 
-    <Route  path={`${path}/:id`}>
-      <Country
-        countries={countries}
-        getAsyncCountries={getAsyncCountries}
-      />
+    <Route path={`${path}/:id`}>
+      <Country />
     </Route>
   </Switch>
+
 </CountryWapper>
 </CountryBodyWrapper>
 </PageWrapper>

@@ -9,7 +9,9 @@ import Form from "react-bootstrap/Form";
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import PageWrapper from '../../GlobalComponents/PageWrapper';
+import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 import {handleFetchProductsAsync} from '../../redux/actions/ProductConfig/productConfig/productActions';
+
 
 import {
   Link,
@@ -83,7 +85,6 @@ const Products = (props) => {
   },[])
 
   useEffect(()=>{
-    console.log(products)
       setProducts(products); 
   },[products])
 
@@ -110,14 +111,9 @@ const Products = (props) => {
         <FormControl type='text' name='search' onChange={(e)=>{filterItems(e.target.value)}} placeholder="Search..."  />
         </InputGroup>
 
-        <Button
-          variant="primary"
-          onClick={() => {
-            props.handlegetAllProducts();
-          }}
-        >
-          {fetching? 'Loading...'  :  'Get all Products'}
-        </Button>
+        <div>
+          {fetching ? <ZilisLoader width={50} height={50}/>  :  <b>Products List</b>}
+        </div>
         <ListWrapper>
           {productsArray && productsArray.map((product) => {
             return (
@@ -143,7 +139,7 @@ const Products = (props) => {
               handlegetAllProducts={props.handlegetAllProducts}
              />
           </Route>
-
+            
           <Route path={`${path}/:id`}>
             <Product
               products={props.products}
