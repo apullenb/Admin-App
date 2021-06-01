@@ -9,7 +9,6 @@ import { CaretUp, CaretDown } from "react-bootstrap-icons";
 const EntryList = (props) => {
     const [entries, setEntries] = useState("");
     const [filter, setFilter] = useState("");
-    const [isSorted, setIsSorted] = useState("");
 
     const getEntries = async (perPage = 10, pageNo = 1, sort = "entries.id", sortDirection = "asc") => {
         try{
@@ -20,7 +19,6 @@ const EntryList = (props) => {
                 `${config.CHALLANGE_API_URL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`,
                 requestOptions
             );
-
             const data = await response.json();
             setEntries(data.data);
         } catch (err) {
@@ -32,9 +30,6 @@ const EntryList = (props) => {
         getEntries();
     }, []);
 
-   const toggleSortDirection = () => {
-    getEntries(10,1,"entries.id","asc");
-    }
     
     return (
         <div>
