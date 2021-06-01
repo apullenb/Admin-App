@@ -58,35 +58,26 @@ $breakpoint-laptop: 1624px;
     padding: 5px 15px;
     font-weight: 500;
     position: relative;
-    left:1120px;
+    left:1070px!important;;
     display:flex;
     align-self: flex-end;
   }
 
 
-  @media (max-width: $breakpoint-tablet) {
+  @media (min-width: 800px) {
 
   .add-entry-btn {
     position: relative;
-    left:755px;
-    display:flex;
-    align-self: flex-end;
-  }
-}
-@media (max-width: $breakpoint-mobile) {
-
-  .add-entry-btn {
-    position: relative;
-    left:710px;
+    left:680px;
     display:flex;
     align-self: flex-end;
   }
 }
-@media (max-width: $breakpoint-laptop) {
+@media (min-width: 300px) {
 
   .add-entry-btn {
     position: relative;
-    left:1060px;
+    left:680px;
     display:flex;
     align-self: flex-end;
   }
@@ -95,11 +86,12 @@ $breakpoint-laptop: 1624px;
 @media (max-width: 1600px) {
   .add-entry-btn {
     position: relative;
-    left:1070px;
+    left:1050px;
     display:flex;
     align-self: flex-end;
   }
 }
+
   .button-row {
     display: flex;
     flex-direction: row;
