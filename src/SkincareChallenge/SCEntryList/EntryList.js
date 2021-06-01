@@ -4,23 +4,25 @@ import PageWrapper from "../../GlobalComponents/PageWrapper";
 import Entries from './Entries';
 import config from "../../config/config";
 import Pagination from "./Pagination";
-
+import { CaretUp, CaretDown } from "react-bootstrap-icons";
 
 const EntryList = (props) => {
-    const [entries, setentries] = useState("");
+    const [entries, setEntries] = useState("");
     const [filter, setFilter] = useState("");
+    const [isSorted, setIsSorted] = useState("");
 
-    const getEntries = async (perPage = 10, pageNo = 1) => {
+    const getEntries = async (perPage = 10, pageNo = 1, sort = "entries.id", sortDirection = "asc") => {
         try{
             const requestOptions = {
                 method:"GET",
             };
             const response = await fetch (
-                `${config.CHALLANGE_API_URL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=entries.id`,
+                `${config.CHALLANGE_API_URL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`,
                 requestOptions
             );
+
             const data = await response.json();
-            setentries(data.data);
+            setEntries(data.data);
         } catch (err) {
             console.log(err.message);
         }
@@ -30,6 +32,10 @@ const EntryList = (props) => {
         getEntries();
     }, []);
 
+   const toggleSortDirection = () => {
+    getEntries(10,1,"entries.id","asc");
+    }
+    
     return (
         <div>
            <PageWrapper>
@@ -140,15 +146,36 @@ const EntryList = (props) => {
                            </th>
                        </tr>
                        <tr>
-                           <th className="head" >Entry ID</th>
-                           <th className="head" >Entry Date</th>
-                           <th className="head" >Ambassador ID</th>
-                           <th className="head" >Name</th>
-                           <th className="head" >Challenge</th>
+                           <th className="head"> Entry ID <br/>
+                                <CaretUp className="caretIcons" onClick={() => {getEntries(10,1,"entries.id","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {getEntries(10,1,"entries.id","desc")}}/> 
+                           </th>
+                           <th className="head">Entry Date<br/>
+                                <CaretUp className="caretIcons" onClick={() => {getEntries(10,1,"entries.createdDate","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {getEntries(10,1,"entries.createdDate","desc")}}/> 
+                            </th>
+                           <th className="head">Ambassador ID <br/>
+                                <CaretUp className="caretIcons" onClick={() => {getEntries(10,1,"owner.ambassador_id","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {getEntries(10,1,"owner.ambassador_id","desc")}}/> 
+                           </th>
+                           <th className="head">Name <br/>
+                                <CaretUp className="caretIcons" onClick={() => {getEntries(10,1,"owner.name","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {getEntries(10,1,"owner.name","desc")}}/> 
+                           </th>
+                           <th className="head">Challenge <br/>
+                                <CaretUp className="caretIcons" onClick={() => {getEntries(10,1,"contests.title","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {getEntries(10,1,"contests.title","desc")}}/> 
+                           </th>
                            <th className="head">Day 1 Photo</th>
                            <th className="head">Day 30 Photo</th>
-                           <th className="head" >Featured</th>
-                           <th className="head">Approved</th>
+                           <th className="head">Featured <br/>
+                                <CaretUp className="caretIcons" onClick={() => {getEntries(10,1,"entries.isFeatured","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {getEntries(10,1,"entries.isFeatured","desc")}}/> 
+                           </th>
+                           <th className="head">Approved <br/>
+                                <CaretUp className="caretIcons" onClick={() => {getEntries(10,1,"entries.isApproved","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {getEntries(10,1,"entries.isApproved","desc")}}/> 
+                           </th>
                            <th className="head">Actions</th>
                        </tr>
                         {entries &&

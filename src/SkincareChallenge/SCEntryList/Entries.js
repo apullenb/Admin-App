@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from "react-router-dom";
 
 
@@ -9,7 +10,7 @@ const Entries = (props) => {
         <tr id="row">
             <td>{entry.id}</td>
             <td>{entry.createdDate}</td>
-            <td>Ambassador ID Here</td>
+            <td>{entry.ambassadorId}</td>
             <td>{entry.name}</td>
             <td>{entry.contestTitle}</td>
             <td><img src={entry.day1ImageUrl} width="50px"/></td>
