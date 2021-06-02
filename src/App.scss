@@ -6,7 +6,6 @@ body {
   align-items: center;
   align-content: center;
   justify-content: center;
-
 }
 
 .selected{
@@ -33,6 +32,10 @@ body {
   margin: 2% 2%;
 }
 
-body ::selection{
+body::selection{
   background-color: rgba(15,75,143,0.8);
+}
+
+.add-button-label {
+  margin-right:2%;
 }

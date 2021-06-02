@@ -1,3 +1,4 @@
+import './App.scss';
 import React, { useState, useEffect } from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -5,16 +6,21 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import './App.scss'
 import Login from "./Login";
-import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
 import Countries from "./ShoppingConfiguration/countries/countries";
-import './App.css'
 import Products from "./ShoppingConfiguration/product/products";
 import Categories from './ShoppingConfiguration/categories';
 import Kits from './ShoppingConfiguration/kits/kits';
+import EntryEdit from "./SkincareChallenge/SCAccountList/EntryEdit";
+import ShoppingCountries from "./ShoppingConfiguration/countries/countries";
+import ShoppingKits from "./ShoppingConfiguration/kits/kits";
+import ShoppingProducts from "./ShoppingConfiguration/product/products";
+import ShoppingCategories from "./ShoppingConfiguration/categories";
+import Page from './GlobalComponents/PageWrapper'
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
 
 function App() {
@@ -45,34 +51,28 @@ useEffect(()=>{
   // <------------ END SAMPLE USER VALIDATION SECTION
 
   return (
-    <div className='app'>
-      <Switch>
-        <Route
-          exact
-          path="/Dashboard"
-          render={(props) =>
-            isAuthenticated ? <Dashboard /> : <Redirect to="/login" />
-          }
-        />
-      </Switch>
 
-      <Route exact path="/Permissions" component={Categories} />
-      <Route exact path="/" component={Home} />
-      <Route exact path="/login" component={Login} />
-      <Route
-        exact
-        path="/Skincare-Challenge-Accounts"
-        component={AccountList}
-      />
-      <Route
-        exact
-        path="/Skincare-Challenge-Account-Edit/:accountid"
-        component={AccountEdit}
-      />
-      <Route path="/countries" component={Countries} />
-      <Route path='/products' component={Products} />
-      <Route path="/categories" component={Categories} />
-      <Route path="/kits" component={Kits} />
+    <div className='app'>      
+      <Page >
+        <Switch>
+          <Route exact path="/" render={(props) => isAuthenticated ? <Dashboard /> : <Redirect to="/login" /> } />        
+          <Route path="/login" component={Login} />
+          <Route path="/Shopping/Countries" component={ShoppingCountries} />
+          <Route path="/Shopping/Kits" component={ShoppingKits} />
+          <Route path="/Shopping/Categories" component={ShoppingCategories} />
+          <Route path="/Shopping/Products" component={ShoppingProducts} />
+          <Route path="/Challenge/Accounts" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
+          <Route path="/Challenge/Account/:accountid" component={AccountEdit} />
+          <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
+          <Route path="/Events" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
+          <Route path="/Incentive" render={(props) => isAuthenticated ? <AccountEdit /> : <Redirect to="/login" /> } />
+          <Route path="/Permissions" render={(props) => isAuthenticated ? <Categories /> : <Redirect to="/login" /> } />
+          <Route path="/countries" component={Countries} />
+          <Route path='/products' component={Products} />
+          <Route path="/categories" component={Categories} />
+          <Route path="/kits" component={Kits} />
+        </Switch>       
+       </Page>
     </div>
   );
 }

@@ -5,22 +5,20 @@ import { useToasts } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
 import Product from './product';
 import AddProduct from './addProduct';
-import Form from "react-bootstrap/Form";
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import PageWrapper from '../../GlobalComponents/PageWrapper';
 import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 import {handleFetchProductsAsync} from '../../redux/actions/Configuration/productConfig/productActions';
+import '../../App.scss';
 
-
+import Styled from "styled-components";
 import {
   Link,
   Route,
   Switch,
-  useRouteMatch,
-  useParams,
+  useRouteMatch
 } from "react-router-dom";
-import Styled from "styled-components";
 
 
 const ProductBodyWrapper = Styled.div`
@@ -29,6 +27,7 @@ const ProductBodyWrapper = Styled.div`
     flex-direction:row ;
     margin: 0 auto;
     padding:2%;
+    text-align:center;
  `;
 
 const ProductsWrapper = Styled.div`
@@ -100,7 +99,6 @@ const Products = (props) => {
   }
 
   return (
-    <PageWrapper>
     <ProductBodyWrapper>
       <ProductsWrapper>
         <h2>Products page</h2>
@@ -147,7 +145,6 @@ const Products = (props) => {
         </Switch>
       </ProductWapper>
     </ProductBodyWrapper>
-    </PageWrapper>
   );
 };
 

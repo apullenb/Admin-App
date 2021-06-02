@@ -3,10 +3,6 @@ import styled from 'styled-components'
 
 
 
-
-
-
-
 const Footer = props => {
 const nowDate =new Date(Date.now());
 
