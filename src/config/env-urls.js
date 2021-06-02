@@ -21,8 +21,6 @@
   }
   
 
-
-
   export default config = {
   PRODUCTSBASEURL : handleSetProductsURL(),
   SKINCAREBASEURL : handleSkinCareEnvURL()

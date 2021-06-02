@@ -7,8 +7,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
 import config from '../../config/env-urls'
 import {
     Link,
@@ -20,10 +18,10 @@ import {
   } from "react-router-dom";
 
 const Country = props => {
+  const { id } = useParams();
     const dispatch = useDispatch();
     const {countries} = useSelector(state => state.countries)
     var country = countries.find((country) => `${country.id}` === id);
-    const { id } = useParams();
     const history = useHistory()
     const [data, setData] = useState({});
     const [showModal, setShowModal] = useState(false);

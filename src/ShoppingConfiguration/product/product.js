@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ProductModal from './productModal';
 import ModalType from './modalTypes';
-import config from '../../config/config';
+import config from '../../config/env-urls';
 import styled from 'styled-components';
 
 import {
@@ -56,7 +56,7 @@ const Product = (props) => {
 
     axios
       .put(
-        `${config.CHALLANGE_API_URL}/api/products/update-product/by-id/${data.id}`,
+        `${config.PRODUCTSBASEURL}/api/products/update-product/by-id/${data.id}`,
         data
       )
       .then((res) => {
@@ -75,7 +75,7 @@ const Product = (props) => {
   };
 
   const handleAyncDeleteProduct = () => {
-    axios.delete(`${config.CHALLANGE_API_URL}/api/products/delete-product/by-sku/${data.sku}/${deletePassword}`)
+    axios.delete(`${config.PRODUCTSBASEURL}/api/products/delete-product/by-sku/${data.sku}/${deletePassword}`)
       .then((res) => {
         addToast(`Product: ${data.sku} has been deleted successfully`, {
           appearance: "success",
@@ -368,12 +368,11 @@ const Product = (props) => {
 export default Product;
 
 const SkuNameBackground = styled.div`
-  font-size:3vh; 
-  position:absolute;
-  text-orientation: upright;
-  writing-mode: vertical-rl;
+  font-size:6vh; 
+  position:relative;
   color: rgba(120,121,123,0.5);
   font-weight:400;
   overFlow:hidden;
   z-index:-1;
+  transform: rotate(90deg) translate(350px, 475px);
   `;

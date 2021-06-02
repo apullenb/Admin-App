@@ -7,7 +7,6 @@ import Product from './product';
 import AddProduct from './addProduct';
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
-import PageWrapper from '../../GlobalComponents/PageWrapper';
 import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 import {handleFetchProductsAsync} from '../../redux/actions/Configuration/productConfig/productActions';
 import '../../App.scss';
@@ -20,6 +19,85 @@ import {
   useRouteMatch
 } from "react-router-dom";
 
+
+const Products = (props) => {
+  const dispatch = useDispatch();
+  const { products, fetching } = useSelector(state => state.products)
+  let { path, url } = useRouteMatch();
+  const [productsArray, setProducts] = useState([]);
+
+  useEffect(()=>{
+    dispatch(handleFetchProductsAsync());
+  },[])
+
+  useEffect(()=>{
+      setProducts(products); 
+  },[products])
+
+
+  const filterItems = (filter) => { //search products
+      const filterdItems = productsArray.filter(item => { 
+        if (item.sku.includes(filter.toUpperCase())){
+           return item;
+          }
+      });
+      setProducts(filterdItems);
+  }
+
+  return (
+    <ProductBodyWrapper>
+      <ProductsWrapper>
+        <SearchWrapper>
+        <h2>Products page</h2>
+        <InputGroup className="mb-2 mr-sm-2">
+        <InputGroup.Prepend>
+        <InputGroup.Text><i class="fas fa-binoculars"></i></InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl type='text' name='search' onChange={(e)=>{filterItems(e.target.value)}} placeholder="Search..."  />
+        </InputGroup>
+        </SearchWrapper>
+
+        <div style={{marginTop:'40%'}}>
+        <div>
+          {fetching ? <ZilisLoader width={50} height={50}/>  :  <b>Products List</b>}
+        </div>
+        <ListWrapper>
+          {productsArray && productsArray.map((product) => {
+            return (
+              <li key={product.id}>
+                <Link to={`${url}/${product.id}`}>{product.sku}</Link>
+              </li>
+            );
+          })}
+        </ListWrapper>
+        </div>
+      </ProductsWrapper>
+
+      <ProductWapper>
+        <AddProductWrapper>
+        <AddProductButtonWrapper>
+          <label className='add-button-label form-labels'>Create A New Product</label><Link to={`${url}/addProduct`}><Button variant="success" style={{fontSize:30, width:'50px'}}>&#43;</Button></Link>
+          </AddProductButtonWrapper>
+        </AddProductWrapper>
+
+        <Switch>
+          <Route exact path={path}></Route>
+          <Route  path={`${path}/addProduct`}>
+             <AddProduct 
+             />
+          </Route>
+            
+          <Route path={`${path}/:id`}>
+            <Product
+            />
+          </Route>
+        </Switch>
+      </ProductWapper>
+    </ProductBodyWrapper>
+  );
+};
+
+export default Products;
 
 const ProductBodyWrapper = Styled.div`
     width:90%;
@@ -71,82 +149,18 @@ const AddProductButtonWrapper = Styled.span`
   border-radius:8px;
   padding: 1%;
   color:#fff;
-  
 `;
 
-const Products = (props) => {
-  const dispatch = useDispatch();
-  const { products, fetching } = useSelector(state => state.products)
-  let { path, url } = useRouteMatch();
-  const [productsArray, setProducts] = useState([]);
+const SearchWrapper = Styled.div`
+  display: flex;
+  justify-content:center;
+  flex-direction:column;
+  position:absolute;
+  width:282px;
+  background-color:#5a5e63;
+  border-radius:8px 0 0 0 ;
 
-  useEffect(()=>{
-    dispatch(handleFetchProductsAsync());
-  },[])
-
-  useEffect(()=>{
-      setProducts(products); 
-  },[products])
-
-
-  const filterItems = (filter) => { //search products
-      const filterdItems = productsArray.filter(item => { 
-        if (item.sku.includes(filter.toUpperCase())){
-           return item;
-          }
-      });
-      setProducts(filterdItems);
+  h2{
+    color:#fff;
   }
-
-  return (
-    <ProductBodyWrapper>
-      <ProductsWrapper>
-        <h2>Products page</h2>
-
-        <InputGroup className="mb-2 mr-sm-2">
-        <InputGroup.Prepend>
-        <InputGroup.Text><i class="fas fa-binoculars"></i></InputGroup.Text>
-        </InputGroup.Prepend>
-        <FormControl type='text' name='search' onChange={(e)=>{filterItems(e.target.value)}} placeholder="Search..."  />
-        </InputGroup>
-
-        <div>
-          {fetching ? <ZilisLoader width={50} height={50}/>  :  <b>Products List</b>}
-        </div>
-        <ListWrapper>
-          {productsArray && productsArray.map((product) => {
-            return (
-              <li key={product.id}>
-                <Link to={`${url}/${product.id}`}>{product.sku}</Link>
-              </li>
-            );
-          })}
-        </ListWrapper>
-      </ProductsWrapper>
-
-      <ProductWapper>
-        <AddProductWrapper>
-        <AddProductButtonWrapper>
-          <label className='add-button-label form-labels'>Create A New Product</label><Link to={`${url}/addProduct`}><Button variant="success" style={{fontSize:30, width:'50px'}}>&#43;</Button></Link>
-          </AddProductButtonWrapper>
-        </AddProductWrapper>
-
-        <Switch>
-          <Route exact path={path}></Route>
-          <Route  path={`${path}/addProduct`}>
-             <AddProduct 
-             />
-          </Route>
-            
-          <Route path={`${path}/:id`}>
-            <Product
-            />
-          </Route>
-        </Switch>
-      </ProductWapper>
-    </ProductBodyWrapper>
-  );
-};
-
-
-export default Products;
+`;

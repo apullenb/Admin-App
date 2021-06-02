@@ -17,10 +17,91 @@ import {
   Switch,
   useRouteMatch,
 } from "react-router-dom";
-import config from '../../config/env-urls'
 import '../../App.scss';
 
 import { handleFetchCountriesAsync } from '../../redux/actions/Configuration/countryConfig/countryActions';
+
+
+const Countries = props => {
+  const dispatch = useDispatch();
+  const { countries, fetching } = useSelector(state => state.countries);
+  let { path, url } = useRouteMatch();
+  const [countriesData, setCountriesData] = useState([]);
+
+  useEffect(() => {
+    dispatch(handleFetchCountriesAsync());
+  }, [])
+
+
+  useEffect(() => {
+    setCountriesData(countries)
+  }, [countries])
+
+  const filterItems = (filter) => {
+
+    const filterdItems = countries.filter(item => {
+      if (item.name.includes(filter.toUpperCase())) {
+        return item;
+      }
+    });
+
+    setCountriesData(filterdItems);
+  }
+
+  return (
+    <CountryBodyWrapper>
+      <CountriesWrapper>
+        <SearchWrapper>
+          <h2>Countries Page</h2>
+          <InputGroup className="mb-2 mr-sm-2">
+            <InputGroup.Prepend>
+              <InputGroup.Text><i className="fas fa-binoculars"></i></InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl type='text' name='search' onChange={(e) => { filterItems(e.target.value) }} placeholder="Search..." />
+          </InputGroup>
+        </SearchWrapper>
+
+        <div style={{ marginTop: '40%' }}>
+          <div>
+            {fetching ? <ZilisLoader width={50} height={50} /> : <b>Countries List</b>}
+          </div>
+          <ListWrapper>
+            {countries.map((country) => {
+              return (
+                <li key={country.id}>
+                  <Link to={`${url}/${country.id}`}>{country.name}</Link>
+                </li>
+              );
+            })}
+          </ListWrapper>
+        </div>
+      </CountriesWrapper>
+
+
+      <CountryWapper>
+        <AddCountryWrapper>
+          <AdCountryButtonWrapper>
+            <label className='add-button-label form-labels'>Create A New Country</label><Link to={`${url}/addCountry`}><Button variant="success" style={{ fontSize: 30, width: '50px' }}>&#43;</Button></Link>
+          </AdCountryButtonWrapper>
+        </AddCountryWrapper>
+
+        <Switch>
+          <Route exact path={path}></Route>
+          <Route path={`${path}/addCountry`}>
+            <AddCountry />
+          </Route>
+          <Route path={`${path}/:id`}>
+            <Country />
+          </Route>
+        </Switch>
+
+      </CountryWapper>
+    </CountryBodyWrapper>
+  )
+
+}
+
+export default Countries;
 
 const CountryBodyWrapper = Styled.div`
     width:90%;
@@ -72,91 +153,18 @@ const AdCountryButtonWrapper = Styled.span`
   border-radius:8px;
   padding: 1%;
   color:#fff;
-  
 `;
 
+const SearchWrapper = Styled.div`
+  display: flex;
+  justify-content:center;
+  flex-direction:column;
+  position:absolute;
+  width:282px;
+  background-color:#5a5e63;
+  border-radius:8px 0 0 0 ;
 
-
-const Countries = props => {
-  const dispatch = useDispatch();
-  const { countries, fetching } = useSelector(state => state.countries);
-  let { path, url } = useRouteMatch();
-  const [countriesData, setCountriesData] = useState([]);
-
-  useEffect(() => {
-    dispatch(handleFetchCountriesAsync());
-    console.log(countries);
-  }, [])
-
-
-  useEffect(() => {
-    setCountriesData(countries)
-    console.log(countries);
-  }, [countries])
-
-  const filterItems = (filter) => {
-
-    const filterdItems = countries.filter(item => {
-      if (item.name.includes(filter.toUpperCase())) {
-        return item;
-      }
-    });
-
-    setCountriesData(filterdItems);
+  h2{
+    color:#fff;
   }
-
-  return (
-
-    <CountryBodyWrapper>
-      <CountriesWrapper>
-        <h2>Countries Page</h2>
-
-        <InputGroup className="mb-2 mr-sm-2">
-          <InputGroup.Prepend>
-            <InputGroup.Text><i className="fas fa-binoculars"></i></InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl type='text' name='search' onChange={(e) => { filterItems(e.target.value) }} placeholder="Search..." />
-        </InputGroup>
-
-        <div>
-          {fetching ? <ZilisLoader width={50} height={50} /> : <b>Countries List</b>}
-        </div>
-        <ListWrapper>
-          {countries.map((country) => {
-            return (
-              <li key={country.id}>
-                <Link to={`${url}/${country.id}`}>{country.name}</Link>
-              </li>
-            );
-          })}
-        </ListWrapper>
-      </CountriesWrapper>
-
-
-      <CountryWapper>
-        <AddCountryWrapper>
-          <AdCountryButtonWrapper>
-            <label className='add-button-label form-labels'>Create A New Country</label><Link to={`${url}/addCountry`}><Button variant="success" style={{ fontSize: 30, width: '50px' }}>&#43;</Button></Link>
-          </AdCountryButtonWrapper>
-        </AddCountryWrapper>
-
-        <Switch>
-          <Route exact path={path}></Route>
-          <Route path={`${path}/addCountry`}>
-            <AddCountry />
-          </Route>
-
-          <Route path={`${path}/:id`}>
-            <Country />
-          </Route>
-        </Switch>
-
-      </CountryWapper>
-    </CountryBodyWrapper>
-
-  )
-
-}
-
-export default Countries;
-
+`;

@@ -23,12 +23,9 @@ const PageWrap = styled.div`
     justify-content: center;
     align-items: center;
     align-content: center;
-    margin: 1%;
-    padding: 1%;
-   
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
+    padding: 1%; 
+    margin: 0 auto;
+
 
   h1,
   .page-header {
