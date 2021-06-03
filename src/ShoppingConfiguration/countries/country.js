@@ -29,9 +29,6 @@ const Country = props => {
     const { addToast } = useToasts();
 
     useEffect(() => {
-      console.log(country)
-      console.log(countries)
-      //updateId();
     }, []);
 
     useEffect(() => {
@@ -40,7 +37,6 @@ const Country = props => {
 
     const updateId = () => {
         country = countries.find((country) => `${country.id}` === id);
-        console.log(country)
         setData(country);
       };
 

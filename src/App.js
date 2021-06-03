@@ -39,7 +39,6 @@ function App() {
   };
 
 useEffect(()=>{
-  console.log("Test Action Dispatched")
   dispatch({type:APP_STARTED}) 
 },[])
 
