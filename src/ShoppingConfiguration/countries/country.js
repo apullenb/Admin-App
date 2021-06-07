@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Styled from 'styled-components';
 import Axios from 'axios';
 import { useToasts } from "react-toast-notifications";
@@ -6,8 +7,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
+import config from '../../config/env-urls'
 import {
     Link,
     Route,
@@ -18,23 +18,28 @@ import {
   } from "react-router-dom";
 
 const Country = props => {
-    const { id } = useParams();
+  const { id } = useParams();
+    const dispatch = useDispatch();
+    const {countries} = useSelector(state => state.countries)
+    var country = countries.find((country) => `${country.id}` === id);
     const history = useHistory()
-    var country = props.countries.find((country) => `${country.id}` === id);
-    const [data, setData] = useState(country);
+    const [data, setData] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [deletePassword, setdeletePassword] = useState('null');
     const { addToast } = useToasts();
 
     useEffect(() => {
-        updateId();
-      }, [id, props.countries]);
+    }, []);
 
-      
+    useEffect(() => {
+        updateId();
+      }, [id]);
+
     const updateId = () => {
-        country = props.countries.find((country) => `${country.id}` === id);
+        country = countries.find((country) => `${country.id}` === id);
         setData(country);
       };
+
       const CountryId = data.id;
       const handleSave = (e) => {
         e.preventDefault();
@@ -48,7 +53,7 @@ const Country = props => {
           delete data.updated_at
         }
 
-        Axios.put(`http://localhost:4000/api/countries/${CountryId}`, data)
+        Axios.put(`${config.PRODUCTSBASEURL}/api/countries/${CountryId}`, data)
         .then((res) => {
           addToast(`Country: ${data.name} has been updated successfully`, {
             appearance: "success",
@@ -63,14 +68,13 @@ const Country = props => {
         }).finally(()=>{
           props.getAsyncCountries()
       })
-
       }
 
       const handleUpdateCountriesData = (event) => { 
         setData({ ...data, [event.target.name]: event.target.value });
       }
       const handleDelete = () => {
-          Axios.delete(`http://localhost:4000/api/countries/${data.id}`)
+          Axios.delete(`${config.PRODUCTSBASEURL}/api/countries/${data.id}`)
           .then((res) => {
             addToast(`Product: ${data.name} has been Deleted successfully`, {
               appearance: "success",
@@ -91,8 +95,7 @@ const Country = props => {
       const handleToggleActive = (event) => {
            setData({ ...data, [event.target.name]: !data.active });
       }
-  
-        if (country !== undefined) {
+    
             return (
               <div style={{ margin: "0 auto", width: "80%" }}>
                <h2 style={{ marginBottom:'4%', borderBottom:'2px solid black'}}>EDIT / DELETE: {data.name}</h2>
@@ -116,8 +119,7 @@ const Country = props => {
                         value={data.id? data.id : ''}
                       />
                   </Col>
-                  </Form.Group>
-      
+                  </Form.Group>    
                   <Form.Group as={Row} controlId="formName">
                     <Form.Label className='form-labels' column sm="2">
                       Name
@@ -162,7 +164,7 @@ const Country = props => {
                   </Form.Group>
                   <Form.Group as={Row} controlId="formTaxRate">
                     <Form.Label className='form-labels' column sm="2">
-                      Tax Tare
+                      Tax / VAT 
                     </Form.Label>
                     <Col sm="10">
                       <Form.Control
@@ -215,7 +217,7 @@ const Country = props => {
                 </Form>
                 </div>
                 )
-            }
+            
 }
 
 

@@ -1,0 +1,1 @@
+export const APP_STARTED = "[APP] APP STARTED SUCCESSFUL";
