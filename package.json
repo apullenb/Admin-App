@@ -16,7 +16,8 @@
     "react-scripts": "3.4.3",
     "react-toast-notifications": "^2.4.0",
     "styled-components": "^5.2.0",
-    "toastr": "^2.1.4"
+    "toastr": "^2.1.4",
+    "react-intl": "^5.18.1"
   },
   "scripts": {
     "start": "react-scripts start",
