@@ -7,7 +7,7 @@ import Page from '../GlobalComponents/PageWrapper'
 
 const Home = (props) => {
   return (
-    <Page>
+   
       <section style={{ margin: "2% 6%" }}>
         <h2>Home / Landing Page</h2>
         <Link to="login">
@@ -24,7 +24,7 @@ const Home = (props) => {
           </Link>
         </p>
       </section>
-    </Page>
+  
   );
 };
 
