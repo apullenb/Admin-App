@@ -22,6 +22,7 @@ import ShoppingProducts from "./ShoppingConfiguration/product/products";
 import ShoppingCategories from "./ShoppingConfiguration/categories";
 import Page from './GlobalComponents/PageWrapper'
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
+import Home from './Pages/Home';
 
 function App() {
   // SAMPLE USER VALIDATION (Needs to be created)---------->
@@ -54,7 +55,8 @@ useEffect(()=>{
     <div className='app'>      
       <Page >
         <Switch>
-          <Route exact path="/" render={(props) => isAuthenticated ? <Dashboard /> : <Redirect to="/login" /> } />        
+        <Route exact path="/" component={Home} />
+          {/* <Route exact path="/" render={(props) => isAuthenticated ? <Dashboard /> : <Redirect to="/login" /> } />         */}
           <Route path="/login" component={Login} />
           <Route path="/Shopping/Countries" component={ShoppingCountries} />
           <Route path="/Shopping/Kits" component={ShoppingKits} />
