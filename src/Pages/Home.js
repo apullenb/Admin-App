@@ -3,14 +3,11 @@ import { Link } from "react-router-dom";
 import PageWrapper from "../GlobalComponents/PageWrapper";
 import Logo from "../assets/Zilislogo.png";
 import styled from "styled-components";
+import Page from '../GlobalComponents/PageWrapper'
 
 const Home = (props) => {
   return (
-    <div>
-      <Top>
-        <img src={Logo} />
-      </Top>
-
+   
       <section style={{ margin: "2% 6%" }}>
         <h2>Home / Landing Page</h2>
         <Link to="login">
@@ -27,7 +24,7 @@ const Home = (props) => {
           </Link>
         </p>
       </section>
-    </div>
+  
   );
 };
 

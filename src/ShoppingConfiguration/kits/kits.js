@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import {Link, Switch, Route, useRouteMatch, useParams} from 'react-router-dom';
+import { Link, Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
-import config from '../../config/config'
+import config from '../../config/env-urls'
 
 
 
@@ -15,29 +15,29 @@ const KitWrapper = styled.div`
 
 
 const Kits = (props) => {
-let { url, path } = useRouteMatch();
-const [kits, setKits] = useState([]);
+    let { url, path } = useRouteMatch();
+    const [kits, setKits] = useState([]);
 
-const getAllKits = () => axios.get(`${config.CHALLANGE_API_URL}/api/kits`)
-                    .then(res =>{
-                        setKits(res.data)
-                        console.log(res.data)
-                    }).catch(error => {
-                        console.log(error)
-                    })
+    const getAllKits = () => axios.get(`${config.PRODUCTSBASEURL}/api/kits`)
+        .then(res => {
+            setKits(res.data)
+            console.log(res.data)
+        }).catch(error => {
+            console.log(error)
+        })
 
-useEffect(()=>{
-   getAllKits(); 
-},[]);
+    useEffect(() => {
+        getAllKits();
+    }, []);
 
 
 
-    return(
+    return (
         <KitWrapper>
             {kits.map((kit, index) => {
                 return (
-                    <li>
-                     <Link to={`${url}/${kit.id}`}>{ kit.sku }</Link>
+                    <li key={index}>
+                        <Link to={`${url}/${kit.id}`}>{kit.sku}</Link>
                     </li>
                 )
             })}
@@ -50,19 +50,11 @@ useEffect(()=>{
                     />
                 </Route>
             </Switch>
-        
         </KitWrapper>
     )
-
-
 }
 
-
 export default Kits;
-
-
-
-
 
 const Kit = props => {
     let { id } = useParams();
@@ -72,36 +64,38 @@ const Kit = props => {
     const [kitSingleProducts, setkitSingleProducts] = useState([]);
 
 
-    var findKit = kits.find(kit => `${kit.id}` === id )
+    var findKit = kits.find(kit => `${kit.id}` === id)
 
-    useEffect(()=>{
+    useEffect(() => {
         setKit(findKit);
     })
 
-    useEffect(()=>{
+    useEffect(() => {
         getAllKitsProducts();
-    },[])
+    }, [])
 
-    useEffect(()=>{
-             kitsAndProducts.forEach((currKit) => {
-            if( typeof currKit[`${kit.sku}`] !== 'undefined') {
+    useEffect(() => {
+        kitsAndProducts.forEach((currKit) => {
+            if (typeof currKit[`${kit.sku}`] !== 'undefined') {
                 console.log("I has success")
                 setkitSingleProducts(Object.values(currKit)[0])
             }
         })
         kitSingleProducts.forEach(item => console.log(item))
         console.log(kitSingleProducts)
-    },[id])
+    }, [id])
 
 
 
-    const getAllKitsProducts = () => { axios.get(`${config.CHALLANGE_API_URL}/api/kits/kits-products/sorted`)
-                            .then(res => {
-                                setkitsAndProducts(res.data)
-                                console.log(res.data)
-                            }).catch(error => {
-                                console.log(error)
-                            });}
+    const getAllKitsProducts = () => {
+        axios.get(`${config.PRODUCTSBASEURL}/api/kits/kits-products/sorted`)
+        .then(res => {
+            setkitsAndProducts(res.data)
+            console.log(res.data)
+        }).catch(error => {
+            console.log(error)
+        });
+    }
 
     return (
         <div>
@@ -115,7 +109,7 @@ const Kit = props => {
                     <p>{index}</p>
                 )
             })} */}
-     
+
         </div>
 
     )

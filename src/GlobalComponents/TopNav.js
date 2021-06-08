@@ -1,121 +1,111 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import Logo from '../assets/Zilislogo.png'
+import Logo from '../assets/Zilis_Logo_2021.png'
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import styled from 'styled-components';
 import ProfileImage from '../assets/person_palceholder_img.png'
-import Categories from '../ShoppingConfiguration/categories'
 
 function TopNav() {
-  const navLinks = [
-        
-    {name:"Event Calendar", link:'/Event-Calendar', isPrivate: true},
-    {name:"Incentive Trip", link:'/Incentive-Trip', isPrivate: true},
-];
-
+  const navLinks = [        
+    {name:"Event Calendar", link:'/Events', isPrivate: true},
+    {name:"Incentive Trip", link:'/Incentive', isPrivate: true},
+  ];
 
 
   return (
-    <div>
+    <HeaderWrapper>
       <Top>
-      <img src={Logo} style={{maxWidth:'170px', margin: '1px auto'}} />
-      <img src={ProfileImage} style={{maxWidth:'70px', margin: '1px 1%'}}/>
+        <div className="top-wrapper">
+          <div className="inner-wrapper">
+            <a href="/"><img src={Logo} style={{maxWidth:'170px', margin: '1px auto'}} /></a>
+            <img src={ProfileImage} className="profile-pic" />
+          </div>
+        </div>
+        <hr />
       </Top>
-      <MainNavWrapper>
-            <Navbar expand='lg' className='app-nav-wrapper' >
-            <DropDownWrapper>
+      <div className="top-wrapper">
+        <Navbar expand='lg' className='app-nav-wrapper' >
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-          <NavDropdown title="Shopping Configuration" id="basic-nav-dropdown">
-        <NavDropdown.Item href="/Countries">Countries</NavDropdown.Item>
-        <NavDropdown.Item href="/Kits">Kits</NavDropdown.Item>
-        <NavDropdown.Item href="/Categories">Categories</NavDropdown.Item>
-        <NavDropdown.Item href="/Products">Products</NavDropdown.Item>
-      </NavDropdown>    
-      </Nav>     
-      </Navbar.Collapse>
-      </DropDownWrapper>
-      </Navbar>
-      <Navbar expand='lg' className='app-nav-wrapper' >
-            <DropDownWrapper>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-          <NavDropdown title="Skincare Challenge" id="basic-nav-dropdown">
-        <NavDropdown.Item href="/Skincare-Challenge-Accounts">Accounts</NavDropdown.Item>
-        <NavDropdown.Item href="/Skincare-Challenge-Entries">Entries</NavDropdown.Item>
-       
-      </NavDropdown>    
-      </Nav>     
-      </Navbar.Collapse>
-      </DropDownWrapper>
-      </Navbar>
-      <Navbar>
-      <Nav>
-    {navLinks.map ((link, i) => {
-       return (
-        <LinkWrap><Nav.Link key={i} href={link.link} >{link.name}</Nav.Link></LinkWrap>
-    )
-    })
-    }
-</Nav>
-</Navbar>
-<Navbar expand='lg' className='app-nav-wrapper' >
-            <AdDropDownWrapper>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-          <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
-        <NavDropdown.Item href="/Skincare-Challenge-Accounts">Permissions</NavDropdown.Item>
-        <NavDropdown.Item href="/Skincare-Challenge-Entries">Roles</NavDropdown.Item>
-      </NavDropdown>    
-      </Nav>     
-      </Navbar.Collapse>
-      </AdDropDownWrapper>
-      </Navbar>
- </MainNavWrapper>
-    </div>
+              <Nav className="mr-auto">
+                <NavDropdown title="Shopping Configuration" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/Shopping/Countries">Countries</NavDropdown.Item>
+                  <NavDropdown.Item href="/Shopping/Kits">Kits</NavDropdown.Item>
+                  <NavDropdown.Item href="/Shopping/Categories">Categories</NavDropdown.Item>
+                  <NavDropdown.Item href="/Shopping/Products">Products</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown title="Skincare Challenge" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/Challenge/Accounts">Accounts</NavDropdown.Item>
+                  <NavDropdown.Item href="/Challenge/Entries">Entries</NavDropdown.Item>
+                </NavDropdown>    
+                { navLinks.map ((link, i) => {
+                  return (
+                    <LinkWrap key={i}><Nav.Link href={link.link} >{link.name}</Nav.Link></LinkWrap>
+                  )
+                })}
+              </Nav>     
+              <Nav>
+                <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/Settings/Permissions">Permissions</NavDropdown.Item>
+                  <NavDropdown.Item href="/Setings/Roles">Roles</NavDropdown.Item>
+                </NavDropdown>    
+              </Nav>     
+            </Navbar.Collapse>
+        </Navbar>
+      </div>
+    </HeaderWrapper>
   )
 }
 
 export default TopNav;
 
 
+const HeaderWrapper = styled.div`
+  .top-wrapper {
+    max-width: 1400px;
+    position: realtive;
+    margin: 0 auto 20px;
 
-const DropDownWrapper = styled.div`
-    height: 40px;
-    padding: 0px 1px;
-     margin: 0px 1px
-`;
-const MainNavWrapper = styled.div`
-    display:flex;
-    flex-direction: row;
-    justify-content:center;
-    align-items: center;
-    font-size:18px;
-    font-weight: 500;
-    margin: 2px 0px;
-   
-`;
+    .inner-wrapper {
+      position: relative;
+    }
+
+    .navbar {
+      padding: 0;
+    }
+
+    .nav-item {
+      margin: 0px 20px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+`
 
 const LinkWrap = styled.div`
-padding:0px 1px;
-margin: 0px 20px;
+  padding: 0px 1px;
+  margin: 0px 20px;
 `;
+
 const Top = styled.div`
-display: flex;
-justify-content: center;
-border-bottom: 3px solid #043769;
-padding: 10px 1px;
-margin: 5px 25px;
+  text-align: center;
+  padding-top: 10px;
 
-`;
+  .profile-pic {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 70px;
+    border-radius: 50%;
+  }
 
-const AdDropDownWrapper = styled.div`
-    height: 40px;
-    padding: 0px 50px 0px 95px;
-     margin: 0px 10px 0 15%;
+  hr {
+    display: block;
+    border: none;
+    border-bottom: 3px solid #043769;
+    margin-bottom: 0;
+  }
 `;

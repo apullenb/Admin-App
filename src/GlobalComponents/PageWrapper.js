@@ -2,16 +2,14 @@ import React from 'react'
 import TopNav from './TopNav'
 import styled from 'styled-components';
 import Footer from './footer';
-import './Page.css'
+
 function PageWrapper(props) {
     return (
         <div>
             <TopNav />
-            <div className='page'>
             <PageWrap>
-            {props.children}
+                {props.children}
             </PageWrap>
-            </div>
             <Footer />
         </div>
     )
@@ -25,10 +23,27 @@ const PageWrap = styled.div`
     justify-content: center;
     align-items: center;
     align-content: center;
-    margin: 1%;
-    padding: 1%
-   
+    padding: 1%; 
+    margin: 0 auto;
 
-   
-    
- `
+
+  h1,
+  .page-header {
+    font-size: 36px;
+    color:rgb(92, 90, 90);
+    font-weight: 450;
+    margin: 10px 0 30px;
+    align-self: flex-start;
+  }
+
+  .page-header-link {
+    position: absolute;
+    display: inline;
+    right: 0;
+    font-size: 16px;
+
+    a {
+      text-decoration: underline;
+    }
+  }
+`

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import "./EntryList.scss";
 import PageWrapper from "../../GlobalComponents/PageWrapper";
 import Entries from './Entries';
-import config from "../../config/config";
+import config from "../../config/env-urls";
 import Pagination from "./Pagination";
 import { CaretUp, CaretDown } from "react-bootstrap-icons";
 

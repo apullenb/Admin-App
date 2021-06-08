@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import config from '../../config/config'
+import config from '../../config/env-urls'
 import {
     useHistory
   } from "react-router-dom";
@@ -18,7 +18,6 @@ const AddCountry = props => {
         name: "",
         tax_rate:"",
     }
-
 
     const [data, setData] = useState(country);
     const { addToast } = useToasts();
@@ -34,7 +33,7 @@ const AddCountry = props => {
       e.preventDefault();
       axios
         .post(
-          `${config.CHALLANGE_API_URL}/api/countries`,
+          `${config.PRODUCTSBASEURL}/api/countries`,
           data
         )
         .then((res) => {
