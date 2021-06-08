@@ -47,8 +47,8 @@ function AccountEdit(props) {
   };
 
   const handlePasswordReset = async () => {
-    const targetURL = "https://skincarechallangedev-fe.azurewebsites.net";
-    const body = { email: inputs.email, targetURL };
+   
+    const body = { email: inputs.email, targetURL: config.SCTARGETURL };
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
