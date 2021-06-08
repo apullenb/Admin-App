@@ -4,34 +4,41 @@ import styled from 'styled-components';
 function Pagination(props) {
 
   const [pageNo, setPageNo] = useState(1);
-  const [perPage, setPerpage] = useState('');
+  const [perPage, setPerpage] = useState(10);
   const [totalUsers, setTotalUsers] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [pageOptions, setPageOptions] = useState([10, 15, 20])
+  const [blank, setBlank] = useState(true)
+  
 
 
   const changePerPage = (e) => {
-    setPerpage(e.target.value)
-    props.getusers(perPage, pageNo)
-    console.log(perPage)
+    const num = e.target.value
+    setPerpage(num)
+    props.getusers(num, pageNo)
   }
 
   const handlePrevPage =() => {
-    pageNo > 1 ? setPageNo(pageNo -1) : setPageNo(1)
-    props.getusers(perPage, pageNo)
-    console.log(pageNo)
+    setPageNo(pageNo - 1) 
+    setCurrentPage(currentPage -1)
+    props.getusers(perPage, pageNo - 1)
+    setBlank(!blank)
+
   }
 
   const handleNextPage = () => {
     setPageNo(pageNo +1) 
-    props.getusers(perPage, pageNo)
+    props.getusers(perPage, pageNo + 1)
+    setCurrentPage(pageNo)
+    setBlank(!blank)
   }
 
   return (
     <div>
         <PaginationControls>
-          <button onClick={handlePrevPage}>{"< Prev"}</button>
+          <button className='btn' onClick={handlePrevPage} disabled={pageNo === 1 }>{"< Prev"}</button>{' '}
+          Current Page:  <div className='current'> {pageNo}</div>
             Per Page: <select value={perPage} onChange={(e) =>{changePerPage(e)}} >
             {pageOptions.map((option, i) => {
               return (
@@ -39,7 +46,7 @@ function Pagination(props) {
               );
             })}
           </select>
-        <button onClick={handleNextPage}>{"Next >"}</button>
+        <button className='btn' onClick={handleNextPage}>{"Next >"}</button>
       </PaginationControls>
     </div>
   )
@@ -48,10 +55,14 @@ function Pagination(props) {
 export default Pagination
 
 const PaginationControls = styled.div`
-  padding: 10px 2%;
+display:flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+  padding: 10px 1%;
   text-align: center;
   background: white;
-  width: 100%;
+
   background: #104c8e;
   color: white;
   cursor: pointer;
@@ -63,7 +74,14 @@ const PaginationControls = styled.div`
     display: inline-block;
     margin: 0 5px;
   }
+.current{
+  background: white;
+  color: black;
+  border: 1px solid gray;
+  padding: 4px 8px;
+  margin: 2px;
 
+}
   .btn {
     user-select: none;
     padding: 3px 5px;
@@ -82,8 +100,8 @@ const PaginationControls = styled.div`
       background: #c0c0ff;
     }
 
-    &.disable {
-      background: rgba(255, 255, 255, 0.1);
+    &.disabled {
+      background: gray;
       color: lightgray;
       border-color: rgba(255, 255, 255, 0.2);
       cursor: not-allowed;

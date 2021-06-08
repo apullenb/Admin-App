@@ -18,7 +18,7 @@ function Login(props) {
       // Login function using Admin Authentication
   }
   return (
-      <PageWrapper>
+     
     <FormWrapper>
       <h2 className="common-page-title">ADMIN LOGIN</h2>
       <Form>
@@ -50,7 +50,7 @@ function Login(props) {
       </Form>
       <br />
     </FormWrapper>
-    </PageWrapper>
+   
   );
 }
 
