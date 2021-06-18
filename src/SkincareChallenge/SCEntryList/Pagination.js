@@ -1,40 +1,38 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components';
 
+
+
+
 function Pagination(props) {
 
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerpage] = useState(10);
-  const [totalUsers, setTotalUsers] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
   const [pageOptions, setPageOptions] = useState([10, 15, 20])
   const [blank, setBlank] = useState(true)
   
 
 
+
   const changePerPage = (e) => {
     const num = e.target.value
     setPerpage(num)
-    props.getEntries(num, pageNo)
+    props.updatePerPage(num)
   }
 
   const handlePrevPage =() => {
     setPageNo(pageNo - 1) 
     setCurrentPage(currentPage -1)
-    props.getEntries(perPage, pageNo - 1)
+    props.updatePageNo(perPage, pageNo - 1)
     setBlank(!blank)
-
   }
 
   const handleNextPage = () => {
     setPageNo(pageNo +1) 
-    props.getEntries(perPage, pageNo + 1)
+    props.updatePageNo(perPage, pageNo + 1)
     setCurrentPage(pageNo)
     setBlank(!blank)
-if (props.entries < 10) {
-    
-}
   }
 
   return (

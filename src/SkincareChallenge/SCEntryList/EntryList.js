@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./EntryList.scss";
 import Entries from './Entries';
 import Pagination from "./Pagination";
@@ -9,6 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEntries } from '../../redux/actions/Skincare/skincareActions';
 
 const EntryList = () => {
+  const [pageNo, setPageNo] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+
     const dispatch = useDispatch();
     const { entries } = useSelector(state => state.entries);
 
@@ -16,14 +19,17 @@ const EntryList = () => {
         dispatch(getEntries());
     }, []);
 
-  const entriesSortAsc = () => {
-    dispatch(getEntries(10,1,"entries.id","asc"));
+  const entriesSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
+    dispatch(getEntries(numPerPage, pageNoVal, sortInfo, sortBy));
   }
 
-  const entriesSortDesc = () => {
-    dispatch(getEntries(10,1,"entries.id","desc"));
+  const updatePerPage = (val) =>{
+    setPerPage(val);
   }
 
+  const updatePageNo = (val) => {
+    setPageNo(val);
+  }
 
     return (
         <div>
@@ -34,34 +40,34 @@ const EntryList = () => {
                         <button className="add-entry-btn">New Entry</button>
                        <tr>
                        <th className="head"> Entry ID <br/>
-                                <CaretUp className="caretIcons" onClick={() => {entriesSortAsc(10,1,"entries.id","asc")}}/>
-                                <CaretDown className="caretIcons" onClick={() => {entriesSortDesc(10,1,"entries.id","desc")}}/> 
+                                <CaretUp className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"entries.id","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"entries.id","desc")}}/> 
                            </th>
                            <th className="head">Entry Date<br/>
-                                <CaretUp className="caretIcons" onClick={() => {entriesSortAsc(10,1,"entries.createdDate","asc")}}/>
-                                <CaretDown className="caretIcons" onClick={() => {entriesSortDesc(10,1,"entries.createdDate","desc")}}/> 
+                                <CaretUp className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"entries.createdDate","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"entries.createdDate","desc")}}/> 
                             </th>
                            <th className="head">Ambassador ID <br/>
-                                <CaretUp className="caretIcons" onClick={() => {entriesSortAsc(10,1,"owner.ambassador_id","asc")}}/>
-                                <CaretDown className="caretIcons" onClick={() => {entriesSortDesc(10,1,"owner.ambassador_id","desc")}}/> 
+                                <CaretUp className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"owner.ambassador_id","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"owner.ambassador_id","desc")}}/> 
                            </th>
                            <th className="head">Name <br/>
-                                <CaretUp className="caretIcons" onClick={() => {entriesSortAsc(10,1,"owner.name","asc")}}/>
-                                <CaretDown className="caretIcons" onClick={() => {entriesSortDesc(10,1,"owner.name","desc")}}/> 
+                                <CaretUp className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"owner.name","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"owner.name","desc")}}/> 
                            </th>
                            <th className="head">Challenge <br/>
-                                <CaretUp className="caretIcons" onClick={() => {entriesSortAsc(10,1,"contests.title","asc")}}/>
-                                <CaretDown className="caretIcons" onClick={() => {entriesSortDesc(10,1,"contests.title","desc")}}/> 
+                                <CaretUp className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"contests.title","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"contests.title","desc")}}/> 
                            </th>
                            <th className="head">Day 1 Photo</th>
                            <th className="head">Day 30 Photo</th>
                            <th className="head">Featured <br/>
-                                <CaretUp className="caretIcons" onClick={() => {entriesSortAsc(10,1,"entries.isFeatured","asc")}}/>
-                                <CaretDown className="caretIcons" onClick={() => {entriesSortDesc(10,1,"entries.isFeatured","desc")}}/> 
+                                <CaretUp className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"entries.isFeatured","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"entries.isFeatured","desc")}}/> 
                            </th>
                            <th className="head">Approved <br/>
-                                <CaretUp className="caretIcons" onClick={() => {entriesSortAsc(10,1,"entries.isApproved","asc")}}/>
-                                <CaretDown className="caretIcons" onClick={() => {entriesSortDesc(10,1,"entries.isApproved","desc")}}/> 
+                                <CaretUp className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"entries.isApproved","asc")}}/>
+                                <CaretDown className="caretIcons" onClick={() => {entriesSort(perPage,pageNo,"entries.isApproved","desc")}}/> 
                            </th>
                            <th className="head">Actions</th>
                        </tr>
@@ -73,7 +79,7 @@ const EntryList = () => {
                    </table>
                    </EntryTable>
                </section>
-               <Pagination getEntries={getEntries()}/>
+               <Pagination getEntries={getEntries()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
 
           </div>
     )
