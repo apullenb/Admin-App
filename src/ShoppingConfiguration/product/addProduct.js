@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
@@ -18,7 +18,7 @@ const AddProduct = props => {
         video_two_link:'',
         link_one:'',
         link_two:'',
-        ['json-data'] :'',
+        'json-data' :'',
         weight:''
 
     }

@@ -32,8 +32,11 @@ const PageWrap = styled.div`
     font-size: 36px;
     color:rgb(92, 90, 90);
     font-weight: 450;
-    margin: 10px 0 30px;
+    margin: 10px auto 30px;
     align-self: flex-start;
+    text-align: left;
+    max-width: 1400px;
+    position: relative;
   }
 
   .page-header-link {

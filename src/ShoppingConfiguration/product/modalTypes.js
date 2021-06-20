@@ -1,4 +1,6 @@
-export default  {
-    DELETE: 'delete',
-    SAVE: 'save'
-}
+const types = {
+  DELETE: 'delete',
+  SAVE: 'save'
+};
+
+export default types;

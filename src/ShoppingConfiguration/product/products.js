@@ -1,7 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {useDispatch, useSelector} from 'react-redux';
-import axios from "axios";
-import { useToasts } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
 import Product from './product';
 import AddProduct from './addProduct';
@@ -26,22 +25,17 @@ const Products = (props) => {
   let { path, url } = useRouteMatch();
   const [productsArray, setProducts] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(handleFetchProductsAsync());
-  },[])
+  }, []);
 
-  useEffect(()=>{
-      setProducts(products); 
-  },[products])
-
+  useEffect(() => {
+    setProducts(products); 
+  }, [products]);
 
   const filterItems = (filter) => { //search products
-      const filterdItems = productsArray.filter(item => { 
-        if (item.sku.includes(filter.toUpperCase())){
-           return item;
-          }
-      });
-      setProducts(filterdItems);
+    const filterdItems = productsArray.filter(item => item.sku.includes(filter.toUpperCase()));
+    setProducts(filterdItems);
   }
 
   return (

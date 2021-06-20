@@ -1,51 +1,52 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components';
 
 function Pagination(props) {
 
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerpage] = useState(10);
-  const [totalUsers, setTotalUsers] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [pageOptions, setPageOptions] = useState([10, 15, 20])
-  const [blank, setBlank] = useState(true)
-  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [blank, setBlank] = useState(true);
+  const totalRows = props.totalRows ?? 0;  
+  const [totalPages, setTotalPages] = useState(props.totalPages ? Math.ceil(totalRows / perPage) : 1);
 
+  const pageOptions = props.pageOptions ?? [10, 15, 20];
 
   const changePerPage = (e) => {
-    const num = e.target.value
-    setPerpage(num)
-    props.getusers(num, pageNo)
+    const num = e.target.value;
+    setPerpage(num);
+    props.getRows(num, pageNo);
+    setTotalPages(totalRows ? Math.ceil(totalRows / perPage) : 1);
   }
 
   const handlePrevPage =() => {
-    setPageNo(pageNo - 1) 
-    setCurrentPage(currentPage -1)
-    props.getusers(perPage, pageNo - 1)
-    setBlank(!blank)
-
+    setPageNo(pageNo - 1);
+    setCurrentPage(currentPage - 1);
+    props.getRows(perPage, pageNo - 1);
+    setBlank(!blank);
   }
 
   const handleNextPage = () => {
-    setPageNo(pageNo +1) 
-    props.getusers(perPage, pageNo + 1)
-    setCurrentPage(pageNo)
-    setBlank(!blank)
+    setPageNo(pageNo + 1);
+    props.getRows(perPage, pageNo + 1);
+    setCurrentPage(pageNo);
+    setBlank(!blank);
   }
 
   return (
     <div>
         <PaginationControls>
           <button className='btn' onClick={handlePrevPage} disabled={pageNo === 1 }>{"< Prev"}</button>{' '}
-          Current Page:  <div className='current'> {pageNo}</div>
-            Per Page: <select value={perPage} onChange={(e) =>{changePerPage(e)}} >
+          Page:  <div className='current'> {pageNo} of {totalPages}</div>
+          Per Page: 
+          <select value={perPage} onChange={(e) =>{changePerPage(e)}} >
             {pageOptions.map((option, i) => {
               return (
                 <option key={i} value={option} >{option}</option>
               );
             })}
           </select>
+          Total: {totalRows}
         <button className='btn' onClick={handleNextPage}>{"Next >"}</button>
       </PaginationControls>
     </div>

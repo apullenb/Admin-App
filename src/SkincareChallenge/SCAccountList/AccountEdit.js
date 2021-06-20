@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import PageWrapper from "../../GlobalComponents/PageWrapper";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import "./AccountList.scss";
 import config from "../../config/env-urls";
-import { ToastProvider, useToasts } from "react-toast-notifications";
+import { useToasts } from "react-toast-notifications";
 
 function AccountEdit(props) {
   const user = props.location.state;
@@ -72,11 +71,9 @@ function AccountEdit(props) {
 
   return (
     <div>
-      <h1>Skincare Challenge Edit Account</h1>
-      <div style={{ alignSelf: "flex-end", margin: "15px 1%" }}>
-        <Link to="/Challenge/Accounts">
-          <button id="edit">Back to list</button>
-        </Link>
+      <div className="page-header">
+        Skincare Challenge Edit Account
+        <div className="page-header-link"><Link to="/Challenge/Accounts">Back to list</Link></div>
       </div>
       <Main>
         <h5 style={div}>Account ID: {user.id}</h5>
@@ -135,7 +132,8 @@ const Main = styled.section`
   color: rgb(94, 93, 93);
   font-weight: 400;
   font-size: 17px;
-  padding: 1px 1%;
+  width: 1400px;
+  text-align: left;
 `;
 const div = {
   display: "flex",
