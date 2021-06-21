@@ -11,6 +11,7 @@ import Login from "./Login";
 import Dashboard from "./Pages/Dashboard";
 import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
 import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
+import EntryList from "./SkincareChallenge/SCEntryList/EntryList";
 import Countries from "./ShoppingConfiguration/countries/countries";
 import Products from "./ShoppingConfiguration/product/products";
 import Categories from './ShoppingConfiguration/categories';
@@ -65,6 +66,7 @@ useEffect(()=>{
           <Route path="/Challenge/Accounts" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
           <Route path="/Challenge/Account/:accountid" component={AccountEdit} />
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
+          <Route path="/Challenge/Entries" component={EntryList} />
           <Route path="/Events" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
           <Route path="/Incentive" render={(props) => isAuthenticated ? <AccountEdit /> : <Redirect to="/login" /> } />
           <Route path="/Permissions" render={(props) => isAuthenticated ? <Categories /> : <Redirect to="/login" /> } />
