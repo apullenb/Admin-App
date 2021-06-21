@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import "./EntryList.scss";
 import Entries from './Entries';
 import Pagination from "./Pagination";
-import { CaretUp, CaretDown } from "react-bootstrap-icons";
+import { CaretUp, CaretDown} from "react-bootstrap-icons";
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,6 +11,8 @@ import { getEntries } from '../../redux/actions/Skincare/skincareActions';
 const EntryList = () => {
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const [colSort, setColSort] = useState("entries.id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
     const dispatch = useDispatch();
     const { entries } = useSelector(state => state.entries);
@@ -19,16 +21,21 @@ const EntryList = () => {
         dispatch(getEntries());
     }, []);
 
+
   const entriesSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
+    setColSort(sortInfo);
+    setSortDirection(sortBy);
     dispatch(getEntries(numPerPage, pageNoVal, sortInfo, sortBy));
   }
 
   const updatePerPage = (val) =>{
     setPerPage(val);
+    dispatch(getEntries(val, pageNo, colSort, sortDirection));
   }
 
   const updatePageNo = (val) => {
     setPageNo(val);
+    dispatch(getEntries(perPage, val, colSort, sortDirection));
   }
 
     return (

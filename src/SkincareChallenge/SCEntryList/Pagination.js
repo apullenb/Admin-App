@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components';
-
+import { useSelector } from 'react-redux';
 
 
 
@@ -8,11 +8,14 @@ function Pagination(props) {
 
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerpage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1)
-  const [pageOptions, setPageOptions] = useState([10, 15, 20])
   const [blank, setBlank] = useState(true)
-  
+  const [isNextDisabled, setIsNextDisabled] = useState(false);
+  const { entries } = useSelector(state => state.entries);
+  const pageOptions = [10, 15, 20];
 
+  useEffect(() => {
+   entries.data && disableNext();
+}, [entries]);
 
 
   const changePerPage = (e) => {
@@ -22,17 +25,25 @@ function Pagination(props) {
   }
 
   const handlePrevPage =() => {
-    setPageNo(pageNo - 1) 
-    setCurrentPage(currentPage -1)
-    props.updatePageNo(perPage, pageNo - 1)
+    const perPageVal = pageNo - 1;
+    setPageNo(perPageVal) 
+    props.updatePageNo(perPageVal)
     setBlank(!blank)
   }
 
   const handleNextPage = () => {
-    setPageNo(pageNo +1) 
-    props.updatePageNo(perPage, pageNo + 1)
-    setCurrentPage(pageNo)
+    const perPageVal = pageNo + 1;
+    setPageNo(perPageVal) 
+    props.updatePageNo(perPageVal)
     setBlank(!blank)
+  }
+
+  const disableNext = () => {
+  if (entries.data.length < perPage) {
+    setIsNextDisabled(true);
+  } else {
+    setIsNextDisabled(false);
+  }
   }
 
   return (
@@ -47,7 +58,7 @@ function Pagination(props) {
               );
             })}
           </select>
-        <button className='btn' onClick={handleNextPage}>{"Next >"}</button>
+        <button className='btn' disabled = {isNextDisabled} onClick={handleNextPage}>{"Next >"}</button>
       </PaginationControls>
     </div>
   )
