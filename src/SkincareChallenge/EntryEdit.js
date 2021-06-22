@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import config from '../config/env-urls'
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 import axios from 'axios';
 import Moment from 'react-moment';
 import Select from 'react-select';
@@ -71,8 +72,21 @@ function EntryEdit(props) {
       console.error(err.message)
     }
   };
+  
+  const handleProductsChange = (event) => {
+    const value = event.target.checked;
+    const product = parseInt(event.target.name);
+    const currentEntrytemp = entry;
+    if (!value) {
+      const index = entry.products.indexOf(product);
+      currentEntrytemp.products.splice(index, 1);
+    } else {
+      currentEntrytemp.products.push(product);
+    }
+    setEntry(currentEntrytemp);
+    setBlank(!blank)
+  };
 
-  const handleProductsChange = () => {};
   const handleSelectChange = (event, property) => {
     const tempEntry = entry;
     tempEntry[property] = event.value === '1';
@@ -166,28 +180,25 @@ function EntryEdit(props) {
             </div>
           </Col>
           <Col>
-                <ContestImage>
-                  <label>Day 1 Photo</label>
-                  <img src={entry.day1ImageUrl} alt="Day 1 Image" />
-                </ContestImage>
-                <ContestImage>
-                  <label>Day 30 Photo</label>
-                  <img src={entry.day30ImageUrl} alt="Day 30 Image" />
-                </ContestImage>
+            <ContestImage>
+              <label>Day 1 Photo</label>
+              <img src={entry.day1ImageUrl} alt="Day 1 Image" />
+            </ContestImage>
+            <ContestImage>
+              <label>Day 30 Photo</label>
+              <img src={entry.day30ImageUrl} alt="Day 30 Image" />
+            </ContestImage>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button style={{background:"#043769", marginRight: "50px", padding: "10px 25px"}} onClick={handleSubmit} disabled>Save Not Available</Button>
+            <Button style={{background:"#043769", padding: "10px 25px"}} onClick={handlePasswordReset}>Send Password Reset</Button>
           </Col>
         </Row>
       </EntryDetails>
-      <div style={div}>
-        <button className="add-account-btn" onClick={handleSubmit}>
-          Save
-          </button>{" "}
-        <button className="add-account-btn" onClick={handlePasswordReset}>
-          Send Password Reset
-          </button>
-      </div>
     </PageWrapper>
   );
-
 }
 
 export default EntryEdit;
@@ -225,13 +236,3 @@ const EntryDetails = styled.section`
   }
   
 `;
-const div = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  margin: "3% 0%",
-  padding: '5px 10px',
-  width: "355px",
-
-};
