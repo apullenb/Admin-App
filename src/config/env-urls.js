@@ -1,6 +1,5 @@
 
   const environment = process.env.REACT_APP_ENV || 'development';
-  var config;
   
   const handleSetProductsURL = () => {
       switch(environment){
@@ -29,9 +28,10 @@ const handleSCTargetURL = () => {
     }
 };
 
-  export default config = {
+const config = {
   PRODUCTSBASEURL : handleSetProductsURL(),
   SKINCAREBASEURL : handleSkinCareEnvURL(),
   SCTARGETURL : handleSCTargetURL()
-  };
+};
   
+export default config;

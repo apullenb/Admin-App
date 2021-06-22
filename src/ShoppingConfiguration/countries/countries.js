@@ -1,15 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Styled from 'styled-components';
-import Axios from 'axios';
-import { useToasts } from "react-toast-notifications";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Country from './country';
 import AddCountry from './addCountry';
-import PageWrapper from '../../GlobalComponents/PageWrapper';
 import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 import {
   Link,
@@ -38,13 +34,7 @@ const Countries = props => {
   }, [countries])
 
   const filterItems = (filter) => {
-
-    const filterdItems = countries.filter(item => {
-      if (item.name.includes(filter.toUpperCase())) {
-        return item;
-      }
-    });
-
+    const filterdItems = countries.filter(item => item.name.includes(filter.toUpperCase()));
     setCountriesData(filterdItems);
   }
 
@@ -60,13 +50,18 @@ const Countries = props => {
             <FormControl type='text' name='search' onChange={(e) => { filterItems(e.target.value) }} placeholder="Search..." />
           </InputGroup>
         </SearchWrapper>
+        <AddCountryWrapper>
+          <AddCountryButtonWrapper>
+            <Link to={`${url}/addCountry`}>New Country</Link>
+          </AddCountryButtonWrapper>
+        </AddCountryWrapper>
 
-        <div style={{ marginTop: '40%' }}>
+        <div>
           <div>
             {fetching ? <ZilisLoader width={50} height={50} /> : <b>Countries List</b>}
           </div>
           <ListWrapper>
-            {countries.map((country) => {
+            {countriesData.map((country) => {
               return (
                 <li key={country.id}>
                   <Link to={`${url}/${country.id}`}>{country.name}</Link>
@@ -79,11 +74,6 @@ const Countries = props => {
 
 
       <CountryWapper>
-        <AddCountryWrapper>
-          <AdCountryButtonWrapper>
-            <label className='add-button-label form-labels'>Create A New Country</label><Link to={`${url}/addCountry`}><Button variant="success" style={{ fontSize: 30, width: '50px' }}>&#43;</Button></Link>
-          </AdCountryButtonWrapper>
-        </AddCountryWrapper>
 
         <Switch>
           <Route exact path={path}></Route>
@@ -104,13 +94,12 @@ const Countries = props => {
 export default Countries;
 
 const CountryBodyWrapper = Styled.div`
-    width:90%;
+    width:1400px;
     display:flex;
-    flex-direction:row ;
-    justify-content:center;
+    flex-direction: row;
+    justify-content:left;
     margin: 0 auto;
-    padding: 2%;
-    text-align:center;
+    text-align:left;
  `;
 
 const CountriesWrapper = Styled.div`
@@ -118,9 +107,7 @@ const CountriesWrapper = Styled.div`
     flex-direction:column;
     overflow: auto;
     min-width:300px;
-    max-width:300px;
-    height:500px;
-    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.3);
+    height: calc(100% - 146px);
 `;
 
 const ListWrapper = Styled.div`
@@ -129,42 +116,38 @@ const ListWrapper = Styled.div`
 `;
 
 const CountryWapper = Styled.div`
-    background-color: #F0F1F2;
     width:100%;
     height:100vh;
     margin: 0 10px;
     overflow:auto;
     padding: 2%;
-    box-shadow: 0 5px 8px 0 rgba(0,0,0,0.5);
 `;
 
 const AddCountryWrapper = Styled.div`
-  width:80%;
-  margin-left:10%;
-  margin-bottom:5%;
   display:flex;
-  justify-content:flex-start;
+  justify-content:left;
+  margin: 20px 0;
 `;
 
-const AdCountryButtonWrapper = Styled.span`
-  width:100%;
-  background-color: rgba(52,58,64,0.8);
-  border:2px solid rgba(0,0,0,0.5);
-  border-radius:8px;
-  padding: 1%;
-  color:#fff;
+const AddCountryButtonWrapper = Styled.div`
+  a {
+    width:100%;
+    background-color: rgba(52,58,64,0.8);
+    border:2px solid rgba(0,0,0,0.5);
+    border-radius:8px;
+    color:#fff;
+    padding: 5px 15px;
+
+    &:hover {
+      text-decoration: none;
+      background-color: rgba(52,58,64,0.5);
+    }
+  }
 `;
 
 const SearchWrapper = Styled.div`
   display: flex;
-  justify-content:center;
+  justify-content:left;
   flex-direction:column;
-  position:absolute;
   width:282px;
-  background-color:#5a5e63;
-  border-radius:8px 0 0 0 ;
-
-  h2{
-    color:#fff;
-  }
 `;

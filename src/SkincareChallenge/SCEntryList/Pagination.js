@@ -1,11 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-
-
 function Pagination(props) {
-
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerpage] = useState(10);
   const [blank, setBlank] = useState(true)
@@ -14,50 +12,47 @@ function Pagination(props) {
   const pageOptions = [10, 15, 20];
 
   useEffect(() => {
-   entries.data && disableNext();
-}, [entries]);
-
+    entries.data && disableNext();
+  }, []);
 
   const changePerPage = (e) => {
-    const num = e.target.value
-    setPerpage(num)
-    props.updatePerPage(num)
+    const num = e.target.value;
+    setPerpage(num);
+    props.updatePerPage(num);
   }
 
   const handlePrevPage =() => {
     const perPageVal = pageNo - 1;
-    setPageNo(perPageVal) 
-    props.updatePageNo(perPageVal)
-    setBlank(!blank)
+    setPageNo(perPageVal);
+    props.updatePageNo(perPageVal);
+    setBlank(!blank);
   }
 
   const handleNextPage = () => {
     const perPageVal = pageNo + 1;
-    setPageNo(perPageVal) 
-    props.updatePageNo(perPageVal)
-    setBlank(!blank)
+    setPageNo(perPageVal);
+    props.updatePageNo(perPageVal);
+    setBlank(!blank);
   }
 
   const disableNext = () => {
-  if (entries.data.length < perPage) {
-    setIsNextDisabled(true);
-  } else {
-    setIsNextDisabled(false);
-  }
+    if (entries.data.length < perPage) {
+      setIsNextDisabled(true);
+    } else {
+      setIsNextDisabled(false);
+    }
   }
 
   return (
     <div>
-        <PaginationControls>
-          <button className='btn' onClick={handlePrevPage} disabled={pageNo === 1 }>{"< Prev"}</button>{' '}
-          Current Page:  <div className='current'> {pageNo}</div>
-            Per Page: <select value={perPage} onChange={(e) =>{changePerPage(e)}} >
-            {pageOptions.map((option, i) => {
-              return (
-                <option key={i} value={option} >{option}</option>
-              );
-            })}
-          </select>
+      <PaginationControls>
+        <button className='btn' onClick={handlePrevPage} disabled={pageNo === 1 }>{"< Prev"}</button>{' '}
+        Current Page:  <div className='current'> {pageNo}</div>
+        Per Page: <select value={perPage} onChange={(e) =>{changePerPage(e)}} >
+          {pageOptions.map((option, i) => {
+            return (<option key={i} value={option} >{option}</option>);
+          })}
+        </select>
         <button className='btn' disabled = {isNextDisabled} onClick={handleNextPage}>{"Next >"}</button>
       </PaginationControls>
     </div>

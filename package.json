@@ -16,6 +16,7 @@
     "react-bootstrap-table": "^4.3.1",
     "react-bootstrap-table-next": "^4.0.3",
     "react-dom": "^16.13.1",
+    "react-intl": "^5.18.1",
     "react-fetch-hook": "^1.8.5",
     "react-loader-spinner": "^4.0.0",
     "react-moment": "^1.1.1",
@@ -23,14 +24,14 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
+    "react-select": "^4.3.1",
     "react-toast-notifications": "^2.4.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
     "sass-loader": "^8.0.2",
     "start": "^5.1.0",
     "styled-components": "^5.2.0",
-    "toastr": "^2.1.4",
-    "react-intl": "^5.18.1"
+    "toastr": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

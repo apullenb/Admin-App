@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 
-import "./AccountList.scss";
-import config from "../../config/env-urls";
-import Pagination from "../../GlobalComponents/Pagination";
+import config from "../config/env-urls";
+import Pagination from "../GlobalComponents/Pagination";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 
-function AccountList() {
+function IncentiveList() {
   const [users, setUsers] = useState("");
   // const [filter, setFilter] = useState("");
   // const [category, setCategory] = useState("");
@@ -52,7 +51,7 @@ function AccountList() {
   return (
     <PageWrapper>
         <h1>Skincare Challenge Accounts</h1>
-        <AccountTable>
+        <IncentiveTable>
           <table>
             <thead>
               <tr>
@@ -78,7 +77,7 @@ function AccountList() {
                     <td>
                       <Link
                         to={{
-                          pathname: `/Challenge/Accounts/${user.id}`,
+                          pathname: `/Challenge/Account/${user.id}`,
                           state: user,
                         }}
                       >
@@ -92,20 +91,20 @@ function AccountList() {
             }
           </table>
           <h3>{message}</h3>
-        </AccountTable>
+        </IncentiveTable>
 
         <Pagination getRows={getUsers} totalRows={totalUsers} pageOptions={pageOptions} />
     </PageWrapper>
   );
 }
 
-export default AccountList;
+export default IncentiveList;
 
 const PageWrapper = styled.div`
   width: 1400px;
 `;
 
-const AccountTable = styled.div`
+const IncentiveTable = styled.div`
   padding: 1px;
   margin: 0;
 

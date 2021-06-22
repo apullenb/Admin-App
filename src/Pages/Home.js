@@ -1,9 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import PageWrapper from "../GlobalComponents/PageWrapper";
-import Logo from "../assets/Zilislogo.png";
-import styled from "styled-components";
-import Page from '../GlobalComponents/PageWrapper'
 
 const Home = (props) => {
   return (
@@ -29,11 +25,3 @@ const Home = (props) => {
 };
 
 export default Home;
-
-const Top = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 1% 3%;
-  padding: 25px 1%;
-  border-bottom: 3px solid #043769;
-`;

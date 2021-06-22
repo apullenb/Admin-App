@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import axios from "axios";
 import { useToasts } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
@@ -10,18 +11,9 @@ import ProductModal from './productModal';
 import ModalType from './modalTypes';
 import config from '../../config/env-urls';
 import styled from 'styled-components';
-
-import {
-  Link,
-  Route,
-  Switch,
-  useRouteMatch,
-  useParams,
-  useHistory
-} from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 const Product = (props) => {
-  const dispatch = useDispatch();
   const { products } = useSelector(state => state.products)
   const { id } = useParams();
   const history = useHistory();
@@ -33,7 +25,7 @@ const Product = (props) => {
 
   useEffect(() => {
     updateId();
-  }, [id]);
+  }, []);
 
   const updateId = () => {
     product = products.find((prod) => `${prod.id}` === id);
@@ -54,11 +46,7 @@ const Product = (props) => {
     JSON.stringify(data.json - data);
 
 
-    axios
-      .put(
-        `${config.PRODUCTSBASEURL}/api/products/update-product/by-id/${data.id}`,
-        data
-      )
+    axios.put(`${config.PRODUCTSBASEURL}/api/products/update-product/by-id/${data.id}`, data)
       .then((res) => {
         props.handlegetAllProducts();
         addToast(`Product: ${data.sku} has been updated successfully`, {

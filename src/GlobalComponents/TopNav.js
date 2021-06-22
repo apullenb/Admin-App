@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React from 'react';
 import Logo from '../assets/Zilis_Logo_2021.png'
 import Navbar from 'react-bootstrap/Navbar';
@@ -18,8 +19,8 @@ function TopNav() {
       <Top>
         <div className="top-wrapper">
           <div className="inner-wrapper">
-            <a href="/"><img src={Logo} style={{maxWidth:'170px', margin: '1px auto'}} /></a>
-            <img src={ProfileImage} className="profile-pic" />
+            <a href="/"><img src={Logo} alt="Zilis Logo" style={{maxWidth:'170px', margin: '1px auto'}} /></a>
+            <img src={ProfileImage} alt="Profile Image" className="profile-pic" />
           </div>
         </div>
         <hr />
