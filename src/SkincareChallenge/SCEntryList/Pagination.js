@@ -1,53 +1,59 @@
-import React, {useState} from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 function Pagination(props) {
-
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerpage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [blank, setBlank] = useState(true);
-  const totalRows = props.totalRows ?? 0;  
-  const [totalPages, setTotalPages] = useState(props.totalPages ? Math.ceil(totalRows / perPage) : 1);
+  const [blank, setBlank] = useState(true)
+  const [isNextDisabled, setIsNextDisabled] = useState(false);
+  const { entries } = useSelector(state => state.entries);
+  const pageOptions = [10, 15, 20];
 
-  const pageOptions = props.pageOptions ?? [10, 15, 20];
+  useEffect(() => {
+    entries.data && disableNext();
+  }, []);
 
   const changePerPage = (e) => {
     const num = e.target.value;
     setPerpage(num);
-    props.getRows(num, pageNo);
-    setTotalPages(totalRows ? Math.ceil(totalRows / perPage) : 1);
+    props.updatePerPage(num);
   }
 
   const handlePrevPage =() => {
-    setPageNo(pageNo - 1);
-    setCurrentPage(currentPage - 1);
-    props.getRows(perPage, pageNo - 1);
+    const perPageVal = pageNo - 1;
+    setPageNo(perPageVal);
+    props.updatePageNo(perPageVal);
     setBlank(!blank);
   }
 
   const handleNextPage = () => {
-    setPageNo(pageNo + 1);
-    props.getRows(perPage, pageNo + 1);
-    setCurrentPage(pageNo);
+    const perPageVal = pageNo + 1;
+    setPageNo(perPageVal);
+    props.updatePageNo(perPageVal);
     setBlank(!blank);
+  }
+
+  const disableNext = () => {
+    if (entries.data.length < perPage) {
+      setIsNextDisabled(true);
+    } else {
+      setIsNextDisabled(false);
+    }
   }
 
   return (
     <div>
       <PaginationControls>
         <button className='btn' onClick={handlePrevPage} disabled={pageNo === 1 }>{"< Prev"}</button>{' '}
-        Page:  <div className='current'> {pageNo} of {totalPages}</div>
-        Per Page: 
-        <select value={perPage} onChange={(e) =>{changePerPage(e)}} >
+        Current Page:  <div className='current'> {pageNo}</div>
+        Per Page: <select value={perPage} onChange={(e) =>{changePerPage(e)}} >
           {pageOptions.map((option, i) => {
-            return (
-              <option key={i} value={option} >{option}</option>
-            );
+            return (<option key={i} value={option} >{option}</option>);
           })}
         </select>
-        Total: {totalRows}
-        <button className='btn' onClick={handleNextPage}>{"Next >"}</button>
+        <button className='btn' disabled = {isNextDisabled} onClick={handleNextPage}>{"Next >"}</button>
       </PaginationControls>
     </div>
   )

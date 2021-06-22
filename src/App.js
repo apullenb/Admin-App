@@ -11,15 +11,15 @@ import './App.scss'
 import Login from "./Login";
 import Dashboard from "./Pages/Dashboard";
 
+import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
+import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
+import EntryList from "./SkincareChallenge/SCEntryList/EntryList";
+import EntryEdit from "./SkincareChallenge/EntryEdit";
+
 import ShoppingCountries from "./ShoppingConfiguration/countries/countries";
 import ShoppingKits from "./ShoppingConfiguration/kits/kits";
 import ShoppingProducts from "./ShoppingConfiguration/product/products";
 import ShoppingCategories from "./ShoppingConfiguration/categories";
-
-import AccountList from "./SkincareChallenge/SCAccountList/AccountList";
-import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
-import EntryList from "./SkincareChallenge/EntryList";
-import EntryEdit from "./SkincareChallenge/EntryEdit";
 
 import Events from './Events/EventList';
 import Incentive from './Incentive/IncentiveList';
