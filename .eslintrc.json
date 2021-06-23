@@ -21,6 +21,6 @@
         "react/prop-types": "off",
         "no-unused-vars" : "warn",
         "react/no-direct-mutation-state" : "warn",
-        "no-extra-semi" : "warn",
+        "no-extra-semi" : "warn"
     }
 }
