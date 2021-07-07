@@ -42,14 +42,9 @@ function AccountList() {
   }
 
 
-  // const handleChange = (e, cat) => {
-  //   setFilter(e.target.value);
-  //   setCategory(cat);
-  //   // Send category and filter to the backend as parameters
-  //   // Set the response to users
-  //   // setUsers(response)
-  //   // If no results are found, set message to "no results"
-  // };
+const handleChange = (e, cat) => {
+console.log("placeholder");
+};
 
   
 
@@ -59,6 +54,44 @@ function AccountList() {
         <AccountTable>
           <table>
             <thead>
+            <tr>
+              <th id="filter">
+                <input
+                  type="text"
+                  onChange={(e) => handleChange(e, "accountId")}
+                />
+              </th>
+              <th id="filter">
+                <input 
+                type="text"
+                onChange={(e) => handleChange(e, "name")}/>
+              </th>
+              <th id="filter">
+                <input type="text" 
+                onChange={(e) => handleChange(e, "email")} />
+              </th>
+              <th id="filter">
+                <input 
+                type="text" 
+                onChange={(e) => handleChange(e, "ambassadorID")} />
+              </th>
+              <th id="filter">
+                <input 
+                type="text" 
+                onChange={(e) => handleChange(e, "lastLogin")}/>
+              </th>
+              <th id="filter">
+                <select id="filter">
+                  <option selected value="Challenge"  onChange={(e) => handleChange(e, "lastChallenge")}>
+                  </option>
+                  <option value="2020 Q3">2020 Q3</option>
+                  <option value="2020 Q4">2020 Q3</option>
+                  <option value="2021 Q1">2021 Q1</option>
+                  <option value="2021 Q2">2021 Q2</option>
+                  <option value="2021 Q3">2021 Q3</option>
+                </select>
+              </th>
+            </tr>
               <tr>
                 <th className="head">Account ID<br/>
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.id","asc")}}/>
