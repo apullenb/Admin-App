@@ -6,7 +6,6 @@ import Pagination from "./Pagination";
 import { CaretUp, CaretDown} from "react-bootstrap-icons";
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { getEntries } from '../../redux/actions/Skincare/skincareActions';
 
 const EntryList = () => {

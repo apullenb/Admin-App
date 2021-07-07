@@ -1,41 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-
 import "./AccountList.scss";
-import config from "../../config/env-urls";
-import Pagination from "../../GlobalComponents/Pagination";
+//import Pagination from "../../GlobalComponents/Pagination";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAccounts } from '../../redux/actions/Skincare/skincareActions';
+import { CaretUp, CaretDown} from "react-bootstrap-icons";
+import Pagination from "./Pagination";
 
 function AccountList() {
-  const [users, setUsers] = useState("");
-  // const [filter, setFilter] = useState("");
-  // const [category, setCategory] = useState("");
   const [message, setMessage] = useState(true);
   const [totalUsers, setTotalUsers] = useState(0);
   const [blank, setBlank] = useState(false);
+  const [pageNo, setPageNo] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [colSort, setColSort] = useState("entries.id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
-  const pageOptions = [10, 15, 20];
-
-  const getUsers = async (perPage=10, pageNo=1) => {
-    try {
-      const requestOptions = {
-        method: "GET",
-      };
-      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=users.id`,requestOptions);
-      const data = await response.json();
-      setUsers(data.data);
-      setBlank(!blank);
-      setMessage(!message);
-      setTotalUsers(data.totalRows);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
+  const dispatch = useDispatch();
+  const { accounts } = useSelector(state => state.entries);
 
   useEffect(() => {
-    getUsers();
+    dispatch(getAccounts());
   }, []);
+
+  const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
+    setColSort(sortInfo);
+    setSortDirection(sortBy);
+    dispatch(getAccounts(numPerPage, pageNoVal, sortInfo, sortBy));
+  }
+
+  const updatePerPage = (val) =>{
+    setPerPage(val);
+    dispatch(getAccounts(val, pageNo, colSort, sortDirection));
+  }
+
+  const updatePageNo = (val) => {
+    setPageNo(val);
+    dispatch(getAccounts(perPage, val, colSort, sortDirection));
+  }
 
 
   // const handleChange = (e, cat) => {
@@ -56,7 +60,10 @@ function AccountList() {
           <table>
             <thead>
               <tr>
-                <th className="head">Account ID</th>
+                <th className="head">Account ID<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.id","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.id","desc")}}/> 
+                </th>
                 <th className="head">Name</th>
                 <th className="head">Email</th>
                 <th className="head">Ambassador ID </th>
@@ -65,10 +72,10 @@ function AccountList() {
                 <th className="head">Actions </th>
               </tr>
             </thead>
-            {users && users.length > 1 && <tbody>
-              {users.map((user, i) => {
+            {accounts && accounts.data && accounts.data.length > 1 && <tbody>
+              {accounts.data.map((user, i) => {
                 return (
-                  <tr key={i} id="row">
+                  <tr key={i} user = {user} id="row">
                     <td>{user.id}</td>
                     <td>{user.name}</td>
                     <td>{user.email}{blank}</td>
@@ -94,7 +101,7 @@ function AccountList() {
           <h3>{message}</h3>
         </AccountTable>
 
-        <Pagination getRows={getUsers} totalRows={totalUsers} pageOptions={pageOptions} />
+        <Pagination getEntries={getAccounts()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
     </PageWrapper>
   );
 }
