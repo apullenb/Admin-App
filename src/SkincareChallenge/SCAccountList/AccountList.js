@@ -16,6 +16,8 @@ function AccountList() {
   const [perPage, setPerPage] = useState(10);
   const [colSort, setColSort] = useState("users.id");
   const [sortDirection, setSortDirection] = useState("asc");
+  const [filteredData, setFilteredData] = useState([]);
+  const [dataEntered, setDataEntered] = useState("");
 
   const dispatch = useDispatch();
   const { accounts } = useSelector(state => state.entries);
@@ -46,7 +48,18 @@ const handleChange = (e, cat) => {
 console.log("placeholder");
 };
 
+const handleFilter = (event) => {
+  const searchWord = event.target.value;
+  setDataEntered(searchWord);
+  const newFilter = Object.accounts.filter(users => users && users.id.includes(event));
   
+if (searchWord === "") {
+  setFilteredData([]);
+} else {
+  setFilteredData(newFilter);
+}
+};
+
 
   return (
     <PageWrapper>
@@ -58,13 +71,16 @@ console.log("placeholder");
               <th id="filter">
                 <input
                   type="text"
-                  onChange={(e) => handleChange(e, "accountId")}
+                  //value={dataEntered}
+                  //onChange={handleFilter}
                 />
               </th>
               <th id="filter">
                 <input 
-                type="text"
-                onChange={(e) => handleChange(e, "name")}/>
+                 type="text"
+                  value={dataEntered}
+                  onChange={handleFilter}
+                  />
               </th>
               <th id="filter">
                 <input type="text" 

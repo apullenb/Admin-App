@@ -4,7 +4,10 @@ import {
     GET_ENTRIES_FAILURE,
     GET_ACCOUNTS_START,
     GET_ACCOUNTS_SUCCESS,
-    GET_ACCOUNTS_FAILURE
+    GET_ACCOUNTS_FAILURE,
+    GET_FILTERED_ACCOUNTS_START,
+    GET_FILTERED_ACCOUNTS_SUCCESS,
+    GET_FILTERED_ACCOUNTS_FAILURE
 } from './skincareActionTypes'
 
 import axios from 'axios';
@@ -32,6 +35,19 @@ export const getAccounts = (perPage = 10, pageNo = 1, sort = "users.id", sortDir
     })
     .catch(error=>{
         dispatch({type:GET_ACCOUNTS_FAILURE, payload:error});
+    })
+};
+
+
+export const filterAccounts = (filter = "users.id") => (dispatch) => {
+    dispatch({type: GET_FILTERED_ACCOUNTS_START});
+    return axios
+    .get(`${config.SKINCAREBASEURL}/api/challenge/all-users?filtered=${filter}`)
+    .then(res=>{
+        dispatch({type:GET_FILTERED_ACCOUNTS_SUCCESS, payload:res.data});
+    })
+    .catch(error=>{
+        dispatch({type:GET_FILTERED_ACCOUNTS_FAILURE, payload:error});
     })
 };
 
