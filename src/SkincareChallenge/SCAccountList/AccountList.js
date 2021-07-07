@@ -11,11 +11,10 @@ import Pagination from "./Pagination";
 
 function AccountList() {
   const [message, setMessage] = useState(true);
-  const [totalUsers, setTotalUsers] = useState(0);
   const [blank, setBlank] = useState(false);
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [colSort, setColSort] = useState("entries.id");
+  const [colSort, setColSort] = useState("users.id");
   const [sortDirection, setSortDirection] = useState("asc");
 
   const dispatch = useDispatch();
@@ -26,6 +25,7 @@ function AccountList() {
   }, []);
 
   const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
+    console.log("This button was clicked");
     setColSort(sortInfo);
     setSortDirection(sortBy);
     dispatch(getAccounts(numPerPage, pageNoVal, sortInfo, sortBy));
@@ -64,11 +64,26 @@ function AccountList() {
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.id","asc")}}/>
                 <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.id","desc")}}/> 
                 </th>
-                <th className="head">Name</th>
-                <th className="head">Email</th>
-                <th className="head">Ambassador ID </th>
-                <th className="head">Last Login </th>
-                <th className="head">Last Challenge </th>
+                <th className="head">Name<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.name","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.name","desc")}}/> 
+                </th>
+                <th className="head">Email<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.email","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.email","desc")}}/> 
+                </th>
+                <th className="head">Ambassador ID<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.ambassadorId","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.ambassadorId","desc")}}/> 
+                </th>
+                <th className="head">Last Login<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.lastLoginDate","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.lastLoginDate","desc")}}/> 
+                </th>
+                <th className="head">Last Challenge<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.lastChallenge","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.lastChallenge","desc")}}/> 
+                </th>
                 <th className="head">Actions </th>
               </tr>
             </thead>

@@ -23,10 +23,10 @@ export const getEntries = (perPage = 10, pageNo = 1, sort = "entries.id", sortDi
 };
 
 
-export const getAccounts = (perPage = 10, pageNo = 1) => (dispatch) => {
+export const getAccounts = (perPage = 10, pageNo = 1, sort = "users.id", sortDirection = "asc") => (dispatch) => {
     dispatch({type: GET_ACCOUNTS_START});
     return axios
-    .get(`${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}`)
+    .get(`${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
     .then(res=>{
         dispatch({type:GET_ACCOUNTS_SUCCESS, payload:res.data});
     })
