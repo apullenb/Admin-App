@@ -9,7 +9,7 @@ function Pagination(props) {
   const [blank, setBlank] = useState(true)
   const [isNextDisabled, setIsNextDisabled] = useState(false);
   const { entries } = useSelector(state => state.entries);
-  const pageOptions = [10, 15, 20];
+  const pageOptions = [10, 25, 50];
 
   useEffect(() => {
     entries.data && disableNext();

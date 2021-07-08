@@ -4,7 +4,7 @@ import "./AccountList.scss";
 //import Pagination from "../../GlobalComponents/Pagination";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import { getAccounts, filterAccounts } from '../../redux/actions/Skincare/skincareActions';
 import { CaretUp, CaretDown} from "react-bootstrap-icons";
 import Pagination from "./Pagination";
@@ -17,6 +17,10 @@ function AccountList() {
   const [colSort, setColSort] = useState("users.id");
   const [sortDirection, setSortDirection] = useState("asc");
   const [localAccounts, setLocalAccounts ] = useState([]);
+  const [idInput, setIdInput] = useState(false);
+  const [nameInput, setNameInput] = useState(false);
+  const [emailInput, setEmailInput] = useState(false);
+  const [ambassadorIdInput, setAmbassadorIdInput] = useState(false);
 
   const dispatch = useDispatch();
   const { accounts } = useSelector(state => state.entries);
@@ -29,6 +33,7 @@ function AccountList() {
   useEffect(() => {
 setLocalAccounts(accounts);
 console.log(localAccounts);
+console.log(accounts);
   }, [accounts]);
 
   
@@ -53,8 +58,44 @@ const handleChange = (e) => {
 console.log(e.target.value);
 const filter = e.target.value;
 const col = e.target.id;
-dispatch(filterAccounts(col, filter));
+if (e.target.value === "") {
+  dispatch(getAccounts());
+} else {
+  dispatch(filterAccounts(col, filter));
+}
 };
+
+const disableInput = (e) => {
+  console.log(e.target.value);
+ if (e.target.value === ""){
+    console.log("it worked!");
+  setNameInput(false);
+  setEmailInput(false);
+  setIdInput(false);
+  setAmbassadorIdInput(false);
+  }
+else if (e.target.id === "users.id") {
+  setNameInput(true);
+  setEmailInput(true);
+  setAmbassadorIdInput(true);
+}
+else if (e.target.id === "users.name") {
+  setIdInput(true);
+  setEmailInput(true);
+  setAmbassadorIdInput(true);
+}
+else if (e.target.id === "users.email") {
+  setNameInput(true);
+  setIdInput(true);
+  setAmbassadorIdInput(true);
+}
+else if (e.target.id === "users.ambassadorID") {
+  setNameInput(true);
+  setEmailInput(true);
+  setIdInput(true);
+} 
+
+}
 
   return (
     <PageWrapper>
@@ -65,29 +106,39 @@ dispatch(filterAccounts(col, filter));
             <tr>
               <th id="filter">
                 <input
+                disabled={idInput}
                 id="users.id"
                   type="text"
                   onBlur={(e) => handleChange(e)} 
+                  onChange={(e) => disableInput(e)}
                 />
               </th>
               <th id="filter">
                 <input 
+                disabled={nameInput}
                 id="users.name"
                  type="text"
                  onBlur={(e) => handleChange(e)} 
+                 onChange={(e) => disableInput(e)}
                   />
               </th>
               <th id="filter">
                 <input 
+                disabled={emailInput}
                 id="users.email"
                 type="text" 
-                onBlur={(e) => handleChange(e)} />
+                onBlur={(e) => handleChange(e)}
+                onChange={(e) => disableInput(e)} 
+                />
               </th>
               <th id="filter">
-                <input 
+                <input
+                disabled={ambassadorIdInput} 
                 id="users.ambassadorID"
                 type="text" 
-                onBlur={(e) => handleChange(e)} />
+                onBlur={(e) => handleChange(e)}
+                onChange={(e) => disableInput(e)}
+                 />
               </th>
             </tr><tr></tr>
               <tr>
