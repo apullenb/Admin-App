@@ -39,11 +39,12 @@ export const getAccounts = (perPage = 10, pageNo = 1, sort = "users.id", sortDir
 };
 
 
-export const filterAccounts = (filter = "users.id") => (dispatch) => {
+export const filterAccounts = (col, filter) => (dispatch) => {
     dispatch({type: GET_FILTERED_ACCOUNTS_START});
     return axios
-    .get(`${config.SKINCAREBASEURL}/api/challenge/all-users?filtered=${filter}`)
+    .post(`${config.SKINCAREBASEURL}/api/challenge/get-user-by`, { col, filter })
     .then(res=>{
+        console.log(res.data);
         dispatch({type:GET_FILTERED_ACCOUNTS_SUCCESS, payload:res.data});
     })
     .catch(error=>{

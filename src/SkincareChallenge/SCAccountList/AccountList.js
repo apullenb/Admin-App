@@ -5,7 +5,7 @@ import "./AccountList.scss";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAccounts } from '../../redux/actions/Skincare/skincareActions';
+import { getAccounts, filterAccounts } from '../../redux/actions/Skincare/skincareActions';
 import { CaretUp, CaretDown} from "react-bootstrap-icons";
 import Pagination from "./Pagination";
 
@@ -16,8 +16,7 @@ function AccountList() {
   const [perPage, setPerPage] = useState(10);
   const [colSort, setColSort] = useState("users.id");
   const [sortDirection, setSortDirection] = useState("asc");
-  const [filteredData, setFilteredData] = useState([]);
-  const [dataEntered, setDataEntered] = useState("");
+  const [localAccounts, setLocalAccounts ] = useState([]);
 
   const dispatch = useDispatch();
   const { accounts } = useSelector(state => state.entries);
@@ -26,8 +25,14 @@ function AccountList() {
     dispatch(getAccounts());
   }, []);
 
+
+  useEffect(() => {
+setLocalAccounts(accounts);
+console.log(localAccounts);
+  }, [accounts]);
+
+  
   const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
-    console.log("This button was clicked");
     setColSort(sortInfo);
     setSortDirection(sortBy);
     dispatch(getAccounts(numPerPage, pageNoVal, sortInfo, sortBy));
@@ -44,22 +49,12 @@ function AccountList() {
   }
 
 
-const handleChange = (e, cat) => {
-console.log("placeholder");
+const handleChange = (e) => {
+console.log(e.target.value);
+const filter = e.target.value;
+const col = e.target.id;
+dispatch(filterAccounts(col, filter));
 };
-
-const handleFilter = (event) => {
-  const searchWord = event.target.value;
-  setDataEntered(searchWord);
-  const newFilter = Object.accounts.filter(users => users && users.id.includes(event));
-  
-if (searchWord === "") {
-  setFilteredData([]);
-} else {
-  setFilteredData(newFilter);
-}
-};
-
 
   return (
     <PageWrapper>
@@ -70,44 +65,31 @@ if (searchWord === "") {
             <tr>
               <th id="filter">
                 <input
+                id="users.id"
                   type="text"
-                  //value={dataEntered}
-                  //onChange={handleFilter}
+                  onBlur={(e) => handleChange(e)} 
                 />
               </th>
               <th id="filter">
                 <input 
+                id="users.name"
                  type="text"
-                  value={dataEntered}
-                  onChange={handleFilter}
+                 onBlur={(e) => handleChange(e)} 
                   />
               </th>
               <th id="filter">
-                <input type="text" 
-                onChange={(e) => handleChange(e, "email")} />
+                <input 
+                id="users.email"
+                type="text" 
+                onBlur={(e) => handleChange(e)} />
               </th>
               <th id="filter">
                 <input 
+                id="users.ambassadorID"
                 type="text" 
-                onChange={(e) => handleChange(e, "ambassadorID")} />
+                onBlur={(e) => handleChange(e)} />
               </th>
-              <th id="filter">
-                <input 
-                type="text" 
-                onChange={(e) => handleChange(e, "lastLogin")}/>
-              </th>
-              <th id="filter">
-                <select id="filter">
-                  <option selected value="Challenge"  onChange={(e) => handleChange(e, "lastChallenge")}>
-                  </option>
-                  <option value="2020 Q3">2020 Q3</option>
-                  <option value="2020 Q4">2020 Q3</option>
-                  <option value="2021 Q1">2021 Q1</option>
-                  <option value="2021 Q2">2021 Q2</option>
-                  <option value="2021 Q3">2021 Q3</option>
-                </select>
-              </th>
-            </tr>
+            </tr><tr></tr>
               <tr>
                 <th className="head">Account ID<br/>
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.id","asc")}}/>
@@ -125,19 +107,15 @@ if (searchWord === "") {
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.ambassadorId","asc")}}/>
                 <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.ambassadorId","desc")}}/> 
                 </th>
-                <th className="head">Last Login<br/>
-                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.lastLoginDate","asc")}}/>
-                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.lastLoginDate","desc")}}/> 
+                <th className="head">Last Login<br/> 
                 </th>
                 <th className="head">Last Challenge<br/>
-                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.lastChallenge","asc")}}/>
-                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.lastChallenge","desc")}}/> 
                 </th>
                 <th className="head">Actions </th>
               </tr>
             </thead>
-            {accounts && accounts.data && accounts.data.length > 1 && <tbody>
-              {accounts.data.map((user, i) => {
+            {localAccounts && localAccounts.data && localAccounts.data.length >= 1 && <tbody>
+              {localAccounts.data.map((user, i) => {
                 return (
                   <tr key={i} user = {user} id="row">
                     <td>{user.id}</td>
