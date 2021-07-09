@@ -8,6 +8,7 @@ import {
     GET_FILTERED_ACCOUNTS_START,
     GET_FILTERED_ACCOUNTS_SUCCESS,
     GET_FILTERED_ACCOUNTS_FAILURE
+
 } from '../../actions/Skincare/skincareActionTypes'
 
 const initalState = {

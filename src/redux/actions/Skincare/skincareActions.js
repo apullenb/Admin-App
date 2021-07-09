@@ -7,7 +7,8 @@ import {
     GET_ACCOUNTS_FAILURE,
     GET_FILTERED_ACCOUNTS_START,
     GET_FILTERED_ACCOUNTS_SUCCESS,
-    GET_FILTERED_ACCOUNTS_FAILURE
+    GET_FILTERED_ACCOUNTS_FAILURE,
+
 } from './skincareActionTypes'
 
 import axios from 'axios';

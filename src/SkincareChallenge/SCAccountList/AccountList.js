@@ -5,7 +5,7 @@ import "./AccountList.scss";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import { useDispatch, useSelector, useStore } from 'react-redux';
-import { getAccounts, filterAccounts } from '../../redux/actions/Skincare/skincareActions';
+import { getAccounts, filterAccounts, getFilteredAccounts } from '../../redux/actions/Skincare/skincareActions';
 import { CaretUp, CaretDown} from "react-bootstrap-icons";
 import Pagination from "./Pagination";
 
@@ -32,8 +32,6 @@ function AccountList() {
 
   useEffect(() => {
 setLocalAccounts(accounts);
-console.log(localAccounts);
-console.log(accounts);
   }, [accounts]);
 
   
@@ -68,7 +66,6 @@ if (e.target.value === "") {
 const disableInput = (e) => {
   console.log(e.target.value);
  if (e.target.value === ""){
-    console.log("it worked!");
   setNameInput(false);
   setEmailInput(false);
   setIdInput(false);
