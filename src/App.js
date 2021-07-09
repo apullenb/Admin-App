@@ -16,6 +16,8 @@ import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
 import EntryList from "./SkincareChallenge/SCEntryList/EntryList";
 import EntryEdit from "./SkincareChallenge/EntryEdit";
 
+import EditCOA from "./COA/EditCOA";
+
 import ShoppingCountries from "./ShoppingConfiguration/countries/countries";
 import ShoppingKits from "./ShoppingConfiguration/kits/kits";
 import ShoppingProducts from "./ShoppingConfiguration/product/products";
@@ -55,7 +57,7 @@ function App() {
 
   return (
 
-    <div className='app'>      
+    <div className='app'>     
       <Page >
         <Switch>
           <Route exact path="/" component={Dashboard} />
@@ -70,6 +72,7 @@ function App() {
           <Route path="/Challenge/Accounts/:accountid" component={AccountEdit} />
           <Route path="/Challenge/Entries" component={EntryList} />
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
+          <Route path="/Coa/editcoa" component={EditCOA} />
 
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />
