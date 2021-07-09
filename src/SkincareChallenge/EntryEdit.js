@@ -19,6 +19,8 @@ function EntryEdit(props) {
   const [allProducts, setAllProducts] = useState([]);
   const optionList = [{value: '1', label: 'Yes'},{value: '0', label: 'No'}];
   const [blank, setBlank] = useState(true);
+  const [message, setMessage] = useState('');
+  const [change, setChange] = useState(false);
 
   // this.handleChange = this.handleChange.bind(this);
   // this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,8 +48,11 @@ function EntryEdit(props) {
     });
   }
 
-  const handleChange = (e) => setEntry({ ...entry, [e.target.name]: e.target.value });
-
+  const handleChange = (e) => {
+    setChange(true)
+    setMessage('')
+    setEntry({ ...entry, [e.target.name]: e.target.value });
+  }
   const handleSubmit = async () => {
     try {
       const body = {
@@ -65,8 +70,9 @@ function EntryEdit(props) {
         body: JSON.stringify(body)
       };
       
-      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-entry/${entry.id}`, requestOptions);
-      console.log('response', response);
+      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-entry-admin/${entry.id}`, requestOptions);
+      setChange(false)
+      setMessage('Thank you. Your Changes Have Been Saved')
 
     } catch (err) {
       console.error(err.message)
@@ -74,6 +80,8 @@ function EntryEdit(props) {
   };
   
   const handleProductsChange = (event) => {
+    setChange(true)
+    setMessage('')
     const value = event.target.checked;
     const product = parseInt(event.target.name);
     const currentEntrytemp = entry;
@@ -88,6 +96,8 @@ function EntryEdit(props) {
   };
 
   const handleSelectChange = (event, property) => {
+    setChange(true)
+    setMessage('')
     const tempEntry = entry;
     tempEntry[property] = event.value === '1';
     setEntry(tempEntry);
@@ -97,11 +107,12 @@ function EntryEdit(props) {
 
 
   return (
-    <PageWrapper>
-      <div className="page-header">
+    <div>
+      <h1>
         Skincare Challenge Edit Entry
+        </h1>
         <div className="page-header-link"><Link to="/Challenge/Entries">Back to list</Link></div>
-      </div>
+    
       <EntryDetails>
         <Row>
           <Col>
@@ -126,7 +137,7 @@ function EntryEdit(props) {
             <div>
               <label>Name</label>
               <span className="read-only-value">
-                    <td><Link to = {{ pathname: `/Challenge/Accounts/${entry.userId}`, state: entry }}>{entry.name}</Link></td></span>
+                    <Link to = {{ pathname: `/Challenge/Accounts/${entry.userId}`, state: entry }}>{entry.name}</Link></span>
             </div>
             <div>
               <label>Email</label>
@@ -182,40 +193,49 @@ function EntryEdit(props) {
           <Col>
             <ContestImage>
               <label>Day 1 Photo</label>
-              <img src={entry.day1ImageUrl} alt="Day 1 Image" />
+              {entry.day1ImageUrl ? <img src={entry.day1ImageUrl} alt="Day 1 Image" /> : <p style={{fontWeight: '500'}}>No Photo Submitted</p>}
             </ContestImage>
             <ContestImage>
               <label>Day 30 Photo</label>
-              <img src={entry.day30ImageUrl} alt="Day 30 Image" />
+              {entry.day30ImageUrl ? <img src={entry.day30ImageUrl} alt="Day 30 Image" /> : <p style={{fontWeight: '500'}}>No Photo Submitted</p> }
             </ContestImage>
           </Col>
         </Row>
         <Row>
-          <Col>
-            <Button style={{background:"#043769", marginRight: "50px", padding: "10px 25px"}} onClick={handleSubmit} disabled>Save Not Available</Button>
+         
+          {change ? <Button style={{background:"#043769", marginRight: "50px", padding: "10px 25px"}} onClick={handleSubmit}>Save</Button> :
+            <Button style={{background:"#043769", marginRight: "50px", padding: "10px 25px"}} disabled>Save </Button>}
             <Button style={{background:"#043769", padding: "10px 25px"}} onClick={handlePasswordReset}>Send Password Reset</Button>
-          </Col>
+            <Success>{message}</Success>
+         
         </Row>
       </EntryDetails>
-    </PageWrapper>
+    </div>
   );
 }
 
 export default EntryEdit;
 
-const PageWrapper = styled.div`
-  width: 1400px;
-`;
+
 
 const ContestImage = styled.div`
   display: inline-block;
-  width: 50%;
+  max-width: 350px;
+  margin: 2px;
+  border: 1px solid #d8d8d8;
+  border-radius: 2px;
+  padding: 1%;
   vertical-align: top;
-
   img {
     width: 100%;
   }
 `;
+
+const Success = styled.p`
+font-size: 16px;
+font-weight: 500;
+margin: 6px 2%;
+`
 
 const EntryDetails = styled.section`
   color: rgb(94, 93, 93);
