@@ -96,7 +96,7 @@ else if (e.target.id === "ambassadorID") {
 }
 
   return (
-    <PageWrapper>
+<div>
         <h1>Skincare Challenge Accounts</h1>
         <AccountTable>
           <table>
@@ -193,15 +193,11 @@ else if (e.target.id === "ambassadorID") {
         </AccountTable>
 
         <Pagination getEntries={getAccounts()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
-    </PageWrapper>
+    </div>
   );
 }
 
 export default AccountList;
-
-const PageWrapper = styled.div`
-  width: 1400px;
-`;
 
 const AccountTable = styled.div`
   padding: 1px;
