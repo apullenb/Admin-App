@@ -9,6 +9,11 @@ const EditCOA = () => {
         console.log("btn was clicked");
     }
 
+    
+    const uploadCoa = () => {
+        console.log("btn was clicked");
+    }
+
 
     return (    
     <PageWrapper>
@@ -35,16 +40,20 @@ const EditCOA = () => {
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Is External</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CheckBox  type="checkbox"/></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CheckBox type="checkbox"/></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">File</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CustomButton onClick={saveCoa}>Upload</CustomButton></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CustomButton onClick={uploadCoa}>Upload</CustomButton></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}>File Name</Col>
                     <Col xl={3} lg={3} md={3} sm={3} xs={3}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
+                </Row>
+                <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
+                <Row className="text-left">
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <SaveButton onClick={saveCoa}>Save</SaveButton></Col>
                 </Row>
         </PageWrapper>
     )
@@ -80,6 +89,24 @@ text-align: center;
   }
 `;
 
+const SaveButton = styled.button`
+background-color: #09497e;
+color: white;
+font-size: 14px;
+margin: 3px;
+border: none;
+padding: 2px 15px;
+font-weight: 500;
+width: 100px;
+text-align: center;
+
+&:hover {
+    background: #345880;
+    border: 2px solid #022b53;
+    padding: 0px 13px;
+  }
+`;
+
 const CheckBox = styled.input`
 background-color: #09497e;
 
@@ -92,5 +119,4 @@ background-color: #09497e;
     border: 2px solid #022b53;
     padding: 0px 13px;
   }
-
 `;
