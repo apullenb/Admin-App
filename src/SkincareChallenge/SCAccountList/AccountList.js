@@ -216,7 +216,8 @@ const AccountTable = styled.div`
       }
       
       td {
-        padding: 5px 0;
+        text-align: left;
+        padding: 5px 3px;
       }
     }
   }
@@ -225,8 +226,10 @@ const AccountTable = styled.div`
     font-size: 18px;
     font-weight: 400;
     color: rgb(94, 93, 93);
-    margin: 1px 1vw;
-    padding: 5px 1vw;
+    margin: 3px;
+    padding: 5px;
     border-bottom: 1px solid #094a8a;
   }
+
+
 `;
