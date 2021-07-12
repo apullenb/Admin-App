@@ -40,10 +40,10 @@ export const getAccounts = (perPage = 10, pageNo = 1, sort = "users.id", sortDir
 };
 
 
-export const filterAccounts = (col, filter) => (dispatch) => {
+export const filterAccounts = (col, filter, perPage = 10, pageNo = 1, sort = "id", sortDirection = "asc") => (dispatch) => {
     dispatch({type: GET_FILTERED_ACCOUNTS_START});
     return axios
-    .post(`${config.SKINCAREBASEURL}/api/challenge/get-user-by`, { col, filter })
+    .post(`${config.SKINCAREBASEURL}/api/challenge/get-user-by?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`, { col, filter })
     .then(res=>{
         console.log(res.data);
         dispatch({type:GET_FILTERED_ACCOUNTS_SUCCESS, payload:res.data});

@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import "./AccountList.scss";
-//import Pagination from "../../GlobalComponents/Pagination";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
-import { useDispatch, useSelector, useStore } from 'react-redux';
-import { getAccounts, filterAccounts, getFilteredAccounts } from '../../redux/actions/Skincare/skincareActions';
+import { useDispatch, useSelector} from 'react-redux';
+import { getAccounts, filterAccounts} from '../../redux/actions/Skincare/skincareActions';
 import { CaretUp, CaretDown} from "react-bootstrap-icons";
 import Pagination from "./Pagination";
 
@@ -14,19 +13,21 @@ function AccountList() {
   const [blank, setBlank] = useState(false);
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [colSort, setColSort] = useState("users.id");
+  const [colSort, setColSort] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
   const [localAccounts, setLocalAccounts ] = useState([]);
   const [idInput, setIdInput] = useState(false);
   const [nameInput, setNameInput] = useState(false);
   const [emailInput, setEmailInput] = useState(false);
   const [ambassadorIdInput, setAmbassadorIdInput] = useState(false);
+  const [col, setCol] = useState("id");
+  const [filter, setFilter] = useState("");
 
   const dispatch = useDispatch();
   const { accounts } = useSelector(state => state.entries);
 
   useEffect(() => {
-    dispatch(getAccounts());
+    dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
   }, []);
 
 
@@ -38,55 +39,55 @@ setLocalAccounts(accounts);
   const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
     setColSort(sortInfo);
     setSortDirection(sortBy);
-    dispatch(getAccounts(numPerPage, pageNoVal, sortInfo, sortBy));
+    dispatch(filterAccounts(col, filter, numPerPage, pageNoVal, sortInfo, sortBy));
   }
 
   const updatePerPage = (val) =>{
     setPerPage(val);
-    dispatch(getAccounts(val, pageNo, colSort, sortDirection));
+    dispatch(filterAccounts(col, filter, val, pageNo, colSort, sortDirection));
   }
 
   const updatePageNo = (val) => {
     setPageNo(val);
-    dispatch(getAccounts(perPage, val, colSort, sortDirection));
+    dispatch(filterAccounts(col, filter, perPage, val, colSort, sortDirection));
   }
 
 
 const handleChange = (e) => {
-console.log(e.target.value);
 const filter = e.target.value;
 const col = e.target.id;
+setCol(e.target.id);
+setFilter(e.target.value);
 if (e.target.value === "") {
   dispatch(getAccounts());
 } else {
-  dispatch(filterAccounts(col, filter));
+  dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
 }
 };
 
 const disableInput = (e) => {
-  console.log(e.target.value);
  if (e.target.value === ""){
   setNameInput(false);
   setEmailInput(false);
   setIdInput(false);
   setAmbassadorIdInput(false);
   }
-else if (e.target.id === "users.id") {
+else if (e.target.id === "id") {
   setNameInput(true);
   setEmailInput(true);
   setAmbassadorIdInput(true);
 }
-else if (e.target.id === "users.name") {
+else if (e.target.id === "name") {
   setIdInput(true);
   setEmailInput(true);
   setAmbassadorIdInput(true);
 }
-else if (e.target.id === "users.email") {
+else if (e.target.id === "email") {
   setNameInput(true);
   setIdInput(true);
   setAmbassadorIdInput(true);
 }
-else if (e.target.id === "users.ambassadorID") {
+else if (e.target.id === "ambassadorID") {
   setNameInput(true);
   setEmailInput(true);
   setIdInput(true);
@@ -104,7 +105,7 @@ else if (e.target.id === "users.ambassadorID") {
               <th id="filter">
                 <input
                 disabled={idInput}
-                id="users.id"
+                id="id"
                   type="text"
                   onBlur={(e) => handleChange(e)} 
                   onChange={(e) => disableInput(e)}
@@ -113,7 +114,7 @@ else if (e.target.id === "users.ambassadorID") {
               <th id="filter">
                 <input 
                 disabled={nameInput}
-                id="users.name"
+                id="name"
                  type="text"
                  onBlur={(e) => handleChange(e)} 
                  onChange={(e) => disableInput(e)}
@@ -122,7 +123,7 @@ else if (e.target.id === "users.ambassadorID") {
               <th id="filter">
                 <input 
                 disabled={emailInput}
-                id="users.email"
+                id="email"
                 type="text" 
                 onBlur={(e) => handleChange(e)}
                 onChange={(e) => disableInput(e)} 
@@ -131,7 +132,7 @@ else if (e.target.id === "users.ambassadorID") {
               <th id="filter">
                 <input
                 disabled={ambassadorIdInput} 
-                id="users.ambassadorID"
+                id="ambassadorId"
                 type="text" 
                 onBlur={(e) => handleChange(e)}
                 onChange={(e) => disableInput(e)}
@@ -140,20 +141,20 @@ else if (e.target.id === "users.ambassadorID") {
             </tr><tr></tr>
               <tr>
                 <th className="head">Account ID<br/>
-                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.id","asc")}}/>
-                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.id","desc")}}/> 
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"id","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"id","desc")}}/> 
                 </th>
                 <th className="head">Name<br/>
-                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.name","asc")}}/>
-                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.name","desc")}}/> 
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","desc")}}/> 
                 </th>
                 <th className="head">Email<br/>
-                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.email","asc")}}/>
-                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.email","desc")}}/> 
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"email","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"email","desc")}}/> 
                 </th>
                 <th className="head">Ambassador ID<br/>
-                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.ambassadorId","asc")}}/>
-                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"users.ambassadorId","desc")}}/> 
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"ambassadorId","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"ambassadorId","desc")}}/> 
                 </th>
                 <th className="head">Last Login<br/> 
                 </th>

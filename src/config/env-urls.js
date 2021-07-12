@@ -13,9 +13,8 @@
   const handleSkinCareEnvURL = () => {
       switch(environment){
           case 'development' : return 'http://localhost:4000';
-          case 'test' : return 'http://localhost:4000';
-          //case 'test' : return 'https://skincarechallangedev-be.azurewebsites.net';
-          //case 'production' : return 'https://skincarechallange-be.azurewebsites.net';
+          case 'test' : return 'https://skincarechallangedev-be.azurewebsites.net';
+          case 'production' : return 'https://skincarechallange-be.azurewebsites.net';
           default : return 'http://localhost:4000';
       }
   };
