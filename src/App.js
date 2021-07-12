@@ -72,7 +72,7 @@ function App() {
           <Route path="/Challenge/Accounts/:accountid" component={AccountEdit} />
           <Route path="/Challenge/Entries" component={EntryList} />
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
-          <Route path="/Coa/editcoa" component={EditCOA} />
+          <Route path="/Coa/edit" component={EditCOA} />
 
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />
