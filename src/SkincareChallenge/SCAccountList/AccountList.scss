@@ -8,20 +8,26 @@
   font-size: 18px;
   font-weight: 400;
   color: rgb(94, 93, 93);
-  margin: 1px 1vw;
-  padding: 5px 1vw;
+  //margin: 1px 1vw;
+  //padding: 5px 1vw;
   border-bottom: 1px solid #094a8a;
+  align-self: flex-start;
+
 }
  #filter {
-  text-align: center;
+  text-align: left;
   margin: 0px;
   padding: 0px 5px;
+  align-self: flex-start;
 }
+
+
 
  td {
   font-size: 16px;
   padding: 7px 1vw;
   text-align: left;
+
 }
 
  #row:hover {
