@@ -1,74 +1,172 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-
 import "./AccountList.scss";
-import config from "../../config/env-urls";
-import Pagination from "../../GlobalComponents/Pagination";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import { useDispatch, useSelector} from 'react-redux';
+import { getAccounts, filterAccounts} from '../../redux/actions/Skincare/skincareActions';
+import { CaretUp, CaretDown} from "react-bootstrap-icons";
+import Pagination from "./Pagination";
 
 function AccountList() {
-  const [users, setUsers] = useState("");
-  // const [filter, setFilter] = useState("");
-  // const [category, setCategory] = useState("");
   const [message, setMessage] = useState(true);
-  const [totalUsers, setTotalUsers] = useState(0);
   const [blank, setBlank] = useState(false);
+  const [pageNo, setPageNo] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [colSort, setColSort] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [localAccounts, setLocalAccounts ] = useState([]);
+  const [idInput, setIdInput] = useState(false);
+  const [nameInput, setNameInput] = useState(false);
+  const [emailInput, setEmailInput] = useState(false);
+  const [ambassadorIdInput, setAmbassadorIdInput] = useState(false);
+  const [col, setCol] = useState("id");
+  const [filter, setFilter] = useState("");
 
-  const pageOptions = [10, 15, 20];
-
-  const getUsers = async (perPage=10, pageNo=1) => {
-    try {
-      const requestOptions = {
-        method: "GET",
-      };
-      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=users.id`,requestOptions);
-      const data = await response.json();
-      setUsers(data.data);
-      setBlank(!blank);
-      setMessage(!message);
-      setTotalUsers(data.totalRows);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
+  const dispatch = useDispatch();
+  const { accounts } = useSelector(state => state.entries);
 
   useEffect(() => {
-    getUsers();
+    dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
   }, []);
 
 
-  // const handleChange = (e, cat) => {
-  //   setFilter(e.target.value);
-  //   setCategory(cat);
-  //   // Send category and filter to the backend as parameters
-  //   // Set the response to users
-  //   // setUsers(response)
-  //   // If no results are found, set message to "no results"
-  // };
+  useEffect(() => {
+setLocalAccounts(accounts);
+  }, [accounts]);
 
   
+  const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
+    setColSort(sortInfo);
+    setSortDirection(sortBy);
+    dispatch(filterAccounts(col, filter, numPerPage, pageNoVal, sortInfo, sortBy));
+  }
+
+  const updatePerPage = (val) =>{
+    setPerPage(val);
+    dispatch(filterAccounts(col, filter, val, pageNo, colSort, sortDirection));
+  }
+
+  const updatePageNo = (val) => {
+    setPageNo(val);
+    dispatch(filterAccounts(col, filter, perPage, val, colSort, sortDirection));
+  }
+
+
+const handleChange = (e) => {
+const filter = e.target.value;
+const col = e.target.id;
+setCol(e.target.id);
+setFilter(e.target.value);
+if (e.target.value === "") {
+  dispatch(getAccounts());
+} else {
+  dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
+}
+};
+
+const disableInput = (e) => {
+ if (e.target.value === ""){
+  setNameInput(false);
+  setEmailInput(false);
+  setIdInput(false);
+  setAmbassadorIdInput(false);
+  }
+else if (e.target.id === "id") {
+  setNameInput(true);
+  setEmailInput(true);
+  setAmbassadorIdInput(true);
+}
+else if (e.target.id === "name") {
+  setIdInput(true);
+  setEmailInput(true);
+  setAmbassadorIdInput(true);
+}
+else if (e.target.id === "email") {
+  setNameInput(true);
+  setIdInput(true);
+  setAmbassadorIdInput(true);
+}
+else if (e.target.id === "ambassadorID") {
+  setNameInput(true);
+  setEmailInput(true);
+  setIdInput(true);
+} 
+
+}
 
   return (
-    <div>
+<div>
         <h1>Skincare Challenge Accounts</h1>
         <AccountTable>
           <table>
             <thead>
+            <tr>
+              <th id="filter">
+                <input
+                disabled={idInput}
+                id="id"
+                  type="text"
+                  onBlur={(e) => handleChange(e)} 
+                  onChange={(e) => disableInput(e)}
+                />
+              </th>
+              <th id="filter">
+                <input 
+                disabled={nameInput}
+                id="name"
+                 type="text"
+                 onBlur={(e) => handleChange(e)} 
+                 onChange={(e) => disableInput(e)}
+                  />
+              </th>
+              <th id="filter">
+                <input 
+                disabled={emailInput}
+                id="email"
+                type="text" 
+                onBlur={(e) => handleChange(e)}
+                onChange={(e) => disableInput(e)} 
+                />
+              </th>
+              <th id="filter">
+                <input
+                disabled={ambassadorIdInput} 
+                id="ambassadorId"
+                type="text" 
+                onBlur={(e) => handleChange(e)}
+                onChange={(e) => disableInput(e)}
+                 />
+              </th>
+            </tr><tr></tr>
               <tr>
-                <th className="head">Account ID</th>
-                <th className="head">Name</th>
-                <th className="head">Email</th>
-                <th className="head">Ambassador ID </th>
-                <th className="head">Last Login </th>
-                <th className="head">Last Challenge </th>
+                <th className="head">Account ID<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"id","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"id","desc")}}/> 
+                </th>
+                <th className="head">Name<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","desc")}}/> 
+                </th>
+                <th className="head">Email<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"email","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"email","desc")}}/> 
+                </th>
+                <th className="head">Ambassador ID<br/>
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"ambassadorId","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"ambassadorId","desc")}}/> 
+                </th>
+                <th className="head">Last Login<br/> 
+                </th>
+                <th className="head">Last Challenge<br/>
+                </th>
                 <th className="head">Actions </th>
               </tr>
             </thead>
-            {users && users.length > 1 && <tbody>
-              {users.map((user, i) => {
+            {localAccounts && localAccounts.data && localAccounts.data.length >= 1 && <tbody>
+              {localAccounts.data.map((user, i) => {
                 return (
-                  <tr key={i} id="row">
+                  <tr key={i} user = {user} id="row">
                     <td>{user.id}</td>
                     <td>{user.name}</td>
                     <td>{user.email}{blank}</td>
@@ -94,14 +192,12 @@ function AccountList() {
           <h3>{message}</h3>
         </AccountTable>
 
-        <Pagination getRows={getUsers} totalRows={totalUsers} pageOptions={pageOptions} />
+        <Pagination getEntries={getAccounts()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
     </div>
   );
 }
 
 export default AccountList;
-
-
 
 const AccountTable = styled.div`
   padding: 1px;
