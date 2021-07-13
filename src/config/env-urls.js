@@ -1,5 +1,5 @@
 
-  const environment = process.env.REACT_APP_ENV || 'development';
+  const environment = process.env.REACT_APP_ENV || 'test';
   
   const handleSetProductsURL = () => {
       switch(environment){

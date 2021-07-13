@@ -107,8 +107,7 @@ else if (e.target.id === "ambassadorID") {
                 disabled={idInput}
                 id="id"
                   type="text"
-                  onBlur={(e) => handleChange(e)} 
-                  onChange={(e) => disableInput(e)}
+                  onChange={(e) => {disableInput(e) ; handleChange(e)}}
                 />
               </th>
               <th id="filter">
@@ -116,8 +115,7 @@ else if (e.target.id === "ambassadorID") {
                 disabled={nameInput}
                 id="name"
                  type="text"
-                 onBlur={(e) => handleChange(e)} 
-                 onChange={(e) => disableInput(e)}
+                 onChange={(e) => {disableInput(e) ; handleChange(e)}}
                   />
               </th>
               <th id="filter">
@@ -125,8 +123,7 @@ else if (e.target.id === "ambassadorID") {
                 disabled={emailInput}
                 id="email"
                 type="text" 
-                onBlur={(e) => handleChange(e)}
-                onChange={(e) => disableInput(e)} 
+                onChange={(e) => {disableInput(e) ; handleChange(e)}}
                 />
               </th>
               <th id="filter">
@@ -134,31 +131,30 @@ else if (e.target.id === "ambassadorID") {
                 disabled={ambassadorIdInput} 
                 id="ambassadorId"
                 type="text" 
-                onBlur={(e) => handleChange(e)}
-                onChange={(e) => disableInput(e)}
+                onChange={(e) => {disableInput(e) ; handleChange(e)}}
                  />
               </th>
             </tr><tr></tr>
               <tr>
-                <th className="head">Account ID<br/>
+                <th className="head">Account ID
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"id","asc")}}/>
                 <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"id","desc")}}/> 
                 </th>
-                <th className="head">Name<br/>
+                <th className="head">Name
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","asc")}}/>
                 <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","desc")}}/> 
                 </th>
-                <th className="head">Email<br/>
+                <th className="head">Email
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"email","asc")}}/>
                 <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"email","desc")}}/> 
                 </th>
-                <th className="head">Ambassador ID<br/>
+                <th className="head">Ambassador ID
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"ambassadorId","asc")}}/>
                 <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"ambassadorId","desc")}}/> 
                 </th>
-                <th className="head">Last Login<br/> 
+                <th className="head">Last Login
                 </th>
-                <th className="head">Last Challenge<br/>
+                <th className="head">Last Challenge
                 </th>
                 <th className="head">Actions </th>
               </tr>
@@ -225,6 +221,11 @@ const AccountTable = styled.div`
     margin: 3px;
     padding: 5px;
     border-bottom: 1px solid #094a8a;
+    text-align: left;
+  }
+
+  #filter {
+    text-align: left;
   }
 
 
