@@ -27,6 +27,7 @@ import Permissions from './Permissions/PermissionList';
 
 import Page from './GlobalComponents/PageWrapper'
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
+import COA from './COA/COA';
 
 function App() {
   // SAMPLE USER VALIDATION (Needs to be created)---------->
@@ -74,6 +75,7 @@ function App() {
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />
           <Route path="/Permissions" component={Permissions} />
+          <Route path="/COA" component={COA}/>
         </Switch>       
        </Page>
     </div>
