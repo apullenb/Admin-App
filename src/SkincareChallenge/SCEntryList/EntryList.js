@@ -3,11 +3,10 @@ import React, { useEffect, useState } from "react";
 import "./EntryList.scss";
 import Entries from "./Entries";
 import Pagination from "./Pagination";
-import { CaretUp, CaretDown } from "react-bootstrap-icons";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-
-import { getEntries } from "../../redux/actions/Skincare/skincareActions";
+import { CaretUp, CaretDown} from "react-bootstrap-icons";
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { getEntries } from '../../redux/actions/Skincare/skincareActions';
 
 const EntryList = () => {
   const [pageNo, setPageNo] = useState(1);

@@ -1,7 +1,14 @@
 import {
     GET_ENTRIES_START,
     GET_ENTRIES_SUCCESS,
-    GET_ENTRIES_FAILURE
+    GET_ENTRIES_FAILURE,
+    GET_ACCOUNTS_START,
+    GET_ACCOUNTS_SUCCESS,
+    GET_ACCOUNTS_FAILURE,
+    GET_FILTERED_ACCOUNTS_START,
+    GET_FILTERED_ACCOUNTS_SUCCESS,
+    GET_FILTERED_ACCOUNTS_FAILURE,
+
 } from './skincareActionTypes'
 
 import axios from 'axios';
@@ -19,4 +26,29 @@ export const getEntries = (perPage = 10, pageNo = 1, sort = "entries.id", sortDi
     })
 };
 
+
+export const getAccounts = (perPage = 10, pageNo = 1, sort = "users.id", sortDirection = "asc") => (dispatch) => {
+    dispatch({type: GET_ACCOUNTS_START});
+    return axios
+    .get(`${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
+    .then(res=>{
+        dispatch({type:GET_ACCOUNTS_SUCCESS, payload:res.data});
+    })
+    .catch(error=>{
+        dispatch({type:GET_ACCOUNTS_FAILURE, payload:error});
+    })
+};
+
+
+export const filterAccounts = (col, filter, perPage = 10, pageNo = 1, sort = "id", sortDirection = "asc") => (dispatch) => {
+    dispatch({type: GET_FILTERED_ACCOUNTS_START});
+    return axios
+    .post(`${config.SKINCAREBASEURL}/api/challenge/get-user-by?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`, { col, filter })
+    .then(res=>{
+        dispatch({type:GET_FILTERED_ACCOUNTS_SUCCESS, payload:res.data});
+    })
+    .catch(error=>{
+        dispatch({type:GET_FILTERED_ACCOUNTS_FAILURE, payload:error});
+    })
+};
 
