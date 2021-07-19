@@ -1,12 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
+import { Button } from "react-bootstrap"
 import COATable from "./COATable";
+import { useMediaQuery } from 'react-responsive'
 
 const COA = () => {
+
+  const isMobile = useMediaQuery({
+    query: '(min-device-width: 568px)'
+  })
+
   return (
     <div style={{ width: "100%" }}>
       <Container>
@@ -35,7 +39,7 @@ const COA = () => {
             name="cars"
             id="cars"
             style={{
-              marginLeft: "89px",
+              marginLeft: !isMobile ? "89px" : "0px",
               border: "1px solid #0F4B8F",
               width: "200px",
               height: "30px",
@@ -67,9 +71,7 @@ const COA = () => {
         <p style={{ fontSize: "32px" }}>Product COAs</p>
         <StyledButton>Add New COA</StyledButton>
       </Container>
-      <DndProvider backend={HTML5Backend}>
         <COATable />
-      </DndProvider>
     </div>
   );
 };
