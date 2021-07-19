@@ -11,6 +11,7 @@ function TopNav() {
   const navLinks = [        
     {name:"Event Calendar", link:'/Events', isPrivate: true},
     {name:"Incentive Trip", link:'/Incentive', isPrivate: true},
+    {name:"COA's", link:'/COAs', isPrivate: true},
   ];
 
 
@@ -30,27 +31,27 @@ function TopNav() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
-                {/* <NavDropdown title="Shopping Configuration" id="basic-nav-dropdown">
+                 <NavDropdown title="Shopping Configuration" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/Shopping/Countries">Countries</NavDropdown.Item>
                   <NavDropdown.Item href="/Shopping/Kits">Kits</NavDropdown.Item>
                   <NavDropdown.Item href="/Shopping/Categories">Categories</NavDropdown.Item>
                   <NavDropdown.Item href="/Shopping/Products">Products</NavDropdown.Item>
-                </NavDropdown> */}
+                </NavDropdown> 
                 <NavDropdown title="Skincare Challenge" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/Challenge/Accounts">Accounts</NavDropdown.Item>
                   <NavDropdown.Item href="/Challenge/Entries">Entries</NavDropdown.Item>
                 </NavDropdown>    
-                {/* { navLinks.map ((link, i) => {
+                 { navLinks.map ((link, i) => {
                   return (
                     <LinkWrap key={i}><Nav.Link href={link.link} >{link.name}</Nav.Link></LinkWrap>
                   )
-                })} */}
+                })}
               </Nav>     
               <Nav>
-                {/* <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
+                 <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/Settings/Permissions">Permissions</NavDropdown.Item>
                   <NavDropdown.Item href="/Setings/Roles">Roles</NavDropdown.Item>
-                </NavDropdown>     */}
+                </NavDropdown>     
               </Nav>     
             </Navbar.Collapse>
         </Navbar>
