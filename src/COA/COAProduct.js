@@ -16,9 +16,10 @@ function COAProduct(props) {
 }
 
     return (
+
         <Row className='products'>
         <Col>{productName}</Col>
-        <Col>{props.product.category}</Col>
+        <Col>{props.product.categoryID}</Col>
         <Col>{props.product.region}</Col>
         <Col>Last Updated</Col>
         <Col> <Link

@@ -31,13 +31,14 @@ import Page from './GlobalComponents/PageWrapper'
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
 import COAProductList from './COA/COAProductList';
 import ApolloClient from  'apollo-boost';
-import {ApolloProvider} from 'react-apollo';
+import { ApolloProvider } from '@apollo/react-hooks';
+
+
+const client = new ApolloClient({
+  uri: 'https://zorderapidev.azurewebsites.net/graphql'
+})
 
 function App() {
-
-const client = newApolloClient({
-  uri: '/graphql'
-})
 
   // SAMPLE USER VALIDATION (Needs to be created)---------->
   // Currently defaulted to true..needs to default to false once authentication is set up
@@ -64,9 +65,8 @@ const client = newApolloClient({
   // <------------ END SAMPLE USER VALIDATION SECTION
 
   return (
-
+    <ApolloProvider client={client}>
     <div className='app'>     
-      <ApolloProvider client={client}>
       <Page >
         <Switch>
           <Route exact path="/" component={Dashboard} />
@@ -89,8 +89,8 @@ const client = newApolloClient({
           <Route path="/Permissions" component={Permissions} />
         </Switch>       
        </Page>
-       </ApolloProvider>
     </div>
+    </ApolloProvider>
   );
 }
 

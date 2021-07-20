@@ -11,11 +11,13 @@ import rootReducer from './redux/reducers/index';
 //Redux
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ToastProvider } from 'react-toast-notifications'
+import { ToastProvider } from 'react-toast-notifications';
+
 
 const store = createStore(rootReducer, composeWithDevTools(
   applyMiddleware(thunk)
 ))
+
 
 ReactDOM.render(
   <React.StrictMode>

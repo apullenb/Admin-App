@@ -2,18 +2,22 @@ import React, {useState, useEffect} from "react";
 import { Row, Col, FormControl, Button } from "react-bootstrap/";
 import styled from "styled-components";
 import COAProduct from "./COAProduct";
+import { useQuery } from '@apollo/react-hooks';
+import { GET_PRODUCTS } from '../utils/GQLqueries';
 
 
 const COAProductList = () => {
-
-const [products, setProducts] = useState('')
+const { loading, data } = useQuery(GET_PRODUCTS);
+//const [products, setProducts] = useState("")
 const [value, setValue] = useState('')
 const [category, setCategory] = useState('')
-
+const products = data?.products || [];
 
 useEffect(() => {
-getProducts()
-}, [])
+
+  }, [])
+  
+
 
 useEffect(() => {
   filter()
@@ -21,17 +25,6 @@ useEffect(() => {
 
 const getProducts = () => {
 
-const testProducts = [
-  {id: 1, productName: '<b>ULTRACELL <span style="color:#CD1971">BERRY</span></b>', region: 'USA' , category: 'UltraCell' },
-  {id: 2, productName: '<b><span style="color:#1A1818">FOAMING CLEANSER</span></b>', region: 'USA' , category: 'UltraCell' },
-  {id: 3, productName: '<b>ULTRACELL <span style="color:#CD1971">BERRY</span></b>', region: 'USA' , category: 'UltraCell' },
-  {id: 7, productName: '<b>ULTRA<span style="color:#8900C6">BLISS</span></b>', region: 'USA' , category: 'Lishé' },
-  {id: 4, productName: '<b>ULTRACELL <span style="color:#FAE019">LEMON</span></b>', region: 'Europe' , category: 'UltraCell' },
-  {id: 5, productName: '<b>ULTRA<span style="color:#8900C6">BLISS</span></b>', region: 'USA' , category: 'Lishé' },
-  {id: 6, productName: '<b>ULTRA<span style="color:#8900C6">BLISS</span></b>', region: 'Europe' , category: 'Lishé' },
-  {id: 8, productName: '<b><span style="color:#1A1818">FOAMING CLEANSER</span></b>', region: 'LATAM' , category: 'UltraCell' },
-]
-  setProducts(testProducts)
 }
   
 const handleChange = (e, cat) => {
@@ -40,7 +33,7 @@ const handleChange = (e, cat) => {
   setCategory(cat);
   console.log(category, value)
   if (value === "" || value === undefined || value === 'All') {
-    getProducts();
+    //setProducts();
   }
 };
 
@@ -57,7 +50,7 @@ const filter = () => {
       }
     });
   if (temp.length > 0) {
-    setProducts(temp);
+    //setProducts(temp);
     
   } else {
     setValue("");
@@ -110,7 +103,7 @@ const filter = () => {
         <Col>Actions</Col>
       </Row>
       
-        {products && products.map(product => <COAProduct key={product.id} product={product} /> )}
+        {products && products.length >= 1 && products.map(product => <COAProduct key={product.coaProductID} product={product} /> )}
  
     </Table>
   );
