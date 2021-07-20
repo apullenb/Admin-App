@@ -30,8 +30,15 @@ import Permissions from './Permissions/PermissionList';
 import Page from './GlobalComponents/PageWrapper'
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
 import COAProductList from './COA/COAProductList';
+import ApolloClient from  'apollo-boost';
+import {ApolloProvider} from 'react-apollo';
 
 function App() {
+
+const client = newApolloClient({
+  uri: '/graphql'
+})
+
   // SAMPLE USER VALIDATION (Needs to be created)---------->
   // Currently defaulted to true..needs to default to false once authentication is set up
   const dispatch = useDispatch();
@@ -59,6 +66,7 @@ function App() {
   return (
 
     <div className='app'>     
+      <ApolloProvider client={client}>
       <Page >
         <Switch>
           <Route exact path="/" component={Dashboard} />
@@ -81,6 +89,7 @@ function App() {
           <Route path="/Permissions" component={Permissions} />
         </Switch>       
        </Page>
+       </ApolloProvider>
     </div>
   );
 }
