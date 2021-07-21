@@ -34,19 +34,20 @@ const COA = () => {
         }}
       >
         <div>
-          <label style={{ fontSize: "20px" }}>Country</label>
+          <label style={{ fontSize: "20px" }}>Regions</label>
           <select
-            name="cars"
-            id="cars"
+            name="regions"
+            id="regions"
             style={{
-              marginLeft: !isMobile ? "89px" : "0px",
+              marginLeft: !isMobile ? "89px" : "90px",
               border: "1px solid #0F4B8F",
               width: "200px",
               height: "30px",
             }}
           >
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
+            <option value="USA">USA</option>
+            <option value="EU">EU</option>
+            <option value="LATAM">LATAM</option>
           </select>
         </div>
         <div style={{ marginRight: "300px" }}>
@@ -64,6 +65,9 @@ const COA = () => {
             <option value="volvo">Volvo</option>
             <option value="saab">Saab</option>
           </select>
+        </div>
+        <div>
+        <StyledButton>Save</StyledButton>
         </div>
       </div>
       <hr style={{ color: "#202525" }} />
