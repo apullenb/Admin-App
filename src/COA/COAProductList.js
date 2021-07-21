@@ -4,6 +4,7 @@ import styled from "styled-components";
 import COAProduct from "./COAProduct";
 import { useQuery } from '@apollo/react-hooks';
 import { GET_PRODUCTS } from '../utils/GQLqueries';
+import { Link } from "react-router-dom";
 
 
 const COAProductList = () => {
@@ -67,8 +68,7 @@ const filter = () => {
         <Col></Col>
         <Col></Col>
         <Col></Col>
-        <Col><CustomButton>Add Products</CustomButton></Col>
-        
+        <Col><Link to={{pathname: '/COA/0'}}><CustomButton>Add Products</CustomButton></Link></Col>
       </Row>
       <Row className="search-box">
         <Col><input defaultValue="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>
