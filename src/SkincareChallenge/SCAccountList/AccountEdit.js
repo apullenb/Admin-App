@@ -7,7 +7,10 @@ import { useToasts } from "react-toast-notifications";
 
 function AccountEdit(props) {
   const user = props.location.state;
-
+  if (user.userId) {
+    user.id = user.userId
+  }
+ 
   const [inputs, setInputs] = useState({
     ambassadorId: user.ambassadorId,
     name: user.name,

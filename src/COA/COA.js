@@ -5,8 +5,8 @@ import { Button } from "react-bootstrap"
 import COATable from "./COATable";
 import { useMediaQuery } from 'react-responsive'
 
-const COA = () => {
-
+const COA = (props) => {
+ console.log('addd', props)
   const isMobile = useMediaQuery({
     query: '(min-device-width: 568px)'
   })
