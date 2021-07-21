@@ -8,56 +8,35 @@ import { GET_PRODUCTS } from '../utils/GQLqueries';
 
 const COAProductList = () => {
 const { loading, data } = useQuery(GET_PRODUCTS);
-//const [products, setProducts] = useState("")
-const [value, setValue] = useState('')
-const [category, setCategory] = useState('')
+const [productsState, setProductsState] = useState([])
+
 const products = data?.products || [];
+const [search, setSearch] = useState('');
+const [searchValue, setSearchValue] = useState([]);
 
+ 
 useEffect(() => {
-
-  }, [])
-  
-
-
-useEffect(() => {
-  filter()
-  }, [value, category])
+getProducts();
+console.log(productsState);
+}, [products]);
 
 const getProducts = () => {
-
+  setProductsState(products);
 }
-  
-const handleChange = (e, cat) => {
-  setValue(e.target.value);
-  console.log(e.target.value)
-  setCategory(cat);
-  console.log(category, value)
-  if (value === "" || value === undefined || value === 'All') {
-    //setProducts();
+
+const handleSearchChange = event => {
+  const filteredList = productsState.filter(product => product.productName.includes(event)
+  );
+  setSearchValue(filteredList);
+  console.log(searchValue, 'Break');
+}
+
+
+useEffect(() => {
+  if (data) {
+    handleSearchChange(search);
   }
-};
-
-
-const filter = () => {
- 
-  let temp = [];
-  products && products.filter((product) => {
-      if (
-        (product && product[category].includes(value)) ||
-        product[category].toLowerCase().includes(value)
-      ) {
-        temp.push(product);
-      }
-    });
-  if (temp.length > 0) {
-    //setProducts(temp);
-    
-  } else {
-    setValue("");
-    console.log(value)
-  }
-};
-
+}, [data, search]);
 
 
   return (
@@ -72,9 +51,9 @@ const filter = () => {
         
       </Row>
       <Row className="search-box">
-        <Col><input defaultValue="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>
+        <Col><input defaultValue="Product Name" value={search} onChange={(e) => setSearch(e.target.value)}/></Col>
         <Col>
-          <select name="Product Category" defaultValue='Product Category' onChange={(e)=>handleChange(e, 'category')}>
+          <select name="Product Category" defaultValue='Product Category' >
           <option value='Product Category' disabled>Product Category</option>
             <option value="UltraCell">UltraCell</option>
             <option value="Lishé">Lishé</option>
@@ -82,7 +61,7 @@ const filter = () => {
           </select>
         </Col>
         <Col>
-          <select name="Region" defaultValue='Region' onChange={(e)=>handleChange(e, 'region')}>
+          <select name="Region" defaultValue='Region' >
           <option value='Region' disabled>Region</option>
             <option value="USA">USA</option>
             <option value="Europe">Europe</option>
@@ -102,8 +81,10 @@ const filter = () => {
         <Col>Last Updated</Col>
         <Col>Actions</Col>
       </Row>
-      
-        {products && products.length >= 1 && products.map(product => <COAProduct key={product.coaProductID} product={product} /> )}
+      {search === "" ? productsState && productsState.length >= 1 && productsState.map(product => <COAProduct key={product.coaProductID} product={product} /> )
+      : searchValue.map(product => <COAProduct key={product.coaProductID} product={product} /> )
+      };
+        
  
     </Table>
   );
