@@ -2,8 +2,9 @@ import React, {useState, useEffect} from "react";
 import { Row, Col, FormControl, Button } from "react-bootstrap/";
 import styled from "styled-components";
 import COAProduct from "./COAProduct";
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_PRODUCTS } from '../utils/GQLqueries';
+import { REMOVE_PRODUCT  } from '../utils/mutations'
 import { Link } from "react-router-dom";
 
 
@@ -111,12 +112,15 @@ const filter = () => {
 export default COAProductList;
 
 const Table = styled.div`
-  margin: 2% 1% 9%;
-  max-width: 1200px;
+  margin: 2% 12% 9%;
+  max-width: 1400px;
 
+  h1 {
+    margin: 0 1%;
+  }
 
   .search-box {
-    margin: 0 2px;
+    margin: 0 0px;
   }
 
   .search-box input {

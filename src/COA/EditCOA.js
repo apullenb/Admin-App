@@ -1,8 +1,13 @@
 import React from 'react';
 import {Row, Col, FormControl, Button } from 'react-bootstrap/';
 import styled from "styled-components";
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { ADD_DOCUMENT, EDIT_DOCUMENT  } from '../utils/mutations';
+import { GET_PRODUCTS, GET_PRODUCT_BY_ID } from '../utils/GQLqueries';
 
 const EditCOA = () => {
+const data  = useQuery(GET_PRODUCTS);
+const products = data?.products || [];
 
 
     const saveCoa = () => {
@@ -23,11 +28,11 @@ const EditCOA = () => {
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Product</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">UltraCell Berry</p></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">{products.productName}</p></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">Region</p></Col>
-                    <Col  xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">USA</p></Col>
+                    <Col  xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">{products.region}</p></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                 </Row>
