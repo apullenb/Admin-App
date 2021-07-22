@@ -4,19 +4,18 @@ import styled from "styled-components";
 import COAProduct from "./COAProduct";
 import { useQuery } from '@apollo/react-hooks';
 import { GET_PRODUCTS } from '../utils/GQLqueries';
+import { Link } from "react-router-dom";
 
 
 const COAProductList = () => {
-const { loading, data } = useQuery(GET_PRODUCTS);
-const [products, setProducts] = useState([])
+  const { loading, data } = useQuery(GET_PRODUCTS);
+const [products, setProducts] = useState("")
 const [value, setValue] = useState('')
 const [category, setCategory] = useState('')
 // const products = data?.products || [];
 
-console.log('tst', products)
-
 useEffect(() => {
- setProducts(data?.products)
+  getProducts()
   }, [data])
   
 
@@ -26,16 +25,16 @@ useEffect(() => {
   }, [value, category])
 
 const getProducts = () => {
-
+  setProducts(data?.products || [])
+  console.log(products)
 }
   
 const handleChange = (e, cat) => {
   setValue(e.target.value);
-  console.log(e.target.value)
   setCategory(cat);
   console.log(category, value)
   if (value === "" || value === undefined || value === 'All') {
-    //setProducts();
+    getProducts()
   }
 };
 
@@ -43,16 +42,15 @@ const handleChange = (e, cat) => {
 const filter = () => {
  
   let temp = [];
-  products.length > 0 && products.filter((product) => {
-      if (
-        (product && product[category].includes(value)) ||
-        product[category].toLowerCase().includes(value)
-      ) {
+  products && products.filter(product => {
+    console.log(product[category])
+      if (product[category] && product[category].includes(value) || product[category] &&
+        product[category].toLowerCase().includes(value)) {
         temp.push(product);
       }
     });
   if (temp.length > 0) {
-    //setProducts(temp);
+    setProducts(temp);
     
   } else {
     setValue("");
@@ -70,8 +68,7 @@ const filter = () => {
         <Col></Col>
         <Col></Col>
         <Col></Col>
-        <Col><CustomButton>Add Products</CustomButton></Col>
-        
+        <Col><Link to={{pathname: '/COA/0'}}><CustomButton>Add Products</CustomButton></Link></Col>
       </Row>
       <Row className="search-box">
         <Col><input defaultValue="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>
@@ -87,7 +84,7 @@ const filter = () => {
           <select name="Region" defaultValue='Region' onChange={(e)=>handleChange(e, 'region')}>
           <option value='Region' disabled>Region</option>
             <option value="USA">USA</option>
-            <option value="Europe">Europe</option>
+            <option value="EU">Europe</option>
             <option value="LATAM">LATAM</option>
             <option value="All">Show All</option>
           </select>

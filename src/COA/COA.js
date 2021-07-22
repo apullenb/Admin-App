@@ -1,21 +1,48 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap"
+import { Button } from "react-bootstrap";
+import { useQuery } from "@apollo/react-hooks";
+import { GET_DOCUMENTS_BY_PRODUCT_ID } from "../utils/GQLqueries";
 import COATable from "./COATable";
-import { useMediaQuery } from 'react-responsive'
+import { useMediaQuery } from "react-responsive";
 
 const COA = (props) => {
- console.log('addd', props)
+
+  const [documents, setDocuments] = useState([])
+
+  const { loading, data } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
+    variables: {
+      productID: props.location.state.coaProductID,
+    },
+  });
+  
+  console.log('tst', documents)
+
+  const getDocuments = () => {
+    setDocuments(data?.documents)
+  }
+
+  
+useEffect(() => {
+  getDocuments()
+  }, [data])
+  
+
+
+
+
   const isMobile = useMediaQuery({
-    query: '(min-device-width: 568px)'
-  })
+    query: "(min-device-width: 568px)",
+  });
+
+  const tableData = documents && documents.length > 0  ? documents: []
 
   return (
     <div style={{ width: "100%" }}>
       <Container>
         <p style={{ fontSize: "32px" }}>COA Product Details</p>
-        <Link style={{ display: "flex", alignSelf: "center" }}>
+        <Link to={'/COAs'}style={{ display: "flex", alignSelf: "center" }}>
           Back to list
         </Link>
       </Container>
@@ -23,7 +50,10 @@ const COA = (props) => {
         <label style={{ fontSize: "20px", marginRight: "30px" }}>
           Product Name
         </label>{" "}
-        <input style={{ width: "80%", border: "1px solid #0F4B8F" }} />
+        <input
+          style={{ width: "80%", border: "1px solid #0F4B8F" }}
+          defaultValue={props.location.state.productName}
+        />
       </div>
       <div
         style={{
@@ -37,6 +67,7 @@ const COA = (props) => {
           <label style={{ fontSize: "20px" }}>Regions</label>
           <select
             name="regions"
+            defaultValue={props.location.state.region}
             id="regions"
             style={{
               marginLeft: !isMobile ? "89px" : "90px",
@@ -67,7 +98,7 @@ const COA = (props) => {
           </select>
         </div>
         <div>
-        <StyledButton>Save</StyledButton>
+          <StyledButton>Save</StyledButton>
         </div>
       </div>
       <hr style={{ color: "#202525" }} />
@@ -75,7 +106,7 @@ const COA = (props) => {
         <p style={{ fontSize: "32px" }}>Product COAs</p>
         <StyledButton>Add New COA</StyledButton>
       </Container>
-        <COATable />
+      <COATable tableData={tableData} productID={props.location.state.coaProductID}/>
     </div>
   );
 };

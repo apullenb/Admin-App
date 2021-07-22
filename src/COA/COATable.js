@@ -1,35 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {Link} from 'react-router-dom'
 
-const dataSet = [
-  {
-    batchNumber: "208z-2503",
-    isExternal: "Yes",
-    dateUploaded: "7/4/2021",
-    url: "2021-233z.pdf",
-  },
-  {
-    batchNumber: "0125",
-    isExternal: "No",
-    dateUploaded: "05/01/2021",
-    url: "2021-233a.pdf",
-  },
-  {
-    batchNumber: "1235",
-    isExternal: "No",
-    dateUploaded: "06/15/2021",
-    url: "2021-233t.pdf",
-  },
-  {
-    batchNumber: "06Z1",
-    isExternal: "Yes",
-    dateUploaded: "06/17/2021",
-    url: "2021-233e.pdf",
-  },
-];
+const COATable = ({tableData, productID}) => {
+  // const [data, setData] = useState(tableData);
+  const [data, setData] = useState([])
 
-const COATable = () => {
-  const [data, setData] = useState(dataSet);
+  useEffect(() => {
+    setData(tableData)
+  }, [tableData])
+
+
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -37,6 +18,9 @@ const COATable = () => {
     result.splice(endIndex, 0, removed);
     return result;
   };
+
+  console.log('data', data)
+
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     opacity: isDragging ? 0.5 : 1,
@@ -50,6 +34,8 @@ const COATable = () => {
       return;
     }
 
+    
+    console.log('result', result)
     const items = reorder(data, result.source.index, result.destination.index);
 
     setData(items);
@@ -78,8 +64,11 @@ const COATable = () => {
               <th>View COA</th>
               <th>Actions</th>
             </tr>
-            {data.map((item, index) => (
-              <Draggable
+            {data.map((item, index) => {
+              console.log(
+                'asd', item
+              )
+             return (<Draggable
                 key={item.batchNumber}
                 draggableId={item.batchNumber}
                 index={index}
@@ -105,14 +94,18 @@ const COATable = () => {
                         <span>{item.batchNumber}</span>
                       </div>
                     </td>
-                    <td>{item.isExternal}</td>
-                    <td>{item.dateUploaded}</td>
-                    <td>{item.url}</td>
-                    <td>Edit | Delete</td>
+                    <td>{item.isExternal ? 'Yes' : 'No'}</td>
+                    <td>{item.uploadedOn}</td>
+                    <td>{item.fileUrl}</td>
+                    <td><Link to={{
+                      pathname:`/COA/Edit/${productID}/${item.coaDocumentID}`,
+                      productID: productID 
+                    }}>Edit</Link> | Delete</td>
                   </tr>
                 )}
               </Draggable>
-            ))}
+            )
+                    })}
             {provided.placeholder}
           </table>
         )}
