@@ -1,13 +1,18 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import {Row, Col, FormControl, Button } from 'react-bootstrap/';
 import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { ADD_DOCUMENT, EDIT_DOCUMENT  } from '../utils/mutations';
-import { GET_PRODUCTS, GET_PRODUCT_BY_ID } from '../utils/GQLqueries';
+import { GET_DOCUMENTS_BY_PRODUCT_ID  } from '../utils/GQLqueries';
 
 const EditCOA = () => {
-const data  = useQuery(GET_PRODUCTS);
-const products = data?.products || [];
+
+const { loading, data } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
+    variables: { productID }
+});
+
+const documents = data?.documents || [];
 
 
     const saveCoa = () => {
@@ -20,7 +25,12 @@ const products = data?.products || [];
     }
 
 
+    if (loading) {
+        return <div>Loading...</div>;
+      }
+
     return (    
+        console.log(documents),
     <PageWrapper>
                 <Row className="text-left">
                     <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
@@ -28,11 +38,11 @@ const products = data?.products || [];
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Product</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">{products.productName}</p></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">{documents.productName}</p></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">Region</p></Col>
-                    <Col  xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">{products.region}</p></Col>
+                    <Col  xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">{documents.region}</p></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                 </Row>

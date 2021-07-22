@@ -3,16 +3,17 @@ import { Row, Col, FormControl, Button } from "react-bootstrap/";
 import styled from "styled-components";
 import ReactHtmlParser from "react-html-parser";
 import { Link } from "react-router-dom";
-
+import moment from "moment";
 
 
 
 function COAProduct(props) {
 
    const productName = ReactHtmlParser(props.product.productName)
-
+  const date = props.product.lastUpdatedOn
+  const updated = moment(date).format('L')
    const handleDelete = () => {
-  console.log('delete', props.product.id)
+  console.log('delete', props.product.coaProductID)
 }
 
     return (
@@ -21,10 +22,10 @@ function COAProduct(props) {
         <Col>{productName}</Col>
         <Col>{props.product.categoryID}</Col>
         <Col>{props.product.region}</Col>
-        <Col>Last Updated</Col>
+        <Col>{updated}</Col>
         <Col> <Link
                         to={{
-                          pathname: `/Coa/edit/${props.product.id}`,
+                          pathname: `/COA/edit/${props.product.coaProductID}`,
                           state: props.product,
                         }}
                       >

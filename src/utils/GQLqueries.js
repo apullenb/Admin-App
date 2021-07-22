@@ -42,25 +42,18 @@ export const GET_PRODUCT_BY_ID = gql`
 }
 `;
 
-export const GET_DOCUMENT_BY_ID = gql`
-query documents($coaDocumentID: Int!){ 
+export const GET_DOCUMENTS_BY_PRODUCT_ID = gql`
+  query fetchDocs($productID: Int!) {
     documents(
-        where: {
-            coaDocumentID: {
-                eq: $coaDocumentID
-            }
-        })
-    { 
-        coaDocumentID
-        coaProductID
-        batchNumber
-        isExternal
-        uploadedOn
-        fileUrl
-        sortOrder
-        product {
-            coaProductID
-            productName
-        }
-    } 
-}`;
+      where: { coaProductID: { eq: $productID } }
+      order: { sortOrder: ASC }
+    ) {
+      coaDocumentID
+      batchNumber
+      isExternal
+      uploadedOn
+      fileUrl
+      sortOrder
+    }
+  }
+`;
