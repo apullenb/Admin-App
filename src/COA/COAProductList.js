@@ -27,13 +27,11 @@ useEffect(() => {
 
 const getProducts = () => {
   setProducts(data?.products || [])
-  console.log(products)
 }
   
 const handleChange = (e, cat) => {
   setValue(e.target.value);
   setCategory(cat);
-  console.log(category, value)
   if (value === "" || value === undefined || value === 'All') {
     getProducts()
   }
@@ -44,7 +42,6 @@ const filter = () => {
  
   let temp = [];
   products && products.filter(product => {
-    console.log(product[category])
       if (product[category] && product[category].includes(value) || product[category] &&
         product[category].toLowerCase().includes(value)) {
         temp.push(product);
@@ -55,7 +52,6 @@ const filter = () => {
     
   } else {
     setValue("");
-    console.log(value)
   }
 };
 
@@ -65,8 +61,6 @@ const filter = () => {
     <Table>
       <h1>COA Products</h1>
       <Row>
-      <Col></Col>
-        <Col></Col>
         <Col></Col>
         <Col></Col>
         <Col><Link to={{pathname: '/COA/0'}}><CustomButton>Add Products</CustomButton></Link></Col>
@@ -102,8 +96,7 @@ const filter = () => {
         <Col>Last Updated</Col>
         <Col>Actions</Col>
       </Row>
-      
-        {products && products.length >= 1 && products.map(product => <COAProduct key={product.coaProductID} product={product} /> )}
+        {products && products.map(product => <COAProduct key={product.coaProductID} product={product} fetch={getProducts} /> )}
  
     </Table>
   );
@@ -112,15 +105,15 @@ const filter = () => {
 export default COAProductList;
 
 const Table = styled.div`
-  margin: 2% 12% 9%;
-  max-width: 1400px;
+  margin: 2% 2% 9%;
+  max-width: 1600px;
 
   h1 {
     margin: 0 1%;
   }
 
   .search-box {
-    margin: 0 0px;
+    margin: 10px 0px;
   }
 
   .search-box input {
@@ -149,10 +142,10 @@ const Table = styled.div`
     font-weight: 600;
   }
   .name {
-    margin: 0px;
+    margin: 15px 0px;
     text-align: left;
     font: Segoe UI;
-    font-size: 19px;
+    font-size: 20px;
     color: #707070;
     opacity: 1;
   }
@@ -162,11 +155,14 @@ const Table = styled.div`
     font: Segoe UI;
     font-size: 20px;
     opacity: 1;
-    margin: 10px 0;
+    margin: 15px 0px;
     padding: 0;
   }
 
-
+  #edit {
+    margin: 0px;
+    padding: 0;
+  }
 
 `;
 
@@ -174,17 +170,16 @@ const CustomButton = styled.button`
   background-color: #0F4B8F;
   color: white;
   font-size: 14px;
-  margin: 3px;
+  margin: 6px 0%;
   border: none;
-  padding: 2px 15px;
+  padding: 3px 14px;
   font-weight: 500;
-  width: 150px;
   text-align: center;
 
   &:hover {
     background: #345880;
-    border: 2px solid #022b53;
-    padding: 0px 13px;
+    border: none;
+    padding: 2px 13px;
   }
 `;
 

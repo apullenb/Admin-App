@@ -32,7 +32,7 @@ function COAProduct(props) {
                         <button id="edit">Edit</button>
                       </Link> |  <button id="edit" onClick={showDelete}>Delete</button> </Col>
         </Row>
-        <Delete><div className={showDel}><ConfirmDel product={props.product} show={showDelete} /></div></Delete>
+        <Delete><div className={showDel}><ConfirmDel product={props.product} fetch={props.fetch} show={showDelete} name={productName}/></div></Delete>
         </div>
     )
 }

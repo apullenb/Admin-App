@@ -13,9 +13,10 @@ function ConfirmDel(props) {
     const handleDelete = async () => {
         const id = props.product.coaProductID
         try{
-          const response = await removeProduct({variables: { id } })
+          const response = await removeProduct({variables: {coaProductID: id}  })
            if (response) props.show()
            addToast('Product has been deleted.', {appearance: 'success', autoDismiss: true})
+           
         }
         catch (error) {
             console.log(error)
@@ -27,7 +28,7 @@ function ConfirmDel(props) {
     return (
         <Delete>
             <h1>Are You Sure You Want to Delete This Product?</h1>
-            <p>{props.product.productName}</p>
+            <p>{props.name}</p>
             <ButtonRow><button id='del' onClick={handleDelete}>Delete</button>
              <button id='cancel' onClick={props.show}>Cancel</button></ButtonRow>
         </Delete>
@@ -37,10 +38,14 @@ function ConfirmDel(props) {
 export default ConfirmDel
 
 const Delete = styled.div`
+
+h1 {
+  text-align: center;
+  font-size: 32px;
+}
 p {
  font-size: 23px;
  margin: 2%;
-
 }
 `;
 
