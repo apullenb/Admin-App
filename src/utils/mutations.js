@@ -4,10 +4,10 @@ export const ADD_DOCUMENT = gql`
 mutation document($coaProductID: Int!){
     addCoaDocument(input: { 
       coaProductID: $coaProductID,
-      batchNumber: "FZ-78ST",
+      batchNumber: "",
       isExternal: 1,
-      uploadedOn: "2021-07-19"
-      fileUrl: "FZ-78ST.pdf",
+      uploadedOn: ""
+      fileUrl: "",
       sortOrder: 1000
       }) {
           coaDocument {

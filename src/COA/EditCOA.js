@@ -1,4 +1,4 @@
-import React , { useEffect } from 'react';
+import React , { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {Row, Col, FormControl, Button } from 'react-bootstrap/';
 import styled from "styled-components";
@@ -7,8 +7,8 @@ import { ADD_DOCUMENT, EDIT_DOCUMENT  } from '../utils/mutations';
 import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
 
 const EditCOA = () => {
+const [batchText, setBatchText] = useState('');
 const { productID, coaDocumentID } = useParams();
-
 const productIDInt = parseInt(productID);
 const coaDocumentIDInt = parseInt(coaDocumentID);
 
@@ -17,17 +17,33 @@ const { loading, data }  = useQuery(GET_DOCUMENT_BY_ID, {
    variables: {coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt }
 });
 
+const [addDocument] = useMutation(ADD_DOCUMENT);
+const [editDocument] = useMutation(EDIT_DOCUMENT);
+
 const documents = data?.documents || [];
 const products = data?.products || [];
 
-    const saveCoa = () => {
+    const handleSaveCoa = async event => {
         console.log("btn was clicked");
+        event.preventDefault();
+        try {
+            await addDocument({
+                variables: { productIDInt }
+              });
+              setBatchText('');
+        } catch (e) {
+            console.error(e);
+          }
+//after save the COA, redirect them to the product edit list
     }
 
     const uploadCoa = () => {
-        console.log("btn was clicked");
+
     }
 
+    const handleBatchText = event => {
+        setBatchText(event.target.value);
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -52,7 +68,7 @@ const products = data?.products || [];
                 <SolidLine/>
                 <Row className="text-left mt-3">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Batch Number</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input/></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchText}  onChange={handleBatchText}></input></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
                 </Row>
@@ -71,7 +87,7 @@ const products = data?.products || [];
                 </Row>
                 <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
                 <Row className="text-left">
-                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <SaveButton onClick={saveCoa}>Save</SaveButton></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <SaveButton onClick={handleSaveCoa}>Save</SaveButton></Col>
                 </Row>
         </PageWrapper>
     )
