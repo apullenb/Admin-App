@@ -1,22 +1,25 @@
-import React from "react";
+import React, {useEffect}from "react";
 import styled from "styled-components";
 import { REMOVE_PRODUCT  } from '../utils/mutations'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {  ToastProvider, useToasts } from "react-toast-notifications";
-
+import { GET_PRODUCTS } from '../utils/GQLqueries';
 
 function ConfirmDel(props) {
     const [removeProduct, { error }] = useMutation(REMOVE_PRODUCT)
     const { addToast } = useToasts();
+    const { loading, data } = useQuery(GET_PRODUCTS);
 
 
     const handleDelete = async () => {
         const id = props.product.coaProductID
         try{
           const response = await removeProduct({variables: {coaProductID: id}  })
-           if (response) props.show()
-           addToast('Product has been deleted.', {appearance: 'success', autoDismiss: true})
-           
+          if (response) {
+            addToast('Product has been deleted.', {appearance: 'success', autoDismiss: true})
+            props.show()
+           window.location.reload(true);
+          }
         }
         catch (error) {
             console.log(error)

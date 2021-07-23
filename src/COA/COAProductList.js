@@ -66,12 +66,12 @@ const filter = () => {
         <Col><Link to={{pathname: '/COA/0'}}><CustomButton>Add Products</CustomButton></Link></Col>
       </Row>
       <Row className="search-box">
-        <Col><input defaultValue="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>
+        <Col><input placeholder="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>
         <Col>
           <select name="Product Category" defaultValue='Product Category' onChange={(e)=>handleChange(e, 'category')}>
           <option value='Product Category' disabled>Product Category</option>
             <option value="UltraCell">UltraCell</option>
-            <option value="Lishé">Lishé</option>
+            <option value="Lishe">Lishé</option>
             <option value="All">Show All</option>
           </select>
         </Col>
@@ -96,7 +96,7 @@ const filter = () => {
         <Col>Last Updated</Col>
         <Col>Actions</Col>
       </Row>
-        {products && products.map(product => <COAProduct key={product.coaProductID} product={product} fetch={getProducts} /> )}
+        {products && products.map(product => <COAProduct key={product.coaProductID} product={product} fetch={setProducts} /> )}
  
     </Table>
   );
