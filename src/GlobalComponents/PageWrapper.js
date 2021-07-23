@@ -24,7 +24,7 @@ const PageWrap = styled.div`
     align-items: center;
     align-content: center;
     padding: 1%; 
-    margin: 0 5px;
+    margin: 0 1%;
 
 
   h1,

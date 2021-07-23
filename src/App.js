@@ -16,6 +16,8 @@ import AccountEdit from "./SkincareChallenge/SCAccountList/AccountEdit";
 import EntryList from "./SkincareChallenge/SCEntryList/EntryList";
 import EntryEdit from "./SkincareChallenge/EntryEdit";
 
+import EditCOA from "./COA/EditCOA";
+
 import ShoppingCountries from "./ShoppingConfiguration/countries/countries";
 import ShoppingKits from "./ShoppingConfiguration/kits/kits";
 import ShoppingProducts from "./ShoppingConfiguration/product/products";
@@ -27,8 +29,17 @@ import Permissions from './Permissions/PermissionList';
 
 import Page from './GlobalComponents/PageWrapper'
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
+import COAProductList from './COA/COAProductList';
+import ApolloClient from  'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
+
+
+const client = new ApolloClient({
+  uri: 'https://zorderapidev.azurewebsites.net/graphql'
+})
 
 function App() {
+
   // SAMPLE USER VALIDATION (Needs to be created)---------->
   // Currently defaulted to true..needs to default to false once authentication is set up
   const dispatch = useDispatch();
@@ -54,8 +65,8 @@ function App() {
   // <------------ END SAMPLE USER VALIDATION SECTION
 
   return (
-
-    <div className='app'>      
+    <ApolloProvider client={client}>
+    <div className='app'>     
       <Page >
         <Switch>
           <Route exact path="/" component={Dashboard} />
@@ -71,12 +82,15 @@ function App() {
           <Route path="/Challenge/Entries" component={EntryList} />
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
 
+          <Route path="/Coa/edit/:productId" component={EditCOA} />
+          <Route path="/COAs" component={COAProductList} />
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />
           <Route path="/Permissions" component={Permissions} />
         </Switch>       
        </Page>
     </div>
+    </ApolloProvider>
   );
 }
 
