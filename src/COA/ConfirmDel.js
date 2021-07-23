@@ -1,43 +1,70 @@
-import React from 'react'
+import React from "react";
 import styled from "styled-components";
+import { REMOVE_PRODUCT  } from '../utils/mutations'
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import {  ToastProvider, useToasts } from "react-toast-notifications";
 
 
+function ConfirmDel(props) {
+    const [removeProduct, { error }] = useMutation(REMOVE_PRODUCT)
+    const { addToast } = useToasts();
 
-function ConfirmDel() {
+
+    const handleDelete = async () => {
+        const id = props.product.coaProductID
+        try{
+          const response = await removeProduct({variables: { id } })
+           if (response) props.show()
+           addToast('Product has been deleted.', {appearance: 'success', autoDismiss: true})
+        }
+        catch (error) {
+            console.log(error)
+            addToast('There was an error deleting this product.', {appearance: 'error', autoDismiss: true})
+        }
+    }
+
+
     return (
-        <div>
+        <Delete>
             <h1>Are You Sure You Want to Delete This Product?</h1>
-            <ButtonRow><button id='del'>Delete</button> <button id='cancel'>Cancel</button></ButtonRow>
-        </div>
+            <p>{props.product.productName}</p>
+            <ButtonRow><button id='del' onClick={handleDelete}>Delete</button>
+             <button id='cancel' onClick={props.show}>Cancel</button></ButtonRow>
+        </Delete>
     )
 }
 
 export default ConfirmDel
 
+const Delete = styled.div`
+p {
+ font-size: 23px;
+ margin: 2%;
 
+}
+`;
 
 const ButtonRow = styled.div`
-margin: 10% 5% 1% 5%;
+  margin: 10% 5% 1% 5%;
 
-#del {
+  #del {
     margin: 0 5%;
-    background: #D10000;
+    background: #d10000;
     color: white;
     font: normal Segoe UI;
     font-size: 16px;
     font-weight: 600;
     border: none;
     padding: 4px 20px;
-}
-#cancel {
+  }
+  #cancel {
     margin: 0 5%;
-    background: #0F4B8F;
+    background: #0f4b8f;
     color: white;
     font: normal Segoe UI;
     font-size: 16px;
     font-weight: 600;
     border: none;
     padding: 4px 20px;
-}
-
-`
+  }
+`;

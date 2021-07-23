@@ -18,21 +18,21 @@ function COAProduct(props) {
  
 
    const showDelete = () => {
-   setShowDel('show')
+   showDel === 'hide' ? setShowDel('show') : setShowDel('hide')
    };
 
     return (
     <div>
         <Row className='products'>
         <Col>{productName}</Col>
-        <Col>{props.product.categoryID}</Col>
+        <Col>{props.product.category}</Col>
         <Col>{props.product.region}</Col>
         <Col>{updated}</Col>
         <Col> <Link to={{ pathname: `/COA/${props.product.coaProductID}`, state: props.product}}>
                         <button id="edit">Edit</button>
                       </Link> |  <button id="edit" onClick={showDelete}>Delete</button> </Col>
         </Row>
-        <Delete><div className={showDel}><ConfirmDel id={props.product.coaProductID}/></div></Delete>
+        <Delete><div className={showDel}><ConfirmDel product={props.product} show={showDelete} /></div></Delete>
         </div>
     )
 }

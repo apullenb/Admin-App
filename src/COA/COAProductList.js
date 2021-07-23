@@ -4,7 +4,7 @@ import styled from "styled-components";
 import COAProduct from "./COAProduct";
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_PRODUCTS } from '../utils/GQLqueries';
-import { REMOVE_PRODUCT  } from '../utils/mutations'
+
 import { Link } from "react-router-dom";
 
 

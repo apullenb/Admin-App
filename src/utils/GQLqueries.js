@@ -8,7 +8,7 @@ export const GET_PRODUCTS = gql`
             productName
             region
             lastUpdatedOn
-            categoryID
+            category
    } 
    }
 `;
