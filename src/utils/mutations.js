@@ -20,13 +20,12 @@ mutation addCoaDocument($coaProductID: Int!, $batchNumber:String!, $isExternal: 
   `;
 
 export const EDIT_DOCUMENT = gql`
-mutation changeCoaDocument($coaDocumentID: Int!, $batchNumber:String!, $isExternal: Byte!, $uploadedOn: DateTime!, $sortOrder: Int!){
+mutation changeCoaDocument($coaDocumentID: Int!, $batchNumber:String!, $isExternal: Byte!, $uploadedOn: DateTime!){
     changeCoaDocument(input: { 
       coaDocumentID: $coaDocumentID,
       batchNumber: $batchNumber,
       isExternal: $isExternal,
       uploadedOn: $uploadedOn,
-      sortOrder: $sortOrder
       }) {
         coaDocument {
             coaDocumentID

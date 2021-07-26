@@ -1,10 +1,11 @@
-import React , { useEffect, useState } from 'react';
+import React , { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {Row, Col, FormControl, Button } from 'react-bootstrap/';
+import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { ADD_DOCUMENT, EDIT_DOCUMENT  } from '../utils/mutations';
+import { EDIT_DOCUMENT  } from '../utils/mutations';
 import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
+import { Redirect } from 'react-router-dom';
 
 const EditCOA = () => {
 const [batchNumber, setBatchNumber] = useState('');
@@ -13,15 +14,14 @@ const { productID, coaDocumentID } = useParams();
 const productIDInt = parseInt(productID);
 const coaDocumentIDInt = parseInt(coaDocumentID);
 const uploadedOn = new Date().toISOString();
-const sortOrder = 100;
+
 
 const { loading, data }  = useQuery(GET_DOCUMENT_BY_ID, {
-   variables: {coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn, sortOrder }
+   variables: {coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
 });
 
 const [editDocument] = useMutation(EDIT_DOCUMENT);
 
-const documents = data?.documents || [];
 const products = data?.products || [];
 
     const handleSaveCoa = async event => {
@@ -30,9 +30,10 @@ const products = data?.products || [];
         console.log(coaDocumentIDInt);
         try {
             await editDocument({
-                variables: { coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn, sortOrder }
+                variables: { coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
               });
               setBatchNumber('');
+              return <Redirect to='/COA/:productID' />
         } catch (e) {
             console.error(e);
           }

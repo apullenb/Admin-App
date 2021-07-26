@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { ADD_DOCUMENT, EDIT_DOCUMENT  } from '../utils/mutations';
 import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
+import { Redirect } from 'react-router-dom';
 
 const AddCOA = () => {
 const [batchText, setBatchText] = useState('');
@@ -29,6 +30,7 @@ const products = data?.products || [];
                 variables: { productIDInt }
               });
               setBatchText('');
+           //   return <Redirect to='/COA/:productId' />
         } catch (e) {
             console.error(e);
           }
