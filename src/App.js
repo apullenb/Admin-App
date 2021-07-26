@@ -17,6 +17,7 @@ import EntryList from "./SkincareChallenge/SCEntryList/EntryList";
 import EntryEdit from "./SkincareChallenge/EntryEdit";
 
 import EditCOA from "./COA/EditCOA";
+import AddCOA from "./COA/AddCOA";
 
 import ShoppingCountries from "./ShoppingConfiguration/countries/countries";
 import ShoppingKits from "./ShoppingConfiguration/kits/kits";
@@ -84,6 +85,7 @@ function App() {
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
 
           <Route path="/Coa/edit/:productID/:coaDocumentID" component={EditCOA} />
+          <Route path="/Coa/add/:productID/:coaDocumentID" component={AddCOA} />
           <Route path="/COAs" component={COAProductList} />
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />

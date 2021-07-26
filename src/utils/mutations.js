@@ -1,14 +1,14 @@
 import gql from 'graphql-tag';
 
 export const ADD_DOCUMENT = gql`
-mutation document($coaProductID: Int!){
+mutation addCoaDocument($coaProductID: Int!, $batchNumber:String!, $isExternal: Byte, $uploadedOn: DateTime, $fileUrl: String, $sortOrder: Int!){
     addCoaDocument(input: { 
       coaProductID: $coaProductID,
-      batchNumber: "",
-      isExternal: 1,
-      uploadedOn: ""
-      fileUrl: "",
-      sortOrder: 1000
+      batchNumber: $batchNumber,
+      isExternal: $isExternal,
+      uploadedOn: $uploadedOn,
+      fileUrl: $fileUrl,
+      sortOrder: $sortOrder
       }) {
           coaDocument {
           coaDocumentID
@@ -20,26 +20,26 @@ mutation document($coaProductID: Int!){
   `;
 
 export const EDIT_DOCUMENT = gql`
-mutation document($coaDocumentID: Int!){
+mutation changeCoaDocument($coaDocumentID: Int!, $batchNumber:String!, $isExternal: Byte!, $uploadedOn: DateTime!, $sortOrder: Int!){
     changeCoaDocument(input: { 
       coaDocumentID: $coaDocumentID,
-      batchNumber: "ABCD",
-      isExternal: 1, 
-      uploadedOn: "2021-07-18",
-      fileUrl: "ABCD.pdf",
-      sortOrder: 2000
+      batchNumber: $batchNumber,
+      isExternal: $isExternal,
+      uploadedOn: $uploadedOn,
+      sortOrder: $sortOrder
       }) {
-          coaDocument {
-              coaDocumentID
-              coaProductID
-              batchNumber
-              isExternal
-              uploadedOn
-              fileUrl
-              sortOrder
-          }
-      }
+        coaDocument {
+            coaDocumentID
+            coaProductID
+            batchNumber
+            isExternal
+            uploadedOn
+            fileUrl
+            sortOrder
+        }
+    }
   }
+  
   `;
 
   
