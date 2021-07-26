@@ -5,7 +5,8 @@ import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { EDIT_DOCUMENT  } from '../utils/mutations';
 import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
-import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 
 const EditCOA = () => {
 const [batchNumber, setBatchNumber] = useState('');
@@ -16,6 +17,7 @@ const coaDocumentIDInt = parseInt(coaDocumentID);
 const uploadedOn = new Date().toISOString();
 
 
+
 const { loading, data }  = useQuery(GET_DOCUMENT_BY_ID, {
    variables: {coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
 });
@@ -23,6 +25,7 @@ const { loading, data }  = useQuery(GET_DOCUMENT_BY_ID, {
 const [editDocument] = useMutation(EDIT_DOCUMENT);
 
 const products = data?.products || [];
+const documents = data?.documents || [];
 
     const handleSaveCoa = async event => {
         console.log("btn was clicked");
@@ -33,7 +36,7 @@ const products = data?.products || [];
                 variables: { coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
               });
               setBatchNumber('');
-              return <Redirect to='/COA/:productID' />
+
         } catch (e) {
             console.error(e);
           }
@@ -53,7 +56,7 @@ const products = data?.products || [];
       }
 
     return (    
-console.log(uploadedOn),
+console.log(documents[0].batchNumber),
     <PageWrapper>
                 <Row className="text-left">
                     <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
@@ -72,7 +75,7 @@ console.log(uploadedOn),
                 <SolidLine/>
                 <Row className="text-left mt-3">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Batch Number</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchNumber}  onChange={handleBatchNumber}></input></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchNumber} onChange={handleBatchNumber}></input></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
                 </Row>
@@ -84,7 +87,13 @@ console.log(uploadedOn),
                 </Row>
                 <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
                 <Row className="text-left">
-                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <SaveButton onClick={handleSaveCoa}>Save</SaveButton></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <Link to={{ 
+ pathname: "/COA", 
+ state: productIDInt
+}}>
+<SaveButton onClick={handleSaveCoa}>Save</SaveButton>
+</Link>
+</Col>
                 </Row>
         </PageWrapper>
     )

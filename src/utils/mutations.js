@@ -1,14 +1,14 @@
 import gql from 'graphql-tag';
 
 export const ADD_DOCUMENT = gql`
-mutation addCoaDocument($coaProductID: Int!, $batchNumber:String!, $isExternal: Byte, $uploadedOn: DateTime, $fileUrl: String, $sortOrder: Int!){
+mutation addCoaDocument($coaProductID: Int!, $batchNumber:String!, $isExternal: Byte!, $uploadedOn: DateTime!, $fileUrl: String!){
     addCoaDocument(input: { 
       coaProductID: $coaProductID,
       batchNumber: $batchNumber,
       isExternal: $isExternal,
+      sortOrder: 1,
       uploadedOn: $uploadedOn,
       fileUrl: $fileUrl,
-      sortOrder: $sortOrder
       }) {
           coaDocument {
           coaDocumentID

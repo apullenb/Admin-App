@@ -85,7 +85,7 @@ function App() {
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
 
           <Route path="/Coa/edit/:productID/:coaDocumentID" component={EditCOA} />
-          <Route path="/Coa/add/:productID/:coaDocumentID" component={AddCOA} />
+          <Route path="/Coa/add/:productID/" component={AddCOA} />
           <Route path="/COAs" component={COAProductList} />
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />

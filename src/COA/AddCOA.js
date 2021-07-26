@@ -1,21 +1,25 @@
-import React , { useEffect, useState } from 'react';
+import React , { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {Row, Col, FormControl, Button } from 'react-bootstrap/';
+import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { ADD_DOCUMENT, EDIT_DOCUMENT  } from '../utils/mutations';
-import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
+import { ADD_DOCUMENT } from '../utils/mutations';
+import {GET_PRODUCT_BY_ID } from '../utils/GQLqueries';
 import { Redirect } from 'react-router-dom';
 
 const AddCOA = () => {
-const [batchText, setBatchText] = useState('');
-const { productID, coaDocumentID } = useParams();
+const [batchNumber, setBatchNumber] = useState('');
+const [isExternal, setIsExternal] = useState(0);
+const uploadedOn = new Date().toISOString();
+const fileUrl = "placeholder.com";
+const sortOrder = 1;
+const { productID } = useParams();
 const productIDInt = parseInt(productID);
-const coaDocumentIDInt = parseInt(coaDocumentID);
+console.log(productID);  
 
 
-const { loading, data }  = useQuery(GET_DOCUMENT_BY_ID, {
-   variables: {coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt }
+const { loading, data }  = useQuery(GET_PRODUCT_BY_ID , {
+   variables: {coaProductID: productIDInt }
 });
 
 const [addDocument] = useMutation(ADD_DOCUMENT);
@@ -27,9 +31,9 @@ const products = data?.products || [];
         event.preventDefault();
         try {
             await addDocument({
-                variables: { productIDInt }
+                variables: { coaProductID: productIDInt, batchNumber, isExternal, uploadedOn, fileUrl, sortOrder }
               });
-              setBatchText('');
+              setBatchNumber('');
            //   return <Redirect to='/COA/:productId' />
         } catch (e) {
             console.error(e);
@@ -41,15 +45,19 @@ const products = data?.products || [];
 
     }
 
-    const handleBatchText = event => {
-        setBatchText(event.target.value);
+    const handleBatchNumber = event => {
+        setBatchNumber(event.target.value);
+    };
+
+    const handleIsExternal = () => {
+        setIsExternal(1);
     };
 
     if (loading) {
         return <div>Loading...</div>;
       }
 
-    return (    
+    return (  
     <PageWrapper>
                 <Row className="text-left">
                     <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
@@ -68,13 +76,13 @@ const products = data?.products || [];
                 <SolidLine/>
                 <Row className="text-left mt-3">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Batch Number</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchText}  onChange={handleBatchText}></input></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchNumber}  onChange={handleBatchNumber}></input></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Is External</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CheckBox type="checkbox"/></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CheckBox value={isExternal} onClick={handleIsExternal} type="checkbox"/></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
                 </Row>
