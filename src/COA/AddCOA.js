@@ -1,21 +1,21 @@
 import React , { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { ADD_DOCUMENT } from '../utils/mutations';
 import {GET_PRODUCT_BY_ID } from '../utils/GQLqueries';
-import { Redirect } from 'react-router-dom';
+import ReactHtmlParser from "react-html-parser";
 
 const AddCOA = () => {
 const [batchNumber, setBatchNumber] = useState('');
 const [isExternal, setIsExternal] = useState(0);
 const uploadedOn = new Date().toISOString();
-const fileUrl = "placeholder.com";
+const fileUrl = "PLACEHOLDER.pdf";
 const sortOrder = 1;
 const { productID } = useParams();
 const productIDInt = parseInt(productID);
-console.log(productID);  
+const history = useHistory();
 
 
 const { loading, data }  = useQuery(GET_PRODUCT_BY_ID , {
@@ -26,6 +26,7 @@ const [addDocument] = useMutation(ADD_DOCUMENT);
 
 const products = data?.products || [];
 
+
     const handleSaveCoa = async event => {
         console.log("btn was clicked");
         event.preventDefault();
@@ -34,7 +35,7 @@ const products = data?.products || [];
                 variables: { coaProductID: productIDInt, batchNumber, isExternal, uploadedOn, fileUrl, sortOrder }
               });
               setBatchNumber('');
-           //   return <Redirect to='/COA/:productId' />
+              redirect();
         } catch (e) {
             console.error(e);
           }
@@ -53,6 +54,10 @@ const products = data?.products || [];
         setIsExternal(1);
     };
 
+    const redirect = () => {
+        history.push(`/COAs/`)
+    }
+
     if (loading) {
         return <div>Loading...</div>;
       }
@@ -61,11 +66,11 @@ const products = data?.products || [];
     <PageWrapper>
                 <Row className="text-left">
                     <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
-                    <Col xl={2} lg={2} md={2} sm={6} xs={6}>Back to list</Col>
+                    <Col xl={2} lg={2} md={2} sm={6} xs={6}><Link to = "">Back to list</Link></Col>
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Product</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">{products[0].productName}</p></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">{ReactHtmlParser(products[0].productName)}</p></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
                     <Col xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">Region</p></Col>
