@@ -63,7 +63,7 @@ const filter = () => {
       <Row>
         <Col></Col>
         <Col></Col>
-        <Col><Link to={{pathname: '/COA/0'}}><CustomButton>Add Products</CustomButton></Link></Col>
+        <Col><Link to={{pathname: '/Coa/documents'}}><CustomButton>Add Products</CustomButton></Link></Col>
       </Row>
       <Row className="search-box">
         <Col><input placeholder="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>

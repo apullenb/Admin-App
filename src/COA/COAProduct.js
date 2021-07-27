@@ -28,7 +28,7 @@ function COAProduct(props) {
         <Col>{props.product.category}</Col>
         <Col>{props.product.region}</Col>
         <Col>{updated}</Col>
-        <Col> <Link to={{ pathname: `/COA/${props.product.coaProductID}`, state: props.product}}>
+        <Col> <Link to={{ pathname: `/Coa/documents/${props.product.coaProductID}`, state: props.product}}>
                         <button id="edit">Edit</button>
                       </Link> |  <button id="edit" onClick={showDelete}>Delete</button> </Col>
         </Row>
