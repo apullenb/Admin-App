@@ -7,19 +7,19 @@ import {
   GET_DOCUMENTS_BY_PRODUCT_ID,
   GET_CATEGORIES,
 } from "../utils/GQLqueries";
-import { ADD_PRODUCT } from "../utils/mutations";
+import { ADD_PRODUCT, UPDATE_PRODUCT } from "../utils/mutations";
 import COATable from "./COADocumentsTable";
 import { useMediaQuery } from "react-responsive";
 
 const COADocument = (props) => {
   const [addProduct, { data: updatedProductData }] = useMutation(ADD_PRODUCT);
+  const [updateProduct] = useMutation(UPDATE_PRODUCT);
   const currentProductData = props.location.state
     ? props.location.state
     : updatedProductData &&
       updatedProductData.addCoaProduct &&
       updatedProductData.addCoaProduct.coaProduct;
 
-      console.log('tst', props.location)
 
   const [documents, setDocuments] = useState([]);
   const [dataCategories, setdataCategories] = useState([]);
@@ -28,7 +28,7 @@ const COADocument = (props) => {
   const [category, setCategory] = useState(1);
   const [productExists, setProductExists] = useState(false);
 
-  console.log("tstz", currentProductData);
+
 
   const { loading, data, refetch } = useQuery(
     GET_DOCUMENTS_BY_PRODUCT_ID,
@@ -52,6 +52,10 @@ const COADocument = (props) => {
   };
 
   useEffect(() => {
+    refetch() 
+  },[])
+
+  useEffect(() => {
     getDocuments();
   }, [data]);
 
@@ -63,15 +67,23 @@ const COADocument = (props) => {
     query: "(min-device-width: 568px)",
   });
 
-  const handleAddProduct = () => {
-    addProduct({
+  const handleAddEditProduct = () => {
+    !props.location.state ?  addProduct({
       variables: {
         product: productName,
         region: region,
         categoryID: Number(category),
         lastUpdatedOn: "2021-07-19",
       },
-    });
+    }) : updateProduct({
+      variables: {
+        coaProductID: props.location.state.coaProductID,
+        product: productName,
+        region: region,
+        categoryID: Number(category),
+        lastUpdatedOn: "2021-07-19",
+      },
+    })
     setProductExists(true);
   };
 
@@ -155,7 +167,7 @@ const COADocument = (props) => {
           </select>
         </div>
         <div>
-          <StyledButton disabled={productExists} onClick={handleAddProduct}>
+          <StyledButton disabled={productExists} onClick={handleAddEditProduct}>
             Save
           </StyledButton>
         </div>

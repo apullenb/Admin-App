@@ -42,6 +42,29 @@ export const ADD_PRODUCT = gql`
   }
 `;
 
+export const UPDATE_PRODUCT = gql`
+  mutation product($product: String, $region: String, $categoryID: Int, $lastUpdatedOn: DateTime, $coaProductID: Int! ) {
+    changeCoaProduct(
+      input: {
+        productName: $product
+        region: $region
+        categoryID: $categoryID
+        lastUpdatedOn: $lastUpdatedOn
+        coaProductID: $coaProductID
+      }
+    ) {
+      coaProduct {
+        coaProductID
+        productName
+        region
+        lastUpdatedOn
+        categoryID
+      }
+    }
+  }
+`;
+
+
 export const EDIT_DOCUMENT = gql`
   mutation document($coaDocumentID: Int!) {
     changeCoaDocument(

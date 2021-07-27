@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 
 const COAProductList = () => {
-  const { loading, data } = useQuery(GET_PRODUCTS);
+  const { loading, data, refetch } = useQuery(GET_PRODUCTS);
 const [products, setProducts] = useState("")
 const [value, setValue] = useState('')
 const [category, setCategory] = useState('')
@@ -20,6 +20,10 @@ useEffect(() => {
   }, [data])
   
 
+  useEffect(() => {
+    refetch()
+    }, [])
+    
 
 useEffect(() => {
   filter()
