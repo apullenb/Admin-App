@@ -10,6 +10,7 @@ import ReactHtmlParser from "react-html-parser";
 const AddCOA = () => {
 const [batchNumber, setBatchNumber] = useState('');
 const [isExternal, setIsExternal] = useState(0);
+const [fileUpload, setFileUpload] = useState('');
 const uploadedOn = new Date().toISOString();
 const fileUrl = "PLACEHOLDER.pdf";
 const sortOrder = 1;
@@ -17,6 +18,9 @@ const { productID } = useParams();
 const productIDInt = parseInt(productID);
 const history = useHistory();
 
+//error handling
+const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
+// const [hasBlankFileUrl, setHasBlankFileUrl] = useState(false); UNCOMMENT THIS LINE WHEN FILE UPLOAD IS COMPLETE
 
 const { loading, data }  = useQuery(GET_PRODUCT_BY_ID , {
    variables: {coaProductID: productIDInt }
@@ -28,22 +32,37 @@ const products = data?.products || [];
 
 
     const handleSaveCoa = async event => {
-        console.log("btn was clicked");
         event.preventDefault();
+        if (!batchNumber)  {
+            handleValidation();
+        }
         try {
+            if (batchNumber) {
             await addDocument({
                 variables: { coaProductID: productIDInt, batchNumber, isExternal, uploadedOn, fileUrl, sortOrder }
               });
               setBatchNumber('');
+              //after save the COA, redirect them to the product edit list
               redirect();
+            }
         } catch (e) {
             console.error(e);
           }
-//after save the COA, redirect them to the product edit list
+    }
+
+    const handleValidation = () => {
+        if (!batchNumber) {
+            setHasBlankBatchNumber(true);
+        }
+        //uncomment this out when file upload is complete
+        /*
+        if (!fileUpload) {
+            setHasBlankFileUrl(true);
+        }*/
     }
 
     const uploadCoa = () => {
-
+        setFileUpload();
     }
 
     const handleBatchNumber = event => {
@@ -85,6 +104,13 @@ const products = data?.products || [];
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
                 </Row>
+                <Row>
+                {hasBlankBatchNumber && (
+                    <small className='form-text text-danger'>
+                      Batch Number cannot be blank.
+                    </small>
+                  )}
+                </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Is External</p></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><CheckBox value={isExternal} onClick={handleIsExternal} type="checkbox"/></Col>
@@ -93,14 +119,24 @@ const products = data?.products || [];
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">File</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CustomButton onClick={uploadCoa}>Upload</CustomButton></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CustomButton value={fileUpload}  onClick={uploadCoa}>Upload</CustomButton></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}>File Name</Col>
                     <Col xl={3} lg={3} md={3} sm={3} xs={3}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
                 </Row>
+                <Row>
+                {/*
+                UNCOMMENT THIS SECTION WHEN FILE UPLOAD IS COMPLETE
+                {hasBlankFileUrl && (
+                    <small className='form-text text-danger'>
+                      You must upload a file. 
+                    </small>
+                  )}
+                */}
+                </Row>
                 <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
                 <Row className="text-left">
-                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <SaveButton onClick={handleSaveCoa}>Save</SaveButton></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <SaveButton onClick={handleSaveCoa }>Save</SaveButton></Col>
                 </Row>
         </PageWrapper>
     )

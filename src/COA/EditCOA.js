@@ -7,6 +7,7 @@ import { EDIT_DOCUMENT  } from '../utils/mutations';
 import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
 import { Link } from 'react-router-dom';
 import ReactHtmlParser from "react-html-parser";
+import { useHistory, useLocation } from 'react-router-dom';
 
 const EditCOA = () => {
 const [batchNumber, setBatchNumber] = useState('');
@@ -16,8 +17,14 @@ const productIDInt = parseInt(productID);
 const coaDocumentIDInt = parseInt(coaDocumentID);
 const uploadedOn = new Date().toISOString();
 
+//error handling 
+const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
 
-
+//redirect code 
+let history = useHistory();
+let location = useLocation();
+let { from } = location.state || { from: { pathname: `/COA/${productIDInt}` } };
+console.log(productIDInt);
 const { loading, data }  = useQuery(GET_DOCUMENT_BY_ID, {
    variables: {coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
 });
@@ -28,19 +35,29 @@ const products = data?.products || [];
 const documents = data?.documents || [];
 
     const handleSaveCoa = async event => {
-        console.log("btn was clicked");
         event.preventDefault();
-        console.log(coaDocumentIDInt);
+        if (!batchNumber)  {
+            handleValidation();
+        }
         try {
+            if (batchNumber) {
             await editDocument({
                 variables: { coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
               });
               setBatchNumber('');
-
+              history.replace(from);
+            }
         } catch (e) {
             console.error(e);
           }
 //after save the COA, redirect them to the product edit list
+    }
+
+    const handleValidation = () => {
+        if (!batchNumber) {
+            setHasBlankBatchNumber(true);
+        }
+
     }
 
     const handleBatchNumber = event => {
@@ -78,6 +95,13 @@ console.log(documents[0].batchNumber),
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchNumber} onChange={handleBatchNumber}></input></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
+                </Row>
+                <Row>
+                {hasBlankBatchNumber && (
+                    <small className='form-text text-danger'>
+                      Batch Number cannot be blank.
+                    </small>
+                  )}
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Is External</p></Col>
