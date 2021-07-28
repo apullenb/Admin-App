@@ -24,10 +24,16 @@ const COADocument = (props) => {
   const [documents, setDocuments] = useState([]);
   const [dataCategories, setdataCategories] = useState([]);
   const [region, setRegion] = useState("");
-  const [productName, setProductName] = useState(currentProductData.productName);
+  const [productName, setProductName] = useState("");
   const [category, setCategory] = useState(1);
   const [productExists, setProductExists] = useState(false);
+ 
 
+  useEffect(( ) => {
+    if(currentProductData) {
+    setProductName(currentProductData.productName)
+    }
+  }, [])
 
 
   const { loading, data, refetch } = useQuery(
@@ -52,7 +58,9 @@ const COADocument = (props) => {
   };
 
   useEffect(() => {
+    if(currentProductData && currentProductData.coaProductID){
     refetch() 
+    }
   },[])
 
   useEffect(() => {
