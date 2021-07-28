@@ -65,7 +65,7 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
   const handleDeleteDocument = (item) => {
     setItemToDel(item)
     showDelete()
-    refetch();
+    refetch(); 
   }
 
 
