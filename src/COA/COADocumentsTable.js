@@ -4,10 +4,12 @@ import {
   REMOVE_COA_DOCUMENT,
   UPDATE_DOCUMENT_SORT_ORDER
 } from "../utils/mutations";
+import styled from "styled-components";
 import {Link} from 'react-router-dom'
 import moment from 'moment'
 
 import { useMutation, useQuery } from "@apollo/react-hooks";
+import ConfirmDel from "./ConfirmDel";
 
 const COATable = ({tableData, productID, refetch}) => {
   const [data, setData] = useState([])
@@ -16,6 +18,8 @@ const COATable = ({tableData, productID, refetch}) => {
     setData(tableData)
   }, [tableData])
 
+  const [showDel, setShowDel] = useState(false)
+  const[itemToDel, setItemToDel] = useState(false)
  const [updateSortOrder] = useMutation(UPDATE_DOCUMENT_SORT_ORDER)
 const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
 
@@ -27,7 +31,9 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
     return result;
   };
 
-
+  const showDelete = () => {
+    setShowDel(!showDel)
+    };
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     opacity: isDragging ? 0.5 : 1,
@@ -55,7 +61,17 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
     refetch();
   };
 
+
+  const handleDeleteDocument = (item) => {
+    setItemToDel(item)
+    showDelete()
+    refetch();
+  }
+
+
+
   return (
+    <>
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable"> 
         {(provided, snapshot) => (
@@ -81,7 +97,8 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
             {data.map((item, index) => {
           const uploadedOnDate = item.uploadedOn && moment(Date.parse(item.uploadedOn), "MMM Do");
           const uploadedOnDateParsed =  uploadedOnDate.format("DD/MM/YYYY");
-             return (<Draggable
+             return (
+             <Draggable
                 key={item.batchNumber}
                 draggableId={item.batchNumber}
                 index={index}
@@ -113,21 +130,39 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
                     <td><Link to={{
                       pathname:`/COA/Edit/${productID}/${item.coaDocumentID}`,
                       productID: productID 
-                    }}>Edit</Link> | <span style={{color: '#007BFF', cursor:'pointer'}}onClick={() => {
-                      removeDocument({variables: { coaDocumentID: item.coaDocumentID} })
-                      refetch()
-                    }}>Delete</span></td>
+                    }}>Edit</Link> | <span style={{color: '#007BFF', cursor:'pointer'}}onClick={() => handleDeleteDocument(item)}>Delete</span></td>
                   </tr>
                 )}
               </Draggable>
+            
             )
+            
                     })}
             {provided.placeholder}
           </table>
         )}
       </Droppable>
     </DragDropContext>
+    <Delete><div className={showDel ? 'show': 'hide'}><ConfirmDel document={itemToDel} type={'COA'} show={showDelete} name={itemToDel.batchNumber}/></div></Delete>
+    </>
   );
 };
 
-export default COATable;
+const Delete = styled.div`
+.hide {
+  display:none;
+}
+
+.show {
+  z-index: 2;
+  position: absolute;
+  left: 35%;
+  top: 35%;
+  background: white;
+  border: 1px solid gray;
+  padding: 3%;
+  box-shadow: 2px 3px 5px gray;
+  max-width: 500px;
+}`
+
+export default COATable
