@@ -122,8 +122,6 @@ const COADocument = (props) => {
     setProductExists(true);
   };
 
-  console.log('ddd', currentProductData)
-
   const tableData = documents && documents.length > 0 ? documents : [];
 
   return (
