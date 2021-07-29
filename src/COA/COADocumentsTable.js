@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,  } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
   REMOVE_COA_DOCUMENT,
@@ -58,7 +58,7 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
 
      setData(updatedItems);
      updateSortOrder({variables: {coaProductID: productID, documents: updatedItems} })
-    refetch();
+    // refetch();
   };
 
 
@@ -94,6 +94,7 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
               <th>View COA</th>
               <th>Actions</th>
             </tr>
+            <tbody>
             {data.map((item, index) => {
           const uploadedOnDate = item.uploadedOn && moment(Date.parse(item.uploadedOn), "MMM Do");
           const uploadedOnDateParsed =  uploadedOnDate.format("DD/MM/YYYY");
@@ -133,20 +134,34 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
                     }}>Edit</Link> | <span style={{color: '#007BFF', cursor:'pointer'}}onClick={() => handleDeleteDocument(item)}>Delete</span></td>
                   </tr>
                 )}
+               
               </Draggable>
             
             )
             
                     })}
             {provided.placeholder}
+            </tbody>
           </table>
         )}
       </Droppable>
     </DragDropContext>
+    <Overlay showDel={showDel} />
     <Delete><div className={showDel ? 'show': 'hide'}><ConfirmDel document={itemToDel} type={'COA'} show={showDelete} name={itemToDel.batchNumber}/></div></Delete>
     </>
   );
 };
+
+const Overlay = styled.div`
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 10;
+background-color: rgba(0,0,0,0.5);
+visibility: ${(props) => props.showDel ? 'visible': 'hidden'};
+`
 
 const Delete = styled.div`
 .hide {
@@ -154,7 +169,7 @@ const Delete = styled.div`
 }
 
 .show {
-  z-index: 2;
+  z-index: 12;
   position: absolute;
   left: 35%;
   top: 35%;

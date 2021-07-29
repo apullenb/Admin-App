@@ -61,7 +61,7 @@ const Delete = styled.div`
 
 h1 {
   text-align: center;
-  font-size: 32px;
+  font-size: 28px;
 }
 p {
  font-size: 23px;
