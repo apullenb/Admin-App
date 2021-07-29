@@ -9,6 +9,7 @@ export const GET_PRODUCTS = gql`
             region
             lastUpdatedOn
             category
+            categoryID
    } 
    }
 `;

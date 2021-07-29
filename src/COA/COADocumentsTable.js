@@ -100,13 +100,12 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
           const uploadedOnDateParsed =  uploadedOnDate.format("DD/MM/YYYY");
              return (
              <Draggable
-                key={item.batchNumber}
+                key={item.coaDocumentID}
                 draggableId={item.batchNumber}
                 index={index}
               >
                 {(provided, snapshot) => (
                   <tr
-                    key={index}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

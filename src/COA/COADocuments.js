@@ -32,6 +32,7 @@ const COADocument = (props) => {
   useEffect(( ) => {
     if(currentProductData) {
     setProductName(currentProductData.productName)
+    setCategory(currentProductData.categoryID)
     }
   }, [])
 
@@ -160,6 +161,11 @@ const COADocument = (props) => {
               height: "30px",
             }}
             name="categories"
+            defaultValue={
+              currentProductData && currentProductData.categoryID
+                ? currentProductData.categoryID
+                : null
+            }
             id="categories"
             onChange={(e) => setCategory(e.target.value)}
           >
