@@ -1,15 +1,16 @@
 import gql from "graphql-tag";
 
 export const GET_PRODUCTS = gql`
-  {
-    products {
-      coaProductID
-      productName
-      region
-      lastUpdatedOn
-      categoryID
-    }
-  }
+   {
+        products {
+            coaProductID
+            productName
+            region
+            lastUpdatedOn
+            category
+            categoryID
+   } 
+   }
 `;
 
 export const GET_PRODUCT_BY_ID = gql`
@@ -48,6 +49,8 @@ export const GET_DOCUMENTS_BY_PRODUCT_ID = gql`
   }
 `;
 
+
+
 export const GET_DOCUMENT_BY_ID = gql`
  query fetch($coaDocumentID: Int!, $coaProductID: Int!) {
     documents(
@@ -81,3 +84,14 @@ export const GET_DOCUMENT_BY_ID = gql`
 }
  
 `;
+      
+
+export const GET_CATEGORIES = gql`
+  query {
+    categories {
+      categoryID
+      name
+    }
+  }
+`;
+

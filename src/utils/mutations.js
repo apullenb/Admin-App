@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export const ADD_DOCUMENT = gql`
 mutation addCoaDocument($coaProductID: Int!, $batchNumber:String!, $isExternal: Byte!, $uploadedOn: DateTime!, $fileUrl: String!){
@@ -17,7 +17,8 @@ mutation addCoaDocument($coaProductID: Int!, $batchNumber:String!, $isExternal: 
       }
     }
   }
-  `;
+`;
+
 
 export const EDIT_DOCUMENT = gql`
 mutation changeCoaDocument($coaDocumentID: Int!, $batchNumber:String!, $isExternal: Byte!, $uploadedOn: DateTime!){
@@ -41,4 +42,21 @@ mutation changeCoaDocument($coaDocumentID: Int!, $batchNumber:String!, $isExtern
   
   `;
 
-  
+export const UPDATE_DOCUMENT_SORT_ORDER = gql`
+  mutation changeDocuments(
+    $coaProductID: Int!
+    $documents: [ChangeCoaDocumentInput!]!
+  ) {
+    changeCoaDocuments(coaProductID: $coaProductID, documents: $documents) {
+      success
+    }
+  }
+`;
+
+export const REMOVE_COA_DOCUMENT = gql`
+  mutation document($coaDocumentID: Int!) {
+    removeCoaDocument(input: { coaDocumentID: $coaDocumentID }) {
+      success
+    }
+  }
+`;

@@ -1,22 +1,26 @@
-import React from "react";
+import React, {useEffect}from "react";
 import styled from "styled-components";
-import { REMOVE_PRODUCT  } from '../utils/mutations'
+import { REMOVE_PRODUCT, REMOVE_COA_DOCUMENT  } from '../utils/mutations'
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {  ToastProvider, useToasts } from "react-toast-notifications";
-
+import { GET_PRODUCTS } from '../utils/GQLqueries';
 
 function ConfirmDel(props) {
     const [removeProduct, { error }] = useMutation(REMOVE_PRODUCT)
+    const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
     const { addToast } = useToasts();
+    const { loading, data } = useQuery(GET_PRODUCTS);
 
 
-    const handleDelete = async () => {
+    const handleDeleteProduct = async () => {
         const id = props.product.coaProductID
         try{
           const response = await removeProduct({variables: {coaProductID: id}  })
-           if (response) props.show()
-           addToast('Product has been deleted.', {appearance: 'success', autoDismiss: true})
-           
+          if (response) {
+            addToast('Product has been deleted.', {appearance: 'success', autoDismiss: true})
+            props.show()
+           window.location.reload(true);
+          }
         }
         catch (error) {
             console.log(error)
@@ -24,12 +28,28 @@ function ConfirmDel(props) {
         }
     }
 
+    const handleDeleteCOA = async () => {
+      const id = props.document.coaDocumentID
+      try{
+        const response = await removeDocument({variables: {coaDocumentID: id}  })
+        if (response) {
+          addToast('COA has been deleted.', {appearance: 'success', autoDismiss: true})
+          props.show()
+         window.location.reload(true);
+        }
+      }
+      catch (error) {
+          console.log(error)
+          addToast('There was an error deleting this COA.', {appearance: 'error', autoDismiss: true})
+      }
+  }
+
 
     return (
         <Delete>
-            <h1>Are You Sure You Want to Delete This Product?</h1>
+            <h1>Are You Sure You Want to Delete This {props.type}?</h1>
             <p>{props.name}</p>
-            <ButtonRow><button id='del' onClick={handleDelete}>Delete</button>
+            <ButtonRow><button id='del' onClick={props.type === 'COA' ? handleDeleteCOA : handleDeleteProduct}>Delete</button>
              <button id='cancel' onClick={props.show}>Cancel</button></ButtonRow>
         </Delete>
     )
@@ -41,7 +61,7 @@ const Delete = styled.div`
 
 h1 {
   text-align: center;
-  font-size: 32px;
+  font-size: 28px;
 }
 p {
  font-size: 23px;

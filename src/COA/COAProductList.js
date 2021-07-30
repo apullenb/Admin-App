@@ -2,13 +2,14 @@ import React, {useState, useEffect} from "react";
 import { Row, Col, FormControl, Button } from "react-bootstrap/";
 import styled from "styled-components";
 import COAProduct from "./COAProduct";
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { GET_PRODUCTS } from '../utils/GQLqueries';
+
 import { Link } from "react-router-dom";
 
 
 const COAProductList = () => {
-  const { loading, data } = useQuery(GET_PRODUCTS);
+  const { loading, data, refetch } = useQuery(GET_PRODUCTS);
 const [products, setProducts] = useState("")
 const [value, setValue] = useState('')
 const [category, setCategory] = useState('')
@@ -19,6 +20,10 @@ useEffect(() => {
   }, [data])
   
 
+  useEffect(() => {
+    refetch()
+    }, [])
+    
 
 useEffect(() => {
   filter()
@@ -26,13 +31,11 @@ useEffect(() => {
 
 const getProducts = () => {
   setProducts(data?.products || [])
-  console.log(products)
 }
   
 const handleChange = (e, cat) => {
   setValue(e.target.value);
   setCategory(cat);
-  console.log(category, value)
   if (value === "" || value === undefined || value === 'All') {
     getProducts()
   }
@@ -43,7 +46,6 @@ const filter = () => {
  
   let temp = [];
   products && products.filter(product => {
-    console.log(product[category])
       if (product[category] && product[category].includes(value) || product[category] &&
         product[category].toLowerCase().includes(value)) {
         temp.push(product);
@@ -54,7 +56,6 @@ const filter = () => {
     
   } else {
     setValue("");
-    console.log(value)
   }
 };
 
@@ -64,19 +65,17 @@ const filter = () => {
     <Table>
       <h1>COA Products</h1>
       <Row>
-      <Col></Col>
         <Col></Col>
         <Col></Col>
-        <Col></Col>
-        <Col><Link to={{pathname: '/COA/0'}}><CustomButton>Add Products</CustomButton></Link></Col>
+        <Col><Link to={{pathname: '/Coa/documents'}}><CustomButton>Add Products</CustomButton></Link></Col>
       </Row>
       <Row className="search-box">
-        <Col><input defaultValue="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>
+        <Col><input placeholder="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>
         <Col>
           <select name="Product Category" defaultValue='Product Category' onChange={(e)=>handleChange(e, 'category')}>
           <option value='Product Category' disabled>Product Category</option>
             <option value="UltraCell">UltraCell</option>
-            <option value="Lishé">Lishé</option>
+            <option value="Lishe">Lishé</option>
             <option value="All">Show All</option>
           </select>
         </Col>
@@ -101,8 +100,7 @@ const filter = () => {
         <Col>Last Updated</Col>
         <Col>Actions</Col>
       </Row>
-      
-        {products && products.length >= 1 && products.map(product => <COAProduct key={product.coaProductID} product={product} /> )}
+        {products && products.map(product => <COAProduct key={product.coaProductID} product={product} fetch={setProducts} /> )}
  
     </Table>
   );
@@ -111,12 +109,15 @@ const filter = () => {
 export default COAProductList;
 
 const Table = styled.div`
-  margin: 2% 1% 9%;
-  max-width: 1200px;
+  margin: 2% 2% 9%;
+  max-width: 1600px;
 
+  h1 {
+    margin: 0 1%;
+  }
 
   .search-box {
-    margin: 0 2px;
+    margin: 10px 0px;
   }
 
   .search-box input {
@@ -145,10 +146,10 @@ const Table = styled.div`
     font-weight: 600;
   }
   .name {
-    margin: 0px;
+    margin: 15px 0px;
     text-align: left;
     font: Segoe UI;
-    font-size: 19px;
+    font-size: 20px;
     color: #707070;
     opacity: 1;
   }
@@ -158,11 +159,14 @@ const Table = styled.div`
     font: Segoe UI;
     font-size: 20px;
     opacity: 1;
-    margin: 10px 0;
+    margin: 15px 0px;
     padding: 0;
   }
 
-
+  #edit {
+    margin: 0px;
+    padding: 0;
+  }
 
 `;
 
@@ -170,16 +174,15 @@ const CustomButton = styled.button`
   background-color: #0F4B8F;
   color: white;
   font-size: 14px;
-  margin: 3px;
+  margin: 6px 0%;
   border: none;
-  padding: 2px 15px;
+  padding: 3px 14px;
   font-weight: 500;
-  width: 150px;
   text-align: center;
 
   &:hover {
     background: #345880;
-    border: 2px solid #022b53;
-    padding: 0px 13px;
+    border: none;
+    padding: 2px 13px;
   }
 `;

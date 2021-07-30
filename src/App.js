@@ -34,6 +34,7 @@ import COA from './COA/COA';
 import COAProductList from './COA/COAProductList';
 import ApolloClient from  'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
+import COADocument from './COA/COADocuments';
 
 
 const client = new ApolloClient({
@@ -86,6 +87,7 @@ function App() {
 
           <Route path="/COA/edit/:productID/:coaDocumentID" component={EditCOA} />
           <Route path="/COA/add/:productID/" component={AddCOA} />
+          <Route path="/Coa/documents/:productId?" component={COADocument}/>
           <Route path="/COAs" component={COAProductList} />
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />
