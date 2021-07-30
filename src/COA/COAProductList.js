@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 
 const COAProductList = () => {
-  const { loading, data } = useQuery(GET_PRODUCTS);
+  const { loading, data, refetch } = useQuery(GET_PRODUCTS);
 const [products, setProducts] = useState("")
 const [value, setValue] = useState('')
 const [category, setCategory] = useState('')
@@ -20,6 +20,10 @@ useEffect(() => {
   }, [data])
   
 
+  useEffect(() => {
+    refetch()
+    }, [])
+    
 
 useEffect(() => {
   filter()
@@ -63,7 +67,7 @@ const filter = () => {
       <Row>
         <Col></Col>
         <Col></Col>
-        <Col><Link to={{pathname: '/COA/0'}}><CustomButton>Add Products</CustomButton></Link></Col>
+        <Col><Link to={{pathname: '/Coa/documents'}}><CustomButton>Add Products</CustomButton></Link></Col>
       </Row>
       <Row className="search-box">
         <Col><input placeholder="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>

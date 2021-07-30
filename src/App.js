@@ -32,6 +32,7 @@ import { APP_STARTED } from "./redux/actions/app/appActionTypes";
 import COAProductList from './COA/COAProductList';
 import ApolloClient from  'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
+import COADocument from './COA/COADocuments';
 
 
 const client = new ApolloClient({
@@ -83,6 +84,7 @@ function App() {
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
 
           <Route path="/Coa/edit/:productId" component={EditCOA} />
+          <Route path="/Coa/documents/:productId?" component={COADocument}/>
           <Route path="/COAs" component={COAProductList} />
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />
