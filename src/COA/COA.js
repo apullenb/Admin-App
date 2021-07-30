@@ -18,7 +18,7 @@ const COA = (props) => {
   });
   
   console.log('tst', documents)
-
+console.log(props.location.state.coaProductID);
   const getDocuments = () => {
     setDocuments(data?.documents)
   }

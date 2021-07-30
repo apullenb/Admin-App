@@ -23,8 +23,8 @@ const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
 //redirect code 
 let history = useHistory();
 let location = useLocation();
-let { from } = location.state || { from: { pathname: `/COA/${productIDInt}` } };
-console.log(productIDInt);
+let { from } = location.state || { from: { pathname: `/COA/${productID}` } };
+console.log(location.state);
 const { loading, data }  = useQuery(GET_DOCUMENT_BY_ID, {
    variables: {coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
 });
@@ -111,12 +111,9 @@ console.log(documents[0].batchNumber),
                 </Row>
                 <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
                 <Row className="text-left">
-                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <Link to={{ 
- pathname: "/COA", 
- state: productIDInt
-}}>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}> 
 <SaveButton onClick={handleSaveCoa}>Save</SaveButton>
-</Link>
+
 </Col>
                 </Row>
         </PageWrapper>

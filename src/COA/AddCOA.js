@@ -35,6 +35,7 @@ const products = data?.products || [];
         event.preventDefault();
         if (!batchNumber)  {
             handleValidation();
+            
         }
         try {
             if (batchNumber) {
