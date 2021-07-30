@@ -97,7 +97,7 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
             <tbody>
             {data.map((item, index) => {
           const uploadedOnDate = item.uploadedOn && moment(Date.parse(item.uploadedOn), "MMM Do");
-          const uploadedOnDateParsed =  uploadedOnDate.format("DD/MM/YYYY");
+          const uploadedOnDateParsed =  uploadedOnDate.format("MM/DD/YYYY");
              return (
              <Draggable
                 key={item.coaDocumentID}
