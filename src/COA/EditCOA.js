@@ -8,6 +8,7 @@ import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
 import { Link } from 'react-router-dom';
 import ReactHtmlParser from "react-html-parser";
 import { useHistory, useLocation } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 
 const EditCOA = () => {
 const [batchNumber, setBatchNumber] = useState('');
@@ -16,6 +17,7 @@ const { productID, coaDocumentID } = useParams();
 const productIDInt = parseInt(productID);
 const coaDocumentIDInt = parseInt(coaDocumentID);
 const uploadedOn = new Date().toISOString();
+const { addToast} = useToasts();
 
 //error handling 
 const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
@@ -44,11 +46,13 @@ const documents = data?.documents || [];
             await editDocument({
                 variables: { coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
               });
+              addToast('COA updated successfully!', {appearance: 'success', autoDismiss: true})
               setBatchNumber('');
               //history.replace(from);
             }
         } catch (e) {
             console.error(e);
+            addToast('Error occured while updating COA!', {appearance: 'error', autoDismiss: true})
           }
 //after save the COA, redirect them to the product edit list
     }

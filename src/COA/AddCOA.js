@@ -49,7 +49,7 @@ const AddCOA = () => {
         })
         .catch(err => {
             console.log(err) 
-            alert("Error Occured!")
+            addToast("Error Occured!", {appearance: 'error', autoDismiss: true})
         })
 
     }
@@ -89,13 +89,14 @@ const AddCOA = () => {
             await addDocument({
                 variables: { coaProductID: productIDInt, batchNumber, isExternal, uploadedOn, fileUrl, sortOrder }
               });
-              addToast('Document added successfully!', {appearance: 'success', autoDismiss: true})
+              addToast('COA added successfully!', {appearance: 'success', autoDismiss: true})
               setBatchNumber('');
               //after save the COA, redirect them to the product edit list
               redirect();
             }
         } catch (e) {
             console.error(e);
+            addToast('Error occured while uploading COA!', {appearance: 'error', autoDismiss: true})
           }
     }
 
