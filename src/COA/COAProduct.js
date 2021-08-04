@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import { Row, Col} from "react-bootstrap/";
 import styled from "styled-components";
 import ReactHtmlParser from "react-html-parser";
@@ -15,10 +15,7 @@ function COAProduct(props) {
   };
 
    const [showDel, setShowDel] = useState('hide')
-   const productName = ReactHtmlParser(props.product.productName);
-   const date = props.product.lastUpdatedOn;
-   const updated = moment(date).format("L");
-   
+
  
 
    const showDelete = () => {

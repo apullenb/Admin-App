@@ -60,3 +60,56 @@ export const REMOVE_COA_DOCUMENT = gql`
     }
   }
 `;
+
+
+export const ADD_PRODUCT = gql`
+  mutation product($product: String!, $region: String!, $categoryID: Int!, $lastUpdatedOn: DateTime! ) {
+    addCoaProduct(
+      input: {
+        productName: $product
+        region: $region
+        categoryID: $categoryID
+        lastUpdatedOn: $lastUpdatedOn
+      }
+    ) {
+      coaProduct {
+        coaProductID
+        productName
+        region
+        lastUpdatedOn
+        categoryID
+      }
+    }
+  }
+`;
+
+export const UPDATE_PRODUCT = gql`
+  mutation product($product: String, $region: String, $categoryID: Int, $lastUpdatedOn: DateTime, $coaProductID: Int! ) {
+    changeCoaProduct(
+      input: {
+        productName: $product
+        region: $region
+        categoryID: $categoryID
+        lastUpdatedOn: $lastUpdatedOn
+        coaProductID: $coaProductID
+      }
+    ) {
+      coaProduct {
+        coaProductID
+        productName
+        region
+        lastUpdatedOn
+        categoryID
+      }
+    }
+  }
+`;
+
+
+export const REMOVE_PRODUCT = gql`
+  mutation document($coaProductID: Int!) {
+    removeCoaProduct(input: { coaProductID: $coaProductID }) {
+      success
+    }
+  }
+`;

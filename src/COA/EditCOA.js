@@ -45,7 +45,7 @@ const documents = data?.documents || [];
                 variables: { coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
               });
               setBatchNumber('');
-              history.replace(from);
+              //history.replace(from);
             }
         } catch (e) {
             console.error(e);

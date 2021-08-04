@@ -8,7 +8,7 @@ import styled from "styled-components";
 import {Link} from 'react-router-dom'
 import moment from 'moment'
 
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import ConfirmDel from "./ConfirmDel";
 
 const COATable = ({tableData, productID, refetch}) => {
@@ -126,7 +126,7 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
                     </td>
                     <td>{item.isExternal ? 'Yes' : 'No'}</td>
                     <td>{uploadedOnDateParsed}</td>
-                    <td>{item.fileUrl}</td>
+                    <td><a href={`https://res.cloudinary.com/zilis/image/upload/${item.fileUrl}`}>{item.fileUrl}</a></td>
                     <td><Link to={{
                       pathname:`/COA/Edit/${productID}/${item.coaDocumentID}`,
                       productID: productID 

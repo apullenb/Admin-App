@@ -11,7 +11,7 @@ const COA = (props) => {
 
   const [documents, setDocuments] = useState([])
 
-  const { loading, data } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
+  const { data } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
     variables: {
       productID: props.location.state.coaProductID,
     },

@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React , { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
@@ -6,42 +6,90 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { ADD_DOCUMENT } from '../utils/mutations';
 import {GET_PRODUCT_BY_ID } from '../utils/GQLqueries';
 import ReactHtmlParser from "react-html-parser";
+import { useToasts } from 'react-toast-notifications';
+import axios from 'axios';
 
 const AddCOA = () => {
-const [batchNumber, setBatchNumber] = useState('');
-const [isExternal, setIsExternal] = useState(0);
-const [fileUpload, setFileUpload] = useState('');
-const uploadedOn = new Date().toISOString();
-const fileUrl = "PLACEHOLDER.pdf";
-const sortOrder = 1;
-const { productID } = useParams();
-const productIDInt = parseInt(productID);
-const history = useHistory();
 
-//error handling
-const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
-// const [hasBlankFileUrl, setHasBlankFileUrl] = useState(false); UNCOMMENT THIS LINE WHEN FILE UPLOAD IS COMPLETE
+    const [batchNumber, setBatchNumber] = useState('');
+    const [isExternal, setIsExternal] = useState(0);
+    const [fileInput, setFileInput] = useState('');
+    const [selectedFile, setSelectedFile] = useState('');
+    const [uploadSuccessful, setUploadSuccessful] = useState(false);
+    const [cloudinaryUrl, setCloudinaryUrl] = useState('');
+    const [fileUrl, setFileUrl] = useState('');
+    const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
 
-const { loading, data }  = useQuery(GET_PRODUCT_BY_ID , {
-   variables: {coaProductID: productIDInt }
-});
+    const { addToast} = useToasts();
+    const uploadedOn = new Date().toISOString();
+    const sortOrder = 1;
+    const { productID } = useParams();
+    const productIDInt = parseInt(productID);
+    const history = useHistory();
 
-const [addDocument] = useMutation(ADD_DOCUMENT);
+    //cloudinary
+    const dataCld = new FormData()
+    dataCld.append("file", selectedFile)
+    dataCld.append("upload_preset", "coa-documents")
+    dataCld.append("cloud_name", "zilis")
 
-const products = data?.products || [];
+    const cloudinaryUpload = () =>{
+        axios.post('https://api.cloudinary.com/v1_1/zilis/upload', dataCld, {
+            headers:{
+                "Content-Type": "multipart/form-data"
+            }
+        })
+
+        .then(res =>  {
+            console.log(res.data.url)
+            if (res.data.url !== "") {
+                setCloudinaryUrl(splitCloudinaryUrl(res.data.url));
+                setUploadSuccessful(true);
+            }
+        })
+        .catch(err => {
+            console.log(err) 
+            alert("Error Occured!")
+        })
+
+    }
+
+    const splitCloudinaryUrl = (url) => {
+    const filePath = url.split('/');
+    console.log(filePath);
+    const newFilePath = `${filePath[6]}/admin.coa/coa/${filePath[9]}`;
+    return newFilePath;
+    }
+
+    useEffect(() => {
+        setFileUrl(cloudinaryUrl);
+    }, [cloudinaryUrl])
+
+
+    const { loading, data }  = useQuery(GET_PRODUCT_BY_ID , {
+    variables: {coaProductID: productIDInt}
+    });
+
+    const [addDocument] = useMutation(ADD_DOCUMENT);
+
+    const products = data?.products || [];
 
 
     const handleSaveCoa = async event => {
         event.preventDefault();
         if (!batchNumber)  {
             handleValidation();
-            
+
         }
+        
+        console.log(typeof fileUrl);
+        console.log(cloudinaryUrl);
         try {
             if (batchNumber) {
             await addDocument({
                 variables: { coaProductID: productIDInt, batchNumber, isExternal, uploadedOn, fileUrl, sortOrder }
               });
+              addToast('Document added successfully!', {appearance: 'success', autoDismiss: true})
               setBatchNumber('');
               //after save the COA, redirect them to the product edit list
               redirect();
@@ -55,15 +103,6 @@ const products = data?.products || [];
         if (!batchNumber) {
             setHasBlankBatchNumber(true);
         }
-        //uncomment this out when file upload is complete
-        /*
-        if (!fileUpload) {
-            setHasBlankFileUrl(true);
-        }*/
-    }
-
-    const uploadCoa = () => {
-        setFileUpload();
     }
 
     const handleBatchNumber = event => {
@@ -75,70 +114,81 @@ const products = data?.products || [];
     };
 
     const redirect = () => {
-        history.push(`/COAs/`)
+        history.push(`/Coa/documents/${productIDInt}`)
     }
+
+    const handleFileInputChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedFile(file);
+        setFileInput(e.target.value);
+    }
+
 
     if (loading) {
         return <div>Loading...</div>;
       }
 
     return (  
-    <PageWrapper>
-                <Row className="text-left">
-                    <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
-                    <Col xl={2} lg={2} md={2} sm={6} xs={6}><Link to = "">Back to list</Link></Col>
-                </Row>
-                <Row className="text-left">
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Product</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">{ReactHtmlParser(products[0].productName)}</p></Col>
-                    <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
-                    <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
-                    <Col xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">Region</p></Col>
-                    <Col  xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">{products[0].region}</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
-                </Row>
-                <SolidLine/>
-                <Row className="text-left mt-3">
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Batch Number</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchNumber}  onChange={handleBatchNumber}></input></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
-                    <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
-                </Row>
-                <Row>
-                {hasBlankBatchNumber && (
-                    <small className='form-text text-danger'>
-                      Batch Number cannot be blank.
-                    </small>
-                  )}
-                </Row>
-                <Row className="text-left">
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Is External</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CheckBox value={isExternal} onClick={handleIsExternal} type="checkbox"/></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
-                    <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
-                </Row>
-                <Row className="text-left">
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">File</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CustomButton value={fileUpload}  onClick={uploadCoa}>Upload</CustomButton></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}>File Name</Col>
-                    <Col xl={3} lg={3} md={3} sm={3} xs={3}></Col>
-                    <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
-                </Row>
-                <Row>
-                {/*
-                UNCOMMENT THIS SECTION WHEN FILE UPLOAD IS COMPLETE
-                {hasBlankFileUrl && (
-                    <small className='form-text text-danger'>
-                      You must upload a file. 
-                    </small>
-                  )}
-                */}
-                </Row>
-                <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
-                <Row className="text-left">
-                <Col xl={2} lg={2} md={2} sm={2} xs={2}> <SaveButton onClick={handleSaveCoa }>Save</SaveButton></Col>
-                </Row>
+
+        <PageWrapper>
+            <Row className="text-left">
+                <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
+                <Col xl={2} lg={2} md={2} sm={6} xs={6}><Link to = "">Back to list</Link></Col>
+            </Row>
+            <Row className="text-left">
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Product</p></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">{ReactHtmlParser(products[0].productName)}</p></Col>
+                <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
+                <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
+                <Col xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">Region</p></Col>
+                <Col  xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">{products[0].region}</p></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+            </Row>
+            <SolidLine/>
+            <Row className="text-left mt-3">
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Batch Number</p></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchNumber}  onChange={handleBatchNumber}></input></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+                <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
+            </Row>
+            <Row>
+            {hasBlankBatchNumber && (
+                <small className='form-text text-danger'>
+                    Batch Number cannot be blank.
+                </small>
+                )}
+            </Row>
+            <Row className="text-left">
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Is External</p></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><CheckBox value={isExternal} onClick={handleIsExternal} type="checkbox"/></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+                <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
+            </Row>
+            <Row className="text-left">
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">File</p></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><input type="file" name="document" onChange={handleFileInputChange} value ={fileInput}/></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+                <Col xl={3} lg={3} md={3} sm={3} xs={3}></Col>
+                <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
+            </Row>
+            <Row className="text-left">
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}><CustomButton onClick = {cloudinaryUpload}>Upload</CustomButton></Col>
+                <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+                <Col xl={3} lg={3} md={3} sm={3} xs={3}></Col>
+                <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
+            </Row>
+            <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
+            <Row className="text-left">
+            <Col xl={2} lg={2} md={2} sm={2} xs={2}> 
+            {!uploadSuccessful && (
+            <DisabledSaveButton disabled ={!uploadSuccessful}>Save</DisabledSaveButton> )}
+            {uploadSuccessful && (
+            <SaveButton onClick={handleSaveCoa }>Save</SaveButton>)}
+            </Col>
+            <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+            </Row>
         </PageWrapper>
     )
 }
@@ -189,6 +239,22 @@ text-align: center;
     border: 2px solid #022b53;
     padding: 0px 13px;
   }
+
+  &disabled {
+    background: #dddddd;
+  }
+`;
+
+const DisabledSaveButton = styled.button`
+background-color: #D3D3D3;
+color: white;
+font-size: 14px;
+margin: 3px;
+border: none;
+padding: 2px 15px;
+font-weight: 500;
+width: 100px;
+text-align: center;
 `;
 
 const CheckBox = styled.input`
