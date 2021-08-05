@@ -17,8 +17,6 @@ const COA = (props) => {
     },
   });
   
-  console.log('tst', documents)
-console.log(props.location.state.coaProductID);
   const getDocuments = () => {
     setDocuments(data?.documents)
   }
@@ -49,7 +47,7 @@ useEffect(() => {
       <div style={{ width: "100%", textAlign: "left" }}>
         <label style={{ fontSize: "20px", marginRight: "30px" }}>
           Product Name
-        </label>{" "}
+        </label>
         <input
           style={{ width: "80%", border: "1px solid #0F4B8F" }}
           defaultValue={props.location.state.productName}

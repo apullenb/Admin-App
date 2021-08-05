@@ -79,25 +79,25 @@ const documents = data?.documents || [];
     return (    
     <PageWrapper>
                 <Row className="text-left">
-                    <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
-                    <Col xl={2} lg={2} md={2} sm={6} xs={6}><Link onClick={redirect}>Back to list</Link></Col>
+                    <Col xs={6} md={10} ><h1 className="text-secondary">COA Details</h1></Col>
+                    <Col md={2} xs={6}><Link onClick={redirect}>Back to list</Link></Col>
                 </Row>
                 <Row className="text-left">
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Product</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">{ReactHtmlParser(products[0].productName)}</p></Col>
-                    <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
-                    <Col xl={1} lg={1} md={1} sm={1} xs={1}></Col>
-                    <Col xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">Region</p></Col>
-                    <Col  xl={1} lg={1} md={1} sm={1} xs={1}><p className="text-secondary">{products[0].region}</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
+                    <Col xl={2}><p className="text-secondary">Product</p></Col>
+                    <Col xl={2}><p className="text-secondary">{ReactHtmlParser(products[0].productName)}</p></Col>
+                    <Col xl={1}></Col>
+                    <Col xl={1}></Col>
+                    <Col xl={1}><p className="text-secondary">Region</p></Col>
+                    <Col  xl={1}><p className="text-secondary">{products[0].region}</p></Col>
+                    <Col xl={2}></Col>
+                    <Col xl={2}></Col>
                 </Row>
                 <SolidLine/>
                 <Row className="text-left mt-3">
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Batch Number</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input type="text" value={batchNumber} onChange={handleBatchNumber}></input></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
-                    <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
+                    <Col xl={2}><p className="text-secondary">Batch Number</p></Col>
+                    <Col xl={2}><input type="text" value={batchNumber} onChange={handleBatchNumber}></input></Col>
+                    <Col xl={2}></Col>
+                    <Col xl={6}></Col>
                 </Row>
                 <Row>
                 {hasBlankBatchNumber && (
@@ -107,14 +107,14 @@ const documents = data?.documents || [];
                   )}
                 </Row>
                 <Row className="text-left">
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Is External</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><CheckBox value={isExternal} onClick={handleIsExternal} type="checkbox"/></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
-                    <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
+                    <Col xl={2}><p className="text-secondary">Is External</p></Col>
+                    <Col xl={2}><CheckBox value={isExternal} onClick={handleIsExternal} type="checkbox"/></Col>
+                    <Col xl={2}></Col>
+                    <Col xl={6}></Col>
                 </Row>
                 <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
                 <Row className="text-left">
-                <Col xl={2} lg={2} md={2} sm={2} xs={2}> 
+                <Col xl={2}> 
                     <SaveButton onClick={handleSaveCoa}>Save</SaveButton>
 
                 </Col>
