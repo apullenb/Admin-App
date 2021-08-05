@@ -1,5 +1,5 @@
 import React , { useState } from 'react';
-import { useParams,  Link } from 'react-router-dom';
+import { useParams,  Link, useHistory } from 'react-router-dom';
 import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -16,6 +16,7 @@ const productIDInt = parseInt(productID);
 const coaDocumentIDInt = parseInt(coaDocumentID);
 const uploadedOn = new Date().toISOString();
 const { addToast} = useToasts();
+const history = useHistory()
 
 //error handling 
 const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
@@ -67,7 +68,7 @@ const documents = data?.documents || [];
     };
 
     const redirect = () => {
-        window.location.replace(`/Coa/documents/${productIDInt}`)
+        history.push(`/Coa/documents/${productIDInt}`);
     }
 
 
@@ -95,7 +96,7 @@ console.log(documents[0].batchNumber),
                 <SolidLine/>
                 <Row className="text-left mt-3">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Batch Number</p></Col>
-                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input value={batchNumber} onChange={handleBatchNumber}></input></Col>
+                    <Col xl={2} lg={2} md={2} sm={2} xs={2}><input type="text" value={batchNumber} onChange={handleBatchNumber}></input></Col>
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}></Col>
                     <Col xl={6} lg={6} md={6} sm={6} xs={6}></Col>
                 </Row>

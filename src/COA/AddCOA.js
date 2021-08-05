@@ -1,5 +1,5 @@
 import React , { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -25,6 +25,7 @@ const AddCOA = () => {
     const sortOrder = 1;
     const { productID } = useParams();
     const productIDInt = parseInt(productID);
+    const history = useHistory()
 
 
     //cloudinary
@@ -73,8 +74,7 @@ const AddCOA = () => {
     const [addDocument] = useMutation(ADD_DOCUMENT);
 
     const products = data?.products || [];
-
-
+    
     const handleSaveCoa = async event => {
         event.preventDefault();
         if (!batchNumber)  {
@@ -111,7 +111,7 @@ const AddCOA = () => {
     };
 
     const redirect = () => {
-        window.location.replace(`/Coa/documents/${productIDInt}`)
+        history.push(`/Coa/documents/${productIDInt}`);
     }
 
     const handleFileInputChange = (e) => {
