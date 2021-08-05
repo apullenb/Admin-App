@@ -87,12 +87,12 @@ function App() {
 
           <Route path="/COA/edit/:productID/:coaDocumentID" component={EditCOA} />
           <Route path="/COA/add/:productID/" component={AddCOA} />
-          <Route path="/Coa/documents/:productId?" component={COADocument}/>
+          <Route path="/Coa/documents/:productID" component={COADocument}/>
           <Route path="/COAs" component={COAProductList} />
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />
           <Route path="/Permissions" component={Permissions} />
-          <Route path="/COA/:productId" component={COA}/>
+          <Route path="/COA/:productID" component={COA}/>
         </Switch>       
        </Page>
     </div>

@@ -1,5 +1,5 @@
 import React , { useState, useEffect } from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -25,7 +25,7 @@ const AddCOA = () => {
     const sortOrder = 1;
     const { productID } = useParams();
     const productIDInt = parseInt(productID);
-    const history = useHistory();
+
 
     //cloudinary
     const dataCld = new FormData()
@@ -49,7 +49,7 @@ const AddCOA = () => {
         })
         .catch(err => {
             console.log(err) 
-            addToast("Error Occured!", {appearance: 'error', autoDismiss: true})
+            addToast("Error occured while uploading COA or you did not choose a file to upload. ", {appearance: 'error', autoDismiss: true})
         })
 
     }
@@ -79,11 +79,7 @@ const AddCOA = () => {
         event.preventDefault();
         if (!batchNumber)  {
             handleValidation();
-
         }
-        
-        console.log(typeof fileUrl);
-        console.log(cloudinaryUrl);
         try {
             if (batchNumber) {
             await addDocument({
@@ -91,7 +87,7 @@ const AddCOA = () => {
               });
               addToast('COA added successfully!', {appearance: 'success', autoDismiss: true})
               setBatchNumber('');
-              //after save the COA, redirect them to the product edit list
+              
               redirect();
             }
         } catch (e) {
@@ -115,7 +111,7 @@ const AddCOA = () => {
     };
 
     const redirect = () => {
-        history.push(`/Coa/documents/${productIDInt}`)
+        window.location.replace(`/Coa/documents/${productIDInt}`)
     }
 
     const handleFileInputChange = (e) => {
@@ -134,7 +130,7 @@ const AddCOA = () => {
         <PageWrapper>
             <Row className="text-left">
                 <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
-                <Col xl={2} lg={2} md={2} sm={6} xs={6}><Link to = "">Back to list</Link></Col>
+                <Col xl={2} lg={2} md={2} sm={6} xs={6}><Link onClick={redirect}>Back to list</Link></Col>
             </Row>
             <Row className="text-left">
                 <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Product</p></Col>
@@ -271,3 +267,5 @@ background-color: #09497e;
     padding: 0px 13px;
   }
 `;
+
+

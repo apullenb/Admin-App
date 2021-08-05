@@ -1,13 +1,11 @@
 import React , { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,  Link } from 'react-router-dom';
 import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { EDIT_DOCUMENT  } from '../utils/mutations';
 import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
-import { Link } from 'react-router-dom';
 import ReactHtmlParser from "react-html-parser";
-import { useHistory, useLocation } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
 const EditCOA = () => {
@@ -22,11 +20,7 @@ const { addToast} = useToasts();
 //error handling 
 const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
 
-//redirect code 
-let history = useHistory();
-let location = useLocation();
-let { from } = location.state || { from: { pathname: `/COA/${productID}` } };
-console.log(location.state);
+
 const { loading, data }  = useQuery(GET_DOCUMENT_BY_ID, {
    variables: {coaProductID: productIDInt, coaDocumentID: coaDocumentIDInt, batchNumber, isExternal, uploadedOn }
 });
@@ -48,13 +42,13 @@ const documents = data?.documents || [];
               });
               addToast('COA updated successfully!', {appearance: 'success', autoDismiss: true})
               setBatchNumber('');
-              //history.replace(from);
+
+              redirect();
             }
         } catch (e) {
             console.error(e);
             addToast('Error occured while updating COA!', {appearance: 'error', autoDismiss: true})
           }
-//after save the COA, redirect them to the product edit list
     }
 
     const handleValidation = () => {
@@ -72,6 +66,11 @@ const documents = data?.documents || [];
         setIsExternal(1);
     };
 
+    const redirect = () => {
+        window.location.replace(`/Coa/documents/${productIDInt}`)
+    }
+
+
     if (loading) {
         return <div>Loading...</div>;
       }
@@ -81,7 +80,7 @@ console.log(documents[0].batchNumber),
     <PageWrapper>
                 <Row className="text-left">
                     <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
-                    <Col xl={2} lg={2} md={2} sm={6} xs={6}><Link to = "">Back to list</Link></Col>
+                    <Col xl={2} lg={2} md={2} sm={6} xs={6}><Link onClick={redirect}>Back to list</Link></Col>
                 </Row>
                 <Row className="text-left">
                     <Col xl={2} lg={2} md={2} sm={2} xs={2}><p className="text-secondary">Product</p></Col>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 
 import {
   GET_DOCUMENTS_BY_PRODUCT_ID,
   GET_CATEGORIES,
+  GET_PRODUCT_BY_ID
 } from "../utils/GQLqueries";
 
 import { ADD_PRODUCT, UPDATE_PRODUCT } from "../utils/mutations";
@@ -17,51 +18,66 @@ import { useMediaQuery } from "react-responsive";
 
 const COADocument = (props) => {
   const [addProduct, { data: updatedProductData }] = useMutation(ADD_PRODUCT);
-
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
+  const { productID } = useParams();
+  console.log(productID);
+  const productIDInt = parseInt(productID);
+/*
   const currentProductData = props.location.state
     ? props.location.state
     : updatedProductData &&
       updatedProductData.addCoaProduct &&
       updatedProductData.addCoaProduct.coaProduct;
+      */
+const currentProductData = updatedProductData;
 
   const [documents, setDocuments] = useState([]);
-
   const [dataCategories, setdataCategories] = useState([]);
-
   const [region, setRegion] = useState("");
-
   const [productName, setProductName] = useState("");
-
   const [category, setCategory] = useState(1);
-
   const [productExists, setProductExists] = useState(false);
+
+  const { data, refetch } = useQuery(
+    GET_DOCUMENTS_BY_PRODUCT_ID, {
+variables: {productID: productIDInt} 
+    }
+  );
+
+  const { data: categories } = useQuery(GET_CATEGORIES);
+
+  const { data: product }  = useQuery(GET_PRODUCT_BY_ID , {
+    variables: {coaProductID: productIDInt}
+    });
+
 
   useEffect(() => {
     if (currentProductData) {
       setProductName(currentProductData.productName);
 
       setCategory(currentProductData.categoryID);
+      
     }
   }, []);
 
-  const { loading, data, refetch } = useQuery(
-    GET_DOCUMENTS_BY_PRODUCT_ID,
+useEffect(() => {
+  console.log(data);
+}, [data])
 
-    props.location.state && props.location.state.coaProductID
-      ? {
-          variables: {
-            productID: props.location.state.coaProductID,
-          },
-        }
-      : { skip: true }
-  );
+useEffect(() => {
+  console.log(categories);
+}, [categories])
 
-  const { data: categories } = useQuery(GET_CATEGORIES);
+useEffect(() => {
+  product && console.log(product.products);
+  product && console.log(product.products[0].region);
+}, [product])
+
 
   const getDocuments = () => {
     setDocuments(data?.documents);
+
   };
 
   const getCategories = () => {
@@ -107,7 +123,7 @@ const COADocument = (props) => {
         })
       : updateProduct({
           variables: {
-            coaProductID: props.location.state.coaProductID,
+            coaProductID: productIDInt,
 
             product: productName,
 
@@ -125,6 +141,7 @@ const COADocument = (props) => {
   const tableData = documents && documents.length > 0 ? documents : [];
 
   return (
+
     <div style={{ width: "100%" }}>
       <Container>
         <p style={{ fontSize: "32px" }}>COA Product Details</p>
@@ -141,8 +158,8 @@ const COADocument = (props) => {
         <input
           style={{ width: "80%", border: "1px solid #0F4B8F" }}
           defaultValue={
-            props.location.state && props.location.state.productName
-              ? props.location.state.productName
+            product && product.products[0].productName
+              ? product.products[0].productName
               : null
           }
           onChange={(e) => setProductName(e.target.value)}
@@ -166,8 +183,8 @@ const COADocument = (props) => {
           <select
             name="regions"
             defaultValue={
-              currentProductData && currentProductData.region
-                ? currentProductData.region
+              product && product.products && product.products[0].region
+              ? product.products[0].region
                 : null
             }
             id="regions"
@@ -234,10 +251,10 @@ const COADocument = (props) => {
 
         <Link
           to={`/COA/add/${
-            currentProductData ? currentProductData.coaProductID : 0
+            product ? product.products[0].coaProductID : 0
           }/`}
         >
-          <StyledButton disabled={!currentProductData && !productExists}>
+          <StyledButton disabled={!product && !productExists}>
             Add New COA
           </StyledButton>
         </Link>
@@ -246,9 +263,9 @@ const COADocument = (props) => {
       <COATable
         tableData={tableData}
         productID={
-          currentProductData &&
-          currentProductData.coaProductID &&
-          currentProductData.coaProductID
+          product &&
+          product.products[0].coaProductID &&
+          product.products[0].coaProductID
         }
         refetch={refetch}
       />
