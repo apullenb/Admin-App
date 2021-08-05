@@ -77,7 +77,6 @@ const documents = data?.documents || [];
       }
 
     return (    
-console.log(documents[0].batchNumber),
     <PageWrapper>
                 <Row className="text-left">
                     <Col xl={10} lg={10} md={10} sm={6} xs={6} ><h1 className="text-secondary">COA Details</h1></Col>
@@ -116,9 +115,9 @@ console.log(documents[0].batchNumber),
                 <Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row><Row>&nbsp;</Row>
                 <Row className="text-left">
                 <Col xl={2} lg={2} md={2} sm={2} xs={2}> 
-<SaveButton onClick={handleSaveCoa}>Save</SaveButton>
+                    <SaveButton onClick={handleSaveCoa}>Save</SaveButton>
 
-</Col>
+                </Col>
                 </Row>
         </PageWrapper>
     )

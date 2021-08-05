@@ -21,16 +21,10 @@ const COADocument = (props) => {
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
   const { productID } = useParams();
-  console.log(productID);
+
   const productIDInt = parseInt(productID);
-/*
-  const currentProductData = props.location.state
-    ? props.location.state
-    : updatedProductData &&
-      updatedProductData.addCoaProduct &&
-      updatedProductData.addCoaProduct.coaProduct;
-      */
-const currentProductData = updatedProductData;
+
+  const currentProductData = updatedProductData;
 
   const [documents, setDocuments] = useState([]);
   const [dataCategories, setdataCategories] = useState([]);
@@ -41,7 +35,7 @@ const currentProductData = updatedProductData;
 
   const { data, refetch } = useQuery(
     GET_DOCUMENTS_BY_PRODUCT_ID, {
-variables: {productID: productIDInt} 
+    variables: {productID: productIDInt} 
     }
   );
 
@@ -61,18 +55,14 @@ variables: {productID: productIDInt}
     }
   }, []);
 
-useEffect(() => {
-  console.log(data);
-}, [data])
+  useEffect(() => {
+  }, [data])
 
-useEffect(() => {
-  console.log(categories);
-}, [categories])
+  useEffect(() => {
+  }, [categories])
 
-useEffect(() => {
-  product && console.log(product.products);
-  product && console.log(product.products[0].region);
-}, [product])
+  useEffect(() => {
+  }, [product])
 
 
   const getDocuments = () => {

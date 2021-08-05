@@ -42,7 +42,6 @@ const AddCOA = () => {
         })
 
         .then(res =>  {
-            console.log(res.data.url)
             if (res.data.url !== "") {
                 setCloudinaryUrl(splitCloudinaryUrl(res.data.url));
                 setUploadSuccessful(true);
@@ -57,7 +56,6 @@ const AddCOA = () => {
 
     const splitCloudinaryUrl = (url) => {
     const filePath = url.split('/');
-    console.log(filePath);
     const newFilePath = `${filePath[6]}/admin.coa/coa/${filePath[9]}`;
     return newFilePath;
     }
@@ -74,7 +72,7 @@ const AddCOA = () => {
     const [addDocument] = useMutation(ADD_DOCUMENT);
 
     const products = data?.products || [];
-    
+
     const handleSaveCoa = async event => {
         event.preventDefault();
         if (!batchNumber)  {
