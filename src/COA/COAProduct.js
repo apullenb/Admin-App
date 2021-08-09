@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import { Row, Col} from "react-bootstrap/";
 import styled from "styled-components";
 import ReactHtmlParser from "react-html-parser";
@@ -6,15 +6,16 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import ConfirmDel from "./ConfirmDel";
 
-
-
 function COAProduct(props) {
+  const productName = ReactHtmlParser(props.product.productName);
+  const date = props.product.lastUpdatedOn;
+  const updated = moment(date).format("L");
+  const handleDelete = () => {
+    console.log("delete", props.product.coaProductID);
+  };
 
    const [showDel, setShowDel] = useState('hide')
-   const productName = ReactHtmlParser(props.product.productName);
-   const date = props.product.lastUpdatedOn;
-   const updated = moment(date).format("L");
-   
+
  
 
    const showDelete = () => {

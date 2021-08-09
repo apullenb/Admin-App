@@ -17,6 +17,7 @@ import EntryList from "./SkincareChallenge/SCEntryList/EntryList";
 import EntryEdit from "./SkincareChallenge/EntryEdit";
 
 import EditCOA from "./COA/EditCOA";
+import AddCOA from "./COA/AddCOA";
 
 import ShoppingCountries from "./ShoppingConfiguration/countries/countries";
 import ShoppingKits from "./ShoppingConfiguration/kits/kits";
@@ -29,6 +30,7 @@ import Permissions from './Permissions/PermissionList';
 
 import Page from './GlobalComponents/PageWrapper'
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
+import COA from './COA/COA';
 import COAProductList from './COA/COAProductList';
 import ApolloClient from  'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -83,12 +85,14 @@ function App() {
           <Route path="/Challenge/Entries" component={EntryList} />
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
 
-          <Route path="/Coa/edit/:productId" component={EditCOA} />
-          <Route path="/Coa/documents/:productId?" component={COADocument}/>
+          <Route path="/COA/edit/:productID/:coaDocumentID" component={EditCOA} />
+          <Route path="/COA/add/:productID/" component={AddCOA} />
+          <Route path="/Coa/documents/:productID" component={COADocument}/>
           <Route path="/COAs" component={COAProductList} />
           <Route path="/Events" component={Events} />
           <Route path="/Incentive" component={Incentive} />
           <Route path="/Permissions" component={Permissions} />
+          <Route path="/COA/:productID" component={COA}/>
         </Switch>       
        </Page>
     </div>

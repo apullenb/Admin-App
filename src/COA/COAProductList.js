@@ -186,5 +186,3 @@ const CustomButton = styled.button`
     padding: 2px 13px;
   }
 `;
-
-
