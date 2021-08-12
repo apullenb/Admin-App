@@ -19,19 +19,25 @@
       }
   };
   
-const handleSCTargetURL = () => {
-    switch(environment){
-    case 'development' : return 'http://localhost:4000';
-    case 'test' : return "https://skincarechallangedev-fe.azurewebsites.net";
-    case 'production' : return 'https://skincarechallange-be.azurewebsites.net';
-    default : return 'http://localhost:4000';
-    }
+  const handleSCTargetURL = () => {
+      switch(environment){
+      case 'development' : return 'http://localhost:4000';
+      case 'test' : return "https://skincarechallangedev-fe.azurewebsites.net";
+      case 'production' : return 'https://skincarechallange-be.azurewebsites.net';
+      default : return 'http://localhost:4000';
+      }
+  };
+
+const skincareUser = {
+  username: "AdminApp",
+  password: "vHIsAQ7FWR1tDz"
 };
 
 const config = {
   PRODUCTSBASEURL : handleSetProductsURL(),
   SKINCAREBASEURL : handleSkinCareEnvURL(),
-  SCTARGETURL : handleSCTargetURL()
+  SCTARGETURL : handleSCTargetURL(),
+  skincareUser: skincareUser
 };
-  
+
 export default config;

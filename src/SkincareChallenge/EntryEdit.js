@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import config from '../config/env-urls'
@@ -10,6 +11,8 @@ import Button from "react-bootstrap/Button";
 import axios from 'axios';
 import Moment from 'react-moment';
 import Select from 'react-select';
+import { storeSkincareAuthToken } from "../redux/actions/app/appActions";
+import { skincareLogin } from "./SkincareLogin";
 
 
 function EntryEdit(props) {
@@ -21,6 +24,8 @@ function EntryEdit(props) {
   const [blank, setBlank] = useState(true);
   const [message, setMessage] = useState('');
   const [change, setChange] = useState(false);
+  const { skincareAuthToken } = useSelector(state => state.app);
+  const dispatch = useDispatch();
 
   // this.handleChange = this.handleChange.bind(this);
   // this.handleSubmit = this.handleSubmit.bind(this);
@@ -53,7 +58,38 @@ function EntryEdit(props) {
     setMessage('')
     setEntry({ ...entry, [e.target.name]: e.target.value });
   }
+
   const handleSubmit = async () => {
+    try {
+      let authToken = await getSkincareAuthToken();
+
+      const responseStatus = await updateEntry(authToken);
+
+      if (responseStatus === 401 || responseStatus === 403) {
+        const forceRefresh = true;
+        authToken = await getSkincareAuthToken(forceRefresh);
+
+        await updateEntry(authToken);
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+  
+  const getSkincareAuthToken = async (forceRefresh = false) => {
+
+    let authToken = skincareAuthToken;
+
+    if (!authToken || forceRefresh) {
+      authToken = await skincareLogin();
+
+      dispatch(storeSkincareAuthToken(authToken));
+    }
+
+    return authToken;
+  };
+
+  const updateEntry = async (authToken) => {
     try {
       const body = {
         products: entry.products,
@@ -65,20 +101,26 @@ function EntryEdit(props) {
       };
 
       const requestOptions = {
-        method: 'PUT',
-        headers: { "Content-Type": "application/json" },
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "Authorization": authToken },
         body: JSON.stringify(body)
       };
-      
-      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-entry-admin/${entry.id}`, requestOptions);
-      setChange(false)
-      setMessage('Thank you. Your Changes Have Been Saved')
 
+      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-entry-admin/${entry.id}`, requestOptions);
+
+      if (response.status === 200) {
+        setChange(false);
+        setMessage("The changes have been saved.");
+      } else {
+        setMessage("Error - The changes were not saved. Status " + response.status);
+      }
+
+      return response.status;
     } catch (err) {
-      console.error(err.message)
+      console.error(err.message);
     }
   };
-  
+
   const handleProductsChange = (event) => {
     setChange(true)
     setMessage('')
