@@ -5,6 +5,8 @@ import Pagination from "../GlobalComponents/Pagination";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import UserAuthorizationStatusHeader from "./UserAuthorizationStatusHeader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp, faChevronDown} from "@fortawesome/fontawesome-free-solid";
 
 const UserAuthorizationStatusTable = () => {
   const [users, setUsers] = useState([]);
@@ -46,9 +48,9 @@ const UserAuthorizationStatusTable = () => {
 
     const currentUsers = [...users];
 
-      if(value === "") {
-        setFilteredUsers(currentUsers)
-      return
+    if (value === "") {
+      setFilteredUsers(currentUsers);
+      return;
     }
 
     const filteredUsers = currentUsers.filter((user) =>
@@ -63,9 +65,9 @@ const UserAuthorizationStatusTable = () => {
 
     const currentUsers = [...users];
 
-      if(value === "") {
-        setFilteredUsers(currentUsers)
-      return
+    if (value === "") {
+      setFilteredUsers(currentUsers);
+      return;
     }
 
     const filteredUsers = currentUsers.filter((user) =>
@@ -96,7 +98,6 @@ const UserAuthorizationStatusTable = () => {
                 />
               </th>
               <th>
-                {" "}
                 <StyledInput
                   placeholder="Email"
                   style={{
@@ -109,10 +110,111 @@ const UserAuthorizationStatusTable = () => {
               </th>
             </tr>
             <tr>
-              <th className="head">First - Last Name</th>
-              <th className="head">Email</th>
-              <th className="head">Last Accessed</th>
-              <th className="head">Actions</th>
+              <th className="head">
+                First - Last Name
+                <span style={{ verticalAlign: "middle" }}>
+                  <FontAwesomeIcon
+                    style={{
+                      marginLeft: '25px',
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    icon={faChevronDown}
+                  />
+                </span>
+                <span
+                style={{
+                  verticalAlign: "middle",
+                }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+  
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    icon={faChevronUp}
+                  />
+                </span>
+              </th>
+              <th className="head">Email
+              <span style={{ verticalAlign: "middle" }}>
+                  <FontAwesomeIcon
+                    style={{
+                      marginLeft: '25px',
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    icon={faChevronDown}
+                  />
+                </span>
+                <span
+                style={{
+                  verticalAlign: "middle",
+                }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+  
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    icon={faChevronUp}
+                  />
+                </span>
+              </th>
+              <th className="head">Last Accessed
+              <span style={{ verticalAlign: "middle" }}>
+                  <FontAwesomeIcon
+                    style={{
+                      marginLeft: '25px',
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    icon={faChevronDown}
+                  />
+                </span>
+                <span
+                style={{
+                  verticalAlign: "middle",
+                }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+  
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    icon={faChevronUp}
+                  />
+                </span>
+              </th>
+              <th className="head">Actions
+              <span style={{ verticalAlign: "middle" }}>
+                  <FontAwesomeIcon
+                    style={{
+                      marginLeft: '25px',
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    icon={faChevronDown}
+                  />
+                </span>
+                <span
+                style={{
+                  verticalAlign: "middle",
+                }}
+                >
+                  <FontAwesomeIcon
+                    style={{
+  
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    icon={faChevronUp}
+                  />
+                </span>
+              </th>
             </tr>
           </thead>
           {currentUsers && currentUsers.length > 0 && (
