@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React , { useEffect, useState } from 'react';
 import { useParams,  Link, useHistory } from 'react-router-dom';
 import {Row, Col } from 'react-bootstrap/';
 import styled from "styled-components";
@@ -8,7 +8,7 @@ import {GET_DOCUMENT_BY_ID} from '../utils/GQLqueries';
 import ReactHtmlParser from "react-html-parser";
 import { useToasts } from 'react-toast-notifications';
 
-const EditCOA = () => {
+const EditCOA = (props) => {
 const [batchNumber, setBatchNumber] = useState('');
 const [isExternal, setIsExternal] = useState(0);
 const { productID, coaDocumentID } = useParams();
@@ -17,6 +17,17 @@ const coaDocumentIDInt = parseInt(coaDocumentID);
 const uploadedOn = new Date().toISOString();
 const { addToast} = useToasts();
 const history = useHistory()
+
+
+
+useEffect(() => {
+if(props.location.coaDetails.batchNumber){
+    setBatchNumber(props.location.coaDetails.batchNumber)
+}
+if(props.location.coaDetails.isExternal){
+    setIsExternal(props.location.coaDetails.isExternal)
+}
+}, [])
 
 //error handling 
 const [hasBlankBatchNumber, setHasBlankBatchNumber] = useState(false);
@@ -76,6 +87,7 @@ const documents = data?.documents || [];
         return <div>Loading...</div>;
       }
 
+      console.log('tst', products)
     return (    
     <PageWrapper>
                 <Row className="text-left">
@@ -108,7 +120,7 @@ const documents = data?.documents || [];
                 </Row>
                 <Row className="text-left">
                     <Col xl={2}><p className="text-secondary">Is External</p></Col>
-                    <Col xl={2}><CheckBox value={isExternal} onClick={handleIsExternal} type="checkbox"/></Col>
+                    <Col xl={2}><CheckBox value={isExternal} checked={isExternal} onClick={handleIsExternal} type="checkbox"/></Col>
                     <Col xl={2}></Col>
                     <Col xl={6}></Col>
                 </Row>

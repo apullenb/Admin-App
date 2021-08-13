@@ -71,7 +71,7 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
 
 
   return (
-    <>
+    <Wrapper>
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable"> 
         {(provided, snapshot) => (
@@ -129,7 +129,8 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
                     <td><a href={`https://res.cloudinary.com/zilis/image/upload/${item.fileUrl}`}>{item.fileUrl}</a></td>
                     <td><Link to={{
                       pathname:`/COA/Edit/${productID}/${item.coaDocumentID}`,
-                      productID: productID 
+                      productID: productID,
+                      coaDetails: item 
                     }}>Edit</Link> | <span style={{color: '#007BFF', cursor:'pointer'}}onClick={() => handleDeleteDocument(item)}>Delete</span></td>
                   </tr>
                 )}
@@ -147,9 +148,18 @@ const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
     </DragDropContext>
     <Overlay showDel={showDel} />
     <Delete><div className={showDel ? 'show': 'hide'}><ConfirmDel document={itemToDel} type={'COA'} show={showDelete} name={itemToDel.batchNumber}/></div></Delete>
-    </>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+th {
+  text-align: left;
+}
+tr {
+  text-align: left;
+}
+`
 
 const Overlay = styled.div`
 position: fixed;
