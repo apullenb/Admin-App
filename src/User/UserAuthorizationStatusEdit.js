@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Button } from "react-bootstrap";
 
 const options = [
   { id: 1, value: "Not Allowed" },
@@ -41,8 +42,8 @@ const UserAuthorizationStatusEdit = (props) => {
       userPermission.find((item) => {
         return item.area === area;
       }).level;
-      
-  console.log("data", level);
+
+    console.log("data", level);
     return level;
   };
 
@@ -96,7 +97,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </p>
           <div>
             <label name="countries">Countries</label>
-            <StyledSelect value={generateDefaultValue('Countries')}>
+            <StyledSelect value={generateDefaultValue("Countries")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -104,9 +105,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="kits">Kits</label>
-            <StyledSelect
-            value={generateDefaultValue('Kits')}
-            >
+            <StyledSelect value={generateDefaultValue("Kits")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -114,9 +113,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="categories">Categories</label>
-            <StyledSelect
-            value={generateDefaultValue('Categories')}
-            >
+            <StyledSelect value={generateDefaultValue("Categories")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -124,9 +121,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="products">Products</label>
-            <StyledSelect
-               value={generateDefaultValue('Products')}
-            >
+            <StyledSelect value={generateDefaultValue("Products")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -146,9 +141,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </p>
           <div>
             <label name="countries">Countries</label>
-            <StyledSelect
-             value={generateDefaultValue('Products')}
-            >
+            <StyledSelect value={generateDefaultValue("Products")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -156,9 +149,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="kits">Kits</label>
-            <StyledSelect
-            value={generateDefaultValue('Kits')}
-            >
+            <StyledSelect value={generateDefaultValue("Kits")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -176,9 +167,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </p>
           <div>
             <label name="categories">Categories</label>
-            <StyledSelect
-               value={generateDefaultValue('Categories')}
-            >
+            <StyledSelect value={generateDefaultValue("Categories")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -186,9 +175,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="products">Products</label>
-            <StyledSelect
-             value={generateDefaultValue('Products')}
-            >
+            <StyledSelect value={generateDefaultValue("Products")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -210,9 +197,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </p>
           <div>
             <label name="countries">Accounts</label>
-            <StyledSelect
-                  value={generateDefaultValue('Accounts')}
-            >
+            <StyledSelect value={generateDefaultValue("Accounts")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -220,9 +205,7 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="kits">Entries</label>
-            <StyledSelect
-            value={generateDefaultValue('Entries')}
-            >
+            <StyledSelect value={generateDefaultValue("Entries")}>
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -241,9 +224,7 @@ const UserAuthorizationStatusEdit = (props) => {
             </p>
             <div>
               <label name="countries">Corp Events</label>
-              <StyledSelect
-              value={generateDefaultValue('Corp Events')}
-              >
+              <StyledSelect value={generateDefaultValue("Corp Events")}>
                 {options.map((option) => (
                   <option key={option.id}>{option.value}</option>
                 ))}
@@ -251,9 +232,7 @@ const UserAuthorizationStatusEdit = (props) => {
             </div>
             <div>
               <label name="kits">AMB Events</label>
-              <StyledSelect
-              value={generateDefaultValue('AMB Events')}
-              >
+              <StyledSelect value={generateDefaultValue("AMB Events")}>
                 {options.map((option) => (
                   <option key={option.id}>{option.value}</option>
                 ))}
@@ -276,17 +255,38 @@ const UserAuthorizationStatusEdit = (props) => {
               <StyledSelect>
                 {options.map((option) => (
                   <option
-                  value={generateDefaultValue('Incentive Trip')}
-                  key={option.id}>{option.value}</option>
+                    value={generateDefaultValue("Incentive Trip")}
+                    key={option.id}
+                  >
+                    {option.value}
+                  </option>
                 ))}
               </StyledSelect>
             </div>
           </div>
         </div>
       </BottomAccountConfig>
+      <div style={{ display: "flex" }}>
+        <StyledButton>Save</StyledButton>
+      </div>
     </Container>
   );
 };
+
+const StyledButton = styled(Button)`
+  background-color: #0f4b8f;
+
+  color: white;
+
+  height: 40px;
+
+  font-weight: bold;
+
+  width: 130px;
+  text-align: center;
+  margin-top: 75px;
+  margin-bottom: 45px;
+`;
 
 const BottomAccountConfig = styled.div`
   display: flex;
