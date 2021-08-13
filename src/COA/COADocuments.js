@@ -93,28 +93,26 @@ const COADocument = (props) => {
   const handleAddEditProduct = () => {
     const dataToSubmit = {};
     if (productIDInt) {
-      dataToSubmit["coaProductID"] = productIDInt;
+      dataToSubmit.coaProductID = productIDInt;
     }
 
     if (productName) {
-      dataToSubmit["product"] = productName;
+      dataToSubmit.product = productName;
     }
 
     if (region) {
-      dataToSubmit["region"] = region;
+      dataToSubmit.region = region;
     }
 
     if (category) {
-      dataToSubmit["categoryID"] = category;
+      dataToSubmit.categoryID = category;
     }
 
     if (productName) {
-      dataToSubmit["product"] = productName;
+      dataToSubmit.product = productName;
     }
 
-    dataToSubmit["lastUpdatedOn"] = "2021-07-19";
-
-    console.log("tst", dataToSubmit);
+    dataToSubmit.lastUpdatedOn = "2021-07-19";
 
     !props.location.state
       ? addProduct({
@@ -130,10 +128,10 @@ const COADocument = (props) => {
   const tableData = documents && documents.length > 0 ? documents : [];
 
   const currentRegion =
-    product &&
-    product.products[0] &&
-    product.products[0].region &&
-    product.products[0].region;
+    product && product.products[0] && product.products[0].region;
+
+    const currentCategory = product && product.products[0] && product.products[0].category;
+
   return (
     <div style={{ width: "100%" }}>
       <Container>
@@ -175,7 +173,7 @@ const COADocument = (props) => {
 
           <select
             name="regions"
-            value={region || currentRegion }
+            value={region || currentRegion}
             id="regions"
             style={{
               marginLeft: !isMobile ? "89px" : "90px",
@@ -210,7 +208,7 @@ const COADocument = (props) => {
               height: "30px",
             }}
             name="categories"
-            value={category}
+            value={category || currentCategory}
             id="categories"
             onChange={(e) => setCategory(parseInt(e.target.value))}
           >
@@ -233,7 +231,7 @@ const COADocument = (props) => {
         </div>
       </div>
 
-      <hr style={{ backgroundColor: "#d0d0d0", height: '1px' }} />
+      <hr style={{ backgroundColor: "#d0d0d0", height: "1px" }} />
 
       <Container>
         <p style={{ fontSize: "32px" }}>Product COAs</p>
