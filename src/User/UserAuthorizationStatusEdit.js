@@ -14,7 +14,6 @@ const options = [
 
 const UserAuthorizationStatusEdit = (props) => {
   const [userPermission, setUserPermission] = useState([]);
-  console.log("props passed", props.location.state);
   const getPermissions = async (email) => {
     try {
       const requestOptions = {
@@ -43,7 +42,6 @@ const UserAuthorizationStatusEdit = (props) => {
         return item.area === area;
       }).level;
 
-    console.log("data", level);
     return level;
   };
 
@@ -51,7 +49,7 @@ const UserAuthorizationStatusEdit = (props) => {
     <Container>
       <UserTitleContainer>
         <Title>Account Details</Title>
-        <Link to="/Users">Back to List</Link>
+        <Link to="/Settings/users">Back to List</Link>
       </UserTitleContainer>
       <AccountDetailsContainer>
         <div>

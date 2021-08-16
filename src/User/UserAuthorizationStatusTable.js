@@ -6,13 +6,14 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import UserAuthorizationStatusHeader from "./UserAuthorizationStatusHeader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp, faChevronDown} from "@fortawesome/fontawesome-free-solid";
+import {
+  faChevronUp,
+  faChevronDown,
+} from "@fortawesome/fontawesome-free-solid";
 
 const UserAuthorizationStatusTable = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  // const [filter, setFilter] = useState("");
-  // const [category, setCategory] = useState("");
   const [message, setMessage] = useState(true);
   const [totalUsers, setTotalUsers] = useState(0);
   const [blank, setBlank] = useState(false);
@@ -81,7 +82,12 @@ const UserAuthorizationStatusTable = () => {
 
   return (
     <div>
-      <UserAuthorizationStatusHeader />
+      <div>
+        <UserTitleContainer>
+          <Title>User Accounts</Title>
+          <StyledButton>Add User</StyledButton>
+        </UserTitleContainer>
+      </div>
       <PermissionTable>
         <table>
           <thead>
@@ -92,7 +98,7 @@ const UserAuthorizationStatusTable = () => {
                   style={{
                     width: "229px",
                     marginBottom: "15px",
-                    marginLeft: "85px",
+                   
                   }}
                   onChange={handleFilterByName}
                 />
@@ -101,7 +107,7 @@ const UserAuthorizationStatusTable = () => {
                 <StyledInput
                   placeholder="Email"
                   style={{
-                    marginLeft: "225px",
+                   
                     width: "271px",
                     marginBottom: "15px",
                   }}
@@ -115,7 +121,7 @@ const UserAuthorizationStatusTable = () => {
                 <span style={{ verticalAlign: "middle" }}>
                   <FontAwesomeIcon
                     style={{
-                      marginLeft: '25px',
+                      marginLeft: "25px",
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
@@ -123,13 +129,12 @@ const UserAuthorizationStatusTable = () => {
                   />
                 </span>
                 <span
-                style={{
-                  verticalAlign: "middle",
-                }}
+                  style={{
+                    verticalAlign: "middle",
+                  }}
                 >
                   <FontAwesomeIcon
                     style={{
-  
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
@@ -137,11 +142,12 @@ const UserAuthorizationStatusTable = () => {
                   />
                 </span>
               </th>
-              <th className="head">Email
-              <span style={{ verticalAlign: "middle" }}>
+              <th className="head">
+                Email
+                <span style={{ verticalAlign: "middle" }}>
                   <FontAwesomeIcon
                     style={{
-                      marginLeft: '25px',
+                      marginLeft: "25px",
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
@@ -149,13 +155,12 @@ const UserAuthorizationStatusTable = () => {
                   />
                 </span>
                 <span
-                style={{
-                  verticalAlign: "middle",
-                }}
+                  style={{
+                    verticalAlign: "middle",
+                  }}
                 >
                   <FontAwesomeIcon
                     style={{
-  
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
@@ -163,11 +168,12 @@ const UserAuthorizationStatusTable = () => {
                   />
                 </span>
               </th>
-              <th className="head">Last Accessed
-              <span style={{ verticalAlign: "middle" }}>
+              <th className="head">
+                Last Accessed
+                <span style={{ verticalAlign: "middle" }}>
                   <FontAwesomeIcon
                     style={{
-                      marginLeft: '25px',
+                      marginLeft: "25px",
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
@@ -175,13 +181,12 @@ const UserAuthorizationStatusTable = () => {
                   />
                 </span>
                 <span
-                style={{
-                  verticalAlign: "middle",
-                }}
+                  style={{
+                    verticalAlign: "middle",
+                  }}
                 >
                   <FontAwesomeIcon
                     style={{
-  
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
@@ -189,11 +194,12 @@ const UserAuthorizationStatusTable = () => {
                   />
                 </span>
               </th>
-              <th className="head">Actions
-              <span style={{ verticalAlign: "middle" }}>
+              <th className="head">
+                Actions
+                <span style={{ verticalAlign: "middle" }}>
                   <FontAwesomeIcon
                     style={{
-                      marginLeft: '25px',
+                      marginLeft: "25px",
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
@@ -201,13 +207,12 @@ const UserAuthorizationStatusTable = () => {
                   />
                 </span>
                 <span
-                style={{
-                  verticalAlign: "middle",
-                }}
+                  style={{
+                    verticalAlign: "middle",
+                  }}
                 >
                   <FontAwesomeIcon
                     style={{
-  
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
@@ -231,7 +236,7 @@ const UserAuthorizationStatusTable = () => {
                     <td>
                       <Link
                         to={{
-                          pathname: `/Users/Edit/${user.id}`,
+                          pathname: `/Settings/users/edit/${user.id}`,
                           state: user,
                         }}
                       >
@@ -269,14 +274,16 @@ const PermissionTable = styled.div`
 
   table {
     width: 100%;
-
+    text-align: left;
     tr {
       &:nth-child(even) {
         background: #f4fafe;
+  
       }
 
       td {
         padding: 5px 0;
+  
       }
     }
   }
@@ -294,6 +301,28 @@ const PermissionTable = styled.div`
 const StyledInput = styled.input`
   border: 1px solid #0f4b8f;
   width: 271px;
+`;
+
+const UserTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const Title = styled.p`
+  color: #707070;
+  font-size: 36px;
+  text-align: left;
+`;
+
+const StyledButton = styled.button`
+  background-color: #0f4b8f;
+  color: white;
+  font-weight: bold;
+  border: none;
+  height: 36px;
+  padding-left: 14px;
+  padding-right: 14px;
 `;
 
 export default UserAuthorizationStatusTable;

@@ -49,8 +49,7 @@ function TopNav() {
               </Nav>     
               <Nav>
                  <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="/Settings/Permissions">Permissions</NavDropdown.Item>
-                  <NavDropdown.Item href="/Setings/Roles">Roles</NavDropdown.Item>
+                  <NavDropdown.Item href="/Settings/users">Permissions</NavDropdown.Item>
                 </NavDropdown>     
               </Nav>     
             </Navbar.Collapse>

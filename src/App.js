@@ -96,8 +96,8 @@ function App() {
           <Route path="/Permissions" component={Permissions} />
           <Route path="/COA/:productID" component={COA}/>
 
-          <Route exact path="/Users/Edit/:accountID" component={UserAuthorizationStatusEdit}/>
-          <Route path="/Users" component={UserAuthorizationStatusTable}/>
+          <Route exact path="/Settings/users/edit/:userID" component={UserAuthorizationStatusEdit}/>
+          <Route path="/Settings/users" component={UserAuthorizationStatusTable}/>
 
         </Switch>       
        </Page>
