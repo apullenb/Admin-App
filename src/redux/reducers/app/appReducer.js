@@ -10,12 +10,12 @@ const intialState = {
 
 export const appReducer = (state = intialState, action) => {
     switch (action.type) {
-        case APP_STARTED:
-            return {
-                ...state,
-                isStarted: true,
-            }
-            default:
-                return state;
+      case APP_STARTED:
+          return {
+              ...state,
+              isStarted: true,
+          }
+      default:
+          return state;
     }
 };

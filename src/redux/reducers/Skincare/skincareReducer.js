@@ -7,8 +7,10 @@ import {
     GET_ACCOUNTS_FAILURE,
     GET_FILTERED_ACCOUNTS_START,
     GET_FILTERED_ACCOUNTS_SUCCESS,
-    GET_FILTERED_ACCOUNTS_FAILURE
-
+    GET_FILTERED_ACCOUNTS_FAILURE,
+    LOGIN_ADMIN_SKINCARE_START,
+    LOGIN_ADMIN_SKINCARE_SUCCESS,
+    LOGIN_ADMIN_SKINCARE_FAILURE,
 } from '../../actions/Skincare/skincareActionTypes'
 
 const initalState = {
@@ -16,7 +18,7 @@ const initalState = {
     accounts: [],
     fetching: false,
     error: null,
-
+    skincareAuthToken: null
 }
 
 export const entriesConfigReducer = (state = initalState, action) => {
@@ -78,7 +80,26 @@ export const entriesConfigReducer = (state = initalState, action) => {
                      fetching: false,
                      error:action.payload
             }
-     
+            case LOGIN_ADMIN_SKINCARE_START:
+              return {
+                ...state,
+                fetching: true,
+                error: null,
+              };
+            case LOGIN_ADMIN_SKINCARE_SUCCESS:
+              return {
+                ...state,
+                fetching: false,
+                error: null,
+                skincareAuthToken: action.payload.token,
+              };
+            case LOGIN_ADMIN_SKINCARE_FAILURE:
+              return {
+                ...state,
+                fetching: false,
+                error: action.payload,
+              };
+
         default:
             return state
     }

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import config from '../config/env-urls'
@@ -10,6 +11,8 @@ import Button from "react-bootstrap/Button";
 import axios from 'axios';
 import Moment from 'react-moment';
 import Select from 'react-select';
+import { useToasts } from "react-toast-notifications";
+import { LoginSkincareAdmin } from "../redux/actions/Skincare/skincareActions";
 
 
 function EntryEdit(props) {
@@ -21,6 +24,9 @@ function EntryEdit(props) {
   const [blank, setBlank] = useState(true);
   const [message, setMessage] = useState('');
   const [change, setChange] = useState(false);
+  const { skincareAuthToken } = useSelector(state => state.app);
+  const dispatch = useDispatch();
+  const { addToast } = useToasts();
 
   // this.handleChange = this.handleChange.bind(this);
   // this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,7 +35,6 @@ function EntryEdit(props) {
   useEffect(() => {
     handleGetEntryData();
   }, []);
-
 
 
   const handleGetEntryData = () => {
@@ -53,7 +58,25 @@ function EntryEdit(props) {
     setMessage('')
     setEntry({ ...entry, [e.target.name]: e.target.value });
   }
+
   const handleSubmit = async () => {
+    try {
+      if (skincareAuthToken) {
+        updateEntry(skincareAuthToken);
+      } else {
+          const result = await dispatch(LoginSkincareAdmin());
+          const authToken = result?.data?.token ?? "";
+          await updateEntry(authToken);
+      }
+    } catch (err) {
+        addToast(`An error occured while saving: ${err.message}`, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+    }
+  };
+  
+  const updateEntry = async (authToken) => {
     try {
       const body = {
         products: entry.products,
@@ -65,20 +88,35 @@ function EntryEdit(props) {
       };
 
       const requestOptions = {
-        method: 'PUT',
-        headers: { "Content-Type": "application/json" },
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "Authorization": authToken },
         body: JSON.stringify(body)
       };
-      
-      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-entry-admin/${entry.id}`, requestOptions);
-      setChange(false)
-      setMessage('Thank you. Your Changes Have Been Saved')
 
+      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-entry-admin/${entry.id}`, requestOptions);
+
+      if (response.status === 200) {
+        setChange(false);
+        addToast("Entry was updated successfully", {
+          appearance: "success",
+          autoDismiss: true,
+        });        
+      } else {
+        addToast(`An error occured while saving: ${response.status}`, {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      }
+
+      return response.status;
     } catch (err) {
-      console.error(err.message)
+      addToast(`An error occured while saving: ${err.message}`, {
+        appearance: "error",
+        autoDismiss: true,
+      });
     }
   };
-  
+
   const handleProductsChange = (event) => {
     setChange(true)
     setMessage('')
