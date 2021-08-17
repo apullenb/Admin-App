@@ -4,7 +4,7 @@ import config from "../config/env-urls";
 import Pagination from "../GlobalComponents/Pagination";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import UserAuthorizationStatusHeader from "./UserAuthorizationStatusHeader";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronUp,
