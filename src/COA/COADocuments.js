@@ -52,11 +52,6 @@ const COADocument = (props) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (currentProductData === "") {
-  //     setProductNameMissing(true);
-  //   }
-  // }, []);
 
   const { data: categories } = useQuery(GET_CATEGORIES);
 
