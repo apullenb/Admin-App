@@ -1,65 +1,60 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, FormControl, Button } from "react-bootstrap/";
 import styled from "styled-components";
 import COAProduct from "./COAProduct";
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { GET_PRODUCTS } from '../utils/GQLqueries';
+import { useMutation, useQuery } from "@apollo/react-hooks";
+import { GET_PRODUCTS } from "../utils/GQLqueries";
 
 import { Link } from "react-router-dom";
 
-
 const COAProductList = () => {
   const { loading, data, refetch } = useQuery(GET_PRODUCTS);
-const [products, setProducts] = useState("")
-const [value, setValue] = useState('')
-const [category, setCategory] = useState('')
-// const products = data?.products || [];
-
-useEffect(() => {
-  getProducts()
-  }, [data])
-  
+  const [products, setProducts] = useState("");
+  const [value, setValue] = useState("");
+  const [category, setCategory] = useState("");
+  // const products = data?.products || [];
 
   useEffect(() => {
-    refetch()
-    }, [])
-    
+    getProducts();
+  }, [data]);
 
-useEffect(() => {
-  filter()
-  }, [value, category])
+  useEffect(() => {
+    refetch();
+  }, []);
 
-const getProducts = () => {
-  setProducts(data?.products || [])
-}
-  
-const handleChange = (e, cat) => {
-  setValue(e.target.value);
-  setCategory(cat);
-  if (value === "" || value === undefined || value === 'All') {
-    getProducts()
-  }
-};
+  useEffect(() => {
+    filter();
+  }, [value, category]);
 
+  const getProducts = () => {
+    setProducts(data?.products || []);
+  };
 
-const filter = () => {
- 
-  let temp = [];
-  products && products.filter(product => {
-      if (product[category] && product[category].includes(value) || product[category] &&
-        product[category].toLowerCase().includes(value)) {
-        temp.push(product);
-      }
-    });
-  if (temp.length > 0) {
-    setProducts(temp);
-    
-  } else {
-    setValue("");
-  }
-};
+  const handleChange = (e, cat) => {
+    setValue(e.target.value);
+    setCategory(cat);
+    if (value === "" || value === undefined || value === "All") {
+      getProducts();
+    }
+  };
 
-
+  const filter = () => {
+    let temp = [];
+    products &&
+      products.filter((product) => {
+        if (
+          (product[category] && product[category].includes(value)) ||
+          (product[category] && product[category].toLowerCase().includes(value))
+        ) {
+          temp.push(product);
+        }
+      });
+    if (temp.length > 0) {
+      setProducts(temp);
+    } else {
+      setValue("");
+    }
+  };
 
   return (
     <Table>
@@ -67,21 +62,42 @@ const filter = () => {
       <Row>
         <Col></Col>
         <Col></Col>
-        <Col><Link to={{pathname: '/Coa/documents'}}><CustomButton>Add Products</CustomButton></Link></Col>
+        <Col>
+          <Link to={{ pathname: "/Coa/documents/0" }}>
+            <CustomButton>Add Products</CustomButton>
+          </Link>
+        </Col>
       </Row>
       <Row className="search-box">
-        <Col><input placeholder="Product Name" onChange={(e)=>handleChange(e, 'productName')}/></Col>
         <Col>
-          <select name="Product Category" defaultValue='Product Category' onChange={(e)=>handleChange(e, 'category')}>
-          <option value='Product Category' disabled>Product Category</option>
+          <input
+            placeholder="Product Name"
+            onChange={(e) => handleChange(e, "productName")}
+          />
+        </Col>
+        <Col>
+          <select
+            name="Product Category"
+            defaultValue="Product Category"
+            onChange={(e) => handleChange(e, "category")}
+          >
+            <option value="Product Category" disabled>
+              Product Category
+            </option>
             <option value="UltraCell">UltraCell</option>
             <option value="Lishe">Lishé</option>
             <option value="All">Show All</option>
           </select>
         </Col>
         <Col>
-          <select name="Region" defaultValue='Region' onChange={(e)=>handleChange(e, 'region')}>
-          <option value='Region' disabled>Region</option>
+          <select
+            name="Region"
+            defaultValue="Region"
+            onChange={(e) => handleChange(e, "region")}
+          >
+            <option value="Region" disabled>
+              Region
+            </option>
             <option value="USA">USA</option>
             <option value="EU">Europe</option>
             <option value="LATAM">LATAM</option>
@@ -90,18 +106,22 @@ const filter = () => {
         </Col>
         <Col></Col>
         <Col></Col>
-      
-        
       </Row>
-      <Row className='name'>
+      <Row className="name">
         <Col>Product Name</Col>
         <Col>Product Category</Col>
         <Col>Region</Col>
         <Col>Last Updated</Col>
         <Col>Actions</Col>
       </Row>
-        {products && products.map(product => <COAProduct key={product.coaProductID} product={product} fetch={setProducts} /> )}
- 
+      {products &&
+        products.map((product) => (
+          <COAProduct
+            key={product.coaProductID}
+            product={product}
+            fetch={setProducts}
+          />
+        ))}
     </Table>
   );
 };
@@ -167,11 +187,10 @@ const Table = styled.div`
     margin: 0px;
     padding: 0;
   }
-
 `;
 
 const CustomButton = styled.button`
-  background-color: #0F4B8F;
+  background-color: #0f4b8f;
   color: white;
   font-size: 14px;
   margin: 6px 0%;

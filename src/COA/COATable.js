@@ -19,8 +19,6 @@ const COATable = ({tableData, productID}) => {
     return result;
   };
 
-  console.log('data', data)
-
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     opacity: isDragging ? 0.5 : 1,
@@ -34,8 +32,7 @@ const COATable = ({tableData, productID}) => {
       return;
     }
 
-    
-    console.log('result', result)
+  
     const items = reorder(data, result.source.index, result.destination.index);
 
     setData(items);

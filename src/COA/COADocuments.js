@@ -24,18 +24,27 @@ const COADocument = (props) => {
 
   const productIDInt = parseInt(productID);
 
-  const currentProductData = updatedProductData;
-
   const [documents, setDocuments] = useState([]);
   const [dataCategories, setdataCategories] = useState([]);
-  const [region, setRegion] = useState("");
+  const [region, setRegion] = useState("USA");
   const [productName, setProductName] = useState("");
   const [category, setCategory] = useState(1);
   const [productExists, setProductExists] = useState(false);
+  const [productNameMissing, setProductNameMissing] = useState(false);
 
   const { data, refetch } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
     variables: { productID: productIDInt },
   });
+  const { data: product, refetch: refetchProductInfo } = useQuery(
+    GET_PRODUCT_BY_ID,
+    {
+      variables: { coaProductID: productIDInt },
+    }
+  );
+
+  const currentProductData = props.location.state
+    ? props.location.state
+    : product && product.products[0];
 
   useEffect(() => {
     if (props.history.action === "PUSH") {
@@ -43,18 +52,25 @@ const COADocument = (props) => {
     }
   }, []);
 
+
   const { data: categories } = useQuery(GET_CATEGORIES);
 
-  const { data: product } = useQuery(GET_PRODUCT_BY_ID, {
-    variables: { coaProductID: productIDInt },
-  });
-
   useEffect(() => {
-    if (currentProductData && currentProductData.productName) {
-      setProductName(currentProductData.productName);
-    }
     if (currentProductData && currentProductData.categoryID) {
       setCategory(currentProductData.categoryID);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      currentProductData &&
+      currentProductData.productName 
+    ) {
+      setProductName(currentProductData.productName);
+    }
+ 
+    if(!currentProductData && productName === '' ){
+      setProductNameMissing(true)
     }
   }, []);
 
@@ -65,12 +81,6 @@ const COADocument = (props) => {
   const getCategories = () => {
     setdataCategories(categories?.categories);
   };
-
-  useEffect(() => {
-    if (currentProductData && currentProductData.coaProductID) {
-      refetch();
-    }
-  }, []);
 
   useEffect(() => {
     getDocuments();
@@ -108,10 +118,6 @@ const COADocument = (props) => {
       dataToSubmit.categoryID = category;
     }
 
-    if (productName) {
-      dataToSubmit.product = productName;
-    }
-
     dataToSubmit.lastUpdatedOn = "2021-07-19";
 
     !props.location.state
@@ -130,7 +136,8 @@ const COADocument = (props) => {
   const currentRegion =
     product && product.products[0] && product.products[0].region;
 
-    const currentCategory = product && product.products[0] && product.products[0].category;
+  const currentCategory =
+    product && product.products[0] && product.products[0].category;
 
   return (
     <div style={{ width: "100%" }}>
@@ -148,12 +155,15 @@ const COADocument = (props) => {
         </label>{" "}
         <input
           style={{ width: "80%", border: "1px solid #0F4B8F" }}
-          defaultValue={
-            product && product.products[0].productName
-              ? product.products[0].productName
-              : null
-          }
-          onChange={(e) => setProductName(e.target.value)}
+          value={productName}
+          onChange={(e) => {
+            setProductName(e.target.value);
+            if (e.target.value === "") {
+              setProductNameMissing(true);
+            } else {
+              setProductNameMissing(false);
+            }
+          }}
         />
       </div>
 
@@ -225,7 +235,10 @@ const COADocument = (props) => {
         </div>
 
         <div>
-          <StyledButton disabled={productExists} onClick={handleAddEditProduct}>
+          <StyledButton
+            disabled={productExists || productNameMissing}
+            onClick={handleAddEditProduct}
+          >
             Save
           </StyledButton>
         </div>
@@ -237,9 +250,13 @@ const COADocument = (props) => {
         <p style={{ fontSize: "32px" }}>Product COAs</p>
 
         <Link
-          to={`/COA/add/${product ? product.products[0].coaProductID : 0}/`}
+          to={`/COA/add/${
+            product && product.products[0] && product.products[0].coaProductID
+              ? product.products[0].coaProductID
+              : 0
+          }/`}
         >
-          <StyledButton disabled={!product && !productExists}>
+          <StyledButton disabled={!product || !productExists}>
             Add New COA
           </StyledButton>
         </Link>
@@ -248,9 +265,7 @@ const COADocument = (props) => {
       <COATable
         tableData={tableData}
         productID={
-          product &&
-          product.products[0].coaProductID &&
-          product.products[0].coaProductID
+          product && product.products[0] && product.products[0].coaProductID
         }
         refetch={refetch}
       />
