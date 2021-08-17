@@ -1,13 +1,11 @@
 import { 
-    APP_STARTED,
-    STORE_SKINCARE_AUTH_TOKEN
+    APP_STARTED
 } from '../../actions/app/appActionTypes';
 
 const intialState = {
     isStarted:false,
     fetching:false,
-    error: null,
-    skincareAuthToken: null
+    error: null
 }
 
 export const appReducer = (state = intialState, action) => {
@@ -16,11 +14,6 @@ export const appReducer = (state = intialState, action) => {
           return {
               ...state,
               isStarted: true,
-          }
-      case STORE_SKINCARE_AUTH_TOKEN :
-          return {
-            ...state,
-            skincareAuthToken: action.payload
           }
       default:
           return state;

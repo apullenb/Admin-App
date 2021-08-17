@@ -37,7 +37,7 @@ const config = {
   PRODUCTSBASEURL : handleSetProductsURL(),
   SKINCAREBASEURL : handleSkinCareEnvURL(),
   SCTARGETURL : handleSCTargetURL(),
-  skincareUser: skincareUser
+  SKINCAREUSER: skincareUser
 };
 
 export default config;

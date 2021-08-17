@@ -11,8 +11,8 @@ import Button from "react-bootstrap/Button";
 import axios from 'axios';
 import Moment from 'react-moment';
 import Select from 'react-select';
-import { storeSkincareAuthToken } from "../redux/actions/app/appActions";
-import { skincareLogin } from "./SkincareLogin";
+import { useToasts } from "react-toast-notifications";
+import { LoginSkincareAdmin } from "../redux/actions/Skincare/skincareActions";
 
 
 function EntryEdit(props) {
@@ -26,6 +26,7 @@ function EntryEdit(props) {
   const [change, setChange] = useState(false);
   const { skincareAuthToken } = useSelector(state => state.app);
   const dispatch = useDispatch();
+  const { addToast } = useToasts();
 
   // this.handleChange = this.handleChange.bind(this);
   // this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,7 +35,6 @@ function EntryEdit(props) {
   useEffect(() => {
     handleGetEntryData();
   }, []);
-
 
 
   const handleGetEntryData = () => {
@@ -61,34 +61,21 @@ function EntryEdit(props) {
 
   const handleSubmit = async () => {
     try {
-      let authToken = await getSkincareAuthToken();
-
-      const responseStatus = await updateEntry(authToken);
-
-      if (responseStatus === 401 || responseStatus === 403) {
-        const forceRefresh = true;
-        authToken = await getSkincareAuthToken(forceRefresh);
-
-        await updateEntry(authToken);
+      if (skincareAuthToken) {
+        updateEntry(skincareAuthToken);
+      } else {
+          const result = await dispatch(LoginSkincareAdmin());
+          const authToken = result?.data?.token ?? "";
+          await updateEntry(authToken);
       }
     } catch (err) {
-      console.error(err.message);
+        addToast(`An error occured while saving: ${err.message}`, {
+        appearance: "error",
+        autoDismiss: true,
+      });
     }
   };
   
-  const getSkincareAuthToken = async (forceRefresh = false) => {
-
-    let authToken = skincareAuthToken;
-
-    if (!authToken || forceRefresh) {
-      authToken = await skincareLogin();
-
-      dispatch(storeSkincareAuthToken(authToken));
-    }
-
-    return authToken;
-  };
-
   const updateEntry = async (authToken) => {
     try {
       const body = {
@@ -110,14 +97,23 @@ function EntryEdit(props) {
 
       if (response.status === 200) {
         setChange(false);
-        setMessage("The changes have been saved.");
+        addToast("Entry was updated successfully", {
+          appearance: "success",
+          autoDismiss: true,
+        });        
       } else {
-        setMessage("Error - The changes were not saved. Status " + response.status);
+        addToast(`An error occured while saving: ${response.status}`, {
+          appearance: "error",
+          autoDismiss: true,
+        });
       }
 
       return response.status;
     } catch (err) {
-      console.error(err.message);
+      addToast(`An error occured while saving: ${err.message}`, {
+        appearance: "error",
+        autoDismiss: true,
+      });
     }
   };
 
