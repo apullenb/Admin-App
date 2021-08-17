@@ -7,7 +7,7 @@ import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
   GET_DOCUMENTS_BY_PRODUCT_ID,
   GET_CATEGORIES,
-  GET_PRODUCT_BY_ID
+  GET_PRODUCT_BY_ID,
 } from "../utils/GQLqueries";
 
 import { ADD_PRODUCT, UPDATE_PRODUCT } from "../utils/mutations";
@@ -33,41 +33,33 @@ const COADocument = (props) => {
   const [category, setCategory] = useState(1);
   const [productExists, setProductExists] = useState(false);
 
-  const { data, refetch } = useQuery(
-    GET_DOCUMENTS_BY_PRODUCT_ID, {
-    variables: {productID: productIDInt} 
-    }
-  );
-
-  const { data: categories } = useQuery(GET_CATEGORIES);
-
-  const { data: product }  = useQuery(GET_PRODUCT_BY_ID , {
-    variables: {coaProductID: productIDInt}
-    });
-
+  const { data, refetch } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
+    variables: { productID: productIDInt },
+  });
 
   useEffect(() => {
-    if (currentProductData) {
-      setProductName(currentProductData.productName);
-
-      setCategory(currentProductData.categoryID);
-      
+    if (props.history.action === "PUSH") {
+      refetch();
     }
   }, []);
 
-  useEffect(() => {
-  }, [data])
+  const { data: categories } = useQuery(GET_CATEGORIES);
+
+  const { data: product } = useQuery(GET_PRODUCT_BY_ID, {
+    variables: { coaProductID: productIDInt },
+  });
 
   useEffect(() => {
-  }, [categories])
-
-  useEffect(() => {
-  }, [product])
-
+    if (currentProductData && currentProductData.productName) {
+      setProductName(currentProductData.productName);
+    }
+    if (currentProductData && currentProductData.categoryID) {
+      setCategory(currentProductData.categoryID);
+    }
+  }, []);
 
   const getDocuments = () => {
     setDocuments(data?.documents);
-
   };
 
   const getCategories = () => {
@@ -99,30 +91,35 @@ const COADocument = (props) => {
   });
 
   const handleAddEditProduct = () => {
+    const dataToSubmit = {};
+    if (productIDInt) {
+      dataToSubmit.coaProductID = productIDInt;
+    }
+
+    if (productName) {
+      dataToSubmit.product = productName;
+    }
+
+    if (region) {
+      dataToSubmit.region = region;
+    }
+
+    if (category) {
+      dataToSubmit.categoryID = category;
+    }
+
+    if (productName) {
+      dataToSubmit.product = productName;
+    }
+
+    dataToSubmit.lastUpdatedOn = "2021-07-19";
+
     !props.location.state
       ? addProduct({
-          variables: {
-            product: productName,
-
-            region: region,
-
-            categoryID: Number(category),
-
-            lastUpdatedOn: "2021-07-19",
-          },
+          variables: dataToSubmit,
         })
       : updateProduct({
-          variables: {
-            coaProductID: productIDInt,
-
-            product: productName,
-
-            region: region,
-
-            categoryID: Number(category),
-
-            lastUpdatedOn: "2021-07-19",
-          },
+          variables: dataToSubmit,
         });
 
     setProductExists(true);
@@ -130,8 +127,12 @@ const COADocument = (props) => {
 
   const tableData = documents && documents.length > 0 ? documents : [];
 
-  return (
+  const currentRegion =
+    product && product.products[0] && product.products[0].region;
 
+    const currentCategory = product && product.products[0] && product.products[0].category;
+
+  return (
     <div style={{ width: "100%" }}>
       <Container>
         <p style={{ fontSize: "32px" }}>COA Product Details</p>
@@ -172,11 +173,7 @@ const COADocument = (props) => {
 
           <select
             name="regions"
-            defaultValue={
-              product && product.products && product.products[0].region
-              ? product.products[0].region
-                : null
-            }
+            value={region || currentRegion}
             id="regions"
             style={{
               marginLeft: !isMobile ? "89px" : "90px",
@@ -211,7 +208,7 @@ const COADocument = (props) => {
               height: "30px",
             }}
             name="categories"
-            value={category}
+            value={category || currentCategory}
             id="categories"
             onChange={(e) => setCategory(parseInt(e.target.value))}
           >
@@ -234,15 +231,13 @@ const COADocument = (props) => {
         </div>
       </div>
 
-      <hr style={{ color: "#202525" }} />
+      <hr style={{ backgroundColor: "#d0d0d0", height: "1px" }} />
 
       <Container>
         <p style={{ fontSize: "32px" }}>Product COAs</p>
 
         <Link
-          to={`/COA/add/${
-            product ? product.products[0].coaProductID : 0
-          }/`}
+          to={`/COA/add/${product ? product.products[0].coaProductID : 0}/`}
         >
           <StyledButton disabled={!product && !productExists}>
             Add New COA
