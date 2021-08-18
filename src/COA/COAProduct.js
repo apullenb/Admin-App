@@ -8,8 +8,8 @@ import ConfirmDel from "./ConfirmDel";
 
 function COAProduct(props) {
   const productName = ReactHtmlParser(props.product.productName);
-  const date = props.product.lastUpdatedOn;
-  const updated = moment(date).format("L");
+  const date = props.product.lastUpdatedOn.substr(0, props.product.lastUpdatedOn.indexOf("Z"));
+  const updated = moment(date).format("MM/DD/YYYY");
   const handleDelete = () => {
     console.log("delete", props.product.coaProductID);
   };
