@@ -52,7 +52,6 @@ const COADocument = (props) => {
     }
   }, []);
 
-
   const { data: categories } = useQuery(GET_CATEGORIES);
 
   useEffect(() => {
@@ -62,15 +61,12 @@ const COADocument = (props) => {
   }, []);
 
   useEffect(() => {
-    if (
-      currentProductData &&
-      currentProductData.productName 
-    ) {
+    if (currentProductData && currentProductData.productName) {
       setProductName(currentProductData.productName);
     }
- 
-    if(!currentProductData && productName === '' ){
-      setProductNameMissing(true)
+
+    if (!currentProductData && productName === "") {
+      setProductNameMissing(true);
     }
   }, []);
 
@@ -250,11 +246,17 @@ const COADocument = (props) => {
         <p style={{ fontSize: "32px" }}>Product COAs</p>
 
         <Link
-          to={`/COA/add/${
-            product && product.products[0] && product.products[0].coaProductID
-              ? product.products[0].coaProductID
-              : 0
-          }/`}
+          to={{
+            pathname: `/COA/add/${
+              product && product.products[0] && product.products[0].coaProductID
+                ? product.products[0].coaProductID
+                : 0
+            }}/`,
+            state: {
+              productName,
+              region
+            }
+          }}
         >
           <StyledButton disabled={!product || !productExists}>
             Add New COA
