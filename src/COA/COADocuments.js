@@ -286,13 +286,9 @@ const COADocument = (props) => {
         <Link
           to={{
             pathname: `/COA/add/${evaluatedRouteProductID}/`,
-            state: {
-              productName,
-              region,
-            },
-          }}
+        }}
         >
-          <StyledButton disabled={!product || !productExists}>
+          <StyledButton disabled={!product || (props.match.params.productID && !productExists)}>
             Add New COA
           </StyledButton>
         </Link>
