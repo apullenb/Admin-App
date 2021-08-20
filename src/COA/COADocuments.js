@@ -16,13 +16,16 @@ import COATable from "./COADocumentsTable";
 
 import { useMediaQuery } from "react-responsive";
 
+import { useHistory } from "react-router-dom";
+
 const COADocument = (props) => {
-  const [addProduct, { data: updatedProductData }] = useMutation(ADD_PRODUCT);
+  const [addProduct, { data: addedProductData }] = useMutation(ADD_PRODUCT);
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
 
   const { productID } = useParams();
 
   const productIDInt = parseInt(productID);
+  const history = useHistory();
 
   const [documents, setDocuments] = useState([]);
   const [dataCategories, setdataCategories] = useState([]);
@@ -42,6 +45,16 @@ const COADocument = (props) => {
     }
   );
 
+  useEffect(() => {
+    if (
+      product &&
+      product.products[0] &&
+      product.products[0].coaProductID
+    ) {
+      setProductExists(true)
+    }
+  }, []);
+
   const currentProductData = props.location.state
     ? props.location.state
     : product && product.products[0];
@@ -52,7 +65,6 @@ const COADocument = (props) => {
     }
   }, []);
 
-
   const { data: categories } = useQuery(GET_CATEGORIES);
 
   useEffect(() => {
@@ -62,15 +74,12 @@ const COADocument = (props) => {
   }, []);
 
   useEffect(() => {
-    if (
-      currentProductData &&
-      currentProductData.productName 
-    ) {
+    if (currentProductData && currentProductData.productName) {
       setProductName(currentProductData.productName);
     }
- 
-    if(!currentProductData && productName === '' ){
-      setProductNameMissing(true)
+
+    if (!currentProductData && productName === "") {
+      setProductNameMissing(true);
     }
   }, []);
 
@@ -118,7 +127,14 @@ const COADocument = (props) => {
       dataToSubmit.categoryID = category;
     }
 
-    dataToSubmit.lastUpdatedOn = "2021-07-19";
+    const current = new Date();
+    const dd = String(current.getDate()).padStart(2, "0");
+    const mm = String(current.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const yyyy = current.getFullYear();
+
+    let today = mm + "/" + dd + "/" + yyyy;
+
+    dataToSubmit.lastUpdatedOn = today;
 
     !props.location.state
       ? addProduct({
@@ -127,8 +143,17 @@ const COADocument = (props) => {
       : updateProduct({
           variables: dataToSubmit,
         });
-
     setProductExists(true);
+    if (
+      !props.location.state &&
+      addedProductData &&
+      addedProductData.addCoaProduct &&
+      addedProductData.addCoaProduct.coaProduct.coaProductID
+    ) {
+      history.push(
+        `/Coa/documents/${addedProductData.addCoaProduct.coaProduct.coaProductID}`
+      );
+    }
   };
 
   const tableData = documents && documents.length > 0 ? documents : [];
@@ -138,6 +163,15 @@ const COADocument = (props) => {
 
   const currentCategory =
     product && product.products[0] && product.products[0].category;
+
+  const evaluatedRouteProductID =
+    product && product.products[0] && product.products[0].coaProductID
+      ? product.products[0].coaProductID
+      : (!props.location.state &&
+          addedProductData &&
+          addedProductData.addCoaProduct &&
+          addedProductData.addCoaProduct.coaProduct.coaProductID) ||
+        0;
 
   return (
     <div style={{ width: "100%" }}>
@@ -250,13 +284,11 @@ const COADocument = (props) => {
         <p style={{ fontSize: "32px" }}>Product COAs</p>
 
         <Link
-          to={`/COA/add/${
-            product && product.products[0] && product.products[0].coaProductID
-              ? product.products[0].coaProductID
-              : 0
-          }/`}
+          to={{
+            pathname: `/COA/add/${evaluatedRouteProductID}/`,
+        }}
         >
-          <StyledButton disabled={!product || !productExists}>
+          <StyledButton disabled={!product || (props.match.params.productID && !productExists)}>
             Add New COA
           </StyledButton>
         </Link>

@@ -11,6 +11,7 @@ import axios from 'axios';
 
 const AddCOA = () => {
 
+    
     const [batchNumber, setBatchNumber] = useState('');
     const [isExternal, setIsExternal] = useState(0);
     const [fileInput, setFileInput] = useState('');
@@ -132,11 +133,11 @@ const AddCOA = () => {
             </Row>
             <Row className="text-left">
                 <Col xl={2}><p className="text-secondary">Product</p></Col>
-                <Col xl={2}><p className="text-secondary">{ReactHtmlParser(products[0].productName)}</p></Col>
+                <Col xl={2}><p className="text-secondary">{ReactHtmlParser(products[0] && products[0].productName)}</p></Col>
                 <Col xl={1}></Col>
                 <Col xl={1}></Col>
                 <Col xl={1}><p className="text-secondary">Region</p></Col>
-                <Col  xl={1}><p className="text-secondary">{products[0].region}</p></Col>
+                <Col  xl={1}><p className="text-secondary">{products[0] &&  products[0].region}</p></Col>
                 <Col xl={2}></Col>
                 <Col xl={2}></Col>
             </Row>
