@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
+import moment from "moment";
 
 const options = [
   { id: 1, value: "Not Allowed" },
@@ -44,7 +45,11 @@ const UserAuthorizationStatusEdit = (props) => {
 
     return level;
   };
-
+ 
+  const formattedDate = props.location.state.createdDate && props.location.state.createdDate.substr(0, props.location.state.createdDate.indexOf("Z"));
+  const dateCreated =
+  moment(formattedDate).format("MM/DD/YYYY");
+  console.log('ddd', props.location.state.modifiedDate)
   return (
     <Container>
       <UserTitleContainer>
@@ -66,16 +71,15 @@ const UserAuthorizationStatusEdit = (props) => {
               marginLeft: "27px",
             }}
           >
-            Date Created:{" "}
+            Date Created:
             <span style={{ marginLeft: "40px" }}>
-              {" "}
-              {props.location.state.createdDate}
+              {dateCreated ? dateCreated: ""}
             </span>
           </label>
         </div>
         <div>
-          <p>Date Last Modified: {props.location.state.modifiedDate} </p>
-          <p>Created by: {props.location.state.createdBy} </p>
+          <p>Date Last Modified: {props.location.state.dateModified ? props.location.state.modifiedDate: "" } </p>
+          <p>Created by: {props.location.state.createdBy ? props.location.state.createdBy: "" } </p>
         </div>
 
         <div />
@@ -293,6 +297,9 @@ const Container = styled.div`
   label {
     width: 100px;
   }
+max-width: 1600px;
+margin: 3% 3% 3% 5%;
+
 `;
 
 const AccountConfigContainer = styled.div`
