@@ -58,7 +58,6 @@ const EditCOA = (props) => {
             coaDocumentID: coaDocumentIDInt,
             batchNumber,
             isExternal,
-            uploadedOn,
           },
         });
         addToast("COA updated successfully!", {

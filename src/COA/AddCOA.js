@@ -65,8 +65,12 @@ const AddCOA = () => {
         setFileUrl(cloudinaryUrl);
     }, [cloudinaryUrl])
 
+    useEffect(() => {
+         refetch();
+    }, [])
 
-    const { loading, data }  = useQuery(GET_PRODUCT_BY_ID , {
+
+    const { loading, data, refetch }  = useQuery(GET_PRODUCT_BY_ID , {
     variables: {coaProductID: productIDInt}
     });
 

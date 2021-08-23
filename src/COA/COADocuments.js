@@ -33,7 +33,7 @@ const COADocument = (props) => {
   const [productName, setProductName] = useState("");
   const [category, setCategory] = useState(1);
   const [productExists, setProductExists] = useState(false);
-  const [productNameMissing, setProductNameMissing] = useState(false);
+  const [validation, setValidation] = useState(false);
 
   const { data, refetch } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
     variables: { productID: productIDInt },
@@ -46,24 +46,27 @@ const COADocument = (props) => {
   );
 
   useEffect(() => {
-    if (
-      product &&
-      product.products[0] &&
-      product.products[0].coaProductID
-    ) {
-      setProductExists(true)
+    if (props.history.action === "PUSH") {
+      refetch();
+      refetchProductInfo();
     }
   }, []);
 
   const currentProductData = props.location.state
-    ? props.location.state
-    : product && product.products[0];
+  ? props.location.state
+  : product && product.products[0];
+
 
   useEffect(() => {
-    if (props.history.action === "PUSH") {
-      refetch();
+
+    if (
+     currentProductData
+    ) {
+      
+      setProductExists(true)
     }
   }, []);
+
 
   const { data: categories } = useQuery(GET_CATEGORIES);
 
@@ -78,8 +81,10 @@ const COADocument = (props) => {
       setProductName(currentProductData.productName);
     }
 
-    if (!currentProductData && productName === "") {
-      setProductNameMissing(true);
+    if ( productName === "") {
+      setValidation(true);
+    } else {
+      setValidation(false);
     }
   }, []);
 
@@ -193,9 +198,9 @@ const COADocument = (props) => {
           onChange={(e) => {
             setProductName(e.target.value);
             if (e.target.value === "") {
-              setProductNameMissing(true);
+              setValidation(true);
             } else {
-              setProductNameMissing(false);
+              setValidation(false);
             }
           }}
         />
@@ -228,7 +233,10 @@ const COADocument = (props) => {
 
               height: "30px",
             }}
-            onChange={(e) => setRegion(e.target.value)}
+            onChange={(e) => {
+              setValidation(false);
+              setRegion(e.target.value)
+            }}
           >
             <option value={"USA"}>USA</option>
 
@@ -254,7 +262,9 @@ const COADocument = (props) => {
             name="categories"
             value={category || currentCategory}
             id="categories"
-            onChange={(e) => setCategory(parseInt(e.target.value))}
+            onChange={(e) => {
+              setValidation(false);
+              setCategory(parseInt(e.target.value))}}
           >
             {dataCategories &&
               dataCategories.length > 0 &&
@@ -270,7 +280,7 @@ const COADocument = (props) => {
 
         <div>
           <StyledButton
-            disabled={productExists || productNameMissing}
+            disabled={validation}
             onClick={handleAddEditProduct}
           >
             Save
@@ -288,7 +298,7 @@ const COADocument = (props) => {
             pathname: `/COA/add/${evaluatedRouteProductID}/`,
         }}
         >
-          <StyledButton disabled={!product || (props.match.params.productID && !productExists)}>
+          <StyledButton disabled={!productExists && props.match.params.productID}>
             Add New COA
           </StyledButton>
         </Link>

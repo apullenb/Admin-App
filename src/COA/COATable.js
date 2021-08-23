@@ -62,9 +62,6 @@ const COATable = ({tableData, productID}) => {
               <th>Actions</th>
             </tr>
             {data.map((item, index) => {
-              console.log(
-                'asd', item
-              )
              return (<Draggable
                 key={item.batchNumber}
                 draggableId={item.batchNumber}
