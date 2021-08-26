@@ -109,16 +109,16 @@ const UserAuthorizationStatusEdit = (props) => {
               whiteSpace: "nowrap",
             }}
           >
-            Date Last Modified:{" "}
+            Date Last Modified:
             {props.location.state.dateModified
               ? props.location.state.modifiedDate
-              : ""}{" "}
+              : ""}
           </label>
           <label>
-            Created by:{" "}
+            Created by:
             {props.location.state.createdBy
               ? props.location.state.createdBy
-              : ""}{" "}
+              : ""}
           </label>
         </div>
 
