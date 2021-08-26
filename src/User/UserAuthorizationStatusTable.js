@@ -270,7 +270,7 @@ const UserAuthorizationStatusTable = () => {
 
 const Wrapper = styled.div`
 max-width: 1600px;
-margin: 3% 3% 3% 5%;
+margin: 3% 3%;
 `
 
 const PermissionTable = styled.div`

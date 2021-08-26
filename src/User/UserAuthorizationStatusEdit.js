@@ -15,6 +15,29 @@ const options = [
 
 const UserAuthorizationStatusEdit = (props) => {
   const [userPermission, setUserPermission] = useState([]);
+  const [shopConfigCountryPermssion, setShopConfigCountryPermission] =
+    useState(null);
+  const [shopConfigKitsPermssion, setShopConfigKitsPermission] = useState(null);
+  const [shopConfigCategoriesPermssion, setShopConfigCategoriesPermission] =
+    useState(null);
+  const [shopConfigProductsPermssion, setShopConfigProductsPermission] =
+    useState(null);
+  const [skinAccountsPermission, setSkinAccountPermission] = useState(null);
+  const [skinEntriesPermission, setSkinEntriesPermission] = useState(null);
+  const [eventCalendarCorpPermsission, setEventCalendarCorpPermission] =
+    useState(null);
+  const [eventCalendarAMBPermsission, setEventCalendarAMBPermission] =
+    useState(null);
+  const [incentiveTripPermission, setIncentiveTripPermission] = useState(null);
+  const [coaCountriesPermission, setCoaCountriesPermission] = useState(null);
+  const [coaKitsPermission, setCoaKitsPermission] = useState(null);
+  const [
+    adminSettingsCategoriesPermission,
+    setAdminSettingsCategoriesPermission,
+  ] = useState(null);
+  const [adminSettingsProductsPermission, setAdminSettingsProductsPermission] =
+    useState(null);
+
   const getPermissions = async (email) => {
     try {
       const requestOptions = {
@@ -42,19 +65,22 @@ const UserAuthorizationStatusEdit = (props) => {
       userPermission.find((item) => {
         return item.area === area;
       }).level;
-
+    console.log("area tst", area, level);
     return level;
   };
- 
-  const formattedDate = props.location.state.createdDate && props.location.state.createdDate.substr(0, props.location.state.createdDate.indexOf("Z"));
-  const dateCreated =
-  moment(formattedDate).format("MM/DD/YYYY");
-  console.log('ddd', props.location.state.modifiedDate)
+
+  const formattedDate =
+    props.location.state.createdDate &&
+    props.location.state.createdDate.substr(
+      0,
+      props.location.state.createdDate.indexOf("Z")
+    );
+  const dateCreated = moment(formattedDate).format("MM/DD/YYYY");
   return (
     <Container>
       <UserTitleContainer>
         <Title>Account Details</Title>
-        <Link to="/Settings/users">Back to List</Link>
+        <Link to="/Settings/users" style={{ display: 'flex', alignSelf: 'center'}}>Back to List</Link>
       </UserTitleContainer>
       <AccountDetailsContainer>
         <div>
@@ -68,18 +94,32 @@ const UserAuthorizationStatusEdit = (props) => {
             style={{
               display: "flex",
               whiteSpace: "nowrap",
-              marginLeft: "27px",
             }}
           >
-            Date Created:
-            <span style={{ marginLeft: "40px" }}>
-              {dateCreated ? dateCreated: ""}
+            <label> Date Created:</label>
+            <span style={{ marginLeft: "68px" }}>
+              {dateCreated ? dateCreated : ""}
             </span>
           </label>
         </div>
-        <div>
-          <p>Date Last Modified: {props.location.state.dateModified ? props.location.state.modifiedDate: "" } </p>
-          <p>Created by: {props.location.state.createdBy ? props.location.state.createdBy: "" } </p>
+        <div style={{ marginLeft: "38px" }}>
+          <label
+            style={{
+              display: "flex",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Date Last Modified:{" "}
+            {props.location.state.dateModified
+              ? props.location.state.modifiedDate
+              : ""}{" "}
+          </label>
+          <label>
+            Created by:{" "}
+            {props.location.state.createdBy
+              ? props.location.state.createdBy
+              : ""}{" "}
+          </label>
         </div>
 
         <div />
@@ -99,7 +139,12 @@ const UserAuthorizationStatusEdit = (props) => {
           </p>
           <div>
             <label name="countries">Countries</label>
-            <StyledSelect value={generateDefaultValue("Countries")}>
+            <StyledSelect
+              value={
+                shopConfigCountryPermssion || generateDefaultValue("Countries")
+              }
+              onChange={(e) => setShopConfigCountryPermission(e.target.value)}
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -107,7 +152,10 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="kits">Kits</label>
-            <StyledSelect value={generateDefaultValue("Kits")}>
+            <StyledSelect
+              value={shopConfigKitsPermssion || generateDefaultValue("Kits")}
+              onChange={(e) => setShopConfigKitsPermission(e.target.value)}
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -115,7 +163,13 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="categories">Categories</label>
-            <StyledSelect value={generateDefaultValue("Categories")}>
+            <StyledSelect
+              value={
+                shopConfigCategoriesPermssion ||
+                generateDefaultValue("Categories")
+              }
+              onChange={(e) => setShopConfigCategoriesPermission(e.target.value)}
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -123,14 +177,19 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="products">Products</label>
-            <StyledSelect value={generateDefaultValue("Products")}>
+            <StyledSelect
+              value={
+                shopConfigProductsPermssion || generateDefaultValue("Products")
+              }
+              onChange={(e) => setShopConfigProductsPermission(e.target.value)}
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
             </StyledSelect>
           </div>
         </div>
-        <div>
+        <div style={{marginTop: '48px'}}>
           <p
             style={{
               fontWeight: "bold",
@@ -143,7 +202,10 @@ const UserAuthorizationStatusEdit = (props) => {
           </p>
           <div>
             <label name="countries">Countries</label>
-            <StyledSelect value={generateDefaultValue("Products")}>
+            <StyledSelect
+             onChange={(e) => setCoaCountriesPermission(e.target.value)}
+              value={coaCountriesPermission || generateDefaultValue("Products")}
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -151,7 +213,10 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="kits">Kits</label>
-            <StyledSelect value={generateDefaultValue("Kits")}>
+            <StyledSelect
+              onChange={(e) => setCoaKitsPermission(e.target.value)}
+              value={coaKitsPermission || generateDefaultValue("Kits")}
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -169,7 +234,13 @@ const UserAuthorizationStatusEdit = (props) => {
           </p>
           <div>
             <label name="categories">Categories</label>
-            <StyledSelect value={generateDefaultValue("Categories")}>
+            <StyledSelect
+            onChange={(e) => setAdminSettingsCategoriesPermission(e.target.value)}
+              value={
+                adminSettingsCategoriesPermission ||
+                generateDefaultValue("Categories")
+              }
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -177,7 +248,13 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="products">Products</label>
-            <StyledSelect value={generateDefaultValue("Products")}>
+            <StyledSelect
+            onChange={(e) => setAdminSettingsProductsPermission(e.target.value)}
+              value={
+                adminSettingsProductsPermission ||
+                generateDefaultValue("Products")
+              }
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -199,7 +276,10 @@ const UserAuthorizationStatusEdit = (props) => {
           </p>
           <div>
             <label name="countries">Accounts</label>
-            <StyledSelect value={generateDefaultValue("Accounts")}>
+            <StyledSelect
+             onChange={(e) => setSkinAccountPermission(e.target.value)}
+              value={skinAccountsPermission || generateDefaultValue("Accounts")}
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -207,7 +287,10 @@ const UserAuthorizationStatusEdit = (props) => {
           </div>
           <div>
             <label name="kits">Entries</label>
-            <StyledSelect value={generateDefaultValue("Entries")}>
+            <StyledSelect
+            onChange={(e) => setSkinEntriesPermission(e.target.value)}
+              value={skinEntriesPermission || generateDefaultValue("Entries")}
+            >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
               ))}
@@ -226,7 +309,13 @@ const UserAuthorizationStatusEdit = (props) => {
             </p>
             <div>
               <label name="countries">Corp Events</label>
-              <StyledSelect value={generateDefaultValue("Corp Events")}>
+              <StyledSelect
+               onChange={(e) => setEventCalendarCorpPermission(e.target.value)}
+                value={
+                  eventCalendarCorpPermsission ||
+                  generateDefaultValue("Corp Events")
+                }
+              >
                 {options.map((option) => (
                   <option key={option.id}>{option.value}</option>
                 ))}
@@ -234,7 +323,13 @@ const UserAuthorizationStatusEdit = (props) => {
             </div>
             <div>
               <label name="kits">AMB Events</label>
-              <StyledSelect value={generateDefaultValue("AMB Events")}>
+              <StyledSelect
+               onChange={(e) => setEventCalendarAMBPermission(e.target.value)}
+                value={
+                  eventCalendarAMBPermsission ||
+                  generateDefaultValue("AMB Events")
+                }
+              >
                 {options.map((option) => (
                   <option key={option.id}>{option.value}</option>
                 ))}
@@ -254,10 +349,15 @@ const UserAuthorizationStatusEdit = (props) => {
             </p>
             <div>
               <label name="countries">Incentive Trip</label>
-              <StyledSelect>
+              <StyledSelect
+              onChange={(e) => setIncentiveTripPermission(e.target.value)}
+              >
                 {options.map((option) => (
                   <option
-                    value={generateDefaultValue("Incentive Trip")}
+                    value={
+                      incentiveTripPermission ||
+                      generateDefaultValue("Incentive Trip")
+                    }
                     key={option.id}
                   >
                     {option.value}
@@ -296,10 +396,11 @@ const BottomAccountConfig = styled.div`
 const Container = styled.div`
   label {
     width: 100px;
+    text-align: left;
+    margin-left: 12px;
   }
-max-width: 1600px;
-margin: 3% 3% 3% 5%;
-
+  max-width: 1600px;
+  margin: 1% 3%;
 `;
 
 const AccountConfigContainer = styled.div`
@@ -307,6 +408,8 @@ const AccountConfigContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   max-width: 89%;
+  align-items: center;
+  margin-top: -40px;
 `;
 
 const UserTitleContainer = styled.div`
@@ -327,7 +430,7 @@ const AccountDetailsContainer = styled.div`
   justify-content: space-between;
   label {
     color: #707070;
-  }
+    }
   p {
     color: #707070;
   }
