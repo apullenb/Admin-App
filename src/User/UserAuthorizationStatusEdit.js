@@ -65,7 +65,6 @@ const UserAuthorizationStatusEdit = (props) => {
       userPermission.find((item) => {
         return item.area === area;
       }).level;
-    console.log("area tst", area, level);
     return level;
   };
 
@@ -90,7 +89,7 @@ const UserAuthorizationStatusEdit = (props) => {
           <label>Name: </label>
           <StyledInput defaultValue={props.location.state.name} />
           <br />
-          <label
+          <span
             style={{
               display: "flex",
               whiteSpace: "nowrap",
@@ -100,7 +99,7 @@ const UserAuthorizationStatusEdit = (props) => {
             <span style={{ marginLeft: "68px" }}>
               {dateCreated ? dateCreated : ""}
             </span>
-          </label>
+          </span>
         </div>
         <div style={{ marginLeft: "38px" }}>
           <label
@@ -117,7 +116,7 @@ const UserAuthorizationStatusEdit = (props) => {
           <label>
             Created by:
             {props.location.state.createdBy
-              ? props.location.state.createdBy
+              ? " " + props.location.state.createdBy
               : ""}
           </label>
         </div>
