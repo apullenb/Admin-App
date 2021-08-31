@@ -81,7 +81,7 @@ const UserAuthorizationStatusTable = () => {
   const currentUsers = filteredUsers.length > 0 ? filteredUsers : users;
 
   return (
-    <div>
+    <Wrapper>
       <div>
         <UserTitleContainer>
           <Title>User Accounts</Title>
@@ -264,15 +264,21 @@ const UserAuthorizationStatusTable = () => {
         totalRows={totalUsers}
         pageOptions={pageOptions}
       />
-    </div>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+max-width: 1600px;
+margin: 3% 3%;
+`
 
 const PermissionTable = styled.div`
   padding: 1px;
   margin: 0;
 
   table {
+
     width: 100%;
     text-align: left;
     tr {
@@ -292,9 +298,12 @@ const PermissionTable = styled.div`
     font-size: 18px;
     font-weight: 400;
     color: rgb(94, 93, 93);
-    margin: 1px 1vw;
-    padding: 5px 1vw;
+
     border-bottom: 1px solid #094a8a;
+    background-color: #FFFFFF;
+    margin-right: 50px;
+    width: 100px;
+
   }
 `;
 
