@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-
-import config from "../config/env-urls";
 import Pagination from "../GlobalComponents/Pagination";
+import config from "../config/env-urls";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+
+import _ from "lodash";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,10 +15,14 @@ import {
 const UserAuthorizationStatusTable = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [sortedUsers, setSortedUsers] = useState([]);
   const [message, setMessage] = useState(true);
-  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [blank, setBlank] = useState(false);
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [sortType, setSortType] = useState("");
 
   const pageOptions = [10, 15, 20];
 
@@ -31,10 +36,11 @@ const UserAuthorizationStatusTable = () => {
         requestOptions
       );
       const data = await response.json();
+      console.log("tst", data);
       setUsers(data.data);
       setBlank(!blank);
       setMessage(!message);
-      setTotalUsers(data.totalRows);
+      setTotalPages(data.data.length / data.pagination.perPage);
     } catch (err) {
       console.error(err.message);
     }
@@ -44,48 +50,77 @@ const UserAuthorizationStatusTable = () => {
     getUsers();
   }, []);
 
-  const handleFilterByName = (e) => {
-    const { value } = e.target;
+  const filterAndSort = () => {
+    let currentUsers = [...users];
 
-    const currentUsers = [...users];
-
-    if (value === "") {
+    if (name === "" && email === "") {
       setFilteredUsers(currentUsers);
-      return;
     }
 
-    const filteredUsers = currentUsers.filter((user) =>
-      user.name.toUpperCase().includes(value.toUpperCase())
-    );
-
-    setFilteredUsers(filteredUsers);
-  };
-
-  const handleFilterByEmail = (e) => {
-    const { value } = e.target;
-
-    const currentUsers = [...users];
-
-    if (value === "") {
-      setFilteredUsers(currentUsers);
-      return;
+    if (email.length > 0) {
+      currentUsers = currentUsers.filter((user) =>
+        user.email.toUpperCase().includes(email.toUpperCase())
+      );
     }
 
-    const filteredUsers = currentUsers.filter((user) =>
-      user.email.toUpperCase().includes(value.toUpperCase())
-    );
+    if (name.length > 0) {
+      currentUsers = currentUsers.filter((user) =>
+        user.name.toUpperCase().includes(name.toUpperCase())
+      );
+    }
 
-    setFilteredUsers(filteredUsers);
+    if (sortBy === "name") {
+      sortType === "asc"
+        ? (currentUsers = currentUsers.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          }))
+        : (currentUsers = currentUsers.sort((a, b) => {
+            return b.name.localeCompare(a.name);
+          }));
+    }
+
+    if (sortBy === "email") {
+      sortType === "asc"
+        ? (currentUsers = currentUsers.sort((a, b) => {
+            return a.email.localeCompare(b.email);
+          }))
+        : (currentUsers = currentUsers.sort((a, b) => {
+            return b.email.localeCompare(a.email);
+          }));
+    }
+
+    if (sortBy === "lastAccessed") {
+      sortType === "asc"
+        ? (currentUsers = currentUsers.sort((a, b) => {
+            return a.lastLoginDate.localeCompare(b.lastLoginDate);
+          }))
+        : (currentUsers = currentUsers.sort((a, b) => {
+            return b.lastLoginDate.localeCompare(a.lastLoginDate);
+          }));
+    }
+
+    setFilteredUsers(currentUsers);
   };
 
-  const currentUsers = filteredUsers.length > 0 ? filteredUsers : users;
+  useEffect(() => {
+    filterAndSort();
+  }, [name, email, sortBy, sortType]);
+
+  const currentUsers =
+    sortedUsers.length > 0 || filteredUsers.length > 0 ? filteredUsers : users;
 
   return (
     <Wrapper>
       <div>
         <UserTitleContainer>
           <Title>User Accounts</Title>
-          <StyledButton>Add User</StyledButton>
+          <Link
+            to={{
+              pathname: `/Settings/users/add`,
+            }}
+          >
+            <StyledButton>Add User</StyledButton>
+          </Link>
         </UserTitleContainer>
       </div>
       <PermissionTable>
@@ -98,20 +133,18 @@ const UserAuthorizationStatusTable = () => {
                   style={{
                     width: "229px",
                     marginBottom: "15px",
-                   
                   }}
-                  onChange={handleFilterByName}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </th>
               <th>
                 <StyledInput
                   placeholder="Email"
                   style={{
-                   
                     width: "271px",
                     marginBottom: "15px",
                   }}
-                  onChange={handleFilterByEmail}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </th>
             </tr>
@@ -125,22 +158,47 @@ const UserAuthorizationStatusTable = () => {
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
-                    icon={faChevronDown}
+                    onClick={() => {
+                      setSortBy("name");
+                      if (sortType === "" || sortType === "des") {
+                        setSortType("asc");
+                      }
+                      if (sortType === "asc") {
+                        setSortType("des");
+                      }
+                    }}
+                    icon={
+                      sortBy === "name" && sortType === "asc"
+                        ? faChevronUp
+                        : faChevronDown
+                    }
+                  />
+                  <FontAwesomeIcon
+                    style={{
+                      cursor: "pointer",
+                      color: "#0F4B8F",
+                    }}
+                    onClick={() => {
+                      setSortBy("name");
+                      if (sortType === "" || sortType === "des") {
+                        setSortType("asc");
+                      }
+                      if (sortType === "asc") {
+                        setSortType("des");
+                      }
+                    }}
+                    icon={
+                      sortBy === "name" && sortType === "asc"
+                        ? faChevronDown
+                        : faChevronUp
+                    }
                   />
                 </span>
                 <span
                   style={{
                     verticalAlign: "middle",
                   }}
-                >
-                  <FontAwesomeIcon
-                    style={{
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    icon={faChevronUp}
-                  />
-                </span>
+                ></span>
               </th>
               <th className="head">
                 Email
@@ -151,7 +209,20 @@ const UserAuthorizationStatusTable = () => {
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
-                    icon={faChevronDown}
+                    onClick={() => {
+                      setSortBy("email");
+                      if (sortType === "" || sortType === "des") {
+                        setSortType("asc");
+                      }
+                      if (sortType === "asc") {
+                        setSortType("des");
+                      }
+                    }}
+                    icon={
+                      sortBy === "email" && sortType === "asc"
+                        ? faChevronDown
+                        : faChevronUp
+                    }
                   />
                 </span>
                 <span
@@ -164,7 +235,20 @@ const UserAuthorizationStatusTable = () => {
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
-                    icon={faChevronUp}
+                    onClick={() => {
+                      setSortBy("email");
+                      if (sortType === "" || sortType === "des") {
+                        setSortType("asc");
+                      }
+                      if (sortType === "asc") {
+                        setSortType("des");
+                      }
+                    }}
+                    icon={
+                      sortBy === "email" && sortType === "asc"
+                        ? faChevronUp
+                        : faChevronDown
+                    }
                   />
                 </span>
               </th>
@@ -177,7 +261,20 @@ const UserAuthorizationStatusTable = () => {
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
-                    icon={faChevronDown}
+                    onClick={() => {
+                      setSortBy("lastAccessed");
+                      if (sortType === "" || sortType === "des") {
+                        setSortType("asc");
+                      }
+                      if (sortType === "asc") {
+                        setSortType("des");
+                      }
+                    }}
+                    icon={
+                      sortBy === "lastAccessed" && sortType === "asc"
+                        ? faChevronUp
+                        : faChevronDown
+                    }
                   />
                 </span>
                 <span
@@ -190,36 +287,24 @@ const UserAuthorizationStatusTable = () => {
                       cursor: "pointer",
                       color: "#0F4B8F",
                     }}
-                    icon={faChevronUp}
+                    onClick={() => {
+                      setSortBy("lastAccessed");
+                      if (sortType === "" || sortType === "des") {
+                        setSortType("asc");
+                      }
+                      if (sortType === "asc") {
+                        setSortType("des");
+                      }
+                    }}
+                    icon={
+                      sortBy === "lastAccessed" && sortType === "asc"
+                        ? faChevronDown
+                        : faChevronUp
+                    }
                   />
                 </span>
               </th>
-              <th className="head">
-                Actions
-                <span style={{ verticalAlign: "middle" }}>
-                  <FontAwesomeIcon
-                    style={{
-                      marginLeft: "25px",
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    icon={faChevronDown}
-                  />
-                </span>
-                <span
-                  style={{
-                    verticalAlign: "middle",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    style={{
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    icon={faChevronUp}
-                  />
-                </span>
-              </th>
+              <th className="head">Actions</th>
             </tr>
           </thead>
           {currentUsers && currentUsers.length > 0 && (
@@ -261,7 +346,7 @@ const UserAuthorizationStatusTable = () => {
       </PermissionTable>
       <Pagination
         getRows={getUsers}
-        totalRows={totalUsers}
+        totalPages={totalPages}
         pageOptions={pageOptions}
       />
     </Wrapper>
@@ -269,27 +354,24 @@ const UserAuthorizationStatusTable = () => {
 };
 
 const Wrapper = styled.div`
-max-width: 1600px;
-margin: 3% 3%;
-`
+  margin-left: 9%;
+  margin-right: 9%;
+`;
 
 const PermissionTable = styled.div`
   padding: 1px;
   margin: 0;
 
   table {
-
     width: 100%;
     text-align: left;
     tr {
       &:nth-child(even) {
         background: #f4fafe;
-  
       }
 
       td {
         padding: 5px 0;
-  
       }
     }
   }
@@ -300,10 +382,9 @@ const PermissionTable = styled.div`
     color: rgb(94, 93, 93);
 
     border-bottom: 1px solid #094a8a;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     margin-right: 50px;
     width: 100px;
-
   }
 `;
 

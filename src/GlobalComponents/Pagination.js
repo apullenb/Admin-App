@@ -47,7 +47,7 @@ function Pagination(props) {
         Page:{" "}
         <div className="current">
           {" "}
-          {pageNo} of {totalPages}
+          {pageNo}
         </div>
         Per Page:
         <select

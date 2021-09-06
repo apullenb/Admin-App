@@ -13,7 +13,8 @@ const options = [
   { id: 6, value: "View, Edit and Approve" },
 ];
 
-const UserAuthorizationStatusEdit = (props) => {
+const UserAuthorizationStatusAddEdit = (props) => {
+
   const [userPermission, setUserPermission] = useState([]);
   const [shopConfigCountryPermssion, setShopConfigCountryPermission] =
     useState(null);
@@ -56,7 +57,9 @@ const UserAuthorizationStatusEdit = (props) => {
   };
 
   useEffect(() => {
+    if( props.location.state && props.location.state.email){
     getPermissions(props.location.state.email);
+    }
   }, []);
 
   const generateDefaultValue = (area) => {
@@ -68,13 +71,13 @@ const UserAuthorizationStatusEdit = (props) => {
     return level;
   };
 
-  const formattedDate =
-    props.location.state.createdDate &&
-    props.location.state.createdDate.substr(
-      0,
-      props.location.state.createdDate.indexOf("Z")
-    );
-  const dateCreated = moment(formattedDate).format("MM/DD/YYYY");
+  const createdDate =
+  props.location.state && props.location.state.createdDate 
+  const dateCreated = createdDate ?  moment(createdDate).format("MM/DD/YYYY h:mm:ss a").toUpperCase(): ""
+
+  const lastModified =  props.location.state && props.location.state.modifiedDate
+  const dateLastModified = lastModified ?  moment(lastModified).format("MM/DD/YYYY h:mm:ss a").toUpperCase(): ""
+
   return (
     <Container>
       <UserTitleContainer>
@@ -84,10 +87,10 @@ const UserAuthorizationStatusEdit = (props) => {
       <AccountDetailsContainer>
         <div>
           <label>Email</label>
-          <StyledInput defaultValue={props.location.state.email} />
+          <StyledInput defaultValue={props.location.state &&props.location.state.email || ''} />
           <br />
           <label>Name: </label>
-          <StyledInput defaultValue={props.location.state.name} />
+          <StyledInput defaultValue={props.location.state && props.location.state.name || ''} />
           <br />
           <span
             style={{
@@ -96,12 +99,12 @@ const UserAuthorizationStatusEdit = (props) => {
             }}
           >
             <label> Date Created:</label>
-            <span style={{ marginLeft: "68px" }}>
-              {dateCreated ? dateCreated : ""}
-            </span>
+            <DateCreatedContainer>
+              {dateCreated}
+            </DateCreatedContainer>
           </span>
         </div>
-        <div style={{ marginLeft: "38px" }}>
+        <DateModifiedContainer>
           <label
             style={{
               display: "flex",
@@ -109,17 +112,16 @@ const UserAuthorizationStatusEdit = (props) => {
             }}
           >
             Date Last Modified:
-            {props.location.state.dateModified
-              ? props.location.state.modifiedDate
-              : ""}
+            {dateLastModified}
           </label>
           <label>
+            <div/>
             Created by:
-            {props.location.state.createdBy
+            { props.location.state && props.location.state.createdBy
               ? " " + props.location.state.createdBy
               : ""}
           </label>
-        </div>
+        </DateModifiedContainer>
 
         <div />
       </AccountDetailsContainer>
@@ -132,6 +134,7 @@ const UserAuthorizationStatusEdit = (props) => {
               fontSize: "20px",
               color: "#707070",
               textAlign: "left",
+              
             }}
           >
             Shopping Configuration
@@ -269,6 +272,7 @@ const UserAuthorizationStatusEdit = (props) => {
               fontSize: "20px",
               color: "#707070",
               textAlign: "left",
+              marginTop: '-30px'
             }}
           >
             Skincare Challenge
@@ -399,16 +403,21 @@ const Container = styled.div`
     margin-left: 12px;
   }
   max-width: 1600px;
-  margin: 1% 3%;
+  margin-left: 9%;
+  margin-right: 9%;
+  @media screen and (max-width: 1200px) {
+    margin-left: 3%;
+    margin-right: 3%;
+  }
 `;
 
 const AccountConfigContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  max-width: 89%;
   align-items: center;
   margin-top: -40px;
+  max-width: 1225px;
 `;
 
 const UserTitleContainer = styled.div`
@@ -427,6 +436,7 @@ const AccountDetailsContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
   label {
     color: #707070;
     }
@@ -437,13 +447,26 @@ const AccountDetailsContainer = styled.div`
 const StyledInput = styled.input`
   border: 2px solid #0f4b8f;
   width: 271px;
-  margin-left: 65px;
+  @media screen and (min-width: 1400px) {
+    margin-left: 65px;
+  }
 `;
 
 const StyledSelect = styled.select`
   border: 2px solid #0f4b8f;
   width: 271px;
-  margin-left: 65px;
+  @media screen and (min-width: 1400px) {
+    margin-left: 65px;
+  }
 `;
 
-export default UserAuthorizationStatusEdit;
+const DateCreatedContainer = styled.div`
+@media screen and (min-width: 1400px) {
+  margin-left: 65px;
+}
+`
+const DateModifiedContainer = styled.div`
+padding-right: min(150px, 70%);
+`
+
+export default UserAuthorizationStatusAddEdit;
