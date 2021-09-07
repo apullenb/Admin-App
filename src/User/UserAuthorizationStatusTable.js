@@ -36,7 +36,6 @@ const UserAuthorizationStatusTable = () => {
         requestOptions
       );
       const data = await response.json();
-      console.log("tst", data);
       setUsers(data.data);
       setBlank(!blank);
       setMessage(!message);
