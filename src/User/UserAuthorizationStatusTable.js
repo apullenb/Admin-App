@@ -3,6 +3,7 @@ import Pagination from "../GlobalComponents/Pagination";
 import config from "../config/env-urls";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import moment from "moment";
 
 import _ from "lodash";
 
@@ -21,8 +22,14 @@ const UserAuthorizationStatusTable = () => {
   const [blank, setBlank] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [sortType, setSortType] = useState("");
+  const [sortType, setSortType] = useState("name");
+  const [sortDirectionAsc, setSortDirectionAsc] = useState(false);
+  // const [sortByName, setSortByName] = useState(true);
+  // const [sortByEmail, setSortByEmail] = useState(false);
+  // const [sortByLastAccessed, setSortByLastAccessed] = useState(false);
+  // const [sortTypeName, setSortTypeName] = useState("asc");
+  // const [sortTypeEmail, setSortTypeEmail] = useState("asc");
+  // const [sortTypeLastAccessed, setSortTypeLastAccessed] = useState("asc");
 
   const pageOptions = [10, 15, 20];
 
@@ -36,7 +43,8 @@ const UserAuthorizationStatusTable = () => {
         requestOptions
       );
       const data = await response.json();
-      setUsers(data.data);
+      const sortedData = data.data.sort((a, b) => a.name.localeCompare(b.name));
+      setUsers(sortedData);
       setBlank(!blank);
       setMessage(!message);
       setTotalPages(data.data.length / data.pagination.perPage);
@@ -68,42 +76,33 @@ const UserAuthorizationStatusTable = () => {
       );
     }
 
-    if (sortBy === "name") {
-      sortType === "asc"
-        ? (currentUsers = currentUsers.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-          }))
-        : (currentUsers = currentUsers.sort((a, b) => {
-            return b.name.localeCompare(a.name);
-          }));
-    }
+    currentUsers = currentUsers.sort((a, b) => {
+      if (!a[sortType]) return 1;
+      if (!b[sortType]) return -1;
+      if (typeof a[sortType] === "string") {
+        return sortDirectionAsc
+          ? a[sortType].localeCompare(b[sortType])
+          : b[sortType].localeCompare(a[sortType]);
+      }
+      const direction = sortDirectionAsc ? -1 : 1;
 
-    if (sortBy === "email") {
-      sortType === "asc"
-        ? (currentUsers = currentUsers.sort((a, b) => {
-            return a.email.localeCompare(b.email);
-          }))
-        : (currentUsers = currentUsers.sort((a, b) => {
-            return b.email.localeCompare(a.email);
-          }));
-    }
-
-    if (sortBy === "lastAccessed") {
-      sortType === "asc"
-        ? (currentUsers = currentUsers.sort((a, b) => {
-            return a.lastLoginDate.localeCompare(b.lastLoginDate);
-          }))
-        : (currentUsers = currentUsers.sort((a, b) => {
-            return b.lastLoginDate.localeCompare(a.lastLoginDate);
-          }));
-    }
-
+      return a[sortType] > b[sortType] ? -1 * direction : 1 * direction;
+    });
     setFilteredUsers(currentUsers);
+  };
+
+  const handleSort = (type) => {
+    if (type === sortType) {
+      setSortDirectionAsc(!sortDirectionAsc);
+    } else {
+      setSortDirectionAsc(false);
+    }
+    setSortType(type);
   };
 
   useEffect(() => {
     filterAndSort();
-  }, [name, email, sortBy, sortType]);
+  }, [name, email, sortType, sortDirectionAsc]);
 
   const currentUsers =
     sortedUsers.length > 0 || filteredUsers.length > 0 ? filteredUsers : users;
@@ -148,50 +147,19 @@ const UserAuthorizationStatusTable = () => {
               </th>
             </tr>
             <tr>
-              <th className="head">
+              <th onClick={() => handleSort("name")} className="head">
                 First - Last Name
                 <span style={{ verticalAlign: "middle" }}>
-                  <FontAwesomeIcon
-                    style={{
-                      marginLeft: "25px",
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    onClick={() => {
-                      setSortBy("name");
-                      if (sortType === "" || sortType === "des") {
-                        setSortType("asc");
-                      }
-                      if (sortType === "asc") {
-                        setSortType("des");
-                      }
-                    }}
-                    icon={
-                      sortBy === "name" && sortType === "asc"
-                        ? faChevronUp
-                        : faChevronDown
-                    }
-                  />
-                  <FontAwesomeIcon
-                    style={{
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    onClick={() => {
-                      setSortBy("name");
-                      if (sortType === "" || sortType === "des") {
-                        setSortType("asc");
-                      }
-                      if (sortType === "asc") {
-                        setSortType("des");
-                      }
-                    }}
-                    icon={
-                      sortBy === "name" && sortType === "asc"
-                        ? faChevronDown
-                        : faChevronUp
-                    }
-                  />
+                  {sortType === "name" && (
+                    <FontAwesomeIcon
+                      style={{
+                        marginLeft: "15px",
+                        cursor: "pointer",
+                        color: "#0F4B8F",
+                      }}
+                      icon={sortDirectionAsc ? faChevronUp : faChevronDown}
+                    />
+                  )}
                 </span>
                 <span
                   style={{
@@ -199,109 +167,45 @@ const UserAuthorizationStatusTable = () => {
                   }}
                 ></span>
               </th>
-              <th className="head">
+              <th onClick={() => handleSort("email")} className="head">
                 Email
                 <span style={{ verticalAlign: "middle" }}>
-                  <FontAwesomeIcon
-                    style={{
-                      marginLeft: "25px",
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    onClick={() => {
-                      setSortBy("email");
-                      if (sortType === "" || sortType === "des") {
-                        setSortType("asc");
-                      }
-                      if (sortType === "asc") {
-                        setSortType("des");
-                      }
-                    }}
-                    icon={
-                      sortBy === "email" && sortType === "asc"
-                        ? faChevronDown
-                        : faChevronUp
-                    }
-                  />
+                  {sortType === "email" && (
+                    <FontAwesomeIcon
+                      style={{
+                        marginLeft: "15px",
+                        cursor: "pointer",
+                        color: "#0F4B8F",
+                      }}
+                      icon={sortDirectionAsc ? faChevronUp : faChevronDown}
+                    />
+                  )}
                 </span>
                 <span
                   style={{
                     verticalAlign: "middle",
                   }}
-                >
-                  <FontAwesomeIcon
-                    style={{
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    onClick={() => {
-                      setSortBy("email");
-                      if (sortType === "" || sortType === "des") {
-                        setSortType("asc");
-                      }
-                      if (sortType === "asc") {
-                        setSortType("des");
-                      }
-                    }}
-                    icon={
-                      sortBy === "email" && sortType === "asc"
-                        ? faChevronUp
-                        : faChevronDown
-                    }
-                  />
-                </span>
+                ></span>
               </th>
-              <th className="head">
+              <th className="head" onClick={() => handleSort("lastLoginDate")}>
                 Last Accessed
                 <span style={{ verticalAlign: "middle" }}>
-                  <FontAwesomeIcon
-                    style={{
-                      marginLeft: "25px",
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    onClick={() => {
-                      setSortBy("lastAccessed");
-                      if (sortType === "" || sortType === "des") {
-                        setSortType("asc");
-                      }
-                      if (sortType === "asc") {
-                        setSortType("des");
-                      }
-                    }}
-                    icon={
-                      sortBy === "lastAccessed" && sortType === "asc"
-                        ? faChevronUp
-                        : faChevronDown
-                    }
-                  />
+                  {sortType === "lastLoginDate" && (
+                    <FontAwesomeIcon
+                      style={{
+                        marginLeft: "15px",
+                        cursor: "pointer",
+                        color: "#0F4B8F",
+                      }}
+                      icon={sortDirectionAsc ? faChevronUp : faChevronDown}
+                    />
+                  )}
                 </span>
                 <span
                   style={{
                     verticalAlign: "middle",
                   }}
-                >
-                  <FontAwesomeIcon
-                    style={{
-                      cursor: "pointer",
-                      color: "#0F4B8F",
-                    }}
-                    onClick={() => {
-                      setSortBy("lastAccessed");
-                      if (sortType === "" || sortType === "des") {
-                        setSortType("asc");
-                      }
-                      if (sortType === "asc") {
-                        setSortType("des");
-                      }
-                    }}
-                    icon={
-                      sortBy === "lastAccessed" && sortType === "asc"
-                        ? faChevronDown
-                        : faChevronUp
-                    }
-                  />
-                </span>
+                ></span>
               </th>
               <th className="head">Actions</th>
             </tr>
@@ -316,7 +220,10 @@ const UserAuthorizationStatusTable = () => {
                       {user.email}
                       {blank}
                     </td>
-                    <td>{user.lastLoginDate}</td>
+                    <td>
+                      {user.lastLoginDate &&
+                        moment(user.lastLoginDate).format()}
+                    </td>
                     <td>
                       <Link
                         to={{
@@ -343,11 +250,7 @@ const UserAuthorizationStatusTable = () => {
           )}
         </table>
       </PermissionTable>
-      <Pagination
-        getRows={getUsers}
-        totalPages={totalPages}
-        pageOptions={pageOptions}
-      />
+      <Pagination getRows={getUsers} pageOptions={pageOptions} />
     </Wrapper>
   );
 };
@@ -379,7 +282,8 @@ const PermissionTable = styled.div`
     font-size: 18px;
     font-weight: 400;
     color: rgb(94, 93, 93);
-
+    user-select: none;
+    cursor: pointer;
     border-bottom: 1px solid #094a8a;
     background-color: #ffffff;
     margin-right: 50px;

@@ -71,11 +71,14 @@ const UserAuthorizationStatusAddEdit = (props) => {
     return level;
   };
 
-  const createdDate =
-  props.location.state && props.location.state.createdDate 
-  const dateCreated = createdDate ?  moment(createdDate).format("MM/DD/YYYY h:mm:ss a").toUpperCase(): ""
 
-  const lastModified =  props.location.state && props.location.state.modifiedDate
+  const formattedDate = props.location.state.createdDate &&
+  props.location.state.createdDate.substr(0, props.location.state.createdDate.indexOf("Z"));
+
+  const createdDate = formattedDate ?  moment(formattedDate).format("MM/DD/YYYY h:mm:ss a").toUpperCase(): ""
+
+  const lastModified =  props.location.state.createdDate &&
+  props.location.state.createdDate.substr(0, props.location.state.createdDate.indexOf("Z"));
   const dateLastModified = lastModified ?  moment(lastModified).format("MM/DD/YYYY h:mm:ss a").toUpperCase(): ""
 
   return (
@@ -100,7 +103,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
           >
             <label> Date Created:</label>
             <DateCreatedContainer>
-              {dateCreated}
+              {createdDate}
             </DateCreatedContainer>
           </span>
         </div>
