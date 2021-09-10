@@ -36,7 +36,7 @@ import ApolloClient from  'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import COADocument from './COA/COADocuments';
 import UserAuthorizationStatusTable from './User/UserAuthorizationStatusTable';
-import UserAuthorizationStatusEdit from './User/UserAuthorizationStatusEdit';
+import UserAuthorizationStatusAddEdit from './User/UserAuthorizationStatusAddEdit';
 
 
 const client = new ApolloClient({
@@ -96,7 +96,8 @@ function App() {
           <Route path="/Permissions" component={Permissions} />
           <Route path="/COA/:productID" component={COA}/>
 
-          <Route exact path="/Settings/users/edit/:userID" component={UserAuthorizationStatusEdit}/>
+          <Route exact path="/Settings/users/add" component={UserAuthorizationStatusAddEdit}/>
+          <Route exact path="/Settings/users/edit/:userID" component={UserAuthorizationStatusAddEdit}/>
           <Route path="/Settings/users" component={UserAuthorizationStatusTable}/>
 
         </Switch>       
