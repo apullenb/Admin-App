@@ -67,6 +67,8 @@ const UserAuthorizationStatusAddEdit = (props) => {
       userPermission && userPermission.length > 0 &&
       userPermission.find((item) => {
         return item.area === area;
+      }) && userPermission.find((item) => {
+        return item.area === area;
       }).level
     if(level) {
     return level
