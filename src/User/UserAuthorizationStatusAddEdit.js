@@ -64,20 +64,25 @@ const UserAuthorizationStatusAddEdit = (props) => {
 
   const generateDefaultValue = (area) => {
     const level =
-      userPermission.length > 0 &&
+      userPermission && userPermission.length > 0 &&
       userPermission.find((item) => {
         return item.area === area;
-      }).level;
-    return level;
+      }) && userPermission.find((item) => {
+        return item.area === area;
+      }).level
+    if(level) {
+    return level
+    } else 
+    return options[0].value
   };
 
 
-  const formattedDate = props.location.state.createdDate &&
+  const formattedDate = props.location.state && props.location.state.createdDate &&
   props.location.state.createdDate.substr(0, props.location.state.createdDate.indexOf("Z"));
 
   const createdDate = formattedDate ?  moment(formattedDate).format("MM/DD/YYYY h:mm:ss a").toUpperCase(): ""
 
-  const lastModified =  props.location.state.createdDate &&
+  const lastModified =  props.location.state && props.location.state.createdDate &&
   props.location.state.createdDate.substr(0, props.location.state.createdDate.indexOf("Z"));
   const dateLastModified = lastModified ?  moment(lastModified).format("MM/DD/YYYY h:mm:ss a").toUpperCase(): ""
 
