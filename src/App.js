@@ -38,6 +38,7 @@ import COADocument from './COA/COADocuments';
 import UserAuthorizationStatusTable from './User/UserAuthorizationStatusTable';
 import UserAuthorizationStatusAddEdit from './User/UserAuthorizationStatusAddEdit';
 import GlowEntryList from './GlowChallenge/GlowEntryList';
+import GCEntryEdit from './GlowChallenge/GCEntryEdit';
 
 
 const client = new ApolloClient({
@@ -86,8 +87,9 @@ function App() {
           <Route exact path="/Challenge/Accounts" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
           <Route path="/Challenge/Accounts/:accountid" component={AccountEdit} />
           <Route path="/Challenge/Entries" component={EntryList} />
-          <Route path="/Challenge/Glow-Entries" component={GlowEntryList} />
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
+          <Route path="/Challenge/Glow-Entries" component={GlowEntryList} />
+          <Route path="/Challenge/Glow-Entries/:entryId" component={GCEntryEdit} />
 
           <Route path="/COA/edit/:productID/:coaDocumentID" component={EditCOA} />
           <Route path="/COA/add/:productID/" component={AddCOA} />
