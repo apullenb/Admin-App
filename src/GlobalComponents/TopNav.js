@@ -37,9 +37,10 @@ function TopNav() {
                   <NavDropdown.Item href="/Shopping/Categories">Categories</NavDropdown.Item>
                   <NavDropdown.Item href="/Shopping/Products">Products</NavDropdown.Item>
                 </NavDropdown> 
-                <NavDropdown title="Skincare Challenge" id="basic-nav-dropdown">
+                <NavDropdown title="Challenges" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/Challenge/Accounts">Accounts</NavDropdown.Item>
-                  <NavDropdown.Item href="/Challenge/Entries">Entries</NavDropdown.Item>
+                  <NavDropdown.Item href="/Challenge/Entries">Skincare Entries</NavDropdown.Item>
+                  <NavDropdown.Item href="/Challenge/Glow-Entries">Glow Entries</NavDropdown.Item>
                 </NavDropdown>    
                  { navLinks.map ((link, i) => {
                   return (
