@@ -27,10 +27,10 @@ export const getEntries = (perPage = 10, pageNo = 1, sort = "entries.id", sortDi
         dispatch({type:GET_ENTRIES_FAILURE, payload:error});
     })
 };
-export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "entries.id", sortDirection = "asc") => (dispatch) => { // **UPDATE AFTER GLOW CHALLENGE BACKEND IS DONE**
+export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "glowEntryId", sortDirection = "asc") => (dispatch) => { 
   dispatch({type: GET_ENTRIES_START});
-  return axios // ** UPDATE BASE URL WHEN GLOW CHALLENGE BACKEND IS DONE **
-  .get(`${config.SKINCAREBASEURL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
+  return axios 
+  .get(`${config.SKINCAREBASEURL}/api/challenge/all-glow-entries?pageNo=${pageNo}&perPage=${perPage}&orderBy=${sort}&sortDirection=${sortDirection}`)
   .then(res=>{
       dispatch({type:GET_ENTRIES_SUCCESS, payload:res.data});
   })

@@ -6,9 +6,9 @@ import '../SkincareChallenge/SCEntryList/EntryList.scss'
 import { CaretUp, CaretDown} from "react-bootstrap-icons";
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAccounts, filterAccounts} from './../redux/actions/Skincare/skincareActions';
+import { getGlowEntries, filterAccounts} from './../redux/actions/Skincare/skincareActions';
 import { getEntries } from './../redux/actions/Skincare/skincareActions';
-import GlowEntries from "./GlowEntries";
+import GlowEntries from "./GlowEntry";
 
 function GlowEntryList() {
     const [message, setMessage] = useState(true);
@@ -27,16 +27,16 @@ function GlowEntryList() {
     const [filter, setFilter] = useState("");
   
     const dispatch = useDispatch();
-    const { accounts } = useSelector(state => state.entries);
-  
+    const { entries } = useSelector(state => state.entries);
+  console.log(entries)
     useEffect(() => {
-      dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
+      dispatch(getGlowEntries());
     }, []);
   
   
     useEffect(() => {
-  setLocalAccounts(accounts);
-    }, [accounts]);
+  setLocalAccounts(entries);
+    }, [entries]);
   
     
     const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
@@ -62,7 +62,7 @@ function GlowEntryList() {
   setCol(e.target.id);
   setFilter(e.target.value);
   if (e.target.value === "") {
-    dispatch(getAccounts());
+    dispatch(getGlowEntries());
   } else {
     dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
   }
@@ -139,21 +139,30 @@ function GlowEntryList() {
               </th>
               <th id="filter">
               <select id="challenge" onChange={(e) => {disableInput(e) ; handleChange(e)}}>
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
+                <option value="">{' '}</option>
+                <option value="2021 Q2">2021 Q2</option>
+                <option value="2021 Q2">2021 Q3</option>
+                <option value="2021 Q2">2021 Q2</option>
+                <option value="2021 Q2">2021 Q2</option>
               </select>
+              </th>
+              <th id="filter">
+              <input type="checkbox" id='day' value='1' onChange={(e) => {handleChange(e)}} />
+              </th>
+              <th id="filter">
+              <input type="checkbox" id='day' value='30' onChange={(e) => {handleChange(e)}} />
+              </th>
+              <th id="filter">
+              <input type="checkbox" id='day' value='60' onChange={(e) => {handleChange(e)}} />
+              </th>
+              <th id="filter">
+              <input type="checkbox" id='day' value='90' onChange={(e) => {handleChange(e)}} />
               </th>
             </tr><tr></tr>
               <tr>
                 <th className="head">Entry ID
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"id","asc")}}/>
                 <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"id","desc")}}/> 
-                </th>
-                <th className="head">Name
-                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","asc")}}/>
-                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","desc")}}/> 
                 </th>
                 <th className="head">Email
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"email","asc")}}/>
@@ -163,8 +172,16 @@ function GlowEntryList() {
                 <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"ambassadorId","asc")}}/>
                 <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"ambassadorId","desc")}}/> 
                 </th>
+                <th className="head">Name
+                <CaretUp className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","asc")}}/>
+                <CaretDown className="caretIcons" onClick={() => {accountsSort(perPage,pageNo,"name","desc")}}/> 
+                </th>
                 <th className="head">Challenge
                 </th>
+                <th className="head">1</th>
+                <th className="head">30</th>
+                <th className="head">60</th>
+                <th className="head">90</th>
                 <th className="head">Actions </th>
               </tr>
             </thead>
@@ -172,20 +189,23 @@ function GlowEntryList() {
               {localAccounts.data.map((user, i) => {
                 return (
                   <tr key={i} user = {user} id="row">
-                    <td>{user.id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}{blank}</td>
-                    <td>{user.ambassadorId}</td>
-                    <td>{user.lastLoginDate}</td>
-                    <td>{user.lastChallenge}{message}</td>
+                    <td>{user.glowEntryId}</td>
+                    <td>{user.email || 'test@testdata.com'}{blank}</td>
+                    <td>{user.ambassadorId || '7105698'}</td>
+                    <td>{user.name || 'test name'}</td>
+                    <td>{user.challenge || '2021 Q2'}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                       <Link
                         to={{
-                          pathname: `/Challenge/Accounts/${user.id}`,
+                          pathname: `/Challenge/Glow-Entry/${user.glowEntryId}`,
                           state: user,
                         }}
                       >
-                        <button id="edit">Edit</button>
+                        <button id="edit">View</button>
                       </Link>
                     </td>
                   </tr>
@@ -197,7 +217,7 @@ function GlowEntryList() {
           <h3>{message}</h3>
         </AccountTable>
 
-        <Pagination getEntries={getAccounts()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
+        <Pagination getEntries={getGlowEntries()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
         </div>
     )
 }
