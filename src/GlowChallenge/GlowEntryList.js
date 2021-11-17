@@ -33,7 +33,7 @@ function GlowEntryList() {
   const { entries } = useSelector((state) => state.entries);
 
   useEffect(() => {
-    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection));
+    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
   }, []);
 
   useEffect(() => {
@@ -48,20 +48,24 @@ function GlowEntryList() {
 
   const updatePerPage = (val) => {
     setPerPage(val);
-    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection));
+    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
   };
 
   const updatePageNo = (val) => {
     setPageNo(val);
-    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection));
+    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
   };
 
   const handleChange = (e) => {
-      const column = e.target.id === col ? "glowEntryId" : e.target.id
+      const column = e.target.type === 'checkbox' && e.target.id === col ? "glowEntryId" : e.target.id
+      const searchTerm = e.target.type === 'text' && localAccounts.length > 0 ? e.target.value : ''
+      setFilter(searchTerm)
       setCol(column)
       setColSort(e.target.id)
-    dispatch(getGlowEntries( perPage, pageNo, column, sortDirection));
+    dispatch(getGlowEntries( perPage, pageNo, column, sortDirection, searchTerm));
   };
+
+  
 
   const disableInput = (e) => {
     if (e.target.value === "") {
@@ -81,7 +85,7 @@ function GlowEntryList() {
       setNameInput(true);
       setIdInput(true);
       setAmbassadorIdInput(true);
-    } else if (e.target.id === "ambassadorID") {
+    } else if (e.target.id === "ambassadorId") {
       setNameInput(true);
       setEmailInput(true);
       setIdInput(true);
@@ -109,17 +113,6 @@ function GlowEntryList() {
               </th>
               <th id="filter">
                 <input
-                  disabled={nameInput}
-                  id="name"
-                  type="text"
-                  onChange={(e) => {
-                    disableInput(e);
-                    handleChange(e);
-                  }}
-                />
-              </th>
-              <th id="filter">
-                <input
                   disabled={emailInput}
                   id="email"
                   type="text"
@@ -133,6 +126,17 @@ function GlowEntryList() {
                 <input
                   disabled={ambassadorIdInput}
                   id="ambassadorId"
+                  type="text"
+                  onChange={(e) => {
+                    disableInput(e);
+                    handleChange(e);
+                  }}
+                />
+              </th>
+              <th id="filter">
+                <input
+                  disabled={nameInput}
+                  id="name"
                   type="text"
                   onChange={(e) => {
                     disableInput(e);
