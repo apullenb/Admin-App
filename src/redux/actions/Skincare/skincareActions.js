@@ -32,6 +32,7 @@ export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "glowEntryId", s
   return axios 
   .get(`${config.SKINCAREBASEURL}/api/challenge/all-glow-entries?pageNo=${pageNo}&perPage=${perPage}&orderBy=${sort}&sortDirection=${sortDirection}&filter=${filter}`)
   .then(res=>{
+    console.log(res)
       dispatch({type:GET_ENTRIES_SUCCESS, payload:res.data});
   })
   .catch(error=>{
@@ -44,6 +45,7 @@ export const getAccounts = (perPage = 10, pageNo = 1, sort = "users.id", sortDir
     return axios
     .get(`${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
     .then(res=>{
+     
         dispatch({type:GET_ACCOUNTS_SUCCESS, payload:res.data});
     })
     .catch(error=>{

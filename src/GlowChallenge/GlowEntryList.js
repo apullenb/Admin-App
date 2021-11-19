@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/jsx-key */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../SkincareChallenge/SCAccountList/Pagination";
@@ -28,6 +28,8 @@ function GlowEntryList() {
   const [challengeInput, setChallengeInput] = useState(false);
   const [col, setCol] = useState("glowEntryId");
   const [filter, setFilter] = useState("");
+  const [contests, setContests] = useState([])
+  const [products, setProducts] = useState([])
 
   const dispatch = useDispatch();
   const { entries } = useSelector((state) => state.entries);
@@ -37,7 +39,9 @@ function GlowEntryList() {
   }, []);
 
   useEffect(() => {
-    setLocalAccounts(entries);
+    setLocalAccounts(entries.entries);
+    setContests(entries.contests)
+    setProducts(entries.products)
   }, [entries]);
 
   const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
@@ -58,7 +62,7 @@ function GlowEntryList() {
 
   const handleChange = (e) => {
       const column = e.target.type === 'checkbox' && e.target.id === col ? "glowEntryId" : e.target.id
-      const searchTerm = e.target.type === 'text' && localAccounts.length > 0 ? e.target.value : ''
+      const searchTerm = e.target.type === 'text' && localAccounts.length > 0 || e.target.type !== 'text' ? e.target.value : ''
       setFilter(searchTerm)
       setCol(column)
       setColSort(e.target.id)
@@ -94,7 +98,7 @@ function GlowEntryList() {
   console.log(localAccounts);
 
   return (
-    <div>
+    <div style={{margin:'0 8%'}}>
       <h1>Glow Challenge Entries</h1>
       <AccountTable>
         <table>
@@ -146,17 +150,15 @@ function GlowEntryList() {
               </th>
               <th id="filter">
                 <select
-                  id="challenge"
+                  id="title"
                   onChange={(e) => {
                     disableInput(e);
                     handleChange(e);
                   }}
                 >
                   <option value=""> </option>
-                  <option value="2021 Q2">2021 Q2</option>
-                  <option value="2021 Q2">2021 Q3</option>
-                  <option value="2021 Q2">2021 Q2</option>
-                  <option value="2021 Q2">2021 Q2</option>
+                  {contests && contests.map(c => <option id='title' value={c.title}>{c.title} </option>)
+                  }
                 </select>
               </th>
               <th id="filter">
@@ -271,15 +273,16 @@ function GlowEntryList() {
             </tr>
           </thead>
           <tbody>
-            {localAccounts.length > 1 &&
+            {localAccounts && localAccounts.length > 1 &&
               localAccounts.map((user, i) => {
+                  user.products = products
                 return (
                   <tr key={i} user={user} id="row">
                     <td>{user.glowEntryId}</td>
                     <td>{user.email}</td>
                     <td>{user.ambassadorId}</td>
                     <td>{user.name}</td>
-                    <td>{user.challenge || "2021 Q2"}</td>
+                    <td>{user.title}</td>
                     <td>
                       {user.day1Photo && (
                         <img src={user.day1Photo} style={{ height: "35px" }} />
@@ -317,10 +320,26 @@ function GlowEntryList() {
 
 export default GlowEntryList;
 
+
+
 const AccountTable = styled.div`
   padding: 1px;
   margin: 0;
+  
+  input[type='checkbox'] {
+    appearance: none;
+    border: 1px solid #707070;
+    height: 19px;
+    width: 19px;
+    margin: 10px;
+    
 
+    &:checked:after {
+      content: ' ✔ ';
+      color: #707070;
+      opacity: 1;
+      }
+  }
   table {
     width: 100%;
 

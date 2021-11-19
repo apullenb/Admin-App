@@ -91,7 +91,7 @@ function App() {
           <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
           <Route path="/Challenge/Glow-Entries" component={GlowEntryList} />
           <Route path="/Challenge/Glow-Entry/:accountid" component={GlowEntry} />
-
+          <Route path="/Challenge/Glow-Submission/:submissionId" component={GCEntryEdit} />
           <Route path="/COA/edit/:productID/:coaDocumentID" component={EditCOA} />
           <Route path="/COA/add/:productID/" component={AddCOA} />
           <Route path="/Coa/documents/:productID" component={COADocument}/>
