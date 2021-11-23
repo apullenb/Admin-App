@@ -69,6 +69,7 @@ export const LoginSkincareAdmin = (skincareUser) => {
   return async (dispatch) => {
     dispatch({ type: LOGIN_ADMIN_SKINCARE_START });
     function onSuccess(success) {
+      console.log(success);
       dispatch({ type: LOGIN_ADMIN_SKINCARE_SUCCESS, payload: success.data });
       return success;
     }
