@@ -1,13 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import './App.scss';
-import React, { useState, useEffect } from "react";
-import {useDispatch} from 'react-redux';
-import {
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import './App.scss'
+import "./App.scss";
+import React, { useEffect } from "react";
+import { useDispatch} from "react-redux";
+import { Switch, Route, Redirect } from "react-router-dom";
+import "./App.scss";
 import Login from "./Login";
 import Dashboard from "./Pages/Dashboard";
 
@@ -24,87 +20,169 @@ import ShoppingKits from "./ShoppingConfiguration/kits/kits";
 import ShoppingProducts from "./ShoppingConfiguration/product/products";
 import ShoppingCategories from "./ShoppingConfiguration/categories";
 
-import Events from './Events/EventList';
-import Incentive from './Incentive/IncentiveList';
-import Permissions from './Permissions/PermissionList';
+import Events from "./Events/EventList";
+import Incentive from "./Incentive/IncentiveList";
+import Permissions from "./Permissions/PermissionList";
 
-import Page from './GlobalComponents/PageWrapper'
+import Page from "./GlobalComponents/PageWrapper";
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
-import COA from './COA/COA';
-import COAProductList from './COA/COAProductList';
-import ApolloClient from  'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
-import COADocument from './COA/COADocuments';
-import UserAuthorizationStatusTable from './User/UserAuthorizationStatusTable';
-import UserAuthorizationStatusAddEdit from './User/UserAuthorizationStatusAddEdit';
-import GlowEntryList from './GlowChallenge/GlowEntryList';
+import COA from "./COA/COA";
+import COAProductList from "./COA/COAProductList";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "@apollo/react-hooks";
+import COADocument from "./COA/COADocuments";
+import UserAuthorizationStatusTable from "./User/UserAuthorizationStatusTable";
+import UserAuthorizationStatusAddEdit from "./User/UserAuthorizationStatusAddEdit";
+import GlowEntryList from "./GlowChallenge/GlowEntryList";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
+const allRoutes = [
+  {
+    path: "/",
+    exact: true,
+    component: Dashboard,
+  },
+  {
+    path: "/login",
+    exact: true,
+    component: { Login },
+  },
+  {
+    path: "/Shopping/Countries",
+    exact: true,
+    component: ShoppingCountries,
+  },
+  {
+    path: "/Shopping/Kits",
+    exact: true,
+    component: ShoppingKits,
+  },
+  {
+    path: "/Shopping/Categories",
+    exact: true,
+    component: ShoppingCategories,
+  },
+  {
+    path: "/Shopping/Products",
+    exact: true,
+    component: ShoppingProducts,
+  },
+  {
+    exact: true,
+    path: "/Challenge/Accounts",
+    component: AccountList ,
+  },
+  {
+    exact: true,
+    path: "/Challenge/Accounts/:accountid",
+    component: AccountEdit,
+  },
+  {
+    exact: true,
+    path: "/Challenge/Entries",
+    component: EntryList,
+  },
+  {
+    exact: true,
+    path: "/Challenge/Glow-Entries",
+    component: GlowEntryList,
+  },
+  {
+    exact: true,
+    path: "/Challenge/Entry/:entryId",
+    component: EntryEdit,
+  },
+  {
+    exact: true,
+    path: "/COA/edit/:productID/:coaDocumentID",
+    component: EditCOA,
+  },
+  {
+    exact: true,
+    path: "/COAs",
+    component: COAProductList,
+  },
+  {
+    exact: true,
+    path: "/Events",
+    component: Events,
+  },
+  {
+    exact: true,
+    path: "/Incentive",
+    component: Incentive,
+  },
+  {
+    exact: true,
+    path: "/Permissions",
+    component: Permissions,
+  },
+  {
+    exact: true,
+    path: "/COA/:productID",
+    component: COA,
+  },
+  {
+    exact: true,
+    path: "/Settings/users/add",
+    component: UserAuthorizationStatusAddEdit,
+  },
+  {
+    exact: true,
+    path: "/Settings/users/edit/:userID",
+    component: UserAuthorizationStatusAddEdit ,
+  },
+  {
+    exact: true,
+    path: "/Settings/users",
+    component: UserAuthorizationStatusTable,
+  },
+];
 
 const client = new ApolloClient({
-  uri: 'https://zorderapidev.azurewebsites.net/graphql'
-})
+  uri: "https://zorderapidev.azurewebsites.net/graphql",
+});
 
 function App() {
-
   // SAMPLE USER VALIDATION (Needs to be created)---------->
   // Currently defaulted to true..needs to default to false once authentication is set up
   const dispatch = useDispatch();
-  //const { fetching } = useSelector(state => state.app);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
   // function to verify if the user is logged in.. once user is verified, this function should call the setAuth function to return true
-  const isAuthCheck = () => {
-    setAuth(true);
-  };
-  const setAuth = (boolean) => {
-    setIsAuthenticated(boolean);
-  };
+  
 
   useEffect(() => {
-    dispatch({type:APP_STARTED}) 
-  }, [])
-
-  useEffect(() => {
-    isAuthCheck();
+    dispatch({ type: APP_STARTED });
   }, []);
-
-  // <------------ END SAMPLE USER VALIDATION SECTION
 
   return (
     <ApolloProvider client={client}>
-    <div className='app'>     
-      <Page >
-        <Switch>
-          <Route exact path="/" component={Dashboard} />
-          <Route path="/login" component={Login} />
-
-          <Route path="/Shopping/Countries" component={ShoppingCountries} />
-          <Route path="/Shopping/Kits" component={ShoppingKits} />
-          <Route path="/Shopping/Categories" component={ShoppingCategories} />
-          <Route path="/Shopping/Products" component={ShoppingProducts} />
-
-          <Route exact path="/Challenge/Accounts" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
-          <Route path="/Challenge/Accounts/:accountid" component={AccountEdit} />
-          <Route path="/Challenge/Entries" component={EntryList} />
-          <Route path="/Challenge/Glow-Entries" component={GlowEntryList} />
-          <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
-
-          <Route path="/COA/edit/:productID/:coaDocumentID" component={EditCOA} />
-          <Route path="/COA/add/:productID/" component={AddCOA} />
-          <Route path="/Coa/documents/:productID" component={COADocument}/>
-          <Route path="/COAs" component={COAProductList} />
-          <Route path="/Events" component={Events} />
-          <Route path="/Incentive" component={Incentive} />
-          <Route path="/Permissions" component={Permissions} />
-          <Route path="/COA/:productID" component={COA}/>
-
-          <Route exact path="/Settings/users/add" component={UserAuthorizationStatusAddEdit}/>
-          <Route exact path="/Settings/users/edit/:userID" component={UserAuthorizationStatusAddEdit}/>
-          <Route path="/Settings/users" component={UserAuthorizationStatusTable}/>
-
-        </Switch>       
-       </Page>
-    </div>
+      <div className="app">
+        <Page>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            {allRoutes.map((route, index) => {
+              return (
+                <Route
+                  key={index}
+                  path={route.path}
+                  exact={route.exact}
+                  render={(props) =>
+                    localStorage.getItem("Token") ? (
+                      <>
+                        <route.component {...props} />
+                      </>
+                    ) : (
+                      <Redirect to={"/login"} />
+                    )
+                  }
+                />
+              );
+            })}
+          </Switch>
+        </Page>
+        <ToastContainer />
+      </div>
     </ApolloProvider>
   );
 }

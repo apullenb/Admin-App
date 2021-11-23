@@ -94,6 +94,7 @@ export const entriesConfigReducer = (state = initalState, action) => {
                 skincareAuthToken: action.payload.token,
               };
             case LOGIN_ADMIN_SKINCARE_FAILURE:
+              console.log({erroror:action.payload})
               return {
                 ...state,
                 fetching: false,

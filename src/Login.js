@@ -1,36 +1,61 @@
 import React, { useState } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { Form, Button, Spinner } from "react-bootstrap";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { LoginSkincareAdmin } from "./redux/actions/Skincare/skincareActions";
+import { Redirect } from "react-router";
+import { toast } from "react-toastify";
 
 function Login() {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const fetching = useSelector(({ entries }) => entries.fetching);
+  const [userCredentials, setUserCredentials] = useState({
+    username: "",
+    password: "",
+  });
 
-  const handleChangeU = (e) => setUserName(e.target.value);
-  const handleChangeP = (e) => setPassword(e.target.value);
+  const dispatch = useDispatch();
 
-  const handleLogin = () => {
-    // Login function using Admin Authentication
+  const handleChange = (e) =>
+    setUserCredentials({
+      ...userCredentials,
+      [e.target.name]: e.target.value,
+    });
+
+  const handleLogin = async () => {
+    if (userCredentials.username && userCredentials.password) {
+      dispatch(LoginSkincareAdmin(userCredentials));
+    } else {
+      toast("Enter Username and Password");
+    }
   };
+
+  if (localStorage.getItem("Token")) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <FormWrapper>
       <Title>ADMIN LOGIN</Title>
       <Form.Control
-        type="username"
+        name="username"
         placeholder="Enter Username"
-        value={userName}
-        onChange={(e) => handleChangeU(e)}
+        value={userCredentials.username}
+        onChange={(e) => handleChange(e)}
       />
       <Form.Control
+        name="password"
         type="password"
         placeholder="Enter Password"
-        value={password}
-        onChange={(e) => handleChangeP(e)}
+        value={userCredentials.password}
+        onChange={(e) => handleChange(e)}
       />
-      <Button className="primary" onClick={handleLogin}>
-        Login
-      </Button>
+      {fetching ? (
+        <Spinner animation="border" />
+      ) : (
+        <Button className="primary" onClick={() => handleLogin()}>
+          Login
+        </Button>
+      )}
     </FormWrapper>
   );
 }
@@ -39,9 +64,9 @@ export default Login;
 
 const FormWrapper = styled.div`
   display: flex;
-  margin: 3%;
+  margin: auto;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-center;
   justify-content: space-between;
   border: 1px solid rgba(0, 0, 0, 0.5);
   padding: 2% 6%;
