@@ -34,7 +34,6 @@ import COADocument from "./COA/COADocuments";
 import UserAuthorizationStatusTable from "./User/UserAuthorizationStatusTable";
 import UserAuthorizationStatusAddEdit from "./User/UserAuthorizationStatusAddEdit";
 import GlowEntryList from "./GlowChallenge/GlowEntryList";
-import 'react-toastify/dist/ReactToastify.css';
 
 const allRoutes = [
   {
