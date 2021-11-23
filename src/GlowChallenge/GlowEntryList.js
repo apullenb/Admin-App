@@ -6,12 +6,8 @@ import "../SkincareChallenge/SCEntryList/EntryList.scss";
 import { CaretUp, CaretDown } from "react-bootstrap-icons";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getGlowEntries,
-  filterAccounts,
-} from "./../redux/actions/Skincare/skincareActions";
-import { getEntries } from "./../redux/actions/Skincare/skincareActions";
-import GlowEntries from "./GlowEntry";
+import {  getGlowEntries} from "./../redux/actions/Skincare/skincareActions";
+
 
 function GlowEntryList() {
   const [message, setMessage] = useState(true);
@@ -33,7 +29,8 @@ function GlowEntryList() {
 
   const dispatch = useDispatch();
   const { entries } = useSelector((state) => state.entries);
-console.log(entries)
+
+
   useEffect(() => {
     dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
   }, []);
@@ -95,7 +92,7 @@ console.log(entries)
       setIdInput(true);
     }
   };
-  console.log(localAccounts);
+
 
   return (
     <div style={{margin:'0 8%'}}>
@@ -161,7 +158,7 @@ console.log(entries)
                   }
                 </select>
               </th>
-              <th id="filter">
+              <th id="filter" className='check'>
                 <input
                   type="checkbox"
                   id="day1Photo"
@@ -171,7 +168,7 @@ console.log(entries)
                   }}
                 />
               </th>
-              <th id="filter">
+              <th id="filter" className='check'>
                 <input
                   type="checkbox"
                   id="day30Photo"
@@ -181,7 +178,7 @@ console.log(entries)
                   }}
                 />
               </th>
-              <th id="filter">
+              <th id="filter" className='check'>
                 <input
                   type="checkbox"
                   id="day60Photo"
@@ -191,7 +188,7 @@ console.log(entries)
                   }}
                 />
               </th>
-              <th id="filter">
+              <th id="filter" className='check'>
                 <input
                   type="checkbox"
                   id="day90Photo"
@@ -284,13 +281,19 @@ console.log(entries)
                     <td>{user.name}</td>
                     <td>{user.title}</td>
                     <td>
-                      {user.day1Photo && (
-                        <img src={user.day1Photo} style={{ height: "35px" }} />
-                      )}
+                      {user.day1Photo ? (
+                        <img src={user.day1Photo} style={{ width: "30px" }} />
+                      ) : (<div style={{ width: "30px" }}></div>)}
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td> {user.day30Photo ? (
+                        <img src={user.day30Photo} style={{ width: "30px" }} />
+                      ) : (<div style={{ width: "30px" }}></div>)}</td>
+                    <td> {user.day60Photo ? (
+                        <img src={user.day60Photo} style={{ width: "30px" }} />
+                      ) : (<div style={{ width: "30px" }}></div>)}</td>
+                    <td> {user.day90Photo ? (
+                        <img src={user.day90Photo} style={{ width: "30px" }} />
+                      ) : (<div style={{ width: "30px" }}></div>)}</td>
                     <td>
                       <Link
                         to={{
@@ -326,20 +329,42 @@ const AccountTable = styled.div`
   padding: 1px;
   margin: 0;
   
-  input[type='checkbox'] {
+  .check {
+    gap: 0.9em;
+    line-height: 1.1;
+    margin: 10px 5px;
+}
+input[type="checkbox"] {
     appearance: none;
-    border: 1px solid #707070;
-    height: 19px;
-    width: 19px;
-    margin: 10px;
-    
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.05em solid #707070;
+    display: grid;
+    place-content: center;
+    opacity: 0.8;
+}
+input[type="checkbox"]::before {
+    content: "";
+    width: 0.85em;
+    height: 0.0em;
+   
+  }
 
-    &:checked:after {
-      content: ' ✔ ';
+input:checked {
+    &:after {
+      content: '✔';
+      font-size: 16px;
       color: #707070;
-      opacity: 1;
+      opacity: 0.8;
+      width: 0em;
+      height: 1.2em;
+      opacity: 0.9;
       }
   }
+
   table {
     width: 100%;
 

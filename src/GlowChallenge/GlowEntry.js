@@ -26,11 +26,10 @@ function GlowEntry(props) {
     const [blank, setBlank] = useState(false)
     const [showDelete, setShowDelete]= useState(false)
     
-
+console.log(entry)
 
  const handlePopUp = () => {
      setShowDelete(!showDelete)
-     console.log(showDelete)
  }
 
  const productMap = (product) => {
@@ -42,7 +41,8 @@ function GlowEntry(props) {
  const handleDelete = () => {
 axios.delete(`${config.SKINCAREBASEURL}/api/challenge/delete-glow-entry-admin/${entry.glowEntryId}`)
 .then(res=>{
-    console.log(res)
+    setShowDelete(!showDelete)
+    props.history.push('/Challenge/Glow-Entries')
  })
 }
  const handleShow = () => show === 'hide' ? setShow('show') : setShow('hide')
@@ -111,7 +111,7 @@ useEffect(() => {
               <div>
                 <label>Name</label>
                 <span className="read-only-value">
-                      <Link to = {{ pathname: `/Challenge/Glow-Entries` }}>{entry.name}</Link></span>
+                <Link to={{ pathname: `/Challenge/Accounts/${entry.id}`,  state: entry }}>{entry.name}</Link></span>
               </div>
               <div>
                 <label>Email</label>
@@ -151,7 +151,7 @@ useEffect(() => {
               <th className='head'>Actions</th>
             </tr>
             </thead>
-                {entry.submissions.map((e, i) => {
+               <tbody> {entry.submissions.map((e, i) => {
                     e.challenge = entry.title
                     e.ambId = entry.ambassadorId
                     e.name = entry.name
@@ -163,7 +163,7 @@ useEffect(() => {
                         <td><div style={{marginLeft:'11px'}}>{e.day}</div></td>
                         <td ><img src={e.photoUrl} style={{height: '40px', marginLeft:'17px'}} /></td>
                         <td ><div style={{marginLeft:'45px'}} className='check'><input type="checkbox" checked={entry.height !== ''} /></div></td>
-                        <td style={{position:'relative'}} >{blank}<div style={show === 'show' ? showMore : {margin:'0px'}}>{productMap(e.products) }<span onMouseOver={handleShow} onMouseLeave={handleShow} style={show === 'show' ? {display:'none'} : {margin:'0px'}}> ... {' '}</span></div> </td>
+                        <td style={{position:'relative'}} >{blank}<div style={show === 'show' ? showMore : {margin:'0px'}}>{productMap(e.products) } &nbsp; <span onMouseOver={handleShow} onMouseLeave={handleShow} style={show === 'show' ? {display:'none'} : {margin:'0px'}}>  ... </span></div> </td>
                         <td ><div className='story'>{e.story.slice(0, 18)} ... <span className='story-text'>{e.story}</span></div></td>
                         <td><div style={{marginLeft:'10px'}}>{e.answers.length}/23</div></td>
                         <td> <div style={{marginLeft:'10px', textDecoration:'underline' }} ><Link to={{pathname: `/Challenge/Glow-Submission/${e.glowSubmissionId}`, state: e}}>View</Link></div></td>
@@ -180,7 +180,7 @@ useEffect(() => {
                     <td></td>
                     <td><div><Delete onClick={handlePopUp}>Delete Entry</Delete></div></td>
                 </tr>
-           
+           </tbody>
         </table>
         </SubmissionTable>
         
