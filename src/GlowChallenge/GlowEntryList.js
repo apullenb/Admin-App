@@ -33,7 +33,7 @@ function GlowEntryList() {
 
   const dispatch = useDispatch();
   const { entries } = useSelector((state) => state.entries);
-
+console.log(entries)
   useEffect(() => {
     dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
   }, []);
@@ -52,17 +52,17 @@ function GlowEntryList() {
 
   const updatePerPage = (val) => {
     setPerPage(val);
-    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
+    dispatch(getGlowEntries(val, pageNo, colSort, sortDirection, filter));
   };
 
   const updatePageNo = (val) => {
     setPageNo(val);
-    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
+    dispatch(getGlowEntries(perPage, val, colSort, sortDirection, filter));
   };
 
   const handleChange = (e) => {
       const column = e.target.type === 'checkbox' && e.target.id === col ? "glowEntryId" : e.target.id
-      const searchTerm = e.target.type === 'text' && localAccounts.length > 0 || e.target.type !== 'text' ? e.target.value : ''
+      const searchTerm = e.target.type === 'text' && localAccounts.length >= 1  || e.target.type !== 'checkbox' ? e.target.value : ''
       setFilter(searchTerm)
       setCol(column)
       setColSort(e.target.id)
@@ -273,7 +273,7 @@ function GlowEntryList() {
             </tr>
           </thead>
           <tbody>
-            {localAccounts && localAccounts.length > 1 &&
+            {localAccounts && localAccounts.length > 0 &&
               localAccounts.map((user, i) => {
                   user.products = products
                 return (

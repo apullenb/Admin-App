@@ -11,6 +11,8 @@ import Select from 'react-select';
 import { useToasts } from "react-toast-notifications";
 import { LoginSkincareAdmin } from "../redux/actions/Skincare/skincareActions";
 import { relativeTimeRounding } from "moment";
+import checkbox from '../assets/Checkbox.PNG'
+import Model from "./Model";
 
 function GCEntryEdit(props) {
     const entry = props.location.state
@@ -18,15 +20,19 @@ function GCEntryEdit(props) {
     const [change, setChange] = useState(false);
     const [show, setShow] = useState('hide')
     const [blank, setBlank] = useState(false)
+    const [showDelete, setShowDelete]= useState(false)
     
-    console.log(props.history)
- console.log(entry)
+    console.log(entry)
+   
+   
+    const handlePopUp = () => {
+        setShowDelete(!showDelete)
+    }
+   
 
- const productMap = (product) => {
-    const productMap = [];
-    product.map(p => productMap.push(p.name))
-    return show === 'hide' ? productMap.reverse().join(', ').slice(0, 25) : productMap.join(', ')
- }
+    const handleDelete = () => {
+
+    }
 
  const handleShow = () => show === 'hide' ? setShow('show') : setShow('hide')
 
@@ -34,13 +40,20 @@ useEffect(() => {
     setBlank(!blank)
 }, [show])
 
+const checkProduct = p => {
+    if (entry.products.some(product => product.name === p)){
+        return true
+    }
+    return false
+}
+
 const goBack = () => props.history.goBack()
 
     return (
       <div style={{margin:'0 8%'}}>
         <h1>Glow Challenge Submission</h1> 
           
-
+        <PopUp style={showDelete ? {display: 'block'} : {display:'none'}}><Model type='submission' close={handlePopUp} delete={handleDelete} text="Deleting this submission will delete all photos, questionnaire answers and other information associated with the submission as well. This action can not be undone." /></PopUp>
         <EntryDetails>
             <div className="page-header-link"><button id="edit" onClick={goBack}>Back to Entry</button></div>
           <Row>
@@ -95,18 +108,18 @@ const goBack = () => props.history.goBack()
                 <Col>
                 <div className="read-only-value" style={{marginTop:'5px', marginLeft:'-10px', paddingRight:'-25px'}}>
                       {entry.allProducts.slice(0,7).map((p, i) => 
-                         <div key={i} >
-                         <input type="checkbox" checked={entry.goalWeight} />
-                               &nbsp; <span>{p.name}</span>
+                         <div key={i} className='check'>
+                         <input type="checkbox" checked={checkProduct(p.name)} />
+                                <span>{p.name}</span>
                        </div>                
                         )}
                 </div>
                 </Col>
                 <Col> <div className="read-only-value" style={{marginTop:'5px', marginLeft:'-5px'}}>
                       {entry.allProducts.slice(7).map((p, i) => 
-                         <div key={i} >
-                         <input type="checkbox" checked={entry.goalWeight} />
-                               &nbsp; <span>{p.name}</span>
+                         <div key={i} className='check' >
+                         <input type="checkbox" checked={checkProduct(p.name)} />
+                              <span>{p.name}</span>
                        </div>                
                         )}
                 </div></Col>
@@ -125,25 +138,25 @@ const goBack = () => props.history.goBack()
               <div style={{border: '1px solid #707070', padding:'1px', marginTop:'20px'}}>
                <GrayBox>
                    <div>Scientific data is private, you can only see if information was submitted, not what was submitted.</div>
-                   <div >
-                        <input type="checkbox" id='check' checked={entry.weight !== ''} />
-                              &nbsp; <span>Weight</span>
+                   <div className='check'>
+                        <input type="checkbox" checked={entry.weight !== ''} />
+                             <span>Weight</span>
                       </div>
-                      <div >
+                      <div className='check' >
                         <input type="checkbox" checked={entry.chest !== ''} />
-                              &nbsp; <span>Chest</span>
+                              <span>Chest</span>
                       </div>
-                      <div >
+                      <div className='check'>
                         <input type="checkbox" checked={entry.waist !== ''} />
-                              &nbsp; <span>Waist</span>
+                              <span>Waist</span>
                       </div>
-                      <div >
+                      <div className='check' >
                         <input type="checkbox" checked={entry.hips !== ''} />
-                              &nbsp; <span>Hips</span>
+                              <span>Hips</span>
                       </div>
-                      <div >
+                      <div className='check' >
                         <input type="checkbox" checked={entry.thigh !== ''} />
-                              &nbsp; <span>Thigh</span>
+                              <span>Thigh</span>
                       </div>
                </GrayBox>
               </div>
@@ -158,13 +171,14 @@ const goBack = () => props.history.goBack()
               </Col>
               
               </Row>
+          
           <Row>
+          <Col></Col>
+          <Col></Col>
+          <Col></Col>
            <Col></Col>
            <Col></Col>
-           <Col></Col>
-           <Col></Col>
-           <Col></Col>
-           <Col><button>Delete Entry</button>
+           <Col><Delete onClick={handlePopUp}>Delete Submission</Delete>
               <Success></Success>
            </Col>
            
@@ -226,18 +240,61 @@ const goBack = () => props.history.goBack()
       display: inline-block;
       margin: 0 10px;
     }
-    input:checked {
+    
+    .check {
+        display: grid;
+        grid-template-columns: 1em auto;
+        gap: 0.9em;
+        line-height: 1.1;
+        margin-top: 1em;
+      
+    }
+    input[type="checkbox"] {
         appearance: none;
-
+        margin: 0;
+        font: inherit;
+        color: currentColor;
+        width: 1.15em;
+        height: 1.15em;
+        border: 0.05em solid #707070;
+        display: grid;
+        place-content: center;
+    }
+    input[type="checkbox"]::before {
+        content: "";
+        width: 0.85em;
+        height: 0.0em;
+      }
+  
+    input:checked {
         &:after {
-          content: ' ✔ ';
-          font-size: 11px;
+          content: '✔';
+          font-size: 16px;
           color: #707070;
-          border: 1px solid #707070;
-          padding: 0px 3px;
-          opacity: 0.6;
+          opacity: 0.8;
+          width: 0em;
+          height: 1.2em;
           }
       }
   `;
 
+  const Delete = styled.button`
+      background: #D10000;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size:14px;
+      font-weight: 500;
+      align-self: right;
+      margin: 25px 3px; 
+  `;
+  const PopUp = styled.div`
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width:100vw;
+  background: rgba(0,0,0,0.7);
+`
 export default GCEntryEdit

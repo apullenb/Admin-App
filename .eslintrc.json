@@ -16,7 +16,6 @@
   },
   "plugins": ["react", "react-hooks", "jsx-a11y"],
   "rules": {
-   
     "react/prop-types": "off",
     "no-unused-vars": "warn",
     "react/no-direct-mutation-state": "warn",
@@ -24,7 +23,6 @@
     "react-hooks/exhaustive-deps": 1,
     "no-prototype-builtins": 1,
     "jsx-a11y/img-redundant-alt": 1,
-    "react/no-children-prop": 1,
-    
+    "react/no-children-prop": 1
   }
 }

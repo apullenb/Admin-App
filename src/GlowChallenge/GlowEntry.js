@@ -14,6 +14,9 @@ import Select from 'react-select';
 import { useToasts } from "react-toast-notifications";
 import { LoginSkincareAdmin } from "../redux/actions/Skincare/skincareActions";
 import { relativeTimeRounding } from "moment";
+import Model from "./Model";
+
+
 
 function GlowEntry(props) {
     const entry = props.location.state
@@ -21,9 +24,14 @@ function GlowEntry(props) {
     const [change, setChange] = useState(false);
     const [show, setShow] = useState('hide')
     const [blank, setBlank] = useState(false)
+    const [showDelete, setShowDelete]= useState(false)
     
-    
- console.log(entry)
+
+
+ const handlePopUp = () => {
+     setShowDelete(!showDelete)
+     console.log(showDelete)
+ }
 
  const productMap = (product) => {
     const productMap = [];
@@ -31,6 +39,12 @@ function GlowEntry(props) {
     return show === 'hide' ? productMap.reverse().join(', ').slice(0, 25) : productMap.join(', ')
  }
 
+ const handleDelete = () => {
+axios.delete(`${config.SKINCAREBASEURL}/api/challenge/delete-glow-entry-admin/${entry.glowEntryId}`)
+.then(res=>{
+    console.log(res)
+ })
+}
  const handleShow = () => show === 'hide' ? setShow('show') : setShow('hide')
 
 useEffect(() => {
@@ -43,8 +57,9 @@ useEffect(() => {
           Glow Challenge Entry 
           </h1>
          
-      
+    <PopUp style={showDelete ? {display: 'block'} : {display:'none'}}><Model type='entry' close={handlePopUp} delete={handleDelete} text="Deleting this entry will delete all submissions associated with the entry as well. This action can not be undone." /></PopUp>
         <EntryDetails>
+        
             <div className="page-header-link"><Link to="/Challenge/Glow-Entries">Back to List</Link></div>
           <Row>
             <Col>
@@ -63,25 +78,25 @@ useEffect(() => {
               <div>
                 <label>Goals</label>
                 <div className="read-only-value" style={{marginTop:'5px'}}>
-                      <div >
+                      <div  className='check'>
                         <input type="checkbox" checked={entry.goalWeight} />
-                              &nbsp; <span>Weight Management Support</span>
+                             <span>Weight Management Support</span>
                       </div>
-                      <div>
+                      <div className='check'>
                         <input type="checkbox" checked={entry.goalImmune} />
-                              &nbsp; <span>Promote a Healthy Immune System</span>
+                              <span>Promote a Healthy Immune System</span>
                       </div>
-                      <div>
+                      <div className='check'>
                         <input type="checkbox" checked={entry.goalStress} />
-                              &nbsp; <span>Help with Situational Stress</span>
+                            <span>Help with Situational Stress</span>
                       </div>
-                      <div>
+                      <div className='check'>
                         <input type="checkbox" checked={entry.goalSleep} />
-                              &nbsp; <span>Aid Sleep During Restless Night</span>
+                              <span>Aid Sleep During Restless Night</span>
                       </div>
-                      <div>
+                      <div className='check'>
                         <input type="checkbox" checked={entry.goalOverall} />
-                              &nbsp; <span>Overall Well-Being</span>
+                             <span>Overall Well-Being</span>
                       </div>
                   
                  
@@ -105,13 +120,13 @@ useEffect(() => {
               <div style={{border: '1px solid #707070', padding:'1px', marginTop:'5px'}}>
                <GrayBox>
                    <div>Scientific data is private, you can only see if information was submitted, not what was submitted.</div>
-                   <div >
+                   <div className='check' >
                         <input type="checkbox" id='check' checked={entry.height !== ''} />
-                              &nbsp; <span>Height</span>
+                               <span>Height</span>
                       </div>
-                      <div >
+                      <div  className='check'>
                         <input type="checkbox" checked={entry.gender !== ''} />
-                              &nbsp; <span>Gender</span>
+                               <span>Gender</span>
                       </div>
                </GrayBox>
 
@@ -135,7 +150,7 @@ useEffect(() => {
               <th className='head'>Questionaire</th>
               <th className='head'>Actions</th>
             </tr>
-            
+            </thead>
                 {entry.submissions.map((e, i) => {
                     e.challenge = entry.title
                     e.ambId = entry.ambassadorId
@@ -143,32 +158,32 @@ useEffect(() => {
                     e.email = entry.email
                     e.allProducts = entry.products
                     return <tr key= {i}>
-                        <td>{e.glowSubmissionId}</td>
-                        <td><Moment format="MM/DD/YYYY">{e.submissionDate}</Moment></td>
-                        <td>{e.day}</td>
-                        <td><img src={e.photoUrl} style={{height: '40px'}} /></td>
-                        <td><input type="checkbox" checked={entry.height !== ''} /></td>
+                        <td><div style={{marginLeft:'0px'}}>{e.glowSubmissionId}</div></td>
+                        <td><div style={{marginLeft:'7px'}}><Moment format="MM/DD/YYYY">{e.submissionDate}</Moment></div></td>
+                        <td><div style={{marginLeft:'11px'}}>{e.day}</div></td>
+                        <td ><img src={e.photoUrl} style={{height: '40px', marginLeft:'17px'}} /></td>
+                        <td ><div style={{marginLeft:'45px'}} className='check'><input type="checkbox" checked={entry.height !== ''} /></div></td>
                         <td style={{position:'relative'}} >{blank}<div style={show === 'show' ? showMore : {margin:'0px'}}>{productMap(e.products) }<span onMouseOver={handleShow} onMouseLeave={handleShow} style={show === 'show' ? {display:'none'} : {margin:'0px'}}> ... {' '}</span></div> </td>
                         <td ><div className='story'>{e.story.slice(0, 18)} ... <span className='story-text'>{e.story}</span></div></td>
-                        <td>{e.answers.length}/23</td>
-                        <td> <div className="page-header-link"><Link to={{pathname: `/Challenge/Glow-Submission/${e.glowSubmissionId}`, state: e}}>View</Link></div></td>
+                        <td><div style={{marginLeft:'10px'}}>{e.answers.length}/23</div></td>
+                        <td> <div style={{marginLeft:'10px', textDecoration:'underline' }} ><Link to={{pathname: `/Challenge/Glow-Submission/${e.glowSubmissionId}`, state: e}}>View</Link></div></td>
                         </tr>
                 })}
-            
-            </thead>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div><Delete onClick={handlePopUp}>Delete Entry</Delete></div></td>
+                </tr>
+           
         </table>
         </SubmissionTable>
-          <Row>
-           <Col></Col>
-           <Col></Col>
-           <Col></Col>
-           <Col></Col>
-           <Col></Col>
-           <Col><button>Delete Entry</button>
-              <Success></Success>
-           </Col>
-           
-          </Row>
+        
         </EntryDetails>
       </div>
     );
@@ -187,18 +202,18 @@ useEffect(() => {
   const SubmissionTable = styled.div`
   padding: 1px;
   margin: 3% 0;
+ 
 
   table {
     width: 100%;
-
     td {
-        padding:10px;
+        padding: 10px ;
         text-align: left;
-      }
-    
+    }
+   
     .story {
         position: relative;
-      
+        margin-left: 5px;
        
     }
     .story-text {
@@ -230,19 +245,7 @@ useEffect(() => {
     border-bottom: 1px solid #707070;
   }
 }
-input:checked {
-    appearance: none;
 
-    &:after {
-      content: ' ✔ ';
-      font-size: 14px;
-      color: #707070;
-      border: 1px solid #707070;
-      padding: 0px 3px;
-      opacity: 0.6;
-      margin: 0 0 0 40px
-      }
-  }
 
 `;
  
@@ -272,6 +275,16 @@ input:checked {
   font-weight: 500;
   margin: 6px 2%;
   `
+  const Delete = styled.button`
+      background: #D10000;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size:14px;
+      font-weight: 500;
+      align-self: right;
+      margin: 25px 3px; 
+  `;
   
   const EntryDetails = styled.section`
     color: rgb(94, 93, 93);
@@ -290,19 +303,56 @@ input:checked {
       display: inline-block;
       margin: 0 10px;
     }
-    input:checked {
+    .check {
+        display: grid;
+        grid-template-columns: 1em auto;
+        gap: 0.9em;
+        line-height: 1.1;
+        margin: 10px 0;
+    }
+    input[type="checkbox"] {
         appearance: none;
-
+        margin: 0;
+        font: inherit;
+        color: currentColor;
+        width: 1.15em;
+        height: 1.15em;
+        border: 0.05em solid #707070;
+        display: grid;
+        place-content: center;
+        opacity: 0.8;
+    }
+    input[type="checkbox"]::before {
+        content: "";
+        width: 0.85em;
+        height: 0.0em;
+       
+      }
+    
+    input:checked {
         &:after {
-          content: ' ✔ ';
-          font-size: 11px;
+          content: '✔';
+          font-size: 16px;
           color: #707070;
-          border: 1px solid #707070;
-          padding: 0px 3px;
-          opacity: 0.6;
+          opacity: 0.8;
+          width: 0em;
+          height: 1.2em;
+          opacity: 0.9;
           }
       }
+   .hide {
+       display:none;
+   }
+
   `;
 
-
+const PopUp = styled.div`
+    z-index: 2;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width:100vw;
+	background: rgba(0,0,0,0.7);
+`
 export default GlowEntry
