@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import Logo from "./assets/Zilis_Logo_2021.png";
 import { Form, Button, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { LoginSkincareAdmin } from "./redux/actions/Skincare/skincareActions";
+import Footer from './GlobalComponents/footer';
 import { Redirect } from "react-router";
 import { toast } from "react-toastify";
 
@@ -34,6 +36,18 @@ function Login() {
   }
 
   return (
+
+    <>
+    <Top>
+        <div className="top-wrapper">
+          <div className="inner-wrapper">
+            <a href="/"><img src={Logo} alt="Zilis Logo" style={{maxWidth:'170px', margin: '1px auto'}} /></a>
+            {/* <img src={ProfileImage} alt="Profile Image" className="profile-pic" /> */}
+          </div>
+        </div>
+        <hr />
+      </Top>
+
     <FormWrapper>
       <Title>ADMIN LOGIN</Title>
       <Form.Control
@@ -57,6 +71,9 @@ function Login() {
         </Button>
       )}
     </FormWrapper>
+    <Footer />
+
+    </>
   );
 }
 
@@ -82,4 +99,23 @@ const Title = styled.span`
   color: rgb(92, 90, 90, 0.8);
   font-weight: 450;
   margin: 10px;
+`;
+const Top = styled.div`
+  text-align: center;
+  padding-top: 10px;
+
+  .profile-pic {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 70px;
+    border-radius: 50%;
+  }
+
+  hr {
+    display: block;
+    border: none;
+    border-bottom: 3px solid #043769;
+    margin-bottom: 0;
+  }
 `;

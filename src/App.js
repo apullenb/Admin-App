@@ -158,7 +158,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div className="app">
-        <Page>
+        
           <Switch>
             <Route exact path="/login" component={Login} />
             {allRoutes.map((route, index) => {
@@ -170,7 +170,7 @@ function App() {
                   render={(props) =>
                     localStorage.getItem("Token") ? (
                       <>
-                        <route.component {...props} />
+                        <Page><route.component {...props} /></Page>
                       </>
                     ) : (
                       <Redirect to={"/login"} />
@@ -180,7 +180,6 @@ function App() {
               );
             })}
           </Switch>
-        </Page>
         <ToastContainer />
       </div>
     </ApolloProvider>
