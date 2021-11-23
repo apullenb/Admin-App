@@ -15,7 +15,6 @@ import {
 
 import axios from "axios";
 import config from "../../../config/env-urls";
-import { toast } from "react-toastify";
 
 export const getEntries =
   (perPage = 10, pageNo = 1, sort = "entries.id", sortDirection = "asc") =>
@@ -74,7 +73,6 @@ export const LoginSkincareAdmin = (skincareUser) => {
       return success;
     }
     function onError(error) {
-      toast(error.response.data.error);
       dispatch({
         type: LOGIN_ADMIN_SKINCARE_FAILURE,
         payload: error.response.data.error,

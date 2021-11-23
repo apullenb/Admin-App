@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "./assets/Zilis_Logo_2021.png";
 import { Form, Button, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { LoginSkincareAdmin } from "./redux/actions/Skincare/skincareActions";
-import Footer from './GlobalComponents/footer';
+import Footer from "./GlobalComponents/footer";
 import { Redirect } from "react-router";
-import { toast } from "react-toastify";
+import { useToasts } from "react-toast-notifications";
 
 function Login() {
-  const fetching = useSelector(({ entries }) => entries.fetching);
+  const { fetching, error } = useSelector(({ entries }) => entries);
   const [userCredentials, setUserCredentials] = useState({
     username: "",
     password: "",
   });
+  const { addToast } = useToasts();
 
   const dispatch = useDispatch();
 
@@ -27,52 +28,68 @@ function Login() {
     if (userCredentials.username && userCredentials.password) {
       dispatch(LoginSkincareAdmin(userCredentials));
     } else {
-      toast("Enter Username and Password");
+      addToast("Enter Username and Password", {
+        autoDismiss: true,
+        appearance: "error",
+      });
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      addToast(error, {
+        autoDismiss: true,
+        appearance: "error",
+      });
+    }
+  }, [error]);
+  
   if (localStorage.getItem("Token")) {
     return <Redirect to="/" />;
   }
 
   return (
-
     <>
-    <Top>
+      <Top>
         <div className="top-wrapper">
           <div className="inner-wrapper">
-            <a href="/"><img src={Logo} alt="Zilis Logo" style={{maxWidth:'170px', margin: '1px auto'}} /></a>
+            <a href="/">
+              <img
+                src={Logo}
+                alt="Zilis Logo"
+                style={{ maxWidth: "170px", margin: "1px auto" }}
+              />
+            </a>
             {/* <img src={ProfileImage} alt="Profile Image" className="profile-pic" /> */}
           </div>
         </div>
         <hr />
       </Top>
 
-    <FormWrapper>
-      <Title>ADMIN LOGIN</Title>
-      <Form.Control
-        name="username"
-        placeholder="Enter Username"
-        value={userCredentials.username}
-        onChange={(e) => handleChange(e)}
-      />
-      <Form.Control
-        name="password"
-        type="password"
-        placeholder="Enter Password"
-        value={userCredentials.password}
-        onChange={(e) => handleChange(e)}
-      />
-      {fetching ? (
-        <Spinner animation="border" />
-      ) : (
-        <Button className="primary" onClick={() => handleLogin()}>
-          Login
-        </Button>
-      )}
-    </FormWrapper>
-    <Footer />
-
+      <FormWrapper>
+        <Title>ADMIN LOGIN</Title>
+        <Form.Control
+          name="username"
+          placeholder="Enter Username"
+          value={userCredentials.username}
+          onChange={(e) => handleChange(e)}
+        />
+        <Form.Control
+          name="password"
+          type="password"
+          placeholder="Enter Password"
+          value={userCredentials.password}
+          onChange={(e) => handleChange(e)}
+        />
+        {fetching ? (
+          <Spinner animation="border" />
+        ) : (
+          <Button className="primary" onClick={() => handleLogin()}>
+            Login
+          </Button>
+        )}
+      </FormWrapper>
+      <Footer />
     </>
   );
 }
