@@ -14,7 +14,7 @@ import {
 } from '../../actions/Skincare/skincareActionTypes'
 
 const initalState = {
-    entries: [],
+    entries: '',
     accounts: [],
     fetching: false,
     error: null,
@@ -30,6 +30,7 @@ export const entriesConfigReducer = (state = initalState, action) => {
                 error:null
             }
             case GET_ENTRIES_SUCCESS :
+             
            return {
                 ...state,
                 fetching: false,
