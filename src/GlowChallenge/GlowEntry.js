@@ -169,21 +169,11 @@ useEffect(() => {
                         <td> <div style={{marginLeft:'10px', textDecoration:'underline' }} ><Link to={{pathname: `/Challenge/Glow-Submission/${e.glowSubmissionId}`, state: e}}>View</Link></div></td>
                         </tr>
                 })}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><div><Delete onClick={handlePopUp}>Delete Entry</Delete></div></td>
-                </tr>
+              
            </tbody>
         </table>
         </SubmissionTable>
-        
+        <div style={{display:'flex', flexDirection:'row', justifyContent:'right'}}><Delete onClick={handlePopUp}>Delete Entry</Delete></div>
         </EntryDetails>
       </div>
     );

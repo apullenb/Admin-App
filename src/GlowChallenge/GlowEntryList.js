@@ -336,7 +336,7 @@ const AccountTable = styled.div`
 }
 input[type="checkbox"] {
     appearance: none;
-    margin: 0;
+    margin:0 5px;
     font: inherit;
     color: currentColor;
     width: 1.15em;
@@ -385,7 +385,7 @@ input:checked {
     font-weight: 400;
     color: rgb(94, 93, 93);
     margin: 3px;
-    padding: 5px;
+    padding: 5px 2px;
     border-bottom: 1px solid #094a8a;
     text-align: left;
   }
