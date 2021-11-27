@@ -73,7 +73,7 @@ stages:
         publishLocation: pipeline
 
 
-- stage: DeployDev
+- stage: DeployDevBlob
   displayName: Deploy To Dev Env
   dependsOn: BuildDev
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
