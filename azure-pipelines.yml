@@ -23,7 +23,7 @@ variables:
   webAppNameProd: 'do we need prod?'
 
   storageAccount: 'zilisadminapp'
-  storageContainerName: $web
+  storageContainerName: test
 
   # Environment name
   prod: 'do we need prod?'
