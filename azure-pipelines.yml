@@ -7,6 +7,8 @@ trigger:
 - master
 - develop
 - release*
+pool:
+  vmImage: windows-latest
 
 variables:
 
@@ -27,7 +29,7 @@ variables:
   prod: 'do we need prod?'
 
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  vmImageName: 'windows-latest'
 
 stages:
 - stage: BuildDev
@@ -117,7 +119,7 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webApp
               WebAppName: $(webAppNameDev)
-              packageForLinux: '$(Pipeline.Workspace)/dev/$(Build.BuildId).zip'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/build/**'
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'serve -s build'
 
