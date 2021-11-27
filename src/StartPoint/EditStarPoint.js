@@ -68,7 +68,11 @@ const EditStarPoint = () => {
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'row', width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '25%' }}>
-          <img style={{ width: '350px', height: '350px' }} src={`https://extranet.securefreedom.com/zilis/Shopping/Images/${productData.smallImage}`} alt="Product" />
+          <img
+            style={productData.smallImage ? { width: '350px', height: '350px' } : { width: '350px' }}
+            src={productData.smallImage ? `https://extranet.securefreedom.com/zilis/Shopping/Images/${productData.smallImage}` : 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png'}
+            alt="Product"
+          />
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '75%', marginLeft: '3%' }}>
