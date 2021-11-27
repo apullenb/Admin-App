@@ -17,6 +17,7 @@ const EditStarPoint = () => {
   const [points, setPoints] = useState('');
   const [isActive, setIsActive] = useState(0);
   const [size, setSize] = useState(null);
+  const [hide, setHide] = useState(false);
   const [updateStarProduct] = useMutation(UPDATE_STAR_PRODUCT);
   const { addToast } = useToasts();
 
@@ -57,6 +58,10 @@ const EditStarPoint = () => {
     }
   };
 
+  const handleHide = (value) => {
+    setHide(value);
+  };
+
   return (
     <MainWrapper>
       {loading && <ZilisLoader />}
@@ -69,7 +74,12 @@ const EditStarPoint = () => {
       <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'row', width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '25%' }}>
           <img
-            style={productData.smallImage ? { width: '350px', height: '350px' } : { width: '350px' }}
+            onClick={(e) => {
+              e.preventDefault();
+              setHide(true);
+            }}
+            title="Click to zoom"
+            style={productData.smallImage ? { width: '350px', height: '350px', cursor: 'pointer' } : { width: '350px' }}
             src={productData.smallImage ? `https://extranet.securefreedom.com/zilis/Shopping/Images/${productData.smallImage}` : 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png'}
             alt="Product"
           />
@@ -209,6 +219,7 @@ const EditStarPoint = () => {
           </div>
         </div>
       </div>
+      <ImageOverLay hide={hide} handleHide={handleHide} src={productData.smallImage} />
     </MainWrapper>
   );
 };
@@ -234,3 +245,32 @@ const PageTitle = styled.h1`
   width: 100%;
   margin: 2% 0;
 `;
+
+const ImageOverLay = (props) => {
+  const handleHide = () => {
+    props.handleHide(false);
+  };
+
+  return (
+    <div
+      onClick={handleHide}
+      style={{
+        display: props.hide ? 'flex' : 'none',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        width: '100vw',
+        height: '100vh',
+        position: 'absolute',
+        left: '0',
+        top: '0',
+        backgroundColor: 'rgba(0,0,0,0.8)',
+        zIndex: '9999',
+      }}
+    >
+      <div style={{ display: 'felx', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '50%', backgroundColor: '#eaeaea' }}>
+        <img style={{ width: '100%' }} src={props.src ? `https://extranet.securefreedom.com/zilis/Shopping/Images/${props.src}` : 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png'} />
+      </div>
+    </div>
+  );
+};
