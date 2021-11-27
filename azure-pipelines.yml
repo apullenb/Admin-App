@@ -96,7 +96,7 @@ stages:
               Destination: AzureBlob
               storage: $(storageAccount)
               ContainerName: $(storageContainerName)
-              azureSubscription: $(azureSubscription)
+              azureSubscription: Zilis-Frontends
               CleanTargetBeforeCopy: true
 
 - stage: DeployDev
@@ -113,15 +113,26 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: $(webAppNameDev)'
+          - task: AzureWebApp@1
+            displayName: 'Azure Web App Deploy'
             inputs:
-              azureSubscription: $(azureSubscription)
+              azureSubscription: Zilis-Microservices
+              appName: $(webAppNameDev)
               appType: webApp
-              WebAppName: $(webAppNameDev)
-              packageForLinux: '$(Pipeline.Workspace)/dev/'
-              RuntimeStack: 'NODE|14-lts'
-              StartupCommand: 'serve -s build'
+              package: '$(Pipeline.Workspace)/dev/'
+              # deploymentMethod: runFromPackage
+
+          # - task: AzureRmWebAppDeployment@4
+          #   displayName: 'Azure App Service Deploy: $(webAppNameDev)'
+          #   inputs:
+          #     azureSubscription: Zilis-Microservices
+          #     appType: webApp
+          #     WebAppName: $(webAppNameDev)
+          #     # packageForLinux: '$(Pipeline.Workspace)/dev/'
+          #     RuntimeStack: 'NODE|14-lts'
+          #     StartupCommand: 'serve -s build'
+              
+          #     DeploymentType: webDeploy
 
 # - stage: BuildProd
 #   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
