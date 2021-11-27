@@ -96,7 +96,7 @@ stages:
               Destination: AzureBlob
               storage: $(storageAccount)
               ContainerName: $(storageContainerName)
-              azureSubscription: Zilis-Frontends
+              azureSubscription: BlobConnection
               CleanTargetBeforeCopy: true
 
 - stage: DeployDev
@@ -116,7 +116,7 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Azure Web App Deploy'
             inputs:
-              azureSubscription: Zilis-Microservices
+              azureSubscription: zilis-microservices
               appName: $(webAppNameDev)
               appType: webApp
               package: '$(Pipeline.Workspace)/dev/'
