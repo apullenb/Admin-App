@@ -70,7 +70,7 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish build artifact'
       inputs:
-        targetPath: '$(Build.ArtifactStagingDirectory)/build/'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
         artifactName: dev
         artifactType: pipeline
 
