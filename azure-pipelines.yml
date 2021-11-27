@@ -16,7 +16,7 @@ variables:
   azureSubscription: 'BlobConnection'
 
   #resource group
-  ResourceGroupName: 'Zilis-Microservices'
+  ResourceGroupName: 'Zilis-Frontends'
 
   # Web app name
   webAppNameDev: 'AdminAppZilis'
@@ -61,18 +61,18 @@ stages:
         workingDir: '$(System.DefaultWorkingDirectory)'
         customCommand: 'run build'
         
-    - task: CopyFiles@2
-      displayName: 'Copy build directory to $(Build.ArtifactStagingDirectory)/build'
-      inputs: 
-        Contents: 'build/**'
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    # - task: CopyFiles@2
+    #   displayName: 'Copy build directory to $(Build.ArtifactStagingDirectory)/build'
+    #   inputs: 
+    #     Contents: 'build/**'
+    #     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish build artifact'
       inputs:
-        targetPath: $(Build.ArtifactStagingDirectory)/build
+        targetPath: '$(Build.ArtifactStagingDirectory)/build/'
         artifactName: dev
-        publishLocation: pipeline
+        artifactType: pipeline
 
 
 - stage: DeployDevBlob
@@ -90,9 +90,9 @@ stages:
         deploy:
           steps:
           - task: AzureFileCopy@4
-            displayName: 'Copy files to blob storage: $(storageName)'
+            displayName: 'Copy files to blob storage: $(storageAccount)'
             inputs:
-              SourcePath: '$(Build.ArtifactStagingDirectory)/build/**'
+              SourcePath: '$(Pipeline.Workspace)/**'
               Destination: AzureBlob
               storage: $(storageAccount)
               ContainerName: $(storageContainerName)
@@ -119,7 +119,7 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webApp
               WebAppName: $(webAppNameDev)
-              packageForLinux: '$(Pipeline.Workspace)/dev/build/**'
+              packageForLinux: '$(Pipeline.Workspace)/**'
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'serve -s build'
 
