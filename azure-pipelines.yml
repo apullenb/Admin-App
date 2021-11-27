@@ -119,7 +119,7 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webApp
               WebAppName: $(webAppNameDev)
-              packageForLinux: '$(Build.ArtifactStagingDirectory)/build/**'
+              packageForLinux: '$(Pipeline.Workspace)/dev/build/**'
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'serve -s build'
 
