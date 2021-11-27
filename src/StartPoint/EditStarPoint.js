@@ -224,6 +224,7 @@ const MainWrapper = styled.div`
   max-width: 1475px;
   font-family: Segoe UI;
   color: #707070;
+  font-size: 20px;
 `;
 
 const PageTitle = styled.h1`
