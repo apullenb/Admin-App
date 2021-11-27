@@ -11,7 +11,7 @@ trigger:
 variables:
 
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'zilis-microservices'
+  azureSubscription: 'BlobConnection'
 
   #resource group
   ResourceGroupName: 'Zilis-Microservices'
@@ -20,8 +20,10 @@ variables:
   webAppNameDev: 'AdminAppZilis'
   webAppNameProd: 'do we need prod?'
 
+  storageAccount: 'zilisadminapp'
+  storageContainerName: $web
+
   # Environment name
-  dev: 'AdminAppZilis'
   prod: 'do we need prod?'
 
   # Agent VM image name
@@ -43,27 +45,81 @@ stages:
       inputs:
         versionSpec: '14.x'
       displayName: 'Install Node.js'
-    - script: |
-        npm install
-        npm run build --if-present
-        npm install -g serve
-        npm run tests --if-present
-      displayName: 'npm install, build and test'
-      workingDirectory: '$(System.DefaultWorkingDirectory)'
-    - task: ArchiveFiles@2
-      displayName: 'Archive Build as zip'
+      
+    - task: Npm@1
+      displayName: NPM Install
       inputs:
-        rootFolderOrFile: $(System.DefaultWorkingDirectory)
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-        replaceExistingArchive: true
+        command: 'install'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+        verbose: true
+    - task: Npm@1
+      displayName: NPM Build
+      inputs:
+        command: 'custom'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+        customCommand: 'run build'
+        
+    - task: CopyFiles@2
+      displayName: 'Copy build directory to $(Build.ArtifactStagingDirectory)/build'
+      inputs: 
+        Contents: 'build/**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
     - task: PublishPipelineArtifact@1
       displayName: 'Publish build artifact'
       inputs:
-        targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        targetPath: $(Build.ArtifactStagingDirectory)/build
         artifactName: dev
         publishLocation: pipeline
+
+
+- stage: DeployDev
+  displayName: Deploy To Dev Env
+  dependsOn: BuildDev
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: $(webAppNameDev)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureFileCopy@4
+            displayName: 'Copy files to blob storage: $(storageName)'
+            inputs:
+              SourcePath: '$(Build.ArtifactStagingDirectory)/build/**'
+              Destination: AzureBlob
+              storage: $(storageAccount)
+              ContainerName: $(storageContainerName)
+              azureSubscription: $(azureSubscription)
+              CleanTargetBeforeCopy: true
+
+- stage: DeployDev
+  displayName: Deploy To Dev Env
+  dependsOn: BuildDev
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: $(webAppNameDev)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Azure App Service Deploy: $(webAppNameDev)'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: webApp
+              WebAppName: $(webAppNameDev)
+              packageForLinux: '$(Pipeline.Workspace)/dev/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|14-lts'
+              StartupCommand: 'serve -s build'
 
 # - stage: BuildProd
 #   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
@@ -102,32 +158,6 @@ stages:
 #         targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
 #         artifactName: prod
 #         publishLocation: pipeline
-
-
-- stage: DeployDev
-  displayName: Deploy To Dev Env
-  dependsOn: BuildDev
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: $(dev)
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: $(webAppNameDev)'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webApp
-              WebAppName: $(webAppNameDev)
-              packageForLinux: '$(Pipeline.Workspace)/dev/$(Build.BuildId).zip'
-              RuntimeStack: 'NODE|14-lts'
-              StartupCommand: 'serve -s build'
-
 
 # - stage: DeployStage
 #   displayName: Deploy to Stage Env
