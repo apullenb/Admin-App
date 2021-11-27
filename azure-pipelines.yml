@@ -70,7 +70,7 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish build artifact'
       inputs:
-        targetPath: '$(Build.ArtifactStagingDirectory)'
+        targetPath: '$(System.DefaultWorkingDirectory)/build'
         artifactName: dev
         artifactType: pipeline
 
@@ -119,7 +119,7 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webApp
               WebAppName: $(webAppNameDev)
-              packageForLinux: '$(Pipeline.Workspace)/**'
+              packageForLinux: '$(Pipeline.Workspace)'
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'serve -s build'
 
