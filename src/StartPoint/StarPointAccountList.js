@@ -116,6 +116,7 @@ export const StarPointAccountList = () => {
                 }}
               />
             </TH>
+            <TH>Records Found: {starPointDataFiltered.length}</TH>
           </tr>
           <tr style={{ borderBottom: '1px solid #707070', height: '50px' }}>
             {tHeaderData &&

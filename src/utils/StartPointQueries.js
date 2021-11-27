@@ -25,6 +25,7 @@ export const GET_STAR_PODUCTS_BY_ID = gql`
       largeImage
       smallImage
       country
+      size
     }
   }
 `;
