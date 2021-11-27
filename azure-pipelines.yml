@@ -11,10 +11,10 @@ trigger:
 variables:
 
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '862e851f-da1c-42a6-8591-f72fa38cf11c'
+  azureSubscription: 'zilis-microservices'
 
   #resource group
-  ResourceGroupName: 'Zilis-Frontends'
+  ResourceGroupName: 'Zilis-Microservices'
 
   # Web app name
   webAppNameDev: 'AdminAppZilis'
