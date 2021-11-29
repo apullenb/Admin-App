@@ -7,6 +7,8 @@ trigger:
 - master
 - develop
 - release*
+
+
 pool:
   vmImage: windows-latest
 
@@ -23,10 +25,7 @@ variables:
   webAppNameProd: 'do we need prod?'
 
   storageAccount: 'zilisadminapp'
-  storageContainerName: test
-
-  # Environment name
-  prod: 'do we need prod?'
+  storageContainerName: $web
 
   # Agent VM image name
   vmImageName: 'windows-latest'
@@ -75,29 +74,29 @@ stages:
         artifactType: pipeline
 
 
-- stage: DeployDevBlob
-  displayName: Deploy To Dev Env
-  dependsOn: BuildDev
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: $(webAppNameDev)
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureFileCopy@4
-            displayName: 'Copy files to blob storage: $(storageAccount)'
-            inputs:
-              SourcePath: '$(Pipeline.Workspace)/dev/**'
-              Destination: AzureBlob
-              storage: $(storageAccount)
-              ContainerName: $(storageContainerName)
-              azureSubscription: BlobConnection
-              CleanTargetBeforeCopy: true
+# - stage: DeployDevBlob
+#   displayName: Deploy To Dev Env
+#   dependsOn: BuildDev
+#   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+#   jobs:
+#   - deployment: Deploy
+#     displayName: Deploy
+#     environment: $(webAppNameDev)
+#     pool:
+#       vmImage: $(vmImageName)
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - task: AzureFileCopy@4
+#             displayName: 'Copy files to blob storage: $(storageAccount)'
+#             inputs:
+#               SourcePath: '$(Pipeline.Workspace)/dev/**'
+#               Destination: AzureBlob
+#               storage: $(storageAccount)
+#               ContainerName: $(storageContainerName)
+#               azureSubscription: BlobConnection
+#               CleanTargetBeforeCopy: true
 
 - stage: DeployDev
   displayName: Deploy To Dev Env
