@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_STAR_PRODUCTS, GET_STAR_PODUCTS_BY_ID } from '../utils/StartPointQueries';
+import { GET_STAR_PRODUCTS } from '../utils/StartPointQueries';
 
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';

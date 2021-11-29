@@ -8,6 +8,7 @@ import { useToasts } from 'react-toast-notifications';
 
 import ZilisLoader from '../GlobalComponents/ZilisLoader';
 import ImageOverlay from '../GlobalComponents/ImageOveralay';
+import { Display } from 'react-bootstrap-icons';
 
 const EditStarPoint = () => {
   const sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large', 'XXX-Large', 'XXXX-Large'];
@@ -52,7 +53,7 @@ const EditStarPoint = () => {
         },
       });
       console.log(response);
-      addToast('Starship updated successfully!', {
+      addToast(`Starship with SKU: ${productData.productSku} updated successfully!`, {
         appearance: 'success',
         autoDismiss: true,
       });
@@ -74,7 +75,7 @@ const EditStarPoint = () => {
       {loading && <ZilisLoader />}
       <TopContentWrapper>
         <PageTitle>Edit StarPoint Product</PageTitle>
-        <Link style={{ color: '#0F4B8F', textDecoration: 'underline', width: '10%' }} to={'/StarPoint'}>
+        <Link style={{ color: '#0F4B8F', textDecoration: 'underline', width: '50%', display: 'flex', justifyContent: 'flex-end' }} to={'/StarPoint'}>
           Back to List
         </Link>
       </TopContentWrapper>
@@ -131,8 +132,7 @@ const EditStarPoint = () => {
                   <tr style={{ height: '60px' }}>
                     <td style={{ width: '120px' }}>StarPoint Value</td>
                     <td style={{ width: '300px' }}>
-                      <input
-                        style={{ width: '235px', height: '36px', border: '1px solid #0F4B8F' }}
+                      <CustomInput
                         type="text"
                         value={points}
                         onChange={(e) => {
@@ -144,8 +144,7 @@ const EditStarPoint = () => {
                   <tr>
                     <td> Category</td>
                     <td>
-                      <input
-                        style={{ width: '235px', height: '36px', border: '1px solid #0F4B8F' }}
+                      <CustomInput
                         type="text"
                         value={category}
                         onChange={(e) => {
@@ -157,14 +156,15 @@ const EditStarPoint = () => {
                   <tr>
                     <td>Description</td>
                     <td>
-                      <input
-                        style={{ margin: '3% 0', width: '235px', height: '36px', border: '1px solid #0F4B8F' }}
+                      <textarea
+                        style={{ margin: '3% 0', width: '235px', border: '1px solid #0F4B8F' }}
+                        rows="3"
                         type="text"
                         value={description}
                         onChange={(e) => {
                           setDescription(e.target.value);
                         }}
-                      />
+                      ></textarea>
                     </td>
                   </tr>
                 </tbody>
@@ -178,7 +178,7 @@ const EditStarPoint = () => {
                     <td style={{ width: '120px' }}>Size</td>
                     <td style={{ width: '300px' }}>
                       {size ? (
-                        <select
+                        <CustomSelect
                           style={{ width: '235px', height: '36px', border: '1px solid #0F4B8F' }}
                           value={size}
                           onChange={(e) => {
@@ -195,7 +195,7 @@ const EditStarPoint = () => {
                               </option>
                             );
                           })}
-                        </select>
+                        </CustomSelect>
                       ) : (
                         'Sizes not available for product'
                       )}
@@ -204,8 +204,7 @@ const EditStarPoint = () => {
                   <tr>
                     <td> Is Active</td>
                     <td>
-                      <select
-                        style={{ width: '150px', height: '36px', border: '1px solid #0F4B8F' }}
+                      <CustomSelect
                         value={parseInt(isActive)}
                         onChange={(e) => {
                           setIsActive(parseInt(e.target.value));
@@ -216,7 +215,7 @@ const EditStarPoint = () => {
                         </option>
                         <option value={1}>Yes</option>
                         <option value={0}>No</option>
-                      </select>
+                      </CustomSelect>
                     </td>
                   </tr>
                 </tbody>
@@ -224,14 +223,13 @@ const EditStarPoint = () => {
             </Content>
           </InnerContentWrapper>
           <BottomContentWrapper>
-            <button
+            <SaveButton
               onClick={(e) => {
                 updateStartProduct(e);
               }}
-              style={{ backgroundColor: '#0F4B8F', color: 'white', width: '130px', height: '36px', border: 'none' }}
             >
               Save
-            </button>
+            </SaveButton>
           </BottomContentWrapper>
         </ContentWrapper>
       </ContentOuterWrapper>
@@ -252,12 +250,21 @@ const MainWrapper = styled.div`
   font-family: Segoe UI;
   color: #707070;
   font-size: 20px;
+
+  @media (max-width: 1295px) {
+    width: 90%;
+  }
 `;
 const ContentOuterWrapper = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: row;
   width: 100%;
+
+  @media (max-width: 1295px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const ImageWrapper = styled.div`
@@ -274,14 +281,24 @@ const TopContentWrapper = styled.div`
   align-items: baseline;
   flex-direction: row;
   width: 100%;
+
+  @media (max-width: 595px) {
+    align-items: center;
+    flex-direction: column;
+  }
 `;
 
 const PageTitle = styled.h1`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 80%;
   margin: 2% 0;
+
+  @media (max-width: 595px) {
+    justify-content: center;
+    width: 100%;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -301,6 +318,11 @@ const InnerContentWrapper = styled.div`
   width: 100%;
   text-align: left;
   padding: 2% 0;
+
+  @media (max-width: 1050px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Content = styled.div`
@@ -310,10 +332,46 @@ const Content = styled.div`
   flex-direction: column;
   width: 50%;
   text-align: left;
+
+  @media (max-width: 1050px) {
+    width: 100%;
+  }
 `;
 
 const BottomContentWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+
+  @media (max-width: 1050px) {
+    margin-top: 15%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const SaveButton = styled.button`
+  background-color: #0f4b8f;
+  color: white;
+  width: 130px;
+  height: 36px;
+  border: none;
+
+  @media (max-width: 595px) {
+    width: 80%;
+    height: 45px;
+  }
+`;
+
+const CustomInput = styled.input`
+  width: 235px;
+  height: 36px;
+  border: 1px solid #0f4b8f;
+`;
+
+const CustomSelect = styled.select`
+  width: 150px;
+  height: 36px;
+  border: 1px solid #0f4b8f;
 `;
