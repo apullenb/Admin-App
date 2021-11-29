@@ -42,10 +42,14 @@ export const StarPointAccountList = () => {
 
   const filterTable = (e) => {
     const id = e.target.id;
-    const searchValue = e.target.value;
+    const notChar = id === 'inventoryId' || id === 'isActive';
+    const searchValue = notChar ? e.target.value : e.target.value.toLowerCase();
+
     const filtered = starPointData.filter((value) => {
-      return String(value[id]).includes(searchValue);
+      const val = notChar ? String(value[id]) : value[id].toLowerCase();
+      return val.includes(searchValue);
     });
+
     setStarPointDataFiltered(filtered);
   };
 

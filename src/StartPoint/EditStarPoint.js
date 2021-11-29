@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { GET_STAR_PODUCTS_BY_ID } from '../utils/StartPointQueries';
@@ -7,23 +7,28 @@ import { UPDATE_STAR_PRODUCT } from '../utils/StartPointMutations';
 import { useToasts } from 'react-toast-notifications';
 
 import ZilisLoader from '../GlobalComponents/ZilisLoader';
+import ImageOverlay from '../GlobalComponents/ImageOveralay';
 
 const EditStarPoint = () => {
   const sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large', 'XXX-Large', 'XXXX-Large'];
+  const assetRootUrl = 'https://extranet.securefreedom.com/zilis/Shopping/Images/';
+  const placeHolderImg = 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png';
   const { inventoryId } = useParams();
-  const { loading, error, data } = useQuery(GET_STAR_PODUCTS_BY_ID, { variables: { inventoryId: parseInt(inventoryId) } });
+  const { loading, data } = useQuery(GET_STAR_PODUCTS_BY_ID, { variables: { inventoryId: parseInt(inventoryId) } });
   const [productData, setProductData] = useState({});
   const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
   const [points, setPoints] = useState('');
   const [isActive, setIsActive] = useState(0);
   const [size, setSize] = useState(null);
-  const [hide, setHide] = useState(false);
+  const [show, setShow] = useState(false);
   const [updateStarProduct] = useMutation(UPDATE_STAR_PRODUCT);
   const { addToast } = useToasts();
 
   useEffect(() => {
     data && setProductData(data.starShipInventory[0]);
     data && setCategory(data.starShipInventory[0].category);
+    data && setDescription(data.starShipInventory[0].description);
     data && setPoints(data.starShipInventory[0].points);
     data && setIsActive(data.starShipInventory[0].isActive);
     data && setSize(data.starShipInventory[0].size);
@@ -31,6 +36,7 @@ const EditStarPoint = () => {
 
   const updateStartProduct = async (e) => {
     e.preventDefault();
+    console.log(size);
     const _inventoryId = parseInt(inventoryId);
     const _points = parseInt(points);
     const country = productData.country;
@@ -42,6 +48,7 @@ const EditStarPoint = () => {
           isActive,
           size,
           country,
+          description,
         },
       });
       console.log(response);
@@ -59,35 +66,35 @@ const EditStarPoint = () => {
   };
 
   const handleHide = (value) => {
-    setHide(value);
+    setShow(value);
   };
 
   return (
     <MainWrapper>
       {loading && <ZilisLoader />}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'baseline', flexDirection: 'row', width: '100%' }}>
+      <TopContentWrapper>
         <PageTitle>Edit StarPoint Product</PageTitle>
         <Link style={{ color: '#0F4B8F', textDecoration: 'underline', width: '10%' }} to={'/StarPoint'}>
           Back to List
         </Link>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'row', width: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '25%' }}>
+      </TopContentWrapper>
+      <ContentOuterWrapper>
+        <ImageWrapper>
           <img
             onClick={(e) => {
               e.preventDefault();
-              setHide(true);
+              productData.smallImage && setShow(true);
             }}
             title="Click to zoom"
             style={productData.smallImage ? { width: '350px', height: '350px', cursor: 'pointer' } : { width: '350px' }}
-            src={productData.smallImage ? `https://extranet.securefreedom.com/zilis/Shopping/Images/${productData.smallImage}` : 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png'}
+            src={productData.smallImage ? `${assetRootUrl + productData.smallImage}` : placeHolderImg}
             alt="Product"
           />
-        </div>
+        </ImageWrapper>
 
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '75%', marginLeft: '3%' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', width: '100%', textAlign: 'left', padding: '2% 0' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column', width: '50%', textAlign: 'left' }}>
+        <ContentWrapper>
+          <InnerContentWrapper>
+            <Content>
               <table style={{ width: '100%' }}>
                 <tbody>
                   <tr>
@@ -95,34 +102,30 @@ const EditStarPoint = () => {
                     <td style={{ width: '300px' }}>{productData.inventoryId}</td>
                   </tr>
                   <tr>
-                    <td>Country</td>
-                    <td>{productData.country}</td>
-                  </tr>
-                  <tr>
                     <td>SKU</td>
                     <td>{productData.productSku}</td>
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column', width: '50%', textAlign: 'left' }}>
+            </Content>
+            <Content>
               <table style={{ width: '100%' }}>
                 <tbody>
                   <tr>
-                    <td style={{ width: '120px' }}>Description</td>
-                    <td style={{ width: '300px' }}>{productData.description}</td>
+                    <td>Country</td>
+                    <td>{productData.country}</td>
                   </tr>
                   <tr>
-                    <td>Star Points</td>
-                    <td>{productData.points}</td>
+                    <td style={{ width: '120px' }}>BV</td>
+                    <td style={{ width: '300px' }}>{productData.points}</td>
                   </tr>
                 </tbody>
               </table>
-            </div>
-          </div>
+            </Content>
+          </InnerContentWrapper>
 
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', width: '100%', textAlign: 'left', padding: '2% 0%', borderTop: '3px solid #707070' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column', width: '50%', textAlign: 'left' }}>
+          <InnerContentWrapper style={{ borderTop: '3px solid #707070' }}>
+            <Content>
               <table style={{ width: '100%' }}>
                 <tbody>
                   <tr style={{ height: '60px' }}>
@@ -151,11 +154,24 @@ const EditStarPoint = () => {
                       />
                     </td>
                   </tr>
+                  <tr>
+                    <td>Description</td>
+                    <td>
+                      <input
+                        style={{ margin: '3% 0', width: '235px', height: '36px', border: '1px solid #0F4B8F' }}
+                        type="text"
+                        value={description}
+                        onChange={(e) => {
+                          setDescription(e.target.value);
+                        }}
+                      />
+                    </td>
+                  </tr>
                 </tbody>
               </table>
-            </div>
+            </Content>
 
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', flexDirection: 'column', width: '50%', textAlign: 'left' }}>
+            <Content>
               <table style={{ width: '100%' }}>
                 <tbody>
                   <tr style={{ height: '60px' }}>
@@ -205,9 +221,9 @@ const EditStarPoint = () => {
                   </tr>
                 </tbody>
               </table>
-            </div>
-          </div>
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+            </Content>
+          </InnerContentWrapper>
+          <BottomContentWrapper>
             <button
               onClick={(e) => {
                 updateStartProduct(e);
@@ -216,10 +232,10 @@ const EditStarPoint = () => {
             >
               Save
             </button>
-          </div>
-        </div>
-      </div>
-      <ImageOverLay hide={hide} handleHide={handleHide} src={productData.smallImage} />
+          </BottomContentWrapper>
+        </ContentWrapper>
+      </ContentOuterWrapper>
+      <ImageOverlay show={show} handleHide={handleHide} src={productData.smallImage} rootUrl={assetRootUrl} />
     </MainWrapper>
   );
 };
@@ -237,6 +253,28 @@ const MainWrapper = styled.div`
   color: #707070;
   font-size: 20px;
 `;
+const ContentOuterWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 25%;
+`;
+
+const TopContentWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: row;
+  width: 100%;
+`;
 
 const PageTitle = styled.h1`
   display: flex;
@@ -246,31 +284,36 @@ const PageTitle = styled.h1`
   margin: 2% 0;
 `;
 
-const ImageOverLay = (props) => {
-  const handleHide = () => {
-    props.handleHide(false);
-  };
+const ContentWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 75%;
+  margin-left: 3%;
+`;
 
-  return (
-    <div
-      onClick={handleHide}
-      style={{
-        display: props.hide ? 'flex' : 'none',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        width: '100vw',
-        height: '100vh',
-        position: 'absolute',
-        left: '0',
-        top: '0',
-        backgroundColor: 'rgba(0,0,0,0.8)',
-        zIndex: '9999',
-      }}
-    >
-      <div style={{ display: 'felx', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', width: '50%', backgroundColor: '#eaeaea' }}>
-        <img style={{ width: '100%' }} src={props.src ? `https://extranet.securefreedom.com/zilis/Shopping/Images/${props.src}` : 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png'} />
-      </div>
-    </div>
-  );
-};
+const InnerContentWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  text-align: left;
+  padding: 2% 0;
+`;
+
+const Content = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 50%;
+  text-align: left;
+`;
+
+const BottomContentWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`;
