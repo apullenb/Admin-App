@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import debounce from 'lodash.debounce';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
@@ -20,7 +21,10 @@ export const StarPointAccountList = () => {
   const [skip, setSkip] = useState(0);
   const [perPageNum, setPerPageNum] = useState(10);
   const [hasNextPage, setHasNextPage] = useState(false);
-  const { loading, data, refetch } = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, { variables: { skip: skip, take: perPageNum } });
+  const [productSku, setProductSku] = useState('');
+  const [category, setCategory] = useState('');
+  const [name, setName] = useState('');
+  const { loading, data, refetch } = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, { variables: { skip: skip, take: perPageNum, productSku: productSku, category: category, name: name } });
 
   useEffect(() => {
     setTHeadData(tableHeadings);
@@ -28,7 +32,7 @@ export const StarPointAccountList = () => {
 
   useEffect(() => {
     refetch();
-  }, [perPageNum, skip]);
+  }, [perPageNum, skip, name, category, productSku]);
 
   useEffect(() => {
     data && setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
@@ -71,7 +75,7 @@ export const StarPointAccountList = () => {
   return (
     <TableWrapper>
       <PageTitle>StarPoint Products</PageTitle>
-      {loading && <ZilisLoader />}
+      {loading && <ZilisLoader isFullPage={true} />}
       <Table>
         <thead style={{ height: '50px' }}>
           <tr style={{ height: '30px' }}>
@@ -80,7 +84,7 @@ export const StarPointAccountList = () => {
                 id="inventoryId"
                 type="text"
                 placeholder=" Inventory ID"
-                onChange={(e) => {
+                onBlur={(e) => {
                   filterTable(e);
                 }}
               />
@@ -107,7 +111,7 @@ export const StarPointAccountList = () => {
                 type="text"
                 placeholder=" SKU"
                 onChange={(e) => {
-                  filterTable(e);
+                  setProductSku(e.target.value);
                 }}
               />
             </TH>
@@ -117,7 +121,7 @@ export const StarPointAccountList = () => {
                 type="text"
                 placeholder="Name"
                 onChange={(e) => {
-                  filterTable(e);
+                  setName(e.target.value);
                 }}
               />
             </TH>
@@ -127,7 +131,7 @@ export const StarPointAccountList = () => {
                 type="text"
                 placeholder="Category"
                 onChange={(e) => {
-                  filterTable(e);
+                  setCategory(e.target.value);
                 }}
               />
             </TH>
@@ -171,7 +175,7 @@ export const StarPointAccountList = () => {
                     }
                   >
                     <TD>
-                      {data.description ? truncateText(16, data.description) : 'No Text'} <FontAwesomeIcon style={{ color: '#0f4b8f' }} icon={faInfoCircle} />
+                      {data.description ? truncateText(10, data.description) : 'No Text'} <FontAwesomeIcon style={{ color: '#0f4b8f' }} icon={faInfoCircle} />
                     </TD>
                   </OverlayTrigger>
                   <TD>{data.category}</TD>

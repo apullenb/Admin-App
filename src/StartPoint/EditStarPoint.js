@@ -9,7 +9,6 @@ import { useToasts } from 'react-toast-notifications';
 import ZilisLoader from '../GlobalComponents/ZilisLoader';
 import ImageOverlay from '../GlobalComponents/ImageOveralay';
 
-
 const EditStarPoint = () => {
   const sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large', 'XXX-Large', 'XXXX-Large'];
   const assetRootUrl = 'https://extranet.securefreedom.com/zilis/Shopping/Images/';
@@ -71,7 +70,7 @@ const EditStarPoint = () => {
 
   return (
     <MainWrapper>
-      {loading && <ZilisLoader />}
+      {loading && <ZilisLoader isFullPage={true} />}
       <TopContentWrapper>
         <PageTitle>Edit StarPoint Product</PageTitle>
         <Link style={{ color: '#0F4B8F', textDecoration: 'underline', width: '50%', display: 'flex', justifyContent: 'flex-end' }} to={'/StarPoint'}>

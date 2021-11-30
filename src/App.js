@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import './App.scss';
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
