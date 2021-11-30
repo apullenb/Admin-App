@@ -147,7 +147,7 @@ function EntryEdit(props) {
   return (
     <div>
       <h1>
-        Skincare Challenge Edit Entry
+        Skincare Challenge Edit Entry 
         </h1>
         <div className="page-header-link"><Link to="/Challenge/Entries">Back to list</Link></div>
     

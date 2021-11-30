@@ -1,6 +1,6 @@
 
   const environment = process.env.REACT_APP_ENV || 'test';
-  
+
   const handleSetProductsURL = () => {
       switch(environment){
           case 'development' : return 'http://localhost:4000';

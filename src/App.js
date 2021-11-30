@@ -26,25 +26,22 @@ import Permissions from "./Permissions/PermissionList";
 
 import Page from "./GlobalComponents/PageWrapper";
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
-import COA from "./COA/COA";
-import COAProductList from "./COA/COAProductList";
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "@apollo/react-hooks";
-import COADocument from "./COA/COADocuments";
-import UserAuthorizationStatusTable from "./User/UserAuthorizationStatusTable";
-import UserAuthorizationStatusAddEdit from "./User/UserAuthorizationStatusAddEdit";
-import GlowEntryList from "./GlowChallenge/GlowEntryList";
+import COA from './COA/COA';
+import COAProductList from './COA/COAProductList';
+import ApolloClient from  'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
+import COADocument from './COA/COADocuments';
+import UserAuthorizationStatusTable from './User/UserAuthorizationStatusTable';
+import UserAuthorizationStatusAddEdit from './User/UserAuthorizationStatusAddEdit';
+import GlowEntryList from './GlowChallenge/GlowEntryList';
+import GCEntryEdit from './GlowChallenge/GCEntryEdit';
+import GlowEntry from './GlowChallenge/GlowEntry';
 
 const allRoutes = [
   {
     path: "/",
     exact: true,
     component: Dashboard,
-  },
-  {
-    path: "/login",
-    exact: true,
-    component: { Login },
   },
   {
     path: "/Shopping/Countries",
@@ -73,6 +70,16 @@ const allRoutes = [
   },
   {
     exact: true,
+    path : "/Challenge/Glow-Submission/:submissionId" ,
+    component : GCEntryEdit ,
+  },
+  {
+    exact: true,
+     path : "/Challenge/Glow-Entry/:accountid",
+      component : GlowEntry
+  },
+  {
+    exact: true,
     path: "/Challenge/Accounts/:accountid",
     component: AccountEdit,
   },
@@ -90,6 +97,11 @@ const allRoutes = [
     exact: true,
     path: "/Challenge/Entry/:entryId",
     component: EntryEdit,
+  },
+  {
+    exact: true,
+    path : "/Coa/documents/:productID" ,
+    component : COADocument
   },
   {
     exact: true,
