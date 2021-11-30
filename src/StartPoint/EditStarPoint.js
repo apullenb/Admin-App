@@ -8,7 +8,7 @@ import { useToasts } from 'react-toast-notifications';
 
 import ZilisLoader from '../GlobalComponents/ZilisLoader';
 import ImageOverlay from '../GlobalComponents/ImageOveralay';
-import { Display } from 'react-bootstrap-icons';
+
 
 const EditStarPoint = () => {
   const sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large', 'XXX-Large', 'XXXX-Large'];
@@ -37,7 +37,6 @@ const EditStarPoint = () => {
 
   const updateStartProduct = async (e) => {
     e.preventDefault();
-    console.log(size);
     const _inventoryId = parseInt(inventoryId);
     const _points = parseInt(points);
     const country = productData.country;

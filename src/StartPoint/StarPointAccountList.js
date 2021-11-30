@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-import { GET_STAR_PRODUCTS } from '../utils/StartPointQueries';
+import { GET_STAR_PRODUCTS_WITH_PAGE } from '../utils/StartPointQueries';
 
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
@@ -13,20 +13,27 @@ import ZilisLoader from '../GlobalComponents/ZilisLoader';
 import Pagination from './Pagination';
 
 export const StarPointAccountList = () => {
-  const tableHeadings = ['Inventory', 'Active', 'SKU', 'Name', 'Category', 'StarPoints', 'Actions'];
+  const tableHeadings = ['Inventory', 'Active', 'SKU', 'Name', 'Category', 'Country', 'StarPoints', 'Actions'];
   const [starPointDataFiltered, setStarPointDataFiltered] = useState([]);
   const [starPointData, setStarPointData] = useState([]);
   const [tHeaderData, setTHeadData] = useState();
+  const [skip, setSkip] = useState(0);
   const [perPageNum, setPerPageNum] = useState(10);
-  const { loading, error, data } = useQuery(GET_STAR_PRODUCTS);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const { loading, data, refetch } = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, { variables: { skip: skip, take: perPageNum } });
 
   useEffect(() => {
     setTHeadData(tableHeadings);
   }, []);
 
   useEffect(() => {
-    data && setStarPointDataFiltered(data.starShipInventory);
-    data && setStarPointData(data.starShipInventory);
+    refetch();
+  }, [perPageNum, skip]);
+
+  useEffect(() => {
+    data && setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
+    data && setStarPointData(data.starShipInventoryWithPaging.items);
+    data && setHasNextPage(data.starShipInventoryWithPaging.pageInfo.hasNextPage);
   }, [data]);
 
   const truncateText = (maxCount, textToTruncate) => {
@@ -54,7 +61,11 @@ export const StarPointAccountList = () => {
   };
 
   const updatePerPage = (num) => {
-    setPerPageNum(num);
+    setPerPageNum(parseInt(num));
+  };
+
+  const handleUpdateSkip = (num) => {
+    setSkip(num);
   };
 
   return (
@@ -77,16 +88,16 @@ export const StarPointAccountList = () => {
             <TH>
               <select
                 id="isActive"
-                style={{ width: '70%', border: '1px solid #0f4b8f', height: '35px' }}
+                style={{ width: '80%', border: '1px solid #0f4b8f', height: '35px' }}
                 onChange={(e) => {
                   filterTable(e);
                 }}
               >
                 <option disabled selected value>
-                  --Active--
+                  Yes / No
                 </option>
-                <option value="1">True</option>
-                <option value="0">False</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
                 <option value="">None</option>
               </select>
             </TH>
@@ -120,13 +131,12 @@ export const StarPointAccountList = () => {
                 }}
               />
             </TH>
-            <TH>Records Found: {starPointDataFiltered.length}</TH>
           </tr>
           <tr style={{ borderBottom: '1px solid #707070', height: '50px' }}>
             {tHeaderData &&
               tHeaderData.map((data, index) => {
                 return (
-                  <TH style={{ width: '14.28%' }} key={index}>
+                  <TH style={{ width: '12.5%' }} key={index}>
                     {data}
                   </TH>
                 );
@@ -136,7 +146,7 @@ export const StarPointAccountList = () => {
         <tbody style={{ height: '160px', fontSize: '18px' }}>
           {starPointDataFiltered && starPointDataFiltered.length === 0 ? (
             <tr>
-              <td colSpan={7}>
+              <td colSpan={tableHeadings.length}>
                 <h3 style={{ textAlign: 'center' }}>No Data Found</h3>
               </td>
             </tr>
@@ -146,7 +156,7 @@ export const StarPointAccountList = () => {
               return (
                 <TR key={index}>
                   <TD>{data.inventoryId}</TD>
-                  <TD>{data.isActive === 1 ? 'True' : 'False'}</TD>
+                  <TD>{data.isActive === 1 ? 'Yes' : 'No'}</TD>
                   <TD>{data.productSku}</TD>
 
                   <OverlayTrigger
@@ -164,8 +174,8 @@ export const StarPointAccountList = () => {
                       {data.description ? truncateText(16, data.description) : 'No Text'} <FontAwesomeIcon style={{ color: '#0f4b8f' }} icon={faInfoCircle} />
                     </TD>
                   </OverlayTrigger>
-
                   <TD>{data.category}</TD>
+                  <TD>{data.country}</TD>
                   <TD>{data.points}</TD>
                   <TD>
                     {
@@ -181,7 +191,7 @@ export const StarPointAccountList = () => {
         </tbody>
       </Table>
 
-      <Pagination updatePerPage={updatePerPage} />
+      <Pagination updatePerPage={updatePerPage} handleUpdateSkip={handleUpdateSkip} hasNextPage={hasNextPage} />
     </TableWrapper>
   );
 };

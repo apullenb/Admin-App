@@ -13,6 +13,28 @@ export const GET_STAR_PRODUCTS = gql`
   }
 `;
 
+export const GET_STAR_PRODUCTS_WITH_PAGE = gql`
+  query fetchAllWithPaging($skip: Int!, $take: Int!) {
+    starShipInventoryWithPaging(skip: $skip, take: $take, order: { inventoryId: ASC }) {
+      items {
+        inventoryId
+        country
+        productSku
+        originalPoints
+        points
+        isActive
+        description
+        category
+        sortOrder
+      }
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+      }
+    }
+  }
+`;
+
 export const GET_STAR_PODUCTS_BY_ID = gql`
   query fetchbyID($inventoryId: Int!) {
     starShipInventory(where: { inventoryId: { eq: $inventoryId } }) {

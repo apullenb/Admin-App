@@ -1,22 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 function Pagination(props) {
   const [pageNo, setPageNo] = useState(1);
+  const [skip, setSkip] = useState(0);
   const [perPage, setPerpage] = useState(10);
   const [blank, setBlank] = useState(true);
-  const [isNextDisabled, setIsNextDisabled] = useState(false);
-  const { entries } = useSelector((state) => state.entries);
   const pageOptions = [10, 15, 20];
 
-  useEffect(() => {
-    entries.data && disableNext();
-  }, []);
+  useEffect(() => {}, []);
 
   const changePerPage = (e) => {
-    const num = e.target.value;
+    const num = parseInt(e.target.value);
     setPerpage(num);
     props.updatePerPage(num);
   };
@@ -24,23 +20,19 @@ function Pagination(props) {
   const handlePrevPage = () => {
     const perPageVal = pageNo - 1;
     setPageNo(perPageVal);
-    props.updatePageNo(perPageVal);
+    const calcSkip = skip - perPage;
+    setSkip(calcSkip);
+    props.handleUpdateSkip(calcSkip);
     setBlank(!blank);
   };
 
   const handleNextPage = () => {
     const perPageVal = pageNo + 1;
     setPageNo(perPageVal);
-    props.updatePageNo(perPageVal);
+    const calcSkip = skip + perPage;
+    setSkip(calcSkip);
+    props.handleUpdateSkip(calcSkip);
     setBlank(!blank);
-  };
-
-  const disableNext = () => {
-    if (entries.data.length < perPage) {
-      setIsNextDisabled(true);
-    } else {
-      setIsNextDisabled(false);
-    }
   };
 
   return (
@@ -65,7 +57,7 @@ function Pagination(props) {
             );
           })}
         </select>
-        <button className="btn" disabled={isNextDisabled} onClick={handleNextPage}>
+        <button className="btn" disabled={!props.hasNextPage} onClick={handleNextPage}>
           {'Next >'}
         </button>
       </PaginationControls>
