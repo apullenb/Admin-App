@@ -1,13 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import './App.scss';
+import "./App.scss";
 import React, { useState, useEffect } from "react";
-import {useDispatch} from 'react-redux';
-import {
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import './App.scss'
+import { useDispatch } from "react-redux";
+import { Switch, Route, Redirect } from "react-router-dom";
+import "./App.scss";
 import Login from "./Login";
 import Dashboard from "./Pages/Dashboard";
 
@@ -24,28 +20,27 @@ import ShoppingKits from "./ShoppingConfiguration/kits/kits";
 import ShoppingProducts from "./ShoppingConfiguration/product/products";
 import ShoppingCategories from "./ShoppingConfiguration/categories";
 
-import Events from './Events/EventList';
-import Incentive from './Incentive/IncentiveList';
-import Permissions from './Permissions/PermissionList';
+import Events from "./Events/EventList";
+import Incentive from "./Incentive/IncentiveList";
+import Permissions from "./Permissions/PermissionList";
 
-import Page from './GlobalComponents/PageWrapper'
+import Page from "./GlobalComponents/PageWrapper";
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
-import COA from './COA/COA';
-import COAProductList from './COA/COAProductList';
-import ApolloClient from  'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
-import COADocument from './COA/COADocuments';
-import UserAuthorizationStatusTable from './User/UserAuthorizationStatusTable';
-import UserAuthorizationStatusAddEdit from './User/UserAuthorizationStatusAddEdit';
-import GlowEntryList from './GlowChallenge/GlowEntryList';
-
+import COA from "./COA/COA";
+import COAProductList from "./COA/COAProductList";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "@apollo/react-hooks";
+import COADocument from "./COA/COADocuments";
+import UserAuthorizationStatusTable from "./User/UserAuthorizationStatusTable";
+import UserAuthorizationStatusAddEdit from "./User/UserAuthorizationStatusAddEdit";
+import GlowEntryList from "./GlowChallenge/GlowEntryList";
+import { SkincareAdminPermissions } from "./redux/actions/Skincare/skincareActions";
 
 const client = new ApolloClient({
-  uri: 'https://zorderapidev.azurewebsites.net/graphql'
-})
+  uri: "https://zorderapidev.azurewebsites.net/graphql",
+});
 
 function App() {
-
   // SAMPLE USER VALIDATION (Needs to be created)---------->
   // Currently defaulted to true..needs to default to false once authentication is set up
   const dispatch = useDispatch();
@@ -61,8 +56,9 @@ function App() {
   };
 
   useEffect(() => {
-    dispatch({type:APP_STARTED}) 
-  }, [])
+    dispatch({ type: APP_STARTED });
+    dispatch(SkincareAdminPermissions());
+  }, []);
 
   useEffect(() => {
     isAuthCheck();
@@ -72,39 +68,61 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-    <div className='app'>     
-      <Page >
-        <Switch>
-          <Route exact path="/" component={Dashboard} />
-          <Route path="/login" component={Login} />
+      <div className="app">
+        <Page>
+          <Switch>
+            <Route exact path="/" component={Dashboard} />
+            <Route path="/login" component={Login} />
 
-          <Route path="/Shopping/Countries" component={ShoppingCountries} />
-          <Route path="/Shopping/Kits" component={ShoppingKits} />
-          <Route path="/Shopping/Categories" component={ShoppingCategories} />
-          <Route path="/Shopping/Products" component={ShoppingProducts} />
+            <Route path="/Shopping/Countries" component={ShoppingCountries} />
+            <Route path="/Shopping/Kits" component={ShoppingKits} />
+            <Route path="/Shopping/Categories" component={ShoppingCategories} />
+            <Route path="/Shopping/Products" component={ShoppingProducts} />
 
-          <Route exact path="/Challenge/Accounts" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
-          <Route path="/Challenge/Accounts/:accountid" component={AccountEdit} />
-          <Route path="/Challenge/Entries" component={EntryList} />
-          <Route path="/Challenge/Glow-Entries" component={GlowEntryList} />
-          <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
+            <Route
+              exact
+              path="/Challenge/Accounts"
+              render={(props) =>
+                isAuthenticated ? <AccountList /> : <Redirect to="/login" />
+              }
+            />
+            <Route
+              path="/Challenge/Accounts/:accountid"
+              component={AccountEdit}
+            />
+            <Route path="/Challenge/Entries" component={EntryList} />
+            <Route path="/Challenge/Glow-Entries" component={GlowEntryList} />
+            <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
 
-          <Route path="/COA/edit/:productID/:coaDocumentID" component={EditCOA} />
-          <Route path="/COA/add/:productID/" component={AddCOA} />
-          <Route path="/Coa/documents/:productID" component={COADocument}/>
-          <Route path="/COAs" component={COAProductList} />
-          <Route path="/Events" component={Events} />
-          <Route path="/Incentive" component={Incentive} />
-          <Route path="/Permissions" component={Permissions} />
-          <Route path="/COA/:productID" component={COA}/>
+            <Route
+              path="/COA/edit/:productID/:coaDocumentID"
+              component={EditCOA}
+            />
+            <Route path="/COA/add/:productID/" component={AddCOA} />
+            <Route path="/Coa/documents/:productID" component={COADocument} />
+            <Route path="/COAs" component={COAProductList} />
+            <Route path="/Events" component={Events} />
+            <Route path="/Incentive" component={Incentive} />
+            <Route path="/Permissions" component={Permissions} />
+            <Route path="/COA/:productID" component={COA} />
 
-          <Route exact path="/Settings/users/add" component={UserAuthorizationStatusAddEdit}/>
-          <Route exact path="/Settings/users/edit/:userID" component={UserAuthorizationStatusAddEdit}/>
-          <Route path="/Settings/users" component={UserAuthorizationStatusTable}/>
-
-        </Switch>       
-       </Page>
-    </div>
+            <Route
+              exact
+              path="/Settings/users/add"
+              component={UserAuthorizationStatusAddEdit}
+            />
+            <Route
+              exact
+              path="/Settings/users/edit/:userID"
+              component={UserAuthorizationStatusAddEdit}
+            />
+            <Route
+              path="/Settings/users"
+              component={UserAuthorizationStatusTable}
+            />
+          </Switch>
+        </Page>
+      </div>
     </ApolloProvider>
   );
 }

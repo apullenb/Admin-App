@@ -1,11 +1,19 @@
-import React from 'react'
+import { React } from "react";
+import { connect } from "react-redux";
+import getComponentData from "./selector";
+function GlowEntryList(props) {
+  const {
+    view,
+    edit
+  } = props
 
-function GlowEntryList() {
-    return (
-        <div>
-            <h1>Glow Challenge Entries</h1>
-        </div>
-    )
+  return (
+    <div>
+      <h1>Glow Challenge Entries</h1>
+      {view && <div>view permission </div>}
+      {edit && <div>edit permission </div>}
+    </div>
+  );
 }
 
-export default GlowEntryList
+export default connect(getComponentData)(GlowEntryList);

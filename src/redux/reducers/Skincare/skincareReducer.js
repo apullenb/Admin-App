@@ -11,6 +11,9 @@ import {
     LOGIN_ADMIN_SKINCARE_START,
     LOGIN_ADMIN_SKINCARE_SUCCESS,
     LOGIN_ADMIN_SKINCARE_FAILURE,
+    PERMISSIONS_SKINCARE_START,
+    PERMISSIONS_SKINCARE_SUCCESS,
+    PERMISSIONS_SKINCARE_FAILURE,
 } from '../../actions/Skincare/skincareActionTypes'
 
 const initalState = {
@@ -100,6 +103,24 @@ export const entriesConfigReducer = (state = initalState, action) => {
                 error: action.payload,
               };
 
+              case PERMISSIONS_SKINCARE_START:
+                return {
+                  ...state,
+                  error: null,
+                };
+              case PERMISSIONS_SKINCARE_SUCCESS:
+                return {
+                  ...state,
+                  fetching: false,
+                  error: null,
+                  skincarePermissions: action.payload,
+                };
+              case PERMISSIONS_SKINCARE_FAILURE:
+                return {
+                  ...state,
+                  fetching: false,
+                  error: action.payload,
+                };
         default:
             return state
     }

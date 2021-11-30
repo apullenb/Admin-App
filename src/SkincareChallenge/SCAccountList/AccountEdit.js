@@ -4,22 +4,25 @@ import { Link } from "react-router-dom";
 import "./AccountList.scss";
 import config from "../../config/env-urls";
 import { useToasts } from "react-toast-notifications";
+import Button from "react-bootstrap/Button";
+import { connect } from "react-redux";
+import getComponentData from "./selector";
 
 function AccountEdit(props) {
   const user = props.location.state;
   if (user.userId) {
     user.id = user.userId
   }
- 
+  const {edit} = props
   const [inputs, setInputs] = useState({
     ambassadorId: user.ambassadorId,
     name: user.name,
     username: user.username,
     email: user.email,
   });
+
   const { addToast } = useToasts();
   const { ambassadorId, username, name, email } = inputs;
-
   
   const handleChange = (e) =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -82,54 +85,80 @@ function AccountEdit(props) {
         <h5 style={div}>Account ID: {user.id}</h5>
         <div style={div}>
           Ambassador ID:
-          <input
+          {edit?<input
             type="text"
             defaultValue={user.ambassadorId}
             name="ambassadorId"
-            onChange={handleChange}
-          />
+            onChange={edit && handleChange}
+          />:<input
+          type="text"
+          readOnly
+          value={user.ambassadorId}
+          name="ambassadorId"
+        />}
         </div>
         <div style={div}>
           Name:{" "}
-          <input
+         {edit?<input
             type="text"
+            // {editPermission && readOnly}
             defaultValue={user.name}
             name="name"
-            onChange={handleChange}
-          />
+            onChange={edit && handleChange}
+          />:
+          <input
+          type="text"
+          readOnly
+          value={user.name}
+          name="name"
+        />}
         </div>
         <div style={div}>
           Username:{" "}
-          <input
+          {edit?<input
             type="text"
             defaultValue={user.username}
             name="username"
             onChange={handleChange}
-          />
+          />:<input
+          type="text"
+          value={user.username}
+          name="username"
+          readOnly
+        />}
         </div>
         <div style={div}>
           Email:{" "}
-          <input
+         { edit?<input
             type="text"
             defaultValue={user.email}
             name="email"
             onChange={handleChange}
-          />
+          />: <input
+          type="text"
+          value={user.email}
+          name="email"
+          readOnly
+        />}
         </div>
         <div style={div}>
-          <button className="add-account-btn" onClick={handleSubmit}>
+
+         {edit? <><button className="add-account-btn" onClick={handleSubmit}>
             Save
-          </button>{" "}
+          </button>
           <button className="add-account-btn" onClick={handlePasswordReset}>
             Send Password Reset
-          </button>
+          </button></>
+          :<Button style={{background:"#043769", marginRight: "50px", padding: "10px 25px"}} disabled>
+            Save
+          </Button>}
         </div>
       </Main>
     </div>
   );
 }
 
-export default AccountEdit;
+export default connect(getComponentData)(AccountEdit);
 
 const Main = styled.section`
   color: rgb(94, 93, 93);
