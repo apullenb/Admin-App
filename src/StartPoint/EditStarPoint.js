@@ -40,7 +40,7 @@ const EditStarPoint = () => {
     const _points = parseInt(points);
     const country = productData.country;
     try {
-      const response = await updateStarProduct({
+      await updateStarProduct({
         variables: {
           _inventoryId,
           _points,
@@ -50,13 +50,11 @@ const EditStarPoint = () => {
           description,
         },
       });
-      console.log(response);
       addToast(`Starship with SKU: ${productData.productSku} updated successfully!`, {
         appearance: 'success',
         autoDismiss: true,
       });
     } catch (error) {
-      console.log('There was and error', error);
       addToast('An error occured while updating!', {
         appearance: 'error',
         autoDismiss: true,
@@ -177,13 +175,14 @@ const EditStarPoint = () => {
                     <TDContent>
                       {size ? (
                         <CustomSelect
+                          defaultValue="no-value"
                           style={{ width: '235px', height: '36px', border: '1px solid #0F4B8F' }}
                           value={size}
                           onChange={(e) => {
                             setSize(e.target.value);
                           }}
                         >
-                          <option disabled selected>
+                          <option disabled value="no-value">
                             --Size--
                           </option>
                           {sizes.map((size, index) => {
@@ -203,12 +202,13 @@ const EditStarPoint = () => {
                     <td> Is Active</td>
                     <td>
                       <CustomSelect
+                        defaultValue="no-value"
                         value={parseInt(isActive)}
                         onChange={(e) => {
                           setIsActive(parseInt(e.target.value));
                         }}
                       >
-                        <option disabled selected>
+                        <option disabled value="no-value">
                           Yes/No
                         </option>
                         <option value={1}>Yes</option>
@@ -231,7 +231,7 @@ const EditStarPoint = () => {
           </BottomContentWrapper>
         </ContentWrapper>
       </ContentOuterWrapper>
-      <ImageOverlay show={show} handleHide={handleHide} src={productData.smallImage} rootUrl={assetRootUrl} />
+      <ImageOverlay show={show} handleHide={handleHide} src={productData.smalleImage ? productData.smallImage : ''} rootUrl={assetRootUrl} />
     </MainWrapper>
   );
 };

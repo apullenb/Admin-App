@@ -43,6 +43,7 @@ export const StarPointAccountList = () => {
 
   useEffect(() => {
     applyFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perPageNum, skip, filterObj, sortOrder]);
 
   useEffect(() => {
@@ -106,6 +107,7 @@ export const StarPointAccountList = () => {
       : textToTruncate;
   };
 
+  // eslint-disable-next-line no-unused-vars
   const filterTable = (e) => {
     const id = e.target.id;
     const notChar = id === 'inventoryId' || id === 'isActive';
@@ -161,18 +163,19 @@ export const StarPointAccountList = () => {
             </TH>
             <TH>
               <select
+                defaultValue="no-value"
                 id="isActive"
                 style={{ width: '80%', border: '1px solid #0f4b8f', height: '35px', color: '#707070' }}
                 onChange={(e) => {
                   updateInputValue(e);
                 }}
               >
-                <option disabled selected value>
+                <option disabled value="no-value">
                   Yes / No
                 </option>
                 <option value={1}>Yes</option>
                 <option value={0}>No</option>
-                <option value={NaN}>None</option>
+                <option value={String(NaN)}>None</option>
               </select>
             </TH>
             <TH>
