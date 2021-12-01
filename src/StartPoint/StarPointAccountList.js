@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import debounce from 'lodash.debounce';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
@@ -13,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ZilisLoader from '../GlobalComponents/ZilisLoader';
 import Pagination from './Pagination';
 
+
 export const StarPointAccountList = () => {
   const tableHeadings = ['Inventory', 'Active', 'SKU', 'Name', 'Category', 'Country', 'StarPoints', 'Actions'];
   const [starPointDataFiltered, setStarPointDataFiltered] = useState([]);
@@ -21,24 +21,69 @@ export const StarPointAccountList = () => {
   const [skip, setSkip] = useState(0);
   const [perPageNum, setPerPageNum] = useState(10);
   const [hasNextPage, setHasNextPage] = useState(false);
-  const [productSku, setProductSku] = useState('');
-  const [category, setCategory] = useState('');
-  const [name, setName] = useState('');
-  const { loading, data, refetch } = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, { variables: { skip: skip, take: perPageNum, productSku: productSku, category: category, name: name } });
+  const [filterObj, setFilterObj] = useState({});
+  const [filter, setFilter] = useState(null);
+  const { loading, data, refetch } = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, {
+    variables: { skip: skip, take: perPageNum, filterJson: filter },
+  });
 
   useEffect(() => {
     setTHeadData(tableHeadings);
   }, []);
 
   useEffect(() => {
-    refetch();
-  }, [perPageNum, skip, name, category, productSku]);
+    applyFilter();
+  }, [perPageNum, skip, filterObj]);
 
   useEffect(() => {
     data && setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
     data && setStarPointData(data.starShipInventoryWithPaging.items);
     data && setHasNextPage(data.starShipInventoryWithPaging.pageInfo.hasNextPage);
   }, [data]);
+
+  const applyFilter = () => {
+    var localObject = {};
+    Object.keys(filterObj).forEach((inputName) => {
+      if (filterObj[inputName] || filterObj[inputName] === 0) {
+        if (filter) {
+          localObject = { ...filter };
+          // eslint-disable-next-line no-prototype-builtins
+          if (filter.hasOwnProperty('and') && inputName !== 'inventoryId' && inputName !== 'isActive') {
+            localObject['and'].forEach((objOne, index) => {
+              Object.keys(objOne)[0] === inputName ? localObject['and'].splice(index, 1) : null;
+            });
+            localObject['and'].push({ [inputName]: { startsWith: filterObj[inputName] } });
+          } else {
+            localObject['and'].forEach((objOne, index) => {
+              Object.keys(objOne)[0] === inputName ? localObject['and'].splice(index, 1) : null;
+            });
+            localObject['and'].push({ [inputName]: { eq: filterObj[inputName] } });
+          }
+          setFilter({ ...localObject });
+        } else {
+          if (inputName !== 'inventoryId' && inputName !== 'isActive') {
+            localObject = { and: [{ [inputName]: { startsWith: filterObj[inputName] } }] };
+          } else {
+            localObject = { and: [{ [inputName]: { eq: filterObj[inputName] } }] };
+          }
+          setFilter(localObject);
+        }
+      } else if (filterObj[inputName] === '' || isNaN(filterObj[inputName])) {
+        filter &&
+          filter['and'] &&
+          filter['and'].map((obj, i) => {
+            Object.keys(obj)[0] === `${inputName}` ? filter['and'].splice(i, 1) : null;
+          });
+      }
+    });
+    if (filter && filter['and'].length === 0) {
+      setFilter(null);
+    }
+
+    setTimeout(() => {
+      refetch();
+    }, 1000);
+  };
 
   const truncateText = (maxCount, textToTruncate) => {
     return textToTruncate.length > maxCount
@@ -72,6 +117,16 @@ export const StarPointAccountList = () => {
     setSkip(num);
   };
 
+  const updateInputValue = (e) => {
+    var newVal;
+    if (e.target.id === 'inventoryId' || e.target.id === 'isActive') {
+      newVal = { ...filterObj, [e.target.id]: parseInt(e.target.value) };
+    } else {
+      newVal = { ...filterObj, [e.target.id]: e.target.value };
+    }
+    setFilterObj(newVal);
+  };
+
   return (
     <TableWrapper>
       <PageTitle>StarPoint Products</PageTitle>
@@ -85,7 +140,7 @@ export const StarPointAccountList = () => {
                 type="text"
                 placeholder=" Inventory ID"
                 onBlur={(e) => {
-                  filterTable(e);
+                  updateInputValue(e);
                 }}
               />
             </TH>
@@ -94,15 +149,15 @@ export const StarPointAccountList = () => {
                 id="isActive"
                 style={{ width: '80%', border: '1px solid #0f4b8f', height: '35px' }}
                 onChange={(e) => {
-                  filterTable(e);
+                  updateInputValue(e);
                 }}
               >
                 <option disabled selected value>
                   Yes / No
                 </option>
-                <option value="1">Yes</option>
-                <option value="0">No</option>
-                <option value="">None</option>
+                <option value={1}>Yes</option>
+                <option value={0}>No</option>
+                <option value={NaN}>None</option>
               </select>
             </TH>
             <TH>
@@ -110,8 +165,8 @@ export const StarPointAccountList = () => {
                 id="productSku"
                 type="text"
                 placeholder=" SKU"
-                onChange={(e) => {
-                  setProductSku(e.target.value);
+                onBlur={(e) => {
+                  updateInputValue(e);
                 }}
               />
             </TH>
@@ -120,8 +175,8 @@ export const StarPointAccountList = () => {
                 id="description"
                 type="text"
                 placeholder="Name"
-                onChange={(e) => {
-                  setName(e.target.value);
+                onBlur={(e) => {
+                  updateInputValue(e);
                 }}
               />
             </TH>
@@ -130,8 +185,8 @@ export const StarPointAccountList = () => {
                 id="category"
                 type="text"
                 placeholder="Category"
-                onChange={(e) => {
-                  setCategory(e.target.value);
+                onBlur={(e) => {
+                  updateInputValue(e);
                 }}
               />
             </TH>

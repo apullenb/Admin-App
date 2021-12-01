@@ -97,8 +97,8 @@ const EditStarPoint = () => {
               <table style={{ width: '100%' }}>
                 <tbody>
                   <tr>
-                    <td style={{ width: '120px' }}>Inventory ID</td>
-                    <td style={{ width: '300px' }}>{productData.inventoryId}</td>
+                    <TDLable style={{ width: '120px' }}>Inventory ID</TDLable>
+                    <TDContent style={{ width: '300px' }}>{productData.inventoryId}</TDContent>
                   </tr>
                   <tr>
                     <td>SKU</td>
@@ -115,8 +115,8 @@ const EditStarPoint = () => {
                     <td>{productData.country}</td>
                   </tr>
                   <tr>
-                    <td style={{ width: '120px' }}>BV</td>
-                    <td style={{ width: '300px' }}>{productData.points}</td>
+                    <TDLable>BV</TDLable>
+                    <TDContent>{productData.points}</TDContent>
                   </tr>
                 </tbody>
               </table>
@@ -128,8 +128,8 @@ const EditStarPoint = () => {
               <table style={{ width: '100%' }}>
                 <tbody>
                   <tr style={{ height: '60px' }}>
-                    <td style={{ width: '120px' }}>StarPoint Value</td>
-                    <td style={{ width: '300px' }}>
+                    <TDLable>StarPoint Value</TDLable>
+                    <TDContent>
                       <CustomInput
                         type="text"
                         value={points}
@@ -137,7 +137,7 @@ const EditStarPoint = () => {
                           setPoints(e.target.value);
                         }}
                       />
-                    </td>
+                    </TDContent>
                   </tr>
                   <tr>
                     <td> Category</td>
@@ -173,8 +173,8 @@ const EditStarPoint = () => {
               <table style={{ width: '100%' }}>
                 <tbody>
                   <tr style={{ height: '60px' }}>
-                    <td style={{ width: '120px' }}>Size</td>
-                    <td style={{ width: '300px' }}>
+                    <TDLable>Size</TDLable>
+                    <TDContent>
                       {size ? (
                         <CustomSelect
                           style={{ width: '235px', height: '36px', border: '1px solid #0F4B8F' }}
@@ -197,7 +197,7 @@ const EditStarPoint = () => {
                       ) : (
                         'Sizes not available for product'
                       )}
-                    </td>
+                    </TDContent>
                   </tr>
                   <tr>
                     <td> Is Active</td>
@@ -372,4 +372,12 @@ const CustomSelect = styled.select`
   width: 150px;
   height: 36px;
   border: 1px solid #0f4b8f;
+`;
+
+const TDLable = styled.td`
+  width: 120px;
+`;
+
+const TDContent = styled.td`
+  width: 300px;
 `;

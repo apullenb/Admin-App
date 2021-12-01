@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+
 const ImageOverlay = (props) => {
   const placederImage = 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png';
   const rootUrl = props.rootUrl ? props.rootUrl : '';

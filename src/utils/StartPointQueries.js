@@ -14,8 +14,8 @@ export const GET_STAR_PRODUCTS = gql`
 `;
 
 export const GET_STAR_PRODUCTS_WITH_PAGE = gql`
-  query fetchAllWithPaging($skip: Int!, $take: Int!, $productSku: String, $category: String, $name: String) {
-    starShipInventoryWithPaging(skip: $skip, take: $take, where: { and: [{ productSku: { startsWith: $productSku } }, { category: { startsWith: $category } }, { category: { startsWith: $name } }] }, order: { inventoryId: ASC }) {
+  query fetchAllWithPaging($skip: Int!, $take: Int!, $filterJson: StarShipInventoryFilterInput) {
+    starShipInventoryWithPaging(skip: $skip, take: $take, where: $filterJson, order: { inventoryId: ASC }) {
       items {
         inventoryId
         country
