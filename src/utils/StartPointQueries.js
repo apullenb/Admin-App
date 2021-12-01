@@ -31,6 +31,7 @@ export const GET_STAR_PRODUCTS_WITH_PAGE = gql`
         hasPreviousPage
         hasNextPage
       }
+      totalCount
     }
   }
 `;
