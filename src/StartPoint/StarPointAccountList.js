@@ -12,7 +12,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ZilisLoader from '../GlobalComponents/ZilisLoader';
 import Pagination from './Pagination';
 
-
 export const StarPointAccountList = () => {
   const tableHeadings = ['Inventory', 'Active', 'SKU', 'Name', 'Category', 'Country', 'StarPoints', 'Actions'];
   const [starPointDataFiltered, setStarPointDataFiltered] = useState([]);
@@ -195,7 +194,7 @@ export const StarPointAccountList = () => {
             {tHeaderData &&
               tHeaderData.map((data, index) => {
                 return (
-                  <TH style={{ width: '12.5%' }} key={index}>
+                  <TH style={{ width: '12.5%', backgroundColor: '#f4fafe' }} key={index}>
                     {data}
                   </TH>
                 );
@@ -289,6 +288,10 @@ const TH = styled.th`
 
 const TR = styled.tr`
   height: 50px;
+
+  :nth-child(even) {
+    background-color: #f4fafe;
+  }
 
   :hover {
     background-color: rgba(15, 75, 143, 0.6);
