@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import './App.scss';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import './App.scss';
@@ -13,7 +12,6 @@ import EntryList from './SkincareChallenge/SCEntryList/EntryList';
 import EntryEdit from './SkincareChallenge/EntryEdit';
 
 import EditCOA from './COA/EditCOA';
-import AddCOA from './COA/AddCOA';
 
 import ShoppingCountries from './ShoppingConfiguration/countries/countries';
 import ShoppingKits from './ShoppingConfiguration/kits/kits';

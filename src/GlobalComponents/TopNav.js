@@ -1,67 +1,70 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React from 'react';
-import Logo from '../assets/Zilis_Logo_2021.png'
+import Logo from '../assets/Zilis_Logo_2021.png';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import styled from 'styled-components';
-import ProfileImage from '../assets/person_palceholder_img.png'
+import ProfileImage from '../assets/person_palceholder_img.png';
 
 function TopNav() {
-  const navLinks = [        
-    {name:"Event Calendar", link:'/Events', isPrivate: true},
-    {name:"Incentive Trip", link:'/Incentive', isPrivate: true},
-    {name:"COA's", link:'/COAs', isPrivate: true},
+  const navLinks = [
+    { name: 'Event Calendar', link: '/Events', isPrivate: true },
+    { name: 'Incentive Trip', link: '/Incentive', isPrivate: true },
+    { name: "COA's", link: '/COAs', isPrivate: true },
+    { name: 'StarPoint', link: '/StarPoint', isPrivate: true },
   ];
-
 
   return (
     <HeaderWrapper>
       <Top>
         <div className="top-wrapper">
           <div className="inner-wrapper">
-            <a href="/"><img src={Logo} alt="Zilis Logo" style={{maxWidth:'170px', margin: '1px auto'}} /></a>
+            <a href="/">
+              <img src={Logo} alt="Zilis Logo" style={{ maxWidth: '170px', margin: '1px auto' }} />
+            </a>
             <img src={ProfileImage} alt="Profile Image" className="profile-pic" />
           </div>
         </div>
         <hr />
       </Top>
       <div className="top-wrapper">
-        <Navbar expand='lg' className='app-nav-wrapper' >
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mr-auto">
-                 <NavDropdown title="Shopping Configuration" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="/Shopping/Countries">Countries</NavDropdown.Item>
-                  <NavDropdown.Item href="/Shopping/Kits">Kits</NavDropdown.Item>
-                  <NavDropdown.Item href="/Shopping/Categories">Categories</NavDropdown.Item>
-                  <NavDropdown.Item href="/Shopping/Products">Products</NavDropdown.Item>
-                </NavDropdown> 
-                <NavDropdown title="Challenges" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="/Challenge/Accounts">Accounts</NavDropdown.Item>
-                  <NavDropdown.Item href="/Challenge/Entries">Skincare Entries</NavDropdown.Item>
-                  <NavDropdown.Item href="/Challenge/Glow-Entries">Glow Entries</NavDropdown.Item>
-                </NavDropdown>    
-                 { navLinks.map ((link, i) => {
-                  return (
-                    <LinkWrap key={i}><Nav.Link href={link.link} >{link.name}</Nav.Link></LinkWrap>
-                  )
-                })}
-              </Nav>     
-              <Nav>
-                 <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="/Settings/users">Permissions</NavDropdown.Item>
-                </NavDropdown>     
-              </Nav>     
-            </Navbar.Collapse>
+        <Navbar expand="lg" className="app-nav-wrapper">
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdown title="Shopping Configuration" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/Shopping/Countries">Countries</NavDropdown.Item>
+                <NavDropdown.Item href="/Shopping/Kits">Kits</NavDropdown.Item>
+                <NavDropdown.Item href="/Shopping/Categories">Categories</NavDropdown.Item>
+                <NavDropdown.Item href="/Shopping/Products">Products</NavDropdown.Item>
+              </NavDropdown>
+              <NavDropdown title="Challenges" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/Challenge/Accounts">Accounts</NavDropdown.Item>
+                <NavDropdown.Item href="/Challenge/Entries">Skincare Entries</NavDropdown.Item>
+                <NavDropdown.Item href="/Challenge/Glow-Entries">Glow Entries</NavDropdown.Item>
+              </NavDropdown>
+              {navLinks.map((link, i) => {
+                return (
+                  <LinkWrap key={i}>
+                    <Nav.Link href={link.link}>{link.name}</Nav.Link>
+                  </LinkWrap>
+                );
+              })}
+            </Nav>
+            <Nav>
+              <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/Settings/users">Permissions</NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
         </Navbar>
       </div>
     </HeaderWrapper>
-  )
+  );
 }
 
 export default TopNav;
-
 
 const HeaderWrapper = styled.div`
   .top-wrapper {
@@ -86,7 +89,7 @@ const HeaderWrapper = styled.div`
       }
     }
   }
-`
+`;
 
 const LinkWrap = styled.div`
   padding: 0px 1px;
