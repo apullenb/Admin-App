@@ -26,15 +26,18 @@ import Permissions from "./Permissions/PermissionList";
 
 import Page from "./GlobalComponents/PageWrapper";
 import { APP_STARTED } from "./redux/actions/app/appActionTypes";
-import COA from "./COA/COA";
-import COAProductList from "./COA/COAProductList";
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "@apollo/react-hooks";
-import COADocument from "./COA/COADocuments";
-import UserAuthorizationStatusTable from "./User/UserAuthorizationStatusTable";
-import UserAuthorizationStatusAddEdit from "./User/UserAuthorizationStatusAddEdit";
-import GlowEntryList from "./GlowChallenge/GlowEntryList";
+import COA from './COA/COA';
+import COAProductList from './COA/COAProductList';
+import ApolloClient from  'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
+import COADocument from './COA/COADocuments';
+import UserAuthorizationStatusTable from './User/UserAuthorizationStatusTable';
+import UserAuthorizationStatusAddEdit from './User/UserAuthorizationStatusAddEdit';
+import GlowEntryList from './GlowChallenge/GlowEntryList';
+import GCEntryEdit from './GlowChallenge/GCEntryEdit';
+import GlowEntry from './GlowChallenge/GlowEntry';
 import { SkincareAdminPermissions } from "./redux/actions/Skincare/skincareActions";
+
 
 const client = new ApolloClient({
   uri: "https://zorderapidev.azurewebsites.net/graphql",
@@ -57,7 +60,7 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: APP_STARTED });
-    dispatch(SkincareAdminPermissions());
+    dispatch(SkincareAdminPermissions())
   }, []);
 
   useEffect(() => {
@@ -79,32 +82,21 @@ function App() {
             <Route path="/Shopping/Categories" component={ShoppingCategories} />
             <Route path="/Shopping/Products" component={ShoppingProducts} />
 
-            <Route
-              exact
-              path="/Challenge/Accounts"
-              render={(props) =>
-                isAuthenticated ? <AccountList /> : <Redirect to="/login" />
-              }
-            />
-            <Route
-              path="/Challenge/Accounts/:accountid"
-              component={AccountEdit}
-            />
-            <Route path="/Challenge/Entries" component={EntryList} />
-            <Route path="/Challenge/Glow-Entries" component={GlowEntryList} />
-            <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
-
-            <Route
-              path="/COA/edit/:productID/:coaDocumentID"
-              component={EditCOA}
-            />
-            <Route path="/COA/add/:productID/" component={AddCOA} />
-            <Route path="/Coa/documents/:productID" component={COADocument} />
-            <Route path="/COAs" component={COAProductList} />
-            <Route path="/Events" component={Events} />
-            <Route path="/Incentive" component={Incentive} />
-            <Route path="/Permissions" component={Permissions} />
-            <Route path="/COA/:productID" component={COA} />
+          <Route exact path="/Challenge/Accounts" render={(props) => isAuthenticated ? <AccountList /> : <Redirect to="/login" /> } />
+          <Route path="/Challenge/Accounts/:accountid" component={AccountEdit} />
+          <Route path="/Challenge/Entries" component={EntryList} />
+          <Route path="/Challenge/Entry/:entryId" component={EntryEdit} />
+          <Route path="/Challenge/Glow-Entries" component={GlowEntryList} />
+          <Route path="/Challenge/Glow-Entry/:accountid" component={GlowEntry} />
+          <Route path="/Challenge/Glow-Submission/:submissionId" component={GCEntryEdit} />
+          <Route path="/COA/edit/:productID/:coaDocumentID" component={EditCOA} />
+          <Route path="/COA/add/:productID/" component={AddCOA} />
+          <Route path="/Coa/documents/:productID" component={COADocument}/>
+          <Route path="/COAs" component={COAProductList} />
+          <Route path="/Events" component={Events} />
+          <Route path="/Incentive" component={Incentive} />
+          <Route path="/Permissions" component={Permissions} />
+          <Route path="/COA/:productID" component={COA}/>
 
             <Route
               exact

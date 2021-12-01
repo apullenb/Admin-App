@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import config from "../config/env-urls";
@@ -23,16 +23,17 @@ function EntryEdit(props) {
     { value: "1", label: "Yes" },
     { value: "0", label: "No" },
   ];
+
+  
   const [blank, setBlank] = useState(true);
   const [message, setMessage] = useState("");
   const [change, setChange] = useState(false);
 
-  const { skincareAuthToken } = useSelector((state) => state.app);
 
   const dispatch = useDispatch();
   const { addToast } = useToasts();
 
-  const { edit } = props;
+  const {   skincareAuthToken,edit} = props;
   // this.handleChange = this.handleChange.bind(this);
   // this.handleSubmit = this.handleSubmit.bind(this);
   // const base_url = 'http://localhost:4000';
@@ -158,11 +159,11 @@ function EntryEdit(props) {
 
   return (
     <div>
-      <h1>Skincare Challenge Edit Entry</h1>
-      <div className="page-header-link">
-        <Link to="/Challenge/Entries">Back to list</Link>
-      </div>
-
+      <h1>
+        Skincare Challenge Edit Entry 
+        </h1>
+        <div className="page-header-link"><Link to="/Challenge/Entries">Back to list</Link></div>
+    
       <EntryDetails>
         <Row>
           <Col>
@@ -302,6 +303,7 @@ function EntryEdit(props) {
                 padding: "10px 25px",
               }}
               onClick={handleSubmit}
+              disabled={!edit}
             >
               Save
             </Button>

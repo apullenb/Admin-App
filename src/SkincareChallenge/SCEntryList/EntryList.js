@@ -5,7 +5,7 @@ import Entries from "./Entries";
 import Pagination from "./Pagination";
 import { CaretUp, CaretDown } from "react-bootstrap-icons";
 import styled from "styled-components";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch} from "react-redux";
 import { getEntries } from "../../redux/actions/Skincare/skincareActions";
 import getComponentData from "./selector";
 
@@ -19,8 +19,7 @@ const EntryList = (props) => {
 
   const dispatch = useDispatch();
 
-  const { entries } = useSelector((state) => state?.entries);
-  const { view, edit } = props;
+  const { view, edit ,entries} = props;
 
   useEffect(() => {
     dispatch(getEntries());

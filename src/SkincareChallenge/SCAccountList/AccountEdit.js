@@ -41,7 +41,6 @@ function AccountEdit(props) {
       );
       const parseRes = await response.json();
       if (parseRes.error) {
-        console.error(parseRes.error);
         addToast(parseRes.error, { appearance: "error", autoDismiss: true });
       } else {
         addToast("Your Changes Have Been Saved Successfully", {
