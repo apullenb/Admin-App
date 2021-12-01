@@ -8,12 +8,22 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { faInfoCircle } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 
 import ZilisLoader from '../GlobalComponents/ZilisLoader';
 import Pagination from './Pagination';
 
 export const StarPointAccountList = () => {
-  const tableHeadings = ['Inventory', 'Active', 'SKU', 'Name', 'Category', 'Country', 'StarPoints', 'Actions'];
+  const tableHeadings = [
+    { name: 'Inventory', colId: 'inventoryId' },
+    { name: 'Active', colId: 'isActive' },
+    { name: 'SKU', colId: 'productSku' },
+    { name: 'Name', colId: 'description' },
+    { name: 'Category', colId: 'category' },
+    { name: 'Country', colId: 'country' },
+    { name: 'StarPoints', colId: 'points' },
+    { name: 'Actions', coloId: 'actions' },
+  ];
   const [starPointDataFiltered, setStarPointDataFiltered] = useState([]);
   const [starPointData, setStarPointData] = useState([]);
   const [tHeaderData, setTHeadData] = useState();
@@ -22,8 +32,9 @@ export const StarPointAccountList = () => {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [filterObj, setFilterObj] = useState({});
   const [filter, setFilter] = useState(null);
+  const [sortOrder, setSortOrder] = useState({ ['inventoryId']: 'ASC' });
   const { loading, data, refetch } = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, {
-    variables: { skip: skip, take: perPageNum, filterJson: filter },
+    variables: { skip: skip, take: perPageNum, filterJson: filter, order: sortOrder },
   });
 
   useEffect(() => {
@@ -32,7 +43,7 @@ export const StarPointAccountList = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [perPageNum, skip, filterObj]);
+  }, [perPageNum, skip, filterObj, sortOrder]);
 
   useEffect(() => {
     data && setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
@@ -126,6 +137,11 @@ export const StarPointAccountList = () => {
     setFilterObj(newVal);
   };
 
+  const handleSort = (colName, sortDirection) => {
+    const sort = { [colName]: sortDirection };
+    setSortOrder(sort);
+  };
+
   return (
     <TableWrapper>
       <PageTitle>StarPoint Products</PageTitle>
@@ -146,7 +162,7 @@ export const StarPointAccountList = () => {
             <TH>
               <select
                 id="isActive"
-                style={{ width: '80%', border: '1px solid #0f4b8f', height: '35px' }}
+                style={{ width: '80%', border: '1px solid #0f4b8f', height: '35px', color: '#707070' }}
                 onChange={(e) => {
                   updateInputValue(e);
                 }}
@@ -195,7 +211,25 @@ export const StarPointAccountList = () => {
               tHeaderData.map((data, index) => {
                 return (
                   <TH style={{ width: '12.5%', backgroundColor: '#f4fafe' }} key={index}>
-                    {data}
+                    {data.name}
+                    {data.name !== 'Actions' && (
+                      <div>
+                        <CaretUp
+                          className="caretIcons"
+                          id={data.colId}
+                          onClick={() => {
+                            handleSort(data.colId, 'ASC');
+                          }}
+                        />
+                        <CaretDown
+                          className="caretIcons"
+                          id={data.colId}
+                          onClick={() => {
+                            handleSort(data.colId, 'DESC');
+                          }}
+                        />
+                      </div>
+                    )}
                   </TH>
                 );
               })}
