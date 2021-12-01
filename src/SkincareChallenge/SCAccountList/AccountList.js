@@ -1,39 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
-import "./AccountList.scss";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { useDispatch, connect, useSelector } from "react-redux";
-import {
-  getAccounts,
-  filterAccounts,
-} from "../../redux/actions/Skincare/skincareActions";
-import { CaretUp, CaretDown } from "react-bootstrap-icons";
-import Pagination from "./Pagination";
-import getComponentData from "./selector";
+import React, { useState, useEffect } from 'react';
+import './AccountList.scss';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { useDispatch, connect, useSelector } from 'react-redux';
+import { getAccounts, filterAccounts } from '../../redux/actions/Skincare/skincareActions';
+import { CaretUp, CaretDown } from 'react-bootstrap-icons';
+import Pagination from './Pagination';
+import getComponentData from './selector';
 
 function AccountList(props) {
   const [message, setMessage] = useState(true);
   const [blank, setBlank] = useState(false);
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [colSort, setColSort] = useState("id");
-  const [sortDirection, setSortDirection] = useState("asc");
+  const [colSort, setColSort] = useState('id');
+  const [sortDirection, setSortDirection] = useState('asc');
   const [localAccounts, setLocalAccounts] = useState([]);
   const [idInput, setIdInput] = useState(false);
   const [nameInput, setNameInput] = useState(false);
   const [emailInput, setEmailInput] = useState(false);
   const [ambassadorIdInput, setAmbassadorIdInput] = useState(false);
-  const [col, setCol] = useState("id");
-  const [filter, setFilter] = useState("");
+  const [col, setCol] = useState('id');
+  const [filter, setFilter] = useState('');
   const dispatch = useDispatch();
   const { accounts } = useSelector((state) => state.entries);
   const { view, edit } = props;
 
   useEffect(() => {
-    dispatch(
-      filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection)
-    );
+    dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
   }, []);
 
   useEffect(() => {
@@ -43,9 +38,7 @@ function AccountList(props) {
   const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
     setColSort(sortInfo);
     setSortDirection(sortBy);
-    dispatch(
-      filterAccounts(col, filter, numPerPage, pageNoVal, sortInfo, sortBy)
-    );
+    dispatch(filterAccounts(col, filter, numPerPage, pageNoVal, sortInfo, sortBy));
   };
 
   const updatePerPage = (val) => {
@@ -63,34 +56,32 @@ function AccountList(props) {
     const col = e.target.id;
     setCol(e.target.id);
     setFilter(e.target.value);
-    if (e.target.value === "") {
+    if (e.target.value === '') {
       dispatch(getAccounts());
     } else {
-      dispatch(
-        filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection)
-      );
+      dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
     }
   };
 
   const disableInput = (e) => {
-    if (e.target.value === "") {
+    if (e.target.value === '') {
       setNameInput(false);
       setEmailInput(false);
       setIdInput(false);
       setAmbassadorIdInput(false);
-    } else if (e.target.id === "id") {
+    } else if (e.target.id === 'id') {
       setNameInput(true);
       setEmailInput(true);
       setAmbassadorIdInput(true);
-    } else if (e.target.id === "name") {
+    } else if (e.target.id === 'name') {
       setIdInput(true);
       setEmailInput(true);
       setAmbassadorIdInput(true);
-    } else if (e.target.id === "email") {
+    } else if (e.target.id === 'email') {
       setNameInput(true);
       setIdInput(true);
       setAmbassadorIdInput(true);
-    } else if (e.target.id === "ambassadorID") {
+    } else if (e.target.id === 'ambassadorID') {
       setNameInput(true);
       setEmailInput(true);
       setIdInput(true);
@@ -102,49 +93,49 @@ function AccountList(props) {
       <h1>Skincare Challenge Accounts</h1>
       {view && (
         <>
-          {" "}
+          {' '}
           <AccountTable>
             <table>
               <thead>
                 <tr>
-                  <th id="filter">
+                  <th id='filter'>
                     <input
                       disabled={idInput}
-                      id="id"
-                      type="text"
+                      id='id'
+                      type='text'
                       onChange={(e) => {
                         disableInput(e);
                         handleChange(e);
                       }}
                     />
                   </th>
-                  <th id="filter">
+                  <th id='filter'>
                     <input
                       disabled={nameInput}
-                      id="name"
-                      type="text"
+                      id='name'
+                      type='text'
                       onChange={(e) => {
                         disableInput(e);
                         handleChange(e);
                       }}
                     />
                   </th>
-                  <th id="filter">
+                  <th id='filter'>
                     <input
                       disabled={emailInput}
-                      id="email"
-                      type="text"
+                      id='email'
+                      type='text'
                       onChange={(e) => {
                         disableInput(e);
                         handleChange(e);
                       }}
                     />
                   </th>
-                  <th id="filter">
+                  <th id='filter'>
                     <input
                       disabled={ambassadorIdInput}
-                      id="ambassadorId"
-                      type="text"
+                      id='ambassadorId'
+                      type='text'
                       onChange={(e) => {
                         disableInput(e);
                         handleChange(e);
@@ -154,116 +145,109 @@ function AccountList(props) {
                 </tr>
                 <tr></tr>
                 <tr>
-                  <th className="head">
+                  <th className='head'>
                     Account ID
                     <CaretUp
-                      className="caretIcons"
+                      className='caretIcons'
                       onClick={() => {
-                        accountsSort(perPage, pageNo, "id", "asc");
+                        accountsSort(perPage, pageNo, 'id', 'asc');
                       }}
                     />
                     <CaretDown
-                      className="caretIcons"
+                      className='caretIcons'
                       onClick={() => {
-                        accountsSort(perPage, pageNo, "id", "desc");
+                        accountsSort(perPage, pageNo, 'id', 'desc');
                       }}
                     />
                   </th>
-                  <th className="head">
+                  <th className='head'>
                     Name
                     <CaretUp
-                      className="caretIcons"
+                      className='caretIcons'
                       onClick={() => {
-                        accountsSort(perPage, pageNo, "name", "asc");
+                        accountsSort(perPage, pageNo, 'name', 'asc');
                       }}
                     />
                     <CaretDown
-                      className="caretIcons"
+                      className='caretIcons'
                       onClick={() => {
-                        accountsSort(perPage, pageNo, "name", "desc");
+                        accountsSort(perPage, pageNo, 'name', 'desc');
                       }}
                     />
                   </th>
-                  <th className="head">
+                  <th className='head'>
                     Email
                     <CaretUp
-                      className="caretIcons"
+                      className='caretIcons'
                       onClick={() => {
-                        accountsSort(perPage, pageNo, "email", "asc");
+                        accountsSort(perPage, pageNo, 'email', 'asc');
                       }}
                     />
                     <CaretDown
-                      className="caretIcons"
+                      className='caretIcons'
                       onClick={() => {
-                        accountsSort(perPage, pageNo, "email", "desc");
+                        accountsSort(perPage, pageNo, 'email', 'desc');
                       }}
                     />
                   </th>
-                  <th className="head">
+                  <th className='head'>
                     Ambassador ID
                     <CaretUp
-                      className="caretIcons"
+                      className='caretIcons'
                       onClick={() => {
-                        accountsSort(perPage, pageNo, "ambassadorId", "asc");
+                        accountsSort(perPage, pageNo, 'ambassadorId', 'asc');
                       }}
                     />
                     <CaretDown
-                      className="caretIcons"
+                      className='caretIcons'
                       onClick={() => {
-                        accountsSort(perPage, pageNo, "ambassadorId", "desc");
+                        accountsSort(perPage, pageNo, 'ambassadorId', 'desc');
                       }}
                     />
                   </th>
-                  <th className="head">Last Login</th>
-                  <th className="head">Last Challenge</th>
-                  {edit && <th className="head">Actions </th>}
+                  <th className='head'>Last Login</th>
+                  <th className='head'>Last Challenge</th>
+                  {edit && <th className='head'>Actions </th>}
                 </tr>
               </thead>
-              {localAccounts &&
-                localAccounts.data &&
-                localAccounts.data.length >= 1 && (
-                  <tbody>
-                    {localAccounts.data.map((user, i) => {
-                      return (
-                        <tr key={i} user={user} id="row">
-                          <td>{user.id}</td>
-                          <td>{user.name}</td>
-                          <td>
-                            {user.email}
-                            {blank}
-                          </td>
-                          <td>{user.ambassadorId}</td>
-                          <td>{user.lastLoginDate}</td>
-                          <td>
-                            {user.lastChallenge}
-                            {message}
-                          </td>
-                          <td>
-                            {edit && 
-                            (
-                              <Link
-                                to={{
-                                  pathname: `/Challenge/Accounts/${user.id}`,
-                                  state: user,
-                                }}
-                              >
-                                <button id="edit">Edit</button>
-                              </Link>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                )}
+              {localAccounts && localAccounts.data && localAccounts.data.length >= 1 && (
+                <tbody>
+                  {localAccounts.data.map((user, i) => {
+                    return (
+                      <tr key={i} user={user} id='row'>
+                        <td>{user.id}</td>
+                        <td>{user.name}</td>
+                        <td>
+                          {user.email}
+                          {blank}
+                        </td>
+                        <td>{user.ambassadorId}</td>
+                        <td>{user.lastLoginDate}</td>
+                        <td>
+                          {user.lastChallenge}
+                          {message}
+                        </td>
+                        <td>
+                          {edit && (
+                            <Link
+                              to={{
+                                pathname: `/Challenge/Accounts/${user.id}`,
+                                state: user,
+                              }}
+                            >
+                              <button id='edit'>Edit</button>
+                            </Link>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              )}
             </table>
             <h3>{message}</h3>
           </AccountTable>
-          <Pagination
-            getEntries={getAccounts()}
-            updatePerPage={updatePerPage}
-            updatePageNo={updatePageNo}
-          />
+          <Pagination getEntries={getAccounts()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
         </>
       )}
     </div>

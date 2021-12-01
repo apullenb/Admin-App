@@ -14,53 +14,60 @@ import {
   PERMISSIONS_SKINCARE_START,
   PERMISSIONS_SKINCARE_SUCCESS,
   PERMISSIONS_SKINCARE_FAILURE,
-} from "./skincareActionTypes";
+} from './skincareActionTypes';
 
-import axios from "axios";
-import config from "../../../config/env-urls";
+import axios from 'axios';
+import config from '../../../config/env-urls';
 
 export const getEntries =
-  (perPage = 10, pageNo = 1, sort = "entries.id", sortDirection = "asc") =>
+  (perPage = 10, pageNo = 1, sort = 'entries.id', sortDirection = 'asc') =>
   (dispatch) => {
     dispatch({ type: GET_ENTRIES_START });
     return axios
-    .get(`${config.SKINCAREBASEURL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
-    .then(res=>{
-        dispatch({type:GET_ENTRIES_SUCCESS, payload:res.data});
-    })
-    .catch(error=>{
-        dispatch({type:GET_ENTRIES_FAILURE, payload:error});
-    })
-};
-export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "glowEntryId", sortDirection = "asc", filter = '') => (dispatch) => { 
-  dispatch({type: GET_ENTRIES_START});
-  return axios 
-  .get(`${config.SKINCAREBASEURL}/api/challenge/all-glow-entries?pageNo=${pageNo}&perPage=${perPage}&orderBy=${sort}&sortDirection=${sortDirection}&filter=${filter}`)
-  .then(res=>{
-      dispatch({type:GET_ENTRIES_SUCCESS, payload:res.data});
-  })
-  .catch(error=>{
-      dispatch({type:GET_ENTRIES_FAILURE, payload:error});
-  })
-};
+      .get(
+        `${config.SKINCAREBASEURL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`
+      )
+      .then((res) => {
+        dispatch({ type: GET_ENTRIES_SUCCESS, payload: res.data });
+      })
+      .catch((error) => {
+        dispatch({ type: GET_ENTRIES_FAILURE, payload: error });
+      });
+  };
+export const getGlowEntries =
+  (perPage = 10, pageNo = 1, sort = 'glowEntryId', sortDirection = 'asc', filter = '') =>
+  (dispatch) => {
+    dispatch({ type: GET_ENTRIES_START });
+    return axios
+      .get(
+        `${config.SKINCAREBASEURL}/api/challenge/all-glow-entries?pageNo=${pageNo}&perPage=${perPage}&orderBy=${sort}&sortDirection=${sortDirection}&filter=${filter}`
+      )
+      .then((res) => {
+        dispatch({ type: GET_ENTRIES_SUCCESS, payload: res.data });
+      })
+      .catch((error) => {
+        dispatch({ type: GET_ENTRIES_FAILURE, payload: error });
+      });
+  };
 
 export const getAccounts =
-  (perPage = 10, pageNo = 1, sort = "users.id", sortDirection = "asc") =>
+  (perPage = 10, pageNo = 1, sort = 'users.id', sortDirection = 'asc') =>
   (dispatch) => {
     dispatch({ type: GET_ACCOUNTS_START });
     return axios
-    .get(`${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
-    .then(res=>{
-     
-        dispatch({type:GET_ACCOUNTS_SUCCESS, payload:res.data});
-    })
-    .catch(error=>{
-        dispatch({type:GET_ACCOUNTS_FAILURE, payload:error});
-    })
-};
+      .get(
+        `${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`
+      )
+      .then((res) => {
+        dispatch({ type: GET_ACCOUNTS_SUCCESS, payload: res.data });
+      })
+      .catch((error) => {
+        dispatch({ type: GET_ACCOUNTS_FAILURE, payload: error });
+      });
+  };
 
 export const filterAccounts =
-  (col, filter, perPage = 10, pageNo = 1, sort = "id", sortDirection = "asc") =>
+  (col, filter, perPage = 10, pageNo = 1, sort = 'id', sortDirection = 'asc') =>
   (dispatch) => {
     dispatch({ type: GET_FILTERED_ACCOUNTS_START });
     return axios
@@ -88,10 +95,7 @@ export const LoginSkincareAdmin = () => {
       return error;
     }
     try {
-      const success = await axios.post(
-        `${config.SKINCAREBASEURL}/api/challenge/login`,
-        config.SKINCAREUSER
-      );
+      const success = await axios.post(`${config.SKINCAREBASEURL}/api/challenge/login`, config.SKINCAREUSER);
       return onSuccess(success);
     } catch (error) {
       return onError(error);
@@ -114,11 +118,10 @@ export const SkincareAdminPermissions = () => {
       return error;
     }
     try {
-
-      const permissions = await axios.get('https://zidentityapidev.azurewebsites.net/Permission?email=kevin.broce@zilis.com')
+      const permissions = await axios.get(`${config.ADMINEPERMISSIONS}/Permission?email=kevin.broce@zilis.com`);
       return onSuccess(permissions);
     } catch (error) {
       return onError(error);
     }
   };
-}
+};

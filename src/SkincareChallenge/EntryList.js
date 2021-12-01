@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
-import config from "../config/env-urls";
-import Pagination from "../GlobalComponents/Pagination";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import Moment from "react-moment";
+import React, { useState, useEffect } from 'react';
+import config from '../config/env-urls';
+import Pagination from '../GlobalComponents/Pagination';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import Moment from 'react-moment';
 
 function EntryList() {
-  const [entries, setEntries] = useState("");
+  const [entries, setEntries] = useState('');
   // const [filter, setFilter] = useState("");
   // const [category, setCategory] = useState("");
   const [message, setMessage] = useState(true);
@@ -20,7 +20,7 @@ function EntryList() {
   const getUsers = async (perPage = 10, pageNo = 1) => {
     try {
       const requestOptions = {
-        method: "GET",
+        method: 'GET',
       };
       const response = await fetch(
         `${config.SKINCAREBASEURL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=entries.id`,
@@ -71,36 +71,18 @@ function EntryList() {
             <tbody>
               {entries.map((entry, i) => {
                 return (
-                  <tr key={i} id="row">
+                  <tr key={i} id='row'>
                     <td>{entry.id}</td>
-                    <td>
-                      {entry.day1UploadDate && (
-                        <Moment format="MM/DD/YYYY">
-                          {entry.day1UploadDate}
-                        </Moment>
-                      )}
-                    </td>
+                    <td>{entry.day1UploadDate && <Moment format='MM/DD/YYYY'>{entry.day1UploadDate}</Moment>}</td>
                     <td>{entry.ambassadorId}</td>
                     <td>{entry.name}</td>
                     <td>{entry.contestTitle}</td>
                     <td>
-                      {entry.day1ImageUrl && (
-                        <img
-                          className="image-thumbnail"
-                          alt="Day 1 Photo"
-                          src={entry.day1ImageUrl}
-                        />
-                      )}
-                      {entry.day30ImageUrl && (
-                        <img
-                          className="image-thumbnail"
-                          alt="Day 30 Photo"
-                          src={entry.day30ImageUrl}
-                        />
-                      )}
+                      {entry.day1ImageUrl && <img className='image-thumbnail' alt='Day 1 Photo' src={entry.day1ImageUrl} />}
+                      {entry.day30ImageUrl && <img className='image-thumbnail' alt='Day 30 Photo' src={entry.day30ImageUrl} />}
                     </td>
-                    <td>{entry.isFeatured ? "Yes" : "No"}</td>
-                    <td>{entry.isApproved ? "Yes" : "No"}</td>
+                    <td>{entry.isFeatured ? 'Yes' : 'No'}</td>
+                    <td>{entry.isApproved ? 'Yes' : 'No'}</td>
                     <td>
                       <Link
                         to={{
@@ -120,11 +102,7 @@ function EntryList() {
         <h3>{message}</h3>
       </EntryTable>
 
-      <Pagination
-        getRows={getUsers}
-        totalRows={totalUsers}
-        pageOptions={pageOptions}
-      />
+      <Pagination getRows={getUsers} totalRows={totalUsers} pageOptions={pageOptions} />
     </PageWrapper>
   );
 }
