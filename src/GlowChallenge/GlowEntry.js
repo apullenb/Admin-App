@@ -25,8 +25,7 @@ function GlowEntry(props) {
     const [show, setShow] = useState('hide')
     const [blank, setBlank] = useState(false)
     const [showDelete, setShowDelete]= useState(false)
-    
-console.log(entry)
+ 
 
  const handlePopUp = () => {
      setShowDelete(!showDelete)
