@@ -69,7 +69,7 @@ function GCEntryEdit(props) {
             </div>
             <div>
               <label>Glow Entry ID</label>
-              <span className="read-only-value">{entry.glowEntryId}</span>
+              <span className="read-only-value"><button className='label-btn' onClick={goBack}>{entry.glowEntryId}</button></span>
             </div>
             <div>
               <label>Date Created</label>
@@ -95,7 +95,7 @@ function GCEntryEdit(props) {
             <div>
               <label>Name</label>
               <span className="read-only-value">
-              <Link to={{ pathname: `/Challenge/Accounts/${entry.id}`,  state: entry }}>{entry.name}</Link>
+              <Link className='label-btn' to={{ pathname: `/Challenge/Accounts/${entry.id}`,  state: entry }}>{entry.name}</Link>
               </span>
             </div>
             <div>
@@ -300,6 +300,14 @@ const EntryDetails = styled.section`
       width: 0em;
       height: 1.1em;
     }
+  }
+  .label-btn {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 17px;
+    color: #0F4B8F;
+    padding: 0;
   }
 `;
 
