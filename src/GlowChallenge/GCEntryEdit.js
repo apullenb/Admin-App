@@ -69,7 +69,7 @@ function GCEntryEdit(props) {
             </div>
             <div>
               <label>Glow Entry ID</label>
-              <span className="read-only-value">{entry.glowEntryId}</span>
+              <span className="read-only-value"><button id='edit' style={{color:'#007bff', fontSize:'17px', padding:'0'}} onClick={goBack}> {entry.glowEntryId}</button></span>
             </div>
             <div>
               <label>Date Created</label>
@@ -95,7 +95,7 @@ function GCEntryEdit(props) {
             <div>
               <label>Name</label>
               <span className="read-only-value">
-              <Link to={{ pathname: `/Challenge/Accounts/${entry.id}`,  state: entry }}>{entry.name}</Link>
+              <Link id='edit' style={{color:'#007bff', fontSize:'17px', padding:'0'}} to={{ pathname: `/Challenge/Accounts/${entry.id}`,  state: entry }}>{entry.name}</Link>
               </span>
             </div>
             <div>
