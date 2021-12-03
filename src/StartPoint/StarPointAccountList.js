@@ -35,6 +35,7 @@ export const StarPointAccountList = () => {
   const [sortOrder, setSortOrder] = useState({ ['inventoryId']: 'ASC' });
   const { loading, data, refetch } = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, {
     variables: { skip: skip, take: perPageNum, filterJson: filter, order: sortOrder },
+    refetchPolicy: 'no-cache',
   });
 
   useEffect(() => {
@@ -129,6 +130,10 @@ export const StarPointAccountList = () => {
     setSkip(num);
   };
 
+  const handleEnterKey = (e) => {
+    e.key === 'Enter' || e.key === 'Backspace' ? updateInputValue(e) : null;
+  };
+
   const updateInputValue = (e) => {
     var newVal;
     if (e.target.id === 'inventoryId' || e.target.id === 'isActive') {
@@ -156,6 +161,9 @@ export const StarPointAccountList = () => {
                 id="inventoryId"
                 type="text"
                 placeholder=" Inventory ID"
+                onKeyUp={(e) => {
+                  handleEnterKey(e);
+                }}
                 onBlur={(e) => {
                   updateInputValue(e);
                 }}
@@ -183,6 +191,9 @@ export const StarPointAccountList = () => {
                 id="productSku"
                 type="text"
                 placeholder=" SKU"
+                onKeyUp={(e) => {
+                  handleEnterKey(e);
+                }}
                 onBlur={(e) => {
                   updateInputValue(e);
                 }}
@@ -193,6 +204,9 @@ export const StarPointAccountList = () => {
                 id="description"
                 type="text"
                 placeholder="Name"
+                onKeyUp={(e) => {
+                  handleEnterKey(e);
+                }}
                 onBlur={(e) => {
                   updateInputValue(e);
                 }}
@@ -203,6 +217,9 @@ export const StarPointAccountList = () => {
                 id="category"
                 type="text"
                 placeholder="Category"
+                onKeyUp={(e) => {
+                  handleEnterKey(e);
+                }}
                 onBlur={(e) => {
                   updateInputValue(e);
                 }}
@@ -213,26 +230,28 @@ export const StarPointAccountList = () => {
             {tHeaderData &&
               tHeaderData.map((data, index) => {
                 return (
-                  <TH style={{ width: '12.5%', backgroundColor: '#f4fafe' }} key={index}>
-                    {data.name}
-                    {data.name !== 'Actions' && (
-                      <div>
-                        <CaretUp
-                          className="caretIcons"
-                          id={data.colId}
-                          onClick={() => {
-                            handleSort(data.colId, 'ASC');
-                          }}
-                        />
-                        <CaretDown
-                          className="caretIcons"
-                          id={data.colId}
-                          onClick={() => {
-                            handleSort(data.colId, 'DESC');
-                          }}
-                        />
-                      </div>
-                    )}
+                  <TH style={{ width: '12.5%', flexDirection: 'row', backgroundColor: '#f4fafe' }} key={index}>
+                    <SORTWRAPPER>
+                      <SORTCOLUMNTITLE>{data.name}</SORTCOLUMNTITLE>
+                      {data.name !== 'Actions' && (
+                        <SORTICONWRAPPER>
+                          <CaretUp
+                            className="caretIcons"
+                            id={data.colId}
+                            onClick={() => {
+                              handleSort(data.colId, 'ASC');
+                            }}
+                          />
+                          <CaretDown
+                            className="caretIcons"
+                            id={data.colId}
+                            onClick={() => {
+                              handleSort(data.colId, 'DESC');
+                            }}
+                          />
+                        </SORTICONWRAPPER>
+                      )}
+                    </SORTWRAPPER>
                   </TH>
                 );
               })}
@@ -343,4 +362,30 @@ const TD = styled.td`
 const SearchInput = styled.input`
   width: 90%;
   border: 1px solid #0f4b8f;
+`;
+
+const SORTWRAPPER = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  @media (max-width: 995px) {
+    flex-direction: column;
+  }
+`;
+
+const SORTCOLUMNTITLE = styled.p`
+  display: flex;
+  align-items: center;
+  margin: 0 10% 0 0;
+
+  @media (max-width: 995px) {
+    width: 100%;
+  }
+`;
+
+const SORTICONWRAPPER = styled.div`
+  width: 50%;
+  @media (max-width: 995px) {
+    width: 100%;
+  }
 `;
