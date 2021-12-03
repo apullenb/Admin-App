@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { GET_STAR_PODUCTS_BY_ID } from '../utils/StartPointQueries';
+import { GET_STAR_PODUCTS_BY_ID, GET_STAR_PRODUCTS_WITH_PAGE } from '../utils/StartPointQueries';
 import { UPDATE_STAR_PRODUCT } from '../utils/StartPointMutations';
 import { useToasts } from 'react-toast-notifications';
 
@@ -14,7 +14,7 @@ const EditStarPoint = () => {
   const assetRootUrl = 'https://extranet.securefreedom.com/zilis/Shopping/Images/';
   const placeHolderImg = 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png';
   const { inventoryId } = useParams();
-  const { loading, data } = useQuery(GET_STAR_PODUCTS_BY_ID, { variables: { inventoryId: parseInt(inventoryId) } });
+  const { loading, data, refetch } = useQuery(GET_STAR_PODUCTS_BY_ID, { variables: { inventoryId: parseInt(inventoryId) }, refetchPolicy: 'no-cache' });
   const [productData, setProductData] = useState({});
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
@@ -54,6 +54,7 @@ const EditStarPoint = () => {
         appearance: 'success',
         autoDismiss: true,
       });
+      refetch();
     } catch (error) {
       addToast('An error occured while updating!', {
         appearance: 'error',
