@@ -21,20 +21,28 @@ export const getEntries =
   (dispatch) => {
     dispatch({ type: GET_ENTRIES_START });
     return axios
-      .get(
-        `${config.SKINCAREBASEURL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`
-      )
-      .then((res) => {
-        dispatch({ type: GET_ENTRIES_SUCCESS, payload: res.data });
-      })
-      .catch((error) => {
-        dispatch({ type: GET_ENTRIES_FAILURE, payload: error });
-      });
-  };
-export const getGlowEntries =
-  (perPage = 10, pageNo = 1, sort = 'glowEntryId', sortDirection = 'asc', filter = '') =>
-  (dispatch) => {
-    dispatch({ type: GET_ENTRIES_START });
+    .get(`${config.SKINCAREBASEURL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
+    .then(res=>{
+        dispatch({type:GET_ENTRIES_SUCCESS, payload:res.data});
+    })
+    .catch(error=>{
+        dispatch({type:GET_ENTRIES_FAILURE, payload:error});
+    })
+};
+export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "glowEntryId", sortDirection = "asc", filter = '', photo= '') => (dispatch) => { 
+  dispatch({type: GET_ENTRIES_START});
+  return axios 
+  .post(`${config.SKINCAREBASEURL}/api/challenge/all-glow-entries`, {pageNo, perPage, orderBy: sort,sortDirection, filter, img:photo})
+  .then(res=>{
+      dispatch({type:GET_ENTRIES_SUCCESS, payload:res.data});
+  })
+  .catch(error=>{
+      dispatch({type:GET_ENTRIES_FAILURE, payload:error});
+  })
+};
+
+export const getAccounts = (perPage = 10, pageNo = 1, sort = "users.id", sortDirection = "asc") => (dispatch) => {
+    dispatch({type: GET_ACCOUNTS_START});
     return axios
       .get(
         `${config.SKINCAREBASEURL}/api/challenge/all-glow-entries?pageNo=${pageNo}&perPage=${perPage}&orderBy=${sort}&sortDirection=${sortDirection}&filter=${filter}`
