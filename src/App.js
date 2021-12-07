@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, {useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import './App.scss';
@@ -17,6 +17,8 @@ import ShoppingCountries from './ShoppingConfiguration/countries/countries';
 import ShoppingKits from './ShoppingConfiguration/kits/kits';
 import ShoppingProducts from './ShoppingConfiguration/product/products';
 import ShoppingCategories from './ShoppingConfiguration/categories';
+import StarPointAccountList from './StartPoint/StarPointAccountList';
+import EditStarPoint from './StartPoint/EditStarPoint';
 
 import Events from './Events/EventList';
 import Incentive from './Incentive/IncentiveList';
@@ -35,6 +37,7 @@ import GlowEntryList from './GlowChallenge/GlowEntryList';
 import GCEntryEdit from './GlowChallenge/GCEntryEdit';
 import GlowEntry from './GlowChallenge/GlowEntry';
 
+import config from './config/env-urls';
 const allRoutes = [
   {
     path: '/',
@@ -146,10 +149,19 @@ const allRoutes = [
     path: '/Settings/users',
     component: UserAuthorizationStatusTable,
   },
+  {
+    exact: true,
+    path: '/StarPoint/',
+    component: StarPointAccountList,
+  },
+  {
+    exact: true,
+    path: '/StartPoint/Edit/:inventoryId',
+    component: EditStarPoint,
+  },
 ];
-
 const client = new ApolloClient({
-  uri: 'https://zorderapidev.azurewebsites.net/graphql',
+  uri:config.ORDERAPIURL,
 });
 
 function App() {
