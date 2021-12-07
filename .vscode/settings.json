@@ -1,4 +1,4 @@
 {
-    "prettier.printWidth": 140,
+    "prettier.printWidth": 150,
     "prettier.jsxSingleQuote": true
 }

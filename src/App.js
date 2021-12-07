@@ -12,6 +12,7 @@ import EntryList from './SkincareChallenge/SCEntryList/EntryList';
 import EntryEdit from './SkincareChallenge/EntryEdit';
 
 import EditCOA from './COA/EditCOA';
+import AddCOA from './COA/AddCOA';
 
 import ShoppingCountries from './ShoppingConfiguration/countries/countries';
 import ShoppingKits from './ShoppingConfiguration/kits/kits';
@@ -38,6 +39,7 @@ import GCEntryEdit from './GlowChallenge/GCEntryEdit';
 import GlowEntry from './GlowChallenge/GlowEntry';
 
 import config from './config/env-urls';
+import { SkincareAdminPermissions } from './redux/actions/Skincare/skincareActions';
 const allRoutes = [
   {
     path: '/',
@@ -172,6 +174,7 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: APP_STARTED });
+    dispatch(SkincareAdminPermissions())
   }, []);
 
   return (

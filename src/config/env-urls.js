@@ -26,6 +26,19 @@ const handleSkinCareEnvURL = () => {
   }
 };
 
+const handleAdminPermissions = () => {
+  switch (environment) {
+    case 'development':
+      return 'http://localhost:4000';
+    case 'test':
+      return 'https://zidentityapidev.azurewebsites.net';
+    case 'production':
+      return 'https://zidentityapidev.azurewebsites.net';
+    default:
+      return 'http://localhost:4000';
+  }
+};
+
 const handleSCTargetURL = () => {
   switch (environment) {
     case 'development':
@@ -61,6 +74,7 @@ const config = {
   PRODUCTSBASEURL: handleSetProductsURL(),
   SKINCAREBASEURL: handleSkinCareEnvURL(),
   SCTARGETURL: handleSCTargetURL(),
+  ADMINEPERMISSIONS: handleAdminPermissions(),
   ORDERAPIURL: handleOrderAPIURL(),
   SKINCAREUSER: skincareUser,
 };

@@ -11,6 +11,9 @@ import {
   LOGIN_ADMIN_SKINCARE_START,
   LOGIN_ADMIN_SKINCARE_SUCCESS,
   LOGIN_ADMIN_SKINCARE_FAILURE,
+  PERMISSIONS_SKINCARE_START,
+  PERMISSIONS_SKINCARE_SUCCESS,
+  PERMISSIONS_SKINCARE_FAILURE,
 } from './skincareActionTypes';
 
 import axios from 'axios';
@@ -40,20 +43,6 @@ export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "glowEntryId", s
       dispatch({type:GET_ENTRIES_FAILURE, payload:error});
   })
 };
-
-export const getAccounts = (perPage = 10, pageNo = 1, sort = "users.id", sortDirection = "asc") => (dispatch) => {
-    dispatch({type: GET_ACCOUNTS_START});
-    return axios
-      .get(
-        `${config.SKINCAREBASEURL}/api/challenge/all-glow-entries?pageNo=${pageNo}&perPage=${perPage}&orderBy=${sort}&sortDirection=${sortDirection}&filter=${filter}`
-      )
-      .then((res) => {
-        dispatch({ type: GET_ENTRIES_SUCCESS, payload: res.data });
-      })
-      .catch((error) => {
-        dispatch({ type: GET_ENTRIES_FAILURE, payload: error });
-      });
-  };
 
 export const getAccounts =
   (perPage = 10, pageNo = 1, sort = 'users.id', sortDirection = 'asc') =>
@@ -107,6 +96,29 @@ export const LoginSkincareAdmin = (skincareUser) => {
       localStorage.setItem('Token', success.data.token);
 
       return onSuccess(success);
+    } catch (error) {
+      return onError(error);
+    }
+  };
+};
+
+export const SkincareAdminPermissions = () => {
+  return async (dispatch) => {
+    dispatch({ type: PERMISSIONS_SKINCARE_START });
+    function onSuccess(permissions) {
+      dispatch({ type: PERMISSIONS_SKINCARE_SUCCESS, payload: permissions.data });
+      return permissions;
+    }
+    function onError(error) {
+      dispatch({
+        type: PERMISSIONS_SKINCARE_FAILURE,
+        payload: error,
+      });
+      return error;
+    }
+    try {
+      const permissions = await axios.get(`${config.ADMINEPERMISSIONS}/Permission?email=kevin.broce@zilis.com`);
+      return onSuccess(permissions);
     } catch (error) {
       return onError(error);
     }
