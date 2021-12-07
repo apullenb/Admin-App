@@ -10,7 +10,7 @@ import { getGlowEntries } from "./../redux/actions/Skincare/skincareActions";
 
 function GlowEntryList() {
   const [message, setMessage] = useState(true);
-  const [blank, setBlank] = useState(false);
+
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [colSort, setColSort] = useState("glowEntryId");
@@ -20,12 +20,11 @@ function GlowEntryList() {
   const [contests, setContests] = useState([]);
   const [products, setProducts] = useState([]);
   const [imgFilter, setImgFilter] = useState([]);
-  let timer;
+ 
   const dispatch = useDispatch();
   const { entries } = useSelector((state) => state.entries);
 
   useEffect(() => {
-    console.log('use effect')
     dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
   }, []);
 
@@ -53,58 +52,37 @@ function GlowEntryList() {
 
   const handleChange = (e) => {
     var currentFilter = filter;
-    var existingImgFilter = []
+    var existingImgFilter = imgFilter
     if (e.target.type === "checkbox") {
-      console.log('enter checkbox')
-       existingImgFilter = imgFilter.find(
-        (f) => (f.column = e.target.id)
-      ) || { column: e.target.id, value: "" };
-      existingImgFilter.value = e.target.checked;
-      console.log('current value', imgFilter, existingImgFilter.value)
-      if (existingImgFilter.value) {
-        setImgFilter([existingImgFilter]);
+      var existingImgIndex = existingImgFilter.findIndex(f => f.column === e.target.id);
+      if (existingImgIndex >= 0 ) {
+        if (!e.target.checked) {
+           existingImgFilter.splice(existingImgIndex, 1);
+        } else {
+          existingImgFilter[existingImgIndex].value = e.target.checked;
+        } 
       } else {
-        setImgFilter([]);
+        existingImgFilter.push( {column: e.target.id, value: e.target.checked})
       }
+      setImgFilter(existingImgFilter);
     } else {
-      console.log('initial filter', filter)
-      
-      var existingIndex = currentFilter.findIndex((f) => (f.column = e.target.id));
-      console.log('found index', existingIndex, e.target.id)
+      var existingIndex = currentFilter.findIndex(f => f.column === e.target.id);
+     
       if (existingIndex >= 0 ) {
         if (e.target.value === '') {
           currentFilter.splice(existingIndex, 1);
         } else {
-          console.log('exising index', existingIndex, currentFilter)
           currentFilter[existingIndex].value = e.target.value;
         } 
       } else {
         currentFilter.push( {column: e.target.id, value: e.target.value})
       }
-      console.log('updated filter array', currentFilter);
       setFilter(currentFilter);
     }
     dispatch(
-      getGlowEntries(perPage, pageNo, colSort, sortDirection, currentFilter || filter, existingImgFilter?.value ? [existingImgFilter] : [])
+      getGlowEntries(perPage, pageNo, colSort, sortDirection, currentFilter, existingImgFilter)
     );
-   // processChange();
   };
-
-  function debounce(func, timeout = 3000) {
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, timeout);
-    };
-  }
-  function saveInput(img) {
-    console.log('dispatch value', imgFilter);
-    dispatch(
-      getGlowEntries(perPage, pageNo, colSort, sortDirection, filter, img)
-    );
-  }
-  const processChange = (img) =>  debounce((img) => saveInput(img));
 
  
   return (
@@ -120,9 +98,9 @@ function GlowEntryList() {
                   id="glowEntryId"
                   type="text"
                   onBlur={(e) => {
-                   
                     handleChange(e);
                   }}
+                  onKeyPress={(e)=> {if (e.key === 'Enter') handleChange(e)}}
                 />
               </th>
               <th id="filter">
@@ -134,6 +112,7 @@ function GlowEntryList() {
                    
                     handleChange(e);
                   }}
+                  onKeyPress={(e)=> {if (e.key === 'Enter') handleChange(e)}}
                 />
               </th>
               <th id="filter">
@@ -141,10 +120,10 @@ function GlowEntryList() {
                 
                   id="ambassador_id"
                   type="text"
-                  onChange={(e) => {
-                    
+                  onBlur={(e) => {
                     handleChange(e);
                   }}
+                  onKeyPress={(e)=> {if (e.key === 'Enter') handleChange(e)}}
                 />
               </th>
               <th id="filter">
@@ -152,25 +131,26 @@ function GlowEntryList() {
             
                   id="name"
                   type="text"
-                  onChange={(e) => {
+                  onBlur={(e) => {
                    
                     handleChange(e);
                   }}
+                  onKeyPress={(e)=> {if (e.key === 'Enter') handleChange(e)}}
                 />
               </th>
               <th id="filter">
                 <select
                   id="title"
                   onChange={(e) => {
-                  
                     handleChange(e);
                   }}
+                 
                 >
                   <option value=""> </option>
                   {contests &&
-                    contests.map((c) => (
-                      <option id="title" value={c.title}>
-                        {c.title}{" "}
+                    contests.map((c, k) => (
+                      <option id="title" value={c.title} key={k}>
+                        {c.title}
                       </option>
                     ))}
                 </select>
