@@ -1,4 +1,4 @@
-const environment = process.env.REACT_APP_ENV || 'test';
+const environment = process.env.REACT_APP_ENV || 'development';
 
 const handleSetProductsURL = () => {
   switch (environment) {
@@ -52,6 +52,19 @@ const handleSCTargetURL = () => {
   }
 };
 
+const handleOrderAPIURL = () => {
+  switch (environment) {
+    case 'development':
+      return 'https://localhost:5051/graphql';
+    case 'test':
+      return 'https://zorderapidev.azurewebsites.net/graphql';
+    case 'production':
+      return 'https://zorderapi.azurewebsites.net/graphql';
+    default:
+      return 'https://localhost:5051/graphql';
+  }
+};
+
 const skincareUser = {
   username: 'AdminApp',
   password: 'vHIsAQ7FWR1tDz',
@@ -62,6 +75,7 @@ const config = {
   SKINCAREBASEURL: handleSkinCareEnvURL(),
   SCTARGETURL: handleSCTargetURL(),
   ADMINEPERMISSIONS: handleAdminPermissions(),
+  ORDERAPIURL: handleOrderAPIURL(),
   SKINCAREUSER: skincareUser,
 };
 

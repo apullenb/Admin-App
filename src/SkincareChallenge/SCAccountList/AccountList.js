@@ -24,9 +24,7 @@ function AccountList(props) {
   const [col, setCol] = useState('id');
   const [filter, setFilter] = useState('');
   const dispatch = useDispatch();
-  const { accounts } = useSelector((state) => state.entries);
-  const { view, edit } = props;
-
+  const { view, edit,accounts } = props;
   useEffect(() => {
     dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
   }, []);
