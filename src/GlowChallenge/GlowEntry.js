@@ -59,7 +59,7 @@ useEffect(() => {
     <PopUp style={showDelete ? {display: 'block'} : {display:'none'}}><Model type='entry' close={handlePopUp} delete={handleDelete} text="Deleting this entry will delete all submissions associated with the entry as well. This action can not be undone." /></PopUp>
         <EntryDetails>
         
-            <div className="page-header-link"><Link to="/Challenge/Glow-Entries">Back to List</Link></div>
+            <div className="page-header-link"><Link style={{color:'#0F4B8F'}} to="/Challenge/Glow-Entries">Back to List</Link></div>
           <Row>
             <Col>
               <div>
@@ -110,7 +110,7 @@ useEffect(() => {
               <div>
                 <label>Name</label>
                 <span className="read-only-value">
-                <Link to={{ pathname: `/Challenge/Accounts/${entry.id}`,  state: entry }}>{entry.name}</Link></span>
+                <Link className='label-btn' to={{ pathname: `/Challenge/Accounts/${entry.id}`,  state: entry }}>{entry.name}</Link></span>
               </div>
               <div>
                 <label>Email</label>
@@ -165,7 +165,7 @@ useEffect(() => {
                         <td style={{position:'relative'}} >{blank}<div style={show === 'show' ? showMore : {margin:'0px'}}>{productMap(e.products) } &nbsp; <span onMouseOver={handleShow} onMouseLeave={handleShow} style={show === 'show' ? {display:'none'} : {margin:'0px'}}>  ... </span></div> </td>
                         <td ><div className='story'>{e.story.slice(0, 18)} ... <span className='story-text'>{e.story}</span></div></td>
                         <td><div style={{marginLeft:'10px'}}>{e.answers.length}/23</div></td>
-                        <td> <div style={{marginLeft:'10px', textDecoration:'underline' }} ><Link to={{pathname: `/Challenge/Glow-Submission/${e.glowSubmissionId}`, state: e}}>View</Link></div></td>
+                        <td> <div style={{marginLeft:'10px', textDecoration:'underline' }} ><Link className='label-btn' to={{pathname: `/Challenge/Glow-Submission/${e.glowSubmissionId}`, state: e}}>View</Link></div></td>
                         </tr>
                 })}
               
@@ -332,7 +332,14 @@ useEffect(() => {
    .hide {
        display:none;
    }
-
+   .label-btn {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 17px;
+    color: #0F4B8F;
+    padding: 0;
+  }
   `;
 
 const PopUp = styled.div`
