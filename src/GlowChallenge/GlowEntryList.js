@@ -10,6 +10,7 @@ import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { getGlowEntries } from './../redux/actions/Skincare/skincareActions';
+import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
 
 function GlowEntryList(props) {
   const { view, edit, entries } = props;
@@ -272,8 +273,7 @@ function GlowEntryList(props) {
             </tr>
           </thead>
           <tbody>
-            {localAccounts &&
-              localAccounts.length > 0 &&
+            {localAccounts?.length>0 ?
               localAccounts.map((user, i) => {
                 user.products = products;
                 return (
@@ -441,7 +441,12 @@ function GlowEntryList(props) {
                     </td>
                   </tr>
                 );
-              })}
+              }):
+              <tr id='row'>
+              <td colSpan="10">
+        <SpinnerLoader/>
+        </td>
+        </tr>}
           </tbody>
         </table>
         <h3>{message}</h3>

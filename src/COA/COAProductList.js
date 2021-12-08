@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "@apollo/react-hooks";
 import { GET_PRODUCTS } from "../utils/GQLqueries";
 
 import { Link } from "react-router-dom";
+import SpinnerLoader from "../GlobalComponents/ZilisSpinnerLoader";
 
 const COAProductList = () => {
   const { loading, data, refetch } = useQuery(GET_PRODUCTS);
@@ -114,14 +115,17 @@ const COAProductList = () => {
         <Col>Last Updated</Col>
         <Col>Actions</Col>
       </Row>
-      {products &&
+      {products?.length>0?
         products.map((product) => (
           <COAProduct
             key={product.coaProductID}
             product={product}
             fetch={setProducts}
           />
-        ))}
+        )):
+      
+  <SpinnerLoader/>
+  }
     </Table>
   );
 };
