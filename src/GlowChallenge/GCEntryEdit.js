@@ -7,21 +7,32 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import Moment from "react-moment";
-import Select from "react-select";
-import { useToasts } from "react-toast-notifications";
-import { LoginSkincareAdmin } from "../redux/actions/Skincare/skincareActions";
-import { relativeTimeRounding } from "moment";
-import checkbox from "../assets/Checkbox.PNG";
 import Model from "./Model";
 import config from "../config/env-urls";
+import CloudUpload from "./CloudUpload";
 
 function GCEntryEdit(props) {
   const entry = props.location.state;
   const [showDelete, setShowDelete] = useState(false);
-
+  const [showUpload, setShowUpload] = useState(true);
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [message, setMessage] = useState('')
+  
   const handlePopUp = () => {
     setShowDelete(!showDelete);
   };
+
+  const handlePhotoUpload = (newUrl) => {
+    axios.put( `${config.SKINCAREBASEURL}/api/challenge/replace-glow-entry-photo/${entry.glowSubmissionId}`, {
+      photoUrl: newUrl})
+    .then(res => {
+      if (res.status === 200) {
+      setPhotoUrl(newUrl)
+      } else {
+        setMessage('There was an Error Uploading Your Photo. Please try Again.')
+      }
+    })
+  }
 
   const handleDelete = () => {
     axios
@@ -46,14 +57,8 @@ function GCEntryEdit(props) {
   return (
     <div style={{ margin: "0 8%" }}>
       <h1>Glow Challenge Submission</h1>
-
       <PopUp style={showDelete ? { display: "block" } : { display: "none" }}>
-        <Model
-          type="submission"
-          close={handlePopUp}
-          delete={handleDelete}
-          text="Deleting this submission will delete all photos, questionnaire answers and other information associated with the submission as well. This action can not be undone."
-        />
+        <Model type="submission" close={handlePopUp} delete={handleDelete} text="Deleting this submission will delete all photos, questionnaire answers and other information associated with the submission as well. This action can not be undone." />
       </PopUp>
       <EntryDetails>
         <div className="page-header-link">
@@ -195,9 +200,10 @@ function GCEntryEdit(props) {
           <Col>
             <div style={{ marginBottom: "3%" }}>Day {entry.day} Photo </div>
             <ContestImage>
-              <img src={entry.photoUrl} />
-              <Replace>Replace</Replace>
+              <img src={photoUrl === '' ? entry.photoUrl : photoUrl} />
+             <CloudUpload day={1} user={entry.id} save={handlePhotoUpload} />
             </ContestImage>
+            <h4>{message}</h4>
           </Col>
         </Row>
 
@@ -221,15 +227,6 @@ const GrayBox = styled.div`
   padding: 15px;
   font: normal normal normal 16px/27px Segoe UI;
   color: #707070;
-`;
-const Replace = styled.button`
-  width: 100%;
-  border: none;
-  padding: 4px 0;
-  background: #0f4b8f;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
 `;
 
 const ContestImage = styled.div`

@@ -27,7 +27,7 @@ export const getEntries = (perPage = 10, pageNo = 1, sort = "entries.id", sortDi
         dispatch({type:GET_ENTRIES_FAILURE, payload:error});
     })
 };
-export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "glowEntryId", sortDirection = "asc", filter = '', photo= '') => (dispatch) => { 
+export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "glowEntryId", sortDirection = "asc", filter = [], photo= '') => (dispatch) => { 
   dispatch({type: GET_ENTRIES_START});
   return axios 
   .post(`${config.SKINCAREBASEURL}/api/challenge/all-glow-entries`, {pageNo, perPage, orderBy: sort,sortDirection, filter, img:photo})
