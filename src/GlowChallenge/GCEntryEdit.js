@@ -10,8 +10,10 @@ import Moment from "react-moment";
 import Model from "./Model";
 import config from "../config/env-urls";
 import CloudUpload from "./CloudUpload";
+import getComponentData from './selector';
 
 function GCEntryEdit(props) {
+  const { edit } = props;
   const entry = props.location.state;
   const [showDelete, setShowDelete] = useState(false);
   const [showUpload, setShowUpload] = useState(true);
@@ -201,7 +203,7 @@ function GCEntryEdit(props) {
             <div style={{ marginBottom: "3%" }}>Day {entry.day} Photo </div>
             <ContestImage>
               <img src={photoUrl === '' ? entry.photoUrl : photoUrl} />
-             <CloudUpload day={1} user={entry.id} save={handlePhotoUpload} />
+            {edit && <CloudUpload day={1} user={entry.id} save={handlePhotoUpload} /> }
             </ContestImage>
             <h4>{message}</h4>
           </Col>
@@ -214,7 +216,7 @@ function GCEntryEdit(props) {
           <Col></Col>
           <Col></Col>
           <Col>
-            <Delete onClick={handlePopUp}>Delete Submission</Delete>
+            <Delete onClick={edit && handlePopUp}>Delete Submission</Delete>
           </Col>
         </Row>
       </EntryDetails>
