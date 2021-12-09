@@ -7,32 +7,33 @@ trigger:
 - master
 - develop
 - release*
+- feature*
 
 
 pool:
-  vmImage: windows-latest
+  vmImage: ubuntu-latest
 
 variables:
 
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'BlobConnection'
+  azureSubscription: 'zilis-microservices'
 
   #resource group
   ResourceGroupName: 'Zilis-Microservices'
+  ResourceGroupNameV1: 'Zilis-Applications'
 
   # Web app name
-  webAppNameDev: 'AdminAppZilis'
-  webAppNameProd: 'do we need prod?'
+  webAppNameDev: 'adminapp-dev-zilis'
+  webAppNameProd: 'AdminAppZilis'
 
-  storageAccount: 'zilisadminapp'
-  storageContainerName: $web
 
   # Agent VM image name
-  vmImageName: 'windows-latest'
+  vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: BuildDev
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+  #condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
   displayName: Build Dev/test Code
   jobs:
   - job: Build
@@ -59,44 +60,13 @@ stages:
         command: 'custom'
         workingDir: '$(System.DefaultWorkingDirectory)'
         customCommand: 'run build'
-        
-    # - task: CopyFiles@2
-    #   displayName: 'Copy build directory to $(Build.ArtifactStagingDirectory)/build'
-    #   inputs: 
-    #     Contents: 'build/**'
-    #     TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
+      
     - task: PublishPipelineArtifact@1
       displayName: 'Publish build artifact'
       inputs:
         targetPath: '$(System.DefaultWorkingDirectory)/build'
         artifactName: dev
         artifactType: pipeline
-
-
-# - stage: DeployDevBlob
-#   displayName: Deploy To Dev Env
-#   dependsOn: BuildDev
-#   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     environment: $(webAppNameDev)
-#     pool:
-#       vmImage: $(vmImageName)
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: AzureFileCopy@4
-#             displayName: 'Copy files to blob storage: $(storageAccount)'
-#             inputs:
-#               SourcePath: '$(Pipeline.Workspace)/dev/**'
-#               Destination: AzureBlob
-#               storage: $(storageAccount)
-#               ContainerName: $(storageContainerName)
-#               azureSubscription: BlobConnection
-#               CleanTargetBeforeCopy: true
 
 - stage: DeployDev
   displayName: Deploy To Dev Env
@@ -115,11 +85,10 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Azure Web App Deploy'
             inputs:
-              azureSubscription: zilis-microservices
+              azureSubscription: $(azureSubscription)
               appName: $(webAppNameDev)
               appType: webApp
               package: '$(Pipeline.Workspace)/dev/'
-              # deploymentMethod: runFromPackage
 
           # - task: AzureRmWebAppDeployment@4
           #   displayName: 'Azure App Service Deploy: $(webAppNameDev)'
