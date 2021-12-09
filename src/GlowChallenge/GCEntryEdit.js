@@ -13,6 +13,7 @@ import CloudUpload from "./CloudUpload";
 
 function GCEntryEdit(props) {
   const { edit } = props;
+  console.log(props)
   const entry = props.location.state;
   const [showDelete, setShowDelete] = useState(false);
   const [showUpload, setShowUpload] = useState(true);
@@ -23,13 +24,22 @@ function GCEntryEdit(props) {
     setShowDelete(!showDelete);
   };
 
+  const authToken = localStorage.getItem('Token')
+ 
   const handlePhotoUpload = (newUrl) => {
-    axios.put( `${config.SKINCAREBASEURL}/api/challenge/replace-glow-entry-photo/${entry.glowSubmissionId}`, {
-      photoUrl: newUrl})
+    const data = { photoUrl: newUrl}
+    const requestOptions = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": authToken,
+      }
+    }
+    
+    axios.put( `${config.SKINCAREBASEURL}/api/challenge/replace-glow-entry-photo/${entry.glowSubmissionId}`, data, requestOptions)
     .then(res => {
       if (res.status === 200) {
       setPhotoUrl(newUrl)
-      
       } else {
         setMessage('There was an Error Uploading Your Photo. Please try Again.')
       }
@@ -194,8 +204,9 @@ function GCEntryEdit(props) {
             <ContestImage>
               <img src={photoUrl === '' ? entry.photoUrl : photoUrl} />
             {edit && <CloudUpload day={1} user={entry.id} save={handlePhotoUpload} /> }
-            </ContestImage>
             <h4>{message}</h4>
+            </ContestImage>
+         
           </Col>
         </Row>
 
