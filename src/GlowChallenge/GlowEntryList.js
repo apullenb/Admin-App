@@ -1,20 +1,24 @@
+import { React } from 'react';
+import { connect } from 'react-redux';
+import getComponentData from './selector';
 /* eslint-disable react/jsx-key */
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Pagination from "../SkincareChallenge/SCAccountList/Pagination";
-import "../SkincareChallenge/SCEntryList/EntryList.scss";
-import { CaretUp, CaretDown } from "react-bootstrap-icons";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { getGlowEntries } from "./../redux/actions/Skincare/skincareActions";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Pagination from '../SkincareChallenge/SCAccountList/Pagination';
+import '../SkincareChallenge/SCEntryList/EntryList.scss';
+import { CaretUp, CaretDown } from 'react-bootstrap-icons';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { getGlowEntries } from './../redux/actions/Skincare/skincareActions';
 
-function GlowEntryList() {
+function GlowEntryList(props) {
+  const { view, edit, entries } = props;
   const [message, setMessage] = useState(true);
 
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [colSort, setColSort] = useState("glowEntryId");
-  const [sortDirection, setSortDirection] = useState("asc");
+  const [colSort, setColSort] = useState('glowEntryId');
+  const [sortDirection, setSortDirection] = useState('asc');
   const [localAccounts, setLocalAccounts] = useState([]);
   const [filter, setFilter] = useState([]);
   const [contests, setContests] = useState([]);
@@ -22,7 +26,6 @@ function GlowEntryList() {
   const [imgFilter, setImgFilter] = useState([]);
  
   const dispatch = useDispatch();
-  const { entries } = useSelector((state) => state.entries);
 
   useEffect(() => {
     dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
@@ -88,6 +91,8 @@ function GlowEntryList() {
   return (
     <div style={{ margin: "0 8%" }}>
       <h1>Glow Challenge Entries</h1>
+      {view && (
+        <>
       <AccountTable>
         <table>
           <thead>
@@ -446,12 +451,13 @@ function GlowEntryList() {
         getEntries={getGlowEntries()}
         updatePerPage={updatePerPage}
         updatePageNo={updatePageNo}
-      />
+      /></>)
+      }
     </div>
   );
 }
 
-export default GlowEntryList;
+export default connect(getComponentData)(GlowEntryList);
 
 const AccountTable = styled.div`
   padding: 1px;

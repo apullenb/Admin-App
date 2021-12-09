@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import axios from "axios";
-import Moment from "react-moment";
-import Model from "./Model";
-import config from "../config/env-urls";
-import CloudUpload from "./CloudUpload";
+import React, { useState, useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import axios from 'axios';
+import Moment from 'react-moment';
+import Model from './Model';
+import config from '../config/env-urls';
 import getComponentData from './selector';
+import CloudUpload from "./CloudUpload";
 
 function GCEntryEdit(props) {
   const { edit } = props;
@@ -30,6 +29,7 @@ function GCEntryEdit(props) {
     .then(res => {
       if (res.status === 200) {
       setPhotoUrl(newUrl)
+      
       } else {
         setMessage('There was an Error Uploading Your Photo. Please try Again.')
       }
@@ -37,14 +37,10 @@ function GCEntryEdit(props) {
   }
 
   const handleDelete = () => {
-    axios
-      .delete(
-        `${config.SKINCAREBASEURL}/api/challenge/delete-glow-submission-admin/${entry.glowSubmissionId}`
-      )
-      .then((res) => {
-        setShowDelete(!showDelete);
-        props.history.push("/Challenge/Glow-Entries");
-      });
+    axios.delete(`${config.SKINCAREBASEURL}/api/challenge/delete-glow-submission-admin/${entry.glowSubmissionId}`).then((res) => {
+      setShowDelete(!showDelete);
+      props.history.push('/Challenge/Glow-Entries');
+    });
   };
 
   const checkProduct = (p) => {
@@ -57,22 +53,22 @@ function GCEntryEdit(props) {
   const goBack = () => props.history.goBack();
 
   return (
-    <div style={{ margin: "0 8%" }}>
+    <div style={{ margin: '0 8%' }}>
       <h1>Glow Challenge Submission</h1>
       <PopUp style={showDelete ? { display: "block" } : { display: "none" }}>
         <Model type="submission" close={handlePopUp} delete={handleDelete} text="Deleting this submission will delete all photos, questionnaire answers and other information associated with the submission as well. This action can not be undone." />
       </PopUp>
       <EntryDetails>
-        <div className="page-header-link">
-          <button id="edit" onClick={goBack}>
+        <div className='page-header-link'>
+          <button id='edit' onClick={goBack}>
             Back to Entry
           </button>
         </div>
         <Row>
-          <Col style={{ marginRight: "9%" }}>
+          <Col style={{ marginRight: '9%' }}>
             <div>
               <label>Glow Submission ID</label>
-              <span className="read-only-value">{entry.glowSubmissionId}</span>
+              <span className='read-only-value'>{entry.glowSubmissionId}</span>
             </div>
             <div>
               <label>Glow Entry ID</label>
@@ -80,24 +76,24 @@ function GCEntryEdit(props) {
             </div>
             <div>
               <label>Date Created</label>
-              <span className="read-only-value">
-                <Moment format="MM/DD/YYYY">{entry.createdDate}</Moment>
+              <span className='read-only-value'>
+                <Moment format='MM/DD/YYYY'>{entry.createdDate}</Moment>
               </span>
             </div>
             <div>
               <label>Challenge</label>
-              <span className="read-only-value">{entry.challenge}</span>
+              <span className='read-only-value'>{entry.challenge}</span>
             </div>
           </Col>
 
           <Col>
             <div>
               <label>Day</label>
-              <span className="read-only-value">{entry.day}</span>
+              <span className='read-only-value'>{entry.day}</span>
             </div>
             <div>
               <label>Ambassador ID</label>
-              <span className="read-only-value">{entry.ambId}</span>
+              <span className='read-only-value'>{entry.ambId}</span>
             </div>
             <div>
               <label>Name</label>
@@ -107,41 +103,38 @@ function GCEntryEdit(props) {
             </div>
             <div>
               <label>Email</label>
-              <span className="read-only-value">{entry.email}</span>
+              <span className='read-only-value'>{entry.email}</span>
             </div>
           </Col>
         </Row>
         <hr />
         <Row>
-          <Col style={{ marginRight: "9%" }}>
+          <Col style={{ marginRight: '9%' }}>
             <Row>
-              <label style={{ marginLeft: "16px" }}>Products</label>
+              <label style={{ marginLeft: '16px' }}>Products</label>
               <Col>
                 <div
-                  className="read-only-value"
+                  className='read-only-value'
                   style={{
-                    marginTop: "5px",
-                    marginLeft: "-10px",
-                    paddingRight: "-25px",
+                    marginTop: '5px',
+                    marginLeft: '-10px',
+                    paddingRight: '-25px',
                   }}
                 >
                   {entry.allProducts.slice(0, 7).map((p, i) => (
-                    <div key={i} className="check">
-                      <input type="checkbox" checked={checkProduct(p.name)} />
+                    <div key={i} className='check'>
+                      <input type='checkbox' checked={checkProduct(p.name)} />
                       <span>{p.name}</span>
                     </div>
                   ))}
                 </div>
               </Col>
               <Col>
-                {" "}
-                <div
-                  className="read-only-value"
-                  style={{ marginTop: "5px", marginLeft: "-5px" }}
-                >
+                {' '}
+                <div className='read-only-value' style={{ marginTop: '5px', marginLeft: '-5px' }}>
                   {entry.allProducts.slice(7).map((p, i) => (
-                    <div key={i} className="check">
-                      <input type="checkbox" checked={checkProduct(p.name)} />
+                    <div key={i} className='check'>
+                      <input type='checkbox' checked={checkProduct(p.name)} />
                       <span>{p.name}</span>
                     </div>
                   ))}
@@ -149,50 +142,47 @@ function GCEntryEdit(props) {
               </Col>
             </Row>
 
-            <div style={{ marginTop: "15px" }}>
+            <div style={{ marginTop: '15px' }}>
               <label>Questionaire</label>
-              <span className="read-only-value">{entry.answers.length}/23</span>
+              <span className='read-only-value'>{entry.answers.length}/23</span>
             </div>
-            <label style={{ marginTop: "15px" }}>Journey</label>
+            <label style={{ marginTop: '15px' }}>Journey</label>
             <div
               style={{
-                border: "1px solid #707070",
-                padding: "10px",
-                marginTop: "5px",
+                border: '1px solid #707070',
+                padding: '10px',
+                marginTop: '5px',
               }}
             >
               <div>{entry.story}</div>
             </div>
             <div
               style={{
-                border: "1px solid #707070",
-                padding: "1px",
-                marginTop: "20px",
+                border: '1px solid #707070',
+                padding: '1px',
+                marginTop: '20px',
               }}
             >
               <GrayBox>
-                <div>
-                  Scientific data is private, you can only see if information
-                  was submitted, not what was submitted.
-                </div>
-                <div className="check">
-                  <input type="checkbox" checked={entry.weight !== ""} />
+                <div>Scientific data is private, you can only see if information was submitted, not what was submitted.</div>
+                <div className='check'>
+                  <input type='checkbox' checked={entry.weight !== ''} />
                   <span>Weight</span>
                 </div>
-                <div className="check">
-                  <input type="checkbox" checked={entry.chest !== ""} />
+                <div className='check'>
+                  <input type='checkbox' checked={entry.chest !== ''} />
                   <span>Chest</span>
                 </div>
-                <div className="check">
-                  <input type="checkbox" checked={entry.waist !== ""} />
+                <div className='check'>
+                  <input type='checkbox' checked={entry.waist !== ''} />
                   <span>Waist</span>
                 </div>
-                <div className="check">
-                  <input type="checkbox" checked={entry.hips !== ""} />
+                <div className='check'>
+                  <input type='checkbox' checked={entry.hips !== ''} />
                   <span>Hips</span>
                 </div>
-                <div className="check">
-                  <input type="checkbox" checked={entry.thigh !== ""} />
+                <div className='check'>
+                  <input type='checkbox' checked={entry.thigh !== ''} />
                   <span>Thigh</span>
                 </div>
               </GrayBox>
@@ -200,7 +190,7 @@ function GCEntryEdit(props) {
           </Col>
 
           <Col>
-            <div style={{ marginBottom: "3%" }}>Day {entry.day} Photo </div>
+            <div style={{ marginBottom: '3%' }}>Day {entry.day} Photo </div>
             <ContestImage>
               <img src={photoUrl === '' ? entry.photoUrl : photoUrl} />
             {edit && <CloudUpload day={1} user={entry.id} save={handlePhotoUpload} /> }
@@ -273,7 +263,7 @@ const EntryDetails = styled.section`
     line-height: 1.1;
     margin-top: 1em;
   }
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     appearance: none;
     margin: 0;
     font: inherit;
@@ -284,15 +274,15 @@ const EntryDetails = styled.section`
     display: grid;
     place-content: center;
   }
-  input[type="checkbox"]::before {
-    content: "";
+  input[type='checkbox']::before {
+    content: '';
     width: 0.85em;
     height: 0em;
   }
 
   input:checked {
     &:after {
-      content: "✔";
+      content: '✔';
       font-size: 17px;
       color: #707070;
       opacity: 0.9;
@@ -329,4 +319,4 @@ const PopUp = styled.div`
   width: 100vw;
   background: rgba(0, 0, 0, 0.7);
 `;
-export default GCEntryEdit;
+export default connect(getComponentData)(GCEntryEdit);
