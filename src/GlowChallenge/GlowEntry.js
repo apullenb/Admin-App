@@ -16,18 +16,33 @@ import { LoginSkincareAdmin } from '../redux/actions/Skincare/skincareActions';
 import { relativeTimeRounding } from 'moment';
 import Model from './Model';
 import getComponentData from './selector';
+import { getGlowEntries } from './../redux/actions/Skincare/skincareActions';
 
 function GlowEntry(props) {
-  const entry = props.location.state;
+const user = props.location.state
+  const {entries, products } = useSelector(state => state.entries.entries);
+  
+  const dispatch = useDispatch();
+  const [entry, setEntry] = useState({})  
   const [goals, setGoals] = useState([]);
   const [change, setChange] = useState(false);
   const [show, setShow] = useState('hide');
   const [blank, setBlank] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const { view, edit } = props;
+ 
+  const filter = [{column: 'glowEntryId', value: user.glowEntryId}]
   const handlePopUp = () => {
     setShowDelete(!showDelete);
   };
+
+ useEffect(() => {
+  dispatch(getGlowEntries(10, 1, 'glowEntryId', 'asc', filter));
+ }, [])
+
+useEffect(() => {
+  setEntry(entries && entries.find(entry => entry.glowEntryId === user.glowEntryId))
+}, [entries])
 
   const productMap = (product) => {
     const productMap = [];
@@ -61,37 +76,37 @@ function GlowEntry(props) {
             <Col>
               <div>
                 <label>Entry ID</label>
-                <span className="read-only-value">{entry.glowEntryId}</span>
+                <span className="read-only-value">{entry && entry.glowEntryId}</span>
               </div>
               <div>
                 <label>Date Created</label>
-                <span className="read-only-value"><Moment format="MM/DD/YYYY">{entry.createdDate}</Moment></span>
+                <span className="read-only-value"><Moment format="MM/DD/YYYY">{entry && entry.createdDate}</Moment></span>
               </div>
               <div>
                 <label>Challenge</label>
-                <span className="read-only-value">{entry.title}</span>
+                <span className="read-only-value">{entry && entry.title}</span>
               </div>
               <div>
                 <label>Goals</label>
                 <div className="read-only-value" style={{marginTop:'5px'}}>
                       <div  className='check'>
-                        <input type="checkbox" checked={entry.goalWeight} />
+                        <input type="checkbox" checked={entry && entry.goalWeight} />
                              <span>Weight Management Support</span>
                       </div>
                       <div className='check'>
-                        <input type="checkbox" checked={entry.goalImmune} />
+                        <input type="checkbox" checked={entry && entry.goalImmune} />
                               <span>Promote a Healthy Immune System</span>
                       </div>
                       <div className='check'>
-                        <input type="checkbox" checked={entry.goalStress} />
+                        <input type="checkbox" checked={entry && entry.goalStress} />
                             <span>Help with Situational Stress</span>
                       </div>
                       <div className='check'>
-                        <input type="checkbox" checked={entry.goalSleep} />
+                        <input type="checkbox" checked={entry && entry.goalSleep} />
                               <span>Aid Sleep During Restless Night</span>
                       </div>
                       <div className='check'>
-                        <input type="checkbox" checked={entry.goalOverall} />
+                        <input type="checkbox" checked={entry && entry.goalOverall} />
                              <span>Overall Well-Being</span>
                       </div>
                   
@@ -102,26 +117,26 @@ function GlowEntry(props) {
             <Col>
               <div>
                 <label>Ambassador ID</label>
-                <span className="read-only-value">{entry.ambassadorId}</span>
+                <span className="read-only-value">{entry && entry.ambassadorId}</span>
               </div>
               <div>
                 <label>Name</label>
                 <span className="read-only-value">
-                <Link className='label-btn' to={{ pathname: `/Challenge/Accounts/${entry.id}`,  state: entry }}>{entry.name}</Link></span>
+                <Link className='label-btn' to={{ pathname: `/Challenge/Accounts/${entry && entry.id}`,  state: entry }}>{entry && entry.name}</Link></span>
               </div>
               <div>
                 <label>Email</label>
-                <span className="read-only-value">{entry.email}</span>
+                <span className="read-only-value">{entry && entry.email}</span>
               </div>
               <div style={{border: '1px solid #707070', padding:'1px', marginTop:'5px'}}>
                <GrayBox>
                    <div>Scientific data is private, you can only see if information was submitted, not what was submitted.</div>
                    <div className='check' >
-                        <input type="checkbox" id='check' checked={entry.height !== ''} />
+                        <input type="checkbox" id='check' checked={entry && entry.height !== ''} />
                                <span>Height</span>
                       </div>
                       <div  className='check'>
-                        <input type="checkbox" checked={entry.gender !== ''} />
+                        <input type="checkbox" checked={entry && entry.gender !== ''} />
                                <span>Gender</span>
                       </div>
                </GrayBox>
@@ -141,12 +156,12 @@ function GlowEntry(props) {
                 <th className='head'>Actions</th>
               </tr>
             </thead>
-               <tbody> {entry.submissions.map((e, i) => {
+               <tbody> {entry && entry.submissions && entry.submissions.map((e, i) => {
                     e.challenge = entry.title
                     e.ambId = entry.ambassadorId
                     e.name = entry.name
                     e.email = entry.email
-                    e.allProducts = entry.products
+                    e.allProducts = products
                     return <tr key= {i}>
                         <td><div style={{marginLeft:'0px'}}>{e.glowSubmissionId}</div></td>
                         <td><div style={{marginLeft:'7px'}}><Moment format="MM/DD/YYYY">{e.submissionDate}</Moment></div></td>
