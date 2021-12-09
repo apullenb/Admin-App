@@ -29,7 +29,7 @@ const handleSkinCareEnvURL = () => {
 const handleAdminPermissions = () => {
   switch (environment) {
     case 'development':
-      return 'https://zidentityapidev.azurewebsites.net';
+      return 'http://localhost:4000';
     case 'test':
       return 'https://zidentityapidev.azurewebsites.net';
     case 'production':
