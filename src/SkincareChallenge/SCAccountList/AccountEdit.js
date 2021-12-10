@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import './AccountList.scss';
 import config from '../../config/env-urls';
 import { useToasts } from 'react-toast-notifications';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import getComponentData from './selector';
+import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 
 function AccountEdit(props) {
   const user = props.location.state;
   if (user.userId) {
     user.id = user.userId;
   }
-  const { edit } = props;
+  const {view, edit, permissionFeched, } = props;
   const [inputs, setInputs] = useState({
     ambassadorId: user.ambassadorId,
     name: user.name,
@@ -66,7 +68,8 @@ function AccountEdit(props) {
   };
 
   return (
-    <div>
+    <>
+   { permissionFeched ? ( edit?<div>
       <div className='page-header'>
         Skincare Challenge Edit Account
         <div className='page-header-link'>
@@ -124,7 +127,8 @@ function AccountEdit(props) {
           )}
         </div>
       </Main>
-    </div>
+    </div>:<Redirect to='/NoPermission'/> ) : <ZilisLoader/> }
+    </>
   );
 }
 

@@ -40,6 +40,7 @@ import GlowEntry from './GlowChallenge/GlowEntry';
 
 import config from './config/env-urls';
 import { SkincareAdminPermissions } from './redux/actions/Skincare/skincareActions';
+import PermissionNotGranted from './GlobalComponents/PermissionNotGranted';
 const allRoutes = [
   {
     path: '/',
@@ -160,6 +161,11 @@ const allRoutes = [
     exact: true,
     path: '/StartPoint/Edit/:inventoryId',
     component: EditStarPoint,
+  },
+  {
+    exact: true,
+    path: '/NoPermission',
+    component: PermissionNotGranted,
   },
 ];
 const client = new ApolloClient({

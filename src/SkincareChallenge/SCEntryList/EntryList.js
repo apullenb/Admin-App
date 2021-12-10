@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router";
 import "./EntryList.scss";
 import Entries from "./Entries";
 import Pagination from "./Pagination";
@@ -8,6 +9,7 @@ import styled from "styled-components";
 import { connect, useDispatch} from "react-redux";
 import { getEntries } from "../../redux/actions/Skincare/skincareActions";
 import getComponentData from "./selector";
+import ZilisLoader from "../../GlobalComponents/ZilisLoader";
 
 const EntryList = (props) => {
   const [pageNo, setPageNo] = useState(1);
@@ -15,11 +17,9 @@ const EntryList = (props) => {
   const [colSort, setColSort] = useState("entries.id");
   const [sortDirection, setSortDirection] = useState("asc");
 
-  // const [approvedpermission, setApprovedPermission] = useState(false);
-
   const dispatch = useDispatch();
 
-  const { view, edit ,entries} = props;
+  const { view, edit ,entries ,permissionFeched ,} = props;
 
   useEffect(() => {
     dispatch(getEntries());
@@ -44,7 +44,8 @@ const EntryList = (props) => {
   return (
     <div>
       <h1>Skincare Challenge Entries</h1>
-      {view && (
+      {permissionFeched ? ( 
+        !view ? <Redirect to='/NoPermission'/>:
         <>
           <EntryTable>
             <section className="button-row">
@@ -163,14 +164,14 @@ const EntryList = (props) => {
                   {edit && <th className="head">Actions</th>}
                 </tr>
               </thead>
-              {entries &&
-                entries.data &&
-                entries.data.length > 1 &&
+              <tbody>
+              {entries?.data?.length > 1 &&
                 entries.data.map((entry, i) => {
                   return (
                     <Entries key={i} entry={entry} editPermission={edit} />
                   );
                 })}
+                </tbody>
             </table>
           </EntryTable>
 
@@ -180,7 +181,8 @@ const EntryList = (props) => {
             updatePageNo={updatePageNo}
           />
         </>
-      )}
+      ):<ZilisLoader/>
+      }
     </div>
   );
 };
@@ -195,7 +197,7 @@ const EntryTable = styled.div`
     width: 100%;
 
     tr {
-      &:nth-child(odd) {
+      &:nth-child(even) {
         background: #f4fafe;
       }
 

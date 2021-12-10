@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import './AccountList.scss';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,6 +9,7 @@ import { getAccounts, filterAccounts } from '../../redux/actions/Skincare/skinca
 import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 import Pagination from './Pagination';
 import getComponentData from './selector';
+import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 
 function AccountList(props) {
   const [message, setMessage] = useState(true);
@@ -24,7 +26,7 @@ function AccountList(props) {
   const [col, setCol] = useState('id');
   const [filter, setFilter] = useState('');
   const dispatch = useDispatch();
-  const { view, edit,accounts } = props;
+  const { view, edit,accounts,permissionFeched } = props;
   useEffect(() => {
     dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
   }, []);
@@ -85,13 +87,13 @@ function AccountList(props) {
       setIdInput(true);
     }
   };
-
+  
   return (
     <div>
       <h1>Skincare Challenge Accounts</h1>
-      {view && (
+      {permissionFeched ?(
+        !view ? <Redirect to='/NoPermission'/>:
         <>
-          {' '}
           <AccountTable>
             <table>
               <thead>
@@ -247,7 +249,7 @@ function AccountList(props) {
           </AccountTable>
           <Pagination getEntries={getAccounts()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
         </>
-      )}
+      ):<ZilisLoader/> }
     </div>
   );
 }
