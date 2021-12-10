@@ -4,15 +4,18 @@ import getComponentData from './selector';
 /* eslint-disable react/jsx-key */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Pagination from '../SkincareChallenge/SCAccountList/Pagination';
 import '../SkincareChallenge/SCEntryList/EntryList.scss';
 import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { getGlowEntries } from './../redux/actions/Skincare/skincareActions';
+import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
+import { useToasts } from 'react-toast-notifications';
 
 function GlowEntryList(props) {
-  const { view, edit, entries } = props;
+  const { view, edit, entries, permissionFeched, PermissionsError,} = props;
   const [message, setMessage] = useState(true);
 
   const [pageNo, setPageNo] = useState(1);
@@ -26,10 +29,15 @@ function GlowEntryList(props) {
   const [imgFilter, setImgFilter] = useState([]);
  
   const dispatch = useDispatch();
+  const { addToast } = useToasts();
 
   useEffect(() => {
+    if(PermissionsError)
+    {addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
+      appearance: 'error',
+    })}
     dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
-  }, []);
+  }, [PermissionsError]);
 
   useEffect(() => {
     setLocalAccounts(entries.entries);
@@ -90,8 +98,10 @@ function GlowEntryList(props) {
  
   return (
     <div style={{ margin: "0 8%" }}>
-      <h1>Glow Challenge Entries</h1>
-      {view && (
+      <h1 style={{textAlign:'center'}}>Glow Challenge Entries</h1>
+    
+      {permissionFeched ? (
+       !PermissionsError && (view?
         <>
       <AccountTable>
         <table>
@@ -272,9 +282,8 @@ function GlowEntryList(props) {
             </tr>
           </thead>
           <tbody>
-            {localAccounts &&
-              localAccounts.length > 0 &&
-              localAccounts.map((user, i) => {
+            {
+              localAccounts?.length > 0 && localAccounts.map((user, i) => {
                 user.products = products;
                 return (
                   <tr key={i} user={user} id="row">
@@ -441,7 +450,8 @@ function GlowEntryList(props) {
                     </td>
                   </tr>
                 );
-              })}
+            })
+             }
           </tbody>
         </table>
         <h3>{message}</h3>
@@ -451,7 +461,12 @@ function GlowEntryList(props) {
         getEntries={getGlowEntries()}
         updatePerPage={updatePerPage}
         updatePageNo={updatePageNo}
-      /></>)
+        
+      />
+     </>:
+     <Redirect to='/NoPermission'/>)
+    ):
+     <SpinnerLoader/>
       }
     </div>
   );

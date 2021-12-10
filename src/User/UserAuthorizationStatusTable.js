@@ -12,6 +12,7 @@ import {
   faChevronUp,
   faChevronDown,
 } from "@fortawesome/fontawesome-free-solid";
+import SpinnerLoader from "../GlobalComponents/ZilisSpinnerLoader";
 
 const UserAuthorizationStatusTable = () => {
   const [users, setUsers] = useState([]);
@@ -210,9 +211,8 @@ const UserAuthorizationStatusTable = () => {
               <th className="head">Actions</th>
             </tr>
           </thead>
-          {currentUsers && currentUsers.length > 0 && (
             <tbody>
-              {currentUsers.map((user, i) => {
+              {currentUsers.length > 0? currentUsers.map((user, i) => {
                 return (
                   <tr key={i} id="row">
                     <td>{user.name}</td>
@@ -245,9 +245,14 @@ const UserAuthorizationStatusTable = () => {
                     </td>
                   </tr>
                 );
-              })}
+              }):
+              <tr id='row'>
+              <td colSpan="5">
+        <SpinnerLoader/>
+        </td>
+
+        </tr>}
             </tbody>
-          )}
         </table>
       </PermissionTable>
       <Pagination getRows={getUsers} pageOptions={pageOptions} />

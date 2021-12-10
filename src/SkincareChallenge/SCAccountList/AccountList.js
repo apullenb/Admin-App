@@ -4,12 +4,12 @@ import { Redirect } from 'react-router-dom';
 import './AccountList.scss';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useDispatch, connect, useSelector } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import { getAccounts, filterAccounts } from '../../redux/actions/Skincare/skincareActions';
 import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 import Pagination from './Pagination';
 import getComponentData from './selector';
-import ZilisLoader from '../../GlobalComponents/ZilisLoader';
+import SpinnerLoader from '../../GlobalComponents/ZilisSpinnerLoader';
 
 function AccountList(props) {
   const [message, setMessage] = useState(true);
@@ -90,10 +90,9 @@ function AccountList(props) {
   
   return (
     <div>
-      <h1>Skincare Challenge Accounts</h1>
+      <h1 style={{textAlign:'center'}}>Skincare Challenge Accounts</h1>
       {permissionFeched ?(
-        !view ? <Redirect to='/NoPermission'/>:
-        <>
+        view ? <>
           <AccountTable>
             <table>
               <thead>
@@ -210,46 +209,47 @@ function AccountList(props) {
                   {edit && <th className='head'>Actions </th>}
                 </tr>
               </thead>
-              {localAccounts && localAccounts.data && localAccounts.data.length >= 1 && (
-                <tbody>
-                  {localAccounts.data.map((user, i) => {
-                    return (
-                      <tr key={i} user={user} id='row'>
-                        <td>{user.id}</td>
-                        <td>{user.name}</td>
-                        <td>
-                          {user.email}
-                          {blank}
-                        </td>
-                        <td>{user.ambassadorId}</td>
-                        <td>{user.lastLoginDate}</td>
-                        <td>
-                          {user.lastChallenge}
-                          {message}
-                        </td>
-                        <td>
-                          {edit && (
-                            <Link
-                              to={{
-                                pathname: `/Challenge/Accounts/${user.id}`,
-                                state: user,
-                              }}
-                            >
-                              <button id='edit'>Edit</button>
-                            </Link>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              )}
+                    <tbody>
+                      
+                    {localAccounts.data?.length >= 1 && localAccounts.data.map((user, i) => {
+                      return (
+                        <tr key={i} user={user} id='row'>
+                          <td>{user.id}</td>
+                          <td>{user.name}</td>
+                          <td>
+                            {user.email}
+                            {blank}
+                          </td>
+                          <td>{user.ambassadorId}</td>
+                          <td>{user.lastLoginDate}</td>
+                          <td>
+                            {user.lastChallenge}
+                            {message}
+                          </td>
+                          <td>
+                            {edit && (
+                              <Link
+                                to={{
+                                  pathname: `/Challenge/Accounts/${user.id}`,
+                                  state: user,
+                                }}
+                              >
+                                <button id='edit'>Edit</button>
+                              </Link>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+            
             </table>
             <h3>{message}</h3>
           </AccountTable>
           <Pagination getEntries={getAccounts()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
-        </>
-      ):<ZilisLoader/> }
+        </>:
+        <Redirect to='/NoPermission'/>
+      ):<SpinnerLoader/> }
     </div>
   );
 }

@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { connect, useDispatch} from "react-redux";
 import { getEntries } from "../../redux/actions/Skincare/skincareActions";
 import getComponentData from "./selector";
-import ZilisLoader from "../../GlobalComponents/ZilisLoader";
+import SpinnerLoader from "../../GlobalComponents/ZilisSpinnerLoader";
 
 const EntryList = (props) => {
   const [pageNo, setPageNo] = useState(1);
@@ -43,9 +43,9 @@ const EntryList = (props) => {
 
   return (
     <div>
-      <h1>Skincare Challenge Entries</h1>
+      <h1 style={{textAlign:'center'}}>Skincare Challenge Entries</h1>
       {permissionFeched ? ( 
-        !view ? <Redirect to='/NoPermission'/>:
+        view ? 
         <>
           <EntryTable>
             <section className="button-row">
@@ -165,7 +165,7 @@ const EntryList = (props) => {
                 </tr>
               </thead>
               <tbody>
-              {entries?.data?.length > 1 &&
+              {entries?.data?.length > 0 &&
                 entries.data.map((entry, i) => {
                   return (
                     <Entries key={i} entry={entry} editPermission={edit} />
@@ -180,8 +180,9 @@ const EntryList = (props) => {
             updatePerPage={updatePerPage}
             updatePageNo={updatePageNo}
           />
-        </>
-      ):<ZilisLoader/>
+        </>:
+        <Redirect to='/NoPermission'/>
+      ):<SpinnerLoader/>
       }
     </div>
   );
