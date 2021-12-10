@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import './AccountList.scss';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useDispatch, connect, useSelector } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import { getAccounts, filterAccounts } from '../../redux/actions/Skincare/skincareActions';
 import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 import Pagination from './Pagination';
 import getComponentData from './selector';
+import SpinnerLoader from '../../GlobalComponents/ZilisSpinnerLoader';
 
 function AccountList(props) {
   const [message, setMessage] = useState(true);
@@ -208,40 +209,46 @@ function AccountList(props) {
                   {edit && <th className='head'>Actions </th>}
                 </tr>
               </thead>
-              {localAccounts && localAccounts.data && localAccounts.data.length >= 1 && (
-                <tbody>
-                  {localAccounts.data.map((user, i) => {
-                    return (
-                      <tr key={i} user={user} id='row'>
-                        <td>{user.id}</td>
-                        <td>{user.name}</td>
-                        <td>
-                          {user.email}
-                          {blank}
-                        </td>
-                        <td>{user.ambassadorId}</td>
-                        <td>{user.lastLoginDate}</td>
-                        <td>
-                          {user.lastChallenge}
-                          {message}
-                        </td>
-                        <td>
-                          {edit && (
-                            <Link
-                              to={{
-                                pathname: `/Challenge/Accounts/${user.id}`,
-                                state: user,
-                              }}
-                            >
-                              <button id='edit'>Edit</button>
-                            </Link>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              )}
+                    <tbody>
+                      
+                    {localAccounts.data ? localAccounts.data?.length >= 1 && localAccounts.data.map((user, i) => {
+                      return (
+                        <tr key={i} user={user} id='row'>
+                          <td>{user.id}</td>
+                          <td>{user.name}</td>
+                          <td>
+                            {user.email}
+                            {blank}
+                          </td>
+                          <td>{user.ambassadorId}</td>
+                          <td>{user.lastLoginDate}</td>
+                          <td>
+                            {user.lastChallenge}
+                            {message}
+                          </td>
+                          <td>
+                            {edit && (
+                              <Link
+                                to={{
+                                  pathname: `/Challenge/Accounts/${user.id}`,
+                                  state: user,
+                                }}
+                              >
+                                <button id='edit'>Edit</button>
+                              </Link>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }):
+                    <tr id='row'>
+                    <td colSpan="5">
+              <SpinnerLoader/> 
+              </td>
+
+              </tr>}
+                  </tbody>
+            
             </table>
             <h3>{message}</h3>
           </AccountTable>

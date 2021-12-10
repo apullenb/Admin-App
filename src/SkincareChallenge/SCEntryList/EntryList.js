@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { connect, useDispatch} from "react-redux";
 import { getEntries } from "../../redux/actions/Skincare/skincareActions";
 import getComponentData from "./selector";
+import SpinnerLoader from "../../GlobalComponents/ZilisSpinnerLoader";
 
 const EntryList = (props) => {
   const [pageNo, setPageNo] = useState(1);
@@ -163,14 +164,19 @@ const EntryList = (props) => {
                   {edit && <th className="head">Actions</th>}
                 </tr>
               </thead>
-              {entries &&
-                entries.data &&
-                entries.data.length > 1 &&
+              <tbody>
+              {entries?.data?.length > 1 ?
                 entries.data.map((entry, i) => {
                   return (
                     <Entries key={i} entry={entry} editPermission={edit} />
                   );
-                })}
+                }):
+                <tr id='row'>
+                <td colSpan="10">
+          <SpinnerLoader/>
+          </td>
+          </tr>}
+                </tbody>
             </table>
           </EntryTable>
 
@@ -195,7 +201,7 @@ const EntryTable = styled.div`
     width: 100%;
 
     tr {
-      &:nth-child(odd) {
+      &:nth-child(even) {
         background: #f4fafe;
       }
 
