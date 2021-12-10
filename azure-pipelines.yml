@@ -17,6 +17,9 @@ variables:
 
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: 'zilis-microservices'
+  azureSubscriptionNew: 'Zilis-Applications'
+
+
 
   #resource group
   resourceGroupName: 'Zilis-Microservices'
@@ -30,10 +33,10 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: BuildDev
+- stage: BuildTest
   #condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
-  displayName: Build Dev/test Code
+  displayName: Build Test Code
   jobs:
   - job: Build
     displayName: Build
@@ -67,9 +70,9 @@ stages:
         artifactName: dev
         artifactType: pipeline
 
-- stage: DeployDev
-  displayName: Deploy To Dev Env
-  dependsOn: BuildDev
+- stage: DeployTest
+  displayName: Deploy To Test
+  dependsOn: BuildTest
   # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
   jobs:
@@ -85,7 +88,7 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Azure Web App Deploy'
             inputs:
-              azureSubscription: $(azureSubscription)
+              azureSubscription: $(azureSubscriptionNew)
               resourceGroupName: $(resourceGroupNameNew)
               appName: $(webAppNameDev)
               appType: webAppLinux
