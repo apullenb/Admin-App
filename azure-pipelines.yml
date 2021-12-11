@@ -146,6 +146,6 @@ stages:
               azureSubscription: $(azureSubscription)
               resourceGroupName: $(resourceGroupName)
               appName: $(webAppNameProd)
-              appType: webAppLinux
+              appType: webApp
               package: '$(Pipeline.Workspace)/prod/'
               runtimeStack: 'node|14.x'
