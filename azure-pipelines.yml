@@ -32,8 +32,7 @@ variables:
 
 stages:
 - stage: BuildTest
-  #condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
   displayName: Build Test Code
   jobs:
   - job: Build
@@ -70,8 +69,7 @@ stages:
 - stage: DeployTest
   displayName: Deploy To Test
   dependsOn: BuildTest
-  # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
   jobs:
   - deployment: Deploy
     displayName: Deploy
@@ -93,8 +91,7 @@ stages:
               runtimeStack: 'node|14.x'
 
 - stage: BuildProd
-  # condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
   displayName: Build Production Code
   jobs:
   - job: Build
@@ -129,48 +126,26 @@ stages:
         artifactName: prod
         publishLocation: pipeline
 
-# - stage: DeployStage
-#   displayName: Deploy to Stage Env
-#   dependsOn: BuildProd
-#   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     environment: $(prod)
-#     pool:
-#       vmImage: $(vmImageName)
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: AzureWebApp@1
-#             displayName: 'Azure Web App Deploy'
-#             inputs:
-#               azureSubscription: $(azureSubscriptionNew)
-#               resourceGroupName: $(resourceGroupNameNew)
-#               appName: $(webAppNameDev)
-#               appType: webAppLinux
-#               package: '$(Pipeline.Workspace)/prod/'
-#               runtimeStack: 'node|14.x'
-
-# - stage: SwapStageToProd
-#   displayName: Swap Stage to Production Slot
-#   dependsOn: DeployStage
-#   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-#   jobs:
-#   - deployment: SwapSlots
-#     displayName: Swap Slots
-#     environment: swapslots
-#     pool:
-#       vmImage: $(vmImageName)
-#     strategy:
-#      runOnce:
-#        deploy:
-#         steps:
-#           - task: AzureAppServiceManage@0
-#             inputs:
-#               azureSubscription: $(azureSubscription)
-#               Action: 'Swap Slots'
-#               WebAppName: $(webAppNameProd)
-#               ResourceGroupName: $(ResourceGroupName)
-#               SourceSlot: 'stage'
+- stage: DeployProd
+  displayName: Deploy to Prod Env
+  dependsOn: BuildProd
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: $(webAppNameProd)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            displayName: 'Azure Web App Deploy'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              resourceGroupName: $(resourceGroupName)
+              appName: $(webAppNameProd)
+              appType: webAppLinux
+              package: '$(Pipeline.Workspace)/prod/'
+              runtimeStack: 'node|14.x'
