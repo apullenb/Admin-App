@@ -13,6 +13,12 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 
+//Azure AD
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
+import { msalConfig } from "./services/azureAD/authConfig";
+const msalInstance = new PublicClientApplication(msalConfig);
+
 
 const store = createStore(rootReducer, composeWithDevTools(
   applyMiddleware(thunk)
@@ -24,7 +30,9 @@ ReactDOM.render(
     <Router>
       <ToastProvider>
         <Provider store={store}>
+          <MsalProvider instance={msalInstance}>
           <App />
+          </MsalProvider>
         </Provider>
       </ToastProvider>
     </Router>
