@@ -174,33 +174,37 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: APP_STARTED });
-    dispatch(SkincareAdminPermissions())
+    //dispatch(SkincareAdminPermissions())
   }, []);
 
   return (
     <ApolloProvider client={client}>
       <div className='app'>
         <Switch>
-          <Route exact path='/login' component={Login} />
+          {/* <Route exact path='/login' component={Login} /> */}
           {allRoutes.map((route, index) => {
             return (
               <Route
                 key={index}
                 path={route.path}
                 exact={route.exact}
-                render={(props) =>
-                  localStorage.getItem('Token') ? (
-                    <>
-                      <Page>
+                render={(props) => {
+                  // localStorage.getItem('Token') ? (
+                  //   <>
+                     return <Page>
                         <route.component {...props} />
                       </Page>
-                    </>
-                  ) : (
-                    <Redirect to={'/login'} />
+                     }
+                    //</>
+                 // ) : (
+                   // <Redirect to={'/login'} />
+                    }
+                   />
+
                   )
-                }
-              />
-            );
+                
+              ///>
+            //);
           })}
         </Switch>
       </div>

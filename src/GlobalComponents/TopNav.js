@@ -6,6 +6,8 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import styled from 'styled-components';
 import ProfileImage from '../assets/person_palceholder_img.png';
+import { useIsAuthenticated } from "@azure/msal-react";
+import { AADSignInButton } from './AzureADSignin';
 
 function TopNav() {
   const navLinks = [
@@ -24,6 +26,7 @@ function TopNav() {
               <img src={Logo} alt="Zilis Logo" style={{ maxWidth: '170px', margin: '1px auto' }} />
             </a>
             <img src={ProfileImage} alt="Profile Image" className="profile-pic" />
+            <div><AADSignInButton/></div>
           </div>
         </div>
         <hr />

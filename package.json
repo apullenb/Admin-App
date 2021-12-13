@@ -51,6 +51,7 @@
     "sass-loader": "^8.0.2",
     "start": "^5.1.0",
     "styled-components": "^5.2.0",
+    "superagent": "^6.1.0",
     "toastr": "^2.1.4"
   },
   "scripts": {
