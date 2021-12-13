@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
@@ -10,9 +11,10 @@ import Model from './Model';
 import config from '../config/env-urls';
 import getComponentData from './selector';
 import CloudUpload from "./CloudUpload";
+import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
 
 function GCEntryEdit(props) {
-  const { edit } = props;
+  const {view, edit, permissionFeched, } = props;
   console.log(props)
   const entry = props.location.state;
   const [showDelete, setShowDelete] = useState(false);
@@ -62,8 +64,8 @@ function GCEntryEdit(props) {
 
   const goBack = () => props.history.goBack();
 
-  return (
-    <div style={{ margin: '0 8%' }}>
+  return (<>
+    {permissionFeched?(view?<div style={{ margin: '0 8%' }}>
       <h1>Glow Challenge Submission</h1>
       <PopUp style={showDelete ? { display: "block" } : { display: "none" }}>
         <Model type="submission" close={handlePopUp} delete={handleDelete} text="Deleting this submission will delete all photos, questionnaire answers and other information associated with the submission as well. This action can not be undone." />
@@ -216,12 +218,13 @@ function GCEntryEdit(props) {
           <Col></Col>
           <Col></Col>
           <Col></Col>
-          <Col>
-            <Delete onClick={edit && handlePopUp}>Delete Submission</Delete>
-          </Col>
+         {edit && <Col>
+            <Delete onClick={handlePopUp}>Delete Submission</Delete>
+          </Col>}
         </Row>
       </EntryDetails>
-    </div>
+    </div>:<Redirect to='/NoPermission'/> ):<SpinnerLoader/> }
+    </>
   );
 }
 

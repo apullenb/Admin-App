@@ -278,7 +278,7 @@ function GlowEntryList(props) {
               <th className="head">30</th>
               <th className="head">60</th>
               <th className="head">90</th>
-              <th className="head">Actions </th>
+              {edit && <th className="head">Actions </th>}
             </tr>
           </thead>
           <tbody>

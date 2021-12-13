@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from 'react-router-dom';
 import styled from "styled-components";
 import axios from "axios";
 import {
@@ -9,8 +10,11 @@ import {
   useParams,
 } from "react-router-dom";
 import config from "../../config/env-urls";
+import { connect } from "react-redux";
+import getComponentData from "./selector";
+import SpinnerLoader from "../../GlobalComponents/ZilisSpinnerLoader";
 
-const Kits = (props) => {
+const Kits = ({view,edit,permissionFeched,PermissionsError,}) => {
   let { url, path } = useRouteMatch();
   const [kits, setKits] = useState([]);
 
@@ -28,15 +32,16 @@ const Kits = (props) => {
     getAllKits();
   }, []);
 
-  return (
-    <KitWrapper>
+  return (<>
+   {permissionFeched? (view ? <KitWrapper>
       <ListWrapper>
         <h3>Kit List</h3>
         <ul>
           {kits.map((kit, index) => {
             return (
               <li key={index}>
-                <Link to={`${url}/${kit.id}`}>{kit.sku}</Link>
+                {/* <Link to={`${url}/${kit.id}`}>{kit.sku}</Link> */}
+                <Link to='#'>{kit.sku}</Link>
               </li>
             );
           })}
@@ -48,11 +53,11 @@ const Kits = (props) => {
           <Kit kits={kits} />
         </Route>
       </Switch>
-    </KitWrapper>
+    </KitWrapper>:<Redirect to='/NoPermission'/>):<SpinnerLoader/>}
+    </>
   );
 };
-
-export default Kits;
+export default connect(getComponentData)(Kits);
 
 const Kit = (props) => {
   let { id } = useParams();

@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, FormControl, Button } from "react-bootstrap/";
+import { Row, Col} from "react-bootstrap/";
 import styled from "styled-components";
+import { connect } from 'react-redux';
 import COAProduct from "./COAProduct";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { GET_PRODUCTS } from "../utils/GQLqueries";
-
+import { Redirect } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import SpinnerLoader from "../GlobalComponents/ZilisSpinnerLoader";
+import getPermissions from "./Selector";
+import { useToasts } from 'react-toast-notifications';
 
-const COAProductList = () => {
-  const { loading, data, refetch } = useQuery(GET_PRODUCTS);
+const COAProductList = (props) => {
+  const {error, loading, data, refetch } = useQuery(GET_PRODUCTS);
   const [products, setProducts] = useState("");
   const [value, setValue] = useState("");
   const [category, setCategory] = useState("");
   // const products = data?.products || [];
+const {view ,edit, permissionFeched}=props;
+const { addToast } = useToasts();
+  useEffect(() => {
+    if(error)
+    {addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
+      appearance: 'error',
+    })}
+    else if (data)
+      {    getProducts();}  
+  }, [data,error]);
 
   useEffect(() => {
-    getProducts();
-  }, [data]);
-
-  useEffect(() => {
+    
     refetch();
   }, []);
 
@@ -57,18 +67,16 @@ const COAProductList = () => {
     }
   };
 
-  return (
-    <Table>
+  return (<>
+   {permissionFeched? (view ? <Table>
       <h1>COA Products</h1>
-      <Row>
-        <Col></Col>
-        <Col></Col>
-        <Col>
+     { edit && <Row>
+        <Col md={12} className="text-right">
           <Link to={{ pathname: "/Coa/documents/0" }}>
             <CustomButton>Add Products</CustomButton>
           </Link>
         </Col>
-      </Row>
+      </Row>}
       <Row className="search-box">
         <Col>
           <input
@@ -113,24 +121,25 @@ const COAProductList = () => {
         <Col>Product Category</Col>
         <Col>Region</Col>
         <Col>Last Updated</Col>
-        <Col>Actions</Col>
+        {edit && <Col>Actions</Col>}
       </Row>
-      {products?.length>0?
+      {!loading ?(view ? products?.length>0 &&
         products.map((product) => (
           <COAProduct
             key={product.coaProductID}
             product={product}
             fetch={setProducts}
+            edit={edit}
           />
-        )):
+        )):<Redirect to='/NoPermission'/>) :
       
-  <SpinnerLoader/>
+        <SpinnerLoader/>
   }
-    </Table>
+    </Table>:<Redirect to='NoPermission'/>):<SpinnerLoader/>}
+    </>
   );
 };
-
-export default COAProductList;
+export default connect(getPermissions )(COAProductList);
 
 const Table = styled.div`
   margin: 2% 2% 9%;

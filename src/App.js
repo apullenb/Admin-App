@@ -17,7 +17,7 @@ import AddCOA from './COA/AddCOA';
 import ShoppingCountries from './ShoppingConfiguration/countries/countries';
 import ShoppingKits from './ShoppingConfiguration/kits/kits';
 import ShoppingProducts from './ShoppingConfiguration/product/products';
-import ShoppingCategories from './ShoppingConfiguration/categories';
+import ShoppingCategories from './ShoppingConfiguration/Catagories/categories';
 import StarPointAccountList from './StartPoint/StarPointAccountList';
 import EditStarPoint from './StartPoint/EditStarPoint';
 

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
 import Styled from 'styled-components';
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
@@ -16,11 +17,12 @@ import {
 import '../../App.scss';
 
 import { handleFetchCountriesAsync } from '../../redux/actions/Configuration/countryConfig/countryActions';
+import getPermissions from './selector';
+import SpinnerLoader from '../../GlobalComponents/ZilisSpinnerLoader';
 
 
-const Countries = props => {
+const Countries = ({view, edit, countries, permissionFeched, PermissionsError,}) => {
   const dispatch = useDispatch();
-  const { countries, fetching } = useSelector(state => state.countries);
   let { path, url } = useRouteMatch();
   const [countriesData, setCountriesData] = useState([]);
 
@@ -38,8 +40,8 @@ const Countries = props => {
     setCountriesData(filterdItems);
   }
 
-  return (
-    <CountryBodyWrapper>
+  return (<>
+    {permissionFeched?(view?<CountryBodyWrapper>
       <CountriesWrapper>
         <SearchWrapper>
           <h2>Countries Page</h2>
@@ -47,24 +49,26 @@ const Countries = props => {
             <InputGroup.Prepend>
               <InputGroup.Text><i className="fas fa-binoculars"></i></InputGroup.Text>
             </InputGroup.Prepend>
-            <FormControl type='text' name='search' onChange={(e) => { filterItems(e.target.value) }} placeholder="Search..." />
+            <FormControl type='text' name='search' readOnly onChange={(e) => { filterItems(e.target.value) }} placeholder="Search..." />
           </InputGroup>
         </SearchWrapper>
         <AddCountryWrapper>
           <AddCountryButtonWrapper>
-            <Link to={`${url}/addCountry`}>New Country</Link>
+            <Link to='#'>New Country</Link>
+            {/* <Link to={`${url}/addCountry`}>New Country</Link> */}
           </AddCountryButtonWrapper>
         </AddCountryWrapper>
 
         <div>
           <div>
-            {fetching ? <ZilisLoader width={50} height={50} /> : <b>Countries List</b>}
+            <b>Countries List</b>
           </div>
           <ListWrapper>
-            {countriesData.map((country) => {
+            {countriesData?.map((country) => {
               return (
                 <li key={country.id}>
-                  <Link to={`${url}/${country.id}`}>{country.name}</Link>
+                  <Link to='#'>{country.name}</Link>
+                  {/* <Link to={`${url}/${country.id}`}>{country.name}</Link> */}
                 </li>
               );
             })}
@@ -86,12 +90,11 @@ const Countries = props => {
         </Switch>
 
       </CountryWapper>
-    </CountryBodyWrapper>
+    </CountryBodyWrapper>:<Redirect to='/NoPermission'/> ):<SpinnerLoader/>}</>
   )
 
 }
-
-export default Countries;
+export default connect(getPermissions )(Countries);
 
 const CountryBodyWrapper = Styled.div`
     width:1400px;
