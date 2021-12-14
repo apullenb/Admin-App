@@ -6,10 +6,12 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import styled from 'styled-components';
 import ProfileImage from '../assets/person_palceholder_img.png';
-import { useIsAuthenticated } from "@azure/msal-react";
+import { useIsAuthenticated } from '@azure/msal-react';
 import { AADSignInButton } from './AzureADSignin';
+import { useSelector } from 'react-redux';
 
 function TopNav() {
+  const { profileData } = useSelector((state) => state.azProfile);
   const navLinks = [
     { name: 'Event Calendar', link: '/Events', isPrivate: true },
     { name: 'Incentive Trip', link: '/Incentive', isPrivate: true },
@@ -20,32 +22,43 @@ function TopNav() {
   return (
     <HeaderWrapper>
       <Top>
-        <div className="top-wrapper">
-          <div className="inner-wrapper">
-            <a href="/">
-              <img src={Logo} alt="Zilis Logo" style={{ maxWidth: '170px', margin: '1px auto' }} />
+        <div className='top-wrapper'>
+          <div className='inner-wrapper'>
+            <a href='/'>
+              <img src={Logo} alt='Zilis Logo' style={{ maxWidth: '170px', margin: '1px auto' }} />
             </a>
-            <img src={ProfileImage} alt="Profile Image" className="profile-pic" />
-            <div><AADSignInButton/></div>
+            <ProfileWrapper>
+              <ProfileImg src={ProfileImage} alt='Profile Image' />
+              <p>{profileData.displayName}</p>
+            </ProfileWrapper>
+            <ProfileHover>
+              <h5>{profileData.displayName}</h5>
+              <h6>{profileData.jobTitle}</h6>
+              <p>{profileData.officeLocation}</p>
+            </ProfileHover>
+
+            <div>
+              <AADSignInButton />
+            </div>
           </div>
         </div>
         <hr />
       </Top>
-      <div className="top-wrapper">
-        <Navbar expand="lg" className="app-nav-wrapper">
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <NavDropdown title="Shopping Configuration" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Shopping/Countries">Countries</NavDropdown.Item>
-                <NavDropdown.Item href="/Shopping/Kits">Kits</NavDropdown.Item>
-                <NavDropdown.Item href="/Shopping/Categories">Categories</NavDropdown.Item>
-                <NavDropdown.Item href="/Shopping/Products">Products</NavDropdown.Item>
+      <div className='top-wrapper'>
+        <Navbar expand='lg' className='app-nav-wrapper'>
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='basic-navbar-nav'>
+            <Nav className='mr-auto'>
+              <NavDropdown title='Shopping Configuration' id='basic-nav-dropdown'>
+                <NavDropdown.Item href='/Shopping/Countries'>Countries</NavDropdown.Item>
+                <NavDropdown.Item href='/Shopping/Kits'>Kits</NavDropdown.Item>
+                <NavDropdown.Item href='/Shopping/Categories'>Categories</NavDropdown.Item>
+                <NavDropdown.Item href='/Shopping/Products'>Products</NavDropdown.Item>
               </NavDropdown>
-              <NavDropdown title="Challenges" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Challenge/Accounts">Accounts</NavDropdown.Item>
-                <NavDropdown.Item href="/Challenge/Entries">Skincare Entries</NavDropdown.Item>
-                <NavDropdown.Item href="/Challenge/Glow-Entries">Glow Entries</NavDropdown.Item>
+              <NavDropdown title='Challenges' id='basic-nav-dropdown'>
+                <NavDropdown.Item href='/Challenge/Accounts'>Accounts</NavDropdown.Item>
+                <NavDropdown.Item href='/Challenge/Entries'>Skincare Entries</NavDropdown.Item>
+                <NavDropdown.Item href='/Challenge/Glow-Entries'>Glow Entries</NavDropdown.Item>
               </NavDropdown>
               {navLinks.map((link, i) => {
                 return (
@@ -56,8 +69,8 @@ function TopNav() {
               })}
             </Nav>
             <Nav>
-              <NavDropdown title="Admin Settings" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/Settings/users">Permissions</NavDropdown.Item>
+              <NavDropdown title='Admin Settings' id='basic-nav-dropdown'>
+                <NavDropdown.Item href='/Settings/users'>Permissions</NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
@@ -116,5 +129,45 @@ const Top = styled.div`
     border: none;
     border-bottom: 3px solid #043769;
     margin-bottom: 0;
+  }
+`;
+
+const ProfileImg = styled.img`
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+`;
+
+const ProfileHover = styled.div`
+  visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  width: 200px;
+  height: 0px;
+  border-radius: 12px;
+  padding: 2%;
+  position: absolute;
+  top: 95px;
+  right: 10px;
+
+  transition: all 0.2s ease-in-out;
+`;
+
+const ProfileWrapper = styled.div`
+  position: absolute;
+  right: 20px;
+  top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  :hover + ${ProfileHover} {
+    visibility: visible;
+    height: 250px;
   }
 `;
