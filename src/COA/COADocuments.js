@@ -59,10 +59,7 @@ const COADocument = (props) => {
 
   useEffect(() => {
 
-    if (
-     currentProductData
-    ) {
-      
+    if (currentProductData) {
       setProductExists(true)
     }
   }, []);
@@ -209,28 +206,21 @@ const COADocument = (props) => {
       <div
         style={{
           width: "100%",
-
           textAlign: "left",
-
           display: "flex",
-
           justifyContent: "space-between",
         }}
       >
         <div>
           <label style={{ fontSize: "20px" }}>Regions</label>
-
           <select
             name="regions"
             value={region || currentRegion}
             id="regions"
             style={{
               marginLeft: !isMobile ? "89px" : "90px",
-
               border: "1px solid #0F4B8F",
-
               width: "200px",
-
               height: "30px",
             }}
             onChange={(e) => {
@@ -252,11 +242,8 @@ const COADocument = (props) => {
           <select
             style={{
               marginLeft: "30px",
-
               border: "1px solid #0F4B8F",
-
               width: "200px",
-
               height: "30px",
             }}
             name="categories"
@@ -287,12 +274,9 @@ const COADocument = (props) => {
           </StyledButton>
         </div>
       </div>
-
       <hr style={{ backgroundColor: "#d0d0d0", height: "1px" }} />
-
       <Container>
         <p style={{ fontSize: "32px" }}>Product COAs</p>
-
         <Link
           to={{
             pathname: `/COA/add/${evaluatedRouteProductID}/`,

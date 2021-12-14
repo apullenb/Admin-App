@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col} from "react-bootstrap/";
+import { Row, Col, FormControl, Button } from "react-bootstrap/";
 import styled from "styled-components";
 import { connect } from 'react-redux';
 import COAProduct from "./COAProduct";
@@ -17,20 +17,37 @@ const COAProductList = (props) => {
   const [value, setValue] = useState("");
   const [category, setCategory] = useState("");
   // const products = data?.products || [];
-const {view ,edit, permissionFeched}=props;
+  const permissionFeched=true
+  const view=true
+  const edit=true
+
+  
+const {  PermissionsError}=props;
 const { addToast } = useToasts();
   useEffect(() => {
-    if(error)
-    {addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
-      appearance: 'error',
-    })}
-    else if (data)
-      {    getProducts();}  
-  }, [data,error]);
-
+      getProducts()
+  }, [data]);
   useEffect(() => {
-    
-    refetch();
+    if(data !== undefined)
+    {
+     console.log(error);
+       refetch();
+    }else if (data === undefined && loading===true){
+     console.log(error,data);
+      
+    addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
+      appearance: 'error',
+    })    
+    }
+    // console.log({data})
+    // addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
+    //   appearance: 'error',
+    // })
+
+    // if(error){
+    //   console.log(error);
+      
+    // }
   }, []);
 
   useEffect(() => {
@@ -68,7 +85,7 @@ const { addToast } = useToasts();
   };
 
   return (<>
-   {permissionFeched? (view ? <Table>
+   {!loading && permissionFeched? (view ? <Table>
       <h1>COA Products</h1>
      { edit && <Row>
         <Col md={12} className="text-right">
@@ -123,7 +140,7 @@ const { addToast } = useToasts();
         <Col>Last Updated</Col>
         {edit && <Col>Actions</Col>}
       </Row>
-      {!loading ?(view ? products?.length>0 &&
+      {!error && (view ? products?.length>0 &&
         products.map((product) => (
           <COAProduct
             key={product.coaProductID}
@@ -131,10 +148,7 @@ const { addToast } = useToasts();
             fetch={setProducts}
             edit={edit}
           />
-        )):<Redirect to='/NoPermission'/>) :
-      
-        <SpinnerLoader/>
-  }
+        )):<Redirect to='/NoPermission'/>)}
     </Table>:<Redirect to='NoPermission'/>):<SpinnerLoader/>}
     </>
   );

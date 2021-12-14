@@ -10,6 +10,7 @@ import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 import Pagination from './Pagination';
 import getComponentData from './selector';
 import SpinnerLoader from '../../GlobalComponents/ZilisSpinnerLoader';
+import { useToasts } from 'react-toast-notifications';
 
 function AccountList(props) {
   const [message, setMessage] = useState(true);
@@ -26,14 +27,19 @@ function AccountList(props) {
   const [col, setCol] = useState('id');
   const [filter, setFilter] = useState('');
   const dispatch = useDispatch();
-  const { view, edit,accounts,permissionFeched } = props;
+  const { addToast } = useToasts();
+  const { view, edit,accounts,permissionFeched,error} = props;
   useEffect(() => {
-    dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection));
+    dispatch(filterAccounts(col, filter, perPage, pageNo, colSort, sortDirection)); 
   }, []);
 
   useEffect(() => {
-    setLocalAccounts(accounts);
-  }, [accounts]);
+    if(error){
+      addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', { appearance: 'error'}) 
+ }
+ else
+    {setLocalAccounts(accounts);}
+  }, [accounts,error]);
 
   const accountsSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
     setColSort(sortInfo);
@@ -87,11 +93,10 @@ function AccountList(props) {
       setIdInput(true);
     }
   };
-  
   return (
     <div>
       <h1 style={{textAlign:'center'}}>Skincare Challenge Accounts</h1>
-      {permissionFeched ?(
+      { permissionFeched ?(!error ?(
         view ? <>
           <AccountTable>
             <table>
@@ -249,7 +254,7 @@ function AccountList(props) {
           <Pagination getEntries={getAccounts()} updatePerPage={updatePerPage} updatePageNo={updatePageNo} />
         </>:
         <Redirect to='/NoPermission'/>
-      ):<SpinnerLoader/> }
+      ):''):<SpinnerLoader/> }
     </div>
   );
 }

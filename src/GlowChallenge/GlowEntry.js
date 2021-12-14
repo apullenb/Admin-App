@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Moment from 'react-moment';
-import Select from 'react-select';
+import { useToasts } from 'react-toast-notifications';
 // import { relativeTimeRounding } from 'moment';
 import Model from './Model';
 import getComponentData from './selector';
@@ -28,6 +28,7 @@ const user = props.location.state
   const [show, setShow] = useState('hide');
   const [blank, setBlank] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const { addToast } = useToasts();
   const { view, edit, permissionFeched} = props;
  
   const filter = [{column: 'glowEntryId', value: user.glowEntryId}]
@@ -53,7 +54,11 @@ useEffect(() => {
     axios.delete(`${config.SKINCAREBASEURL}/api/challenge/delete-glow-entry-admin/${entry.glowEntryId}`).then((res) => {
       setShowDelete(!showDelete);
       props.history.push('/Challenge/Glow-Entries');
-    });
+    }).catch(error=>{
+      addToast ('Delete was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', { appearance: 'error', autoDismiss: true });
+      
+    })
+    
   };
   const handleShow = () => (show === 'hide' ? setShow('show') : setShow('hide'));
 

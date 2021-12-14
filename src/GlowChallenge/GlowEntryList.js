@@ -15,7 +15,7 @@ import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
 import { useToasts } from 'react-toast-notifications';
 
 function GlowEntryList(props) {
-  const { view, edit, entries, permissionFeched, PermissionsError,} = props;
+  const { view, edit, entries, permissionFeched, PermissionsError,error} = props;
   const [message, setMessage] = useState(true);
 
   const [pageNo, setPageNo] = useState(1);
@@ -32,12 +32,13 @@ function GlowEntryList(props) {
   const { addToast } = useToasts();
 
   useEffect(() => {
-    if(PermissionsError)
+    if(error)
     {addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
       appearance: 'error',
     })}
-    dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
-  }, [PermissionsError]);
+    else
+   { dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));}
+  }, [error]);
 
   useEffect(() => {
     setLocalAccounts(entries.entries);
@@ -101,7 +102,7 @@ function GlowEntryList(props) {
       <h1 style={{textAlign:'center'}}>Glow Challenge Entries</h1>
     
       {permissionFeched ? (
-       !PermissionsError && (view?
+       !error && (view?
         <>
       <AccountTable>
         <table>

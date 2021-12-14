@@ -9,13 +9,11 @@ const getPermissions = (state) => {
       glowPermissions?.levelId === 3 ||
       glowPermissions?.levelId === 4;
     const edit = glowPermissions?.levelId === 3 || glowPermissions?.levelId === 4;
-    console.log( view,
-      edit,
-      permissionFeched);
     return {
         view,
         edit,
         permissionFeched, 
+        PermissionsError,
     }
 }
 

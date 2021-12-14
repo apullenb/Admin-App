@@ -77,9 +77,8 @@ function EntryEdit(props) {
         await updateEntry(authToken);
       }
     } catch (err) {
-      addToast(`An error occured while saving: ${err.message}`, {
+      addToast(`Save was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.`, {
         appearance: 'error',
-        autoDismiss: true,
       });
     }
   };

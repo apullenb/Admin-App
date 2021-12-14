@@ -10,20 +10,28 @@ import { connect, useDispatch} from "react-redux";
 import { getEntries } from "../../redux/actions/Skincare/skincareActions";
 import getComponentData from "./selector";
 import SpinnerLoader from "../../GlobalComponents/ZilisSpinnerLoader";
+import { useToasts } from 'react-toast-notifications';
 
 const EntryList = (props) => {
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [colSort, setColSort] = useState("entries.id");
   const [sortDirection, setSortDirection] = useState("asc");
+  const { addToast } = useToasts();
 
   const dispatch = useDispatch();
 
-  const { view, edit ,entries ,permissionFeched ,} = props;
+  const { view, edit ,entries ,permissionFeched ,error} = props;
 
   useEffect(() => {
-    dispatch(getEntries());
-  }, []);
+   
+    if(error){
+      addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', { appearance: 'error'}) 
+ }
+ else{
+  dispatch(getEntries());
+ }
+  }, [error]);
 
   const entriesSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
     setColSort(sortInfo);
@@ -44,7 +52,7 @@ const EntryList = (props) => {
   return (
     <div>
       <h1 style={{textAlign:'center'}}>Skincare Challenge Entries</h1>
-      {permissionFeched ? ( 
+      {permissionFeched ? (!error&&( 
         view ? 
         <>
           <EntryTable>
@@ -182,7 +190,7 @@ const EntryList = (props) => {
           />
         </>:
         <Redirect to='/NoPermission'/>
-      ):<SpinnerLoader/>
+      )):<SpinnerLoader/>
       }
     </div>
   );

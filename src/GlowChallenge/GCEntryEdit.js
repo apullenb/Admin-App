@@ -12,6 +12,7 @@ import config from '../config/env-urls';
 import getComponentData from './selector';
 import CloudUpload from "./CloudUpload";
 import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
+import { useToasts } from 'react-toast-notifications';
 
 function GCEntryEdit(props) {
   const {view, edit, permissionFeched, } = props;
@@ -20,7 +21,8 @@ function GCEntryEdit(props) {
   const [showDelete, setShowDelete] = useState(false);
   const [showUpload, setShowUpload] = useState(true);
   const [photoUrl, setPhotoUrl] = useState('');
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
+  const { addToast } = useToasts();
   
   const handlePopUp = () => {
     setShowDelete(!showDelete);
@@ -44,6 +46,8 @@ function GCEntryEdit(props) {
       setPhotoUrl(newUrl)
       } else {
         setMessage('There was an Error Uploading Your Photo. Please try Again.')
+        addToast ('Upload was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', { appearance: 'error', autoDismiss: true });
+
       }
     })
   }
@@ -52,7 +56,10 @@ function GCEntryEdit(props) {
     axios.delete(`${config.SKINCAREBASEURL}/api/challenge/delete-glow-submission-admin/${entry.glowSubmissionId}`).then((res) => {
       setShowDelete(!showDelete);
       props.history.push('/Challenge/Glow-Entries');
-    });
+    }).catch(err=>{
+      addToast ('Delete was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', { appearance: 'error'});
+
+    })
   };
 
   const checkProduct = (p) => {
