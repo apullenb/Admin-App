@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useParams, Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-
-import {
-  GET_DOCUMENTS_BY_PRODUCT_ID,
-  GET_CATEGORIES,
-  GET_PRODUCT_BY_ID,
-} from "../utils/GQLqueries";
-
-import { ADD_PRODUCT, UPDATE_PRODUCT } from "../utils/mutations";
-
-import COATable from "./COADocumentsTable";
-
-import { useMediaQuery } from "react-responsive";
-
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useParams, Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { GET_DOCUMENTS_BY_PRODUCT_ID, GET_CATEGORIES, GET_PRODUCT_BY_ID } from '../utils/GQLqueries';
+import { ADD_PRODUCT, UPDATE_PRODUCT } from '../utils/mutations';
+import COATable from './COADocumentsTable';
+import { useMediaQuery } from 'react-responsive';
+import { useHistory } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
 
 const COADocument = (props) => {
   const [addProduct, { data: addedProductData }] = useMutation(ADD_PRODUCT);
@@ -26,44 +18,43 @@ const COADocument = (props) => {
 
   const productIDInt = parseInt(productID);
   const history = useHistory();
+  const { addToast } = useToasts();
 
   const [documents, setDocuments] = useState([]);
   const [dataCategories, setdataCategories] = useState([]);
-  const [region, setRegion] = useState("USA");
-  const [productName, setProductName] = useState("");
+  const [region, setRegion] = useState('USA');
+  const [productName, setProductName] = useState('');
   const [category, setCategory] = useState(1);
   const [productExists, setProductExists] = useState(false);
   const [validation, setValidation] = useState(false);
 
-  const { data, refetch } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
+  const { error, data, refetch } = useQuery(GET_DOCUMENTS_BY_PRODUCT_ID, {
     variables: { productID: productIDInt },
   });
-  const { data: product, refetch: refetchProductInfo } = useQuery(
-    GET_PRODUCT_BY_ID,
-    {
-      variables: { coaProductID: productIDInt },
-    }
-  );
-
+  const { data: product, refetch: refetchProductInfo } = useQuery(GET_PRODUCT_BY_ID, {
+    variables: { coaProductID: productIDInt },
+  });
+  const ToastError = (mes) => {
+    addToast(`${mes}. Please refresh the page. Contact IT if the problem continues.`, {
+      appearance: 'error',
+    });
+  };
   useEffect(() => {
-    if (props.history.action === "PUSH") {
+    if (!error && props.history.action === 'PUSH') {
       refetch();
       refetchProductInfo();
+    } else if (error && props.history.action !== 'PUSH') {
+      ToastError('The information failed to load');
     }
-  }, []);
+  }, [error]);
 
-  const currentProductData = props.location.state
-  ? props.location.state
-  : product && product.products[0];
-
+  const currentProductData = props.location.state ? props.location.state : product && product.products[0];
 
   useEffect(() => {
-
     if (currentProductData) {
-      setProductExists(true)
+      setProductExists(true);
     }
   }, []);
-
 
   const { data: categories } = useQuery(GET_CATEGORIES);
 
@@ -78,7 +69,7 @@ const COADocument = (props) => {
       setProductName(currentProductData.productName);
     }
 
-    if ( productName === "") {
+    if (productName === '') {
       setValidation(true);
     } else {
       setValidation(false);
@@ -108,7 +99,7 @@ const COADocument = (props) => {
   }, [currentProductData]);
 
   const isMobile = useMediaQuery({
-    query: "(min-device-width: 568px)",
+    query: '(min-device-width: 568px)',
   });
 
   const handleAddEditProduct = () => {
@@ -130,11 +121,11 @@ const COADocument = (props) => {
     }
 
     const current = new Date();
-    const dd = String(current.getDate()).padStart(2, "0");
-    const mm = String(current.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const dd = String(current.getDate()).padStart(2, '0');
+    const mm = String(current.getMonth() + 1).padStart(2, '0'); //January is 0!
     const yyyy = current.getFullYear();
 
-    let today = mm + "/" + dd + "/" + yyyy;
+    let today = mm + '/' + dd + '/' + yyyy;
 
     dataToSubmit.lastUpdatedOn = today;
 
@@ -142,59 +133,46 @@ const COADocument = (props) => {
       ? addProduct({
           variables: dataToSubmit,
         })
-      : updateProduct({
-          variables: dataToSubmit,
-        });
+      :  (error ? ToastError('Save was unsuccessful')
+    : updateProduct({
+        variables: dataToSubmit,
+      }))
     setProductExists(true);
-    if (
-      !props.location.state &&
-      addedProductData &&
-      addedProductData.addCoaProduct &&
-      addedProductData.addCoaProduct.coaProduct.coaProductID
-    ) {
-      history.push(
-        `/Coa/documents/${addedProductData.addCoaProduct.coaProduct.coaProductID}`
-      );
+
+    if (!props.location.state && addedProductData && addedProductData.addCoaProduct && addedProductData.addCoaProduct.coaProduct.coaProductID) {
+      history.push(`/Coa/documents/${addedProductData.addCoaProduct.coaProduct.coaProductID}`);
     }
   };
 
   const tableData = documents && documents.length > 0 ? documents : [];
 
-  const currentRegion =
-    product && product.products[0] && product.products[0].region;
+  const currentRegion = product && product.products[0] && product.products[0].region;
 
-  const currentCategory =
-    product && product.products[0] && product.products[0].category;
+  const currentCategory = product && product.products[0] && product.products[0].category;
 
   const evaluatedRouteProductID =
     product && product.products[0] && product.products[0].coaProductID
       ? product.products[0].coaProductID
-      : (!props.location.state &&
-          addedProductData &&
-          addedProductData.addCoaProduct &&
-          addedProductData.addCoaProduct.coaProduct.coaProductID) ||
-        0;
+      : (!props.location.state && addedProductData && addedProductData.addCoaProduct && addedProductData.addCoaProduct.coaProduct.coaProductID) || 0;
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: '100%' }}>
       <Container>
-        <p style={{ fontSize: "32px" }}>COA Product Details</p>
+        <p style={{ fontSize: '32px' }}>COA Product Details</p>
 
-        <Link to={"/COAs"} style={{ display: "flex", alignSelf: "center" }}>
+        <Link to={'/COAs'} style={{ display: 'flex', alignSelf: 'center' }}>
           Back to list
         </Link>
       </Container>
 
-      <div style={{ width: "100%", textAlign: "left" }}>
-        <label style={{ fontSize: "20px", marginRight: "30px" }}>
-          Product Name
-        </label>{" "}
+      <div style={{ width: '100%', textAlign: 'left' }}>
+        <label style={{ fontSize: '20px', marginRight: '30px' }}>Product Name</label>{' '}
         <input
-          style={{ width: "80%", border: "1px solid #0F4B8F" }}
+          style={{ width: '80%', border: '1px solid #0F4B8F' }}
           value={productName}
           onChange={(e) => {
             setProductName(e.target.value);
-            if (e.target.value === "") {
+            if (e.target.value === '') {
               setValidation(true);
             } else {
               setValidation(false);
@@ -205,53 +183,54 @@ const COADocument = (props) => {
 
       <div
         style={{
-          width: "100%",
-          textAlign: "left",
-          display: "flex",
-          justifyContent: "space-between",
+          width: '100%',
+          textAlign: 'left',
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
         <div>
-          <label style={{ fontSize: "20px" }}>Regions</label>
+          <label style={{ fontSize: '20px' }}>Regions</label>
           <select
-            name="regions"
+            name='regions'
             value={region || currentRegion}
-            id="regions"
+            id='regions'
             style={{
-              marginLeft: !isMobile ? "89px" : "90px",
-              border: "1px solid #0F4B8F",
-              width: "200px",
-              height: "30px",
+              marginLeft: !isMobile ? '89px' : '90px',
+              border: '1px solid #0F4B8F',
+              width: '200px',
+              height: '30px',
             }}
             onChange={(e) => {
               setValidation(false);
-              setRegion(e.target.value)
+              setRegion(e.target.value);
             }}
           >
-            <option value={"USA"}>USA</option>
+            <option value={'USA'}>USA</option>
 
-            <option value={"EU"}>EU</option>
+            <option value={'EU'}>EU</option>
 
-            <option value={"LATAM"}>LATAM</option>
+            <option value={'LATAM'}>LATAM</option>
           </select>
         </div>
 
-        <div style={{ marginRight: "300px" }}>
-          <label style={{ fontSize: "20px" }}>Category</label>
+        <div style={{ marginRight: '300px' }}>
+          <label style={{ fontSize: '20px' }}>Category</label>
 
           <select
             style={{
-              marginLeft: "30px",
-              border: "1px solid #0F4B8F",
-              width: "200px",
-              height: "30px",
+              marginLeft: '30px',
+              border: '1px solid #0F4B8F',
+              width: '200px',
+              height: '30px',
             }}
-            name="categories"
+            name='categories'
             value={category || currentCategory}
-            id="categories"
+            id='categories'
             onChange={(e) => {
               setValidation(false);
-              setCategory(parseInt(e.target.value))}}
+              setCategory(parseInt(e.target.value));
+            }}
           >
             {dataCategories &&
               dataCategories.length > 0 &&
@@ -266,35 +245,24 @@ const COADocument = (props) => {
         </div>
 
         <div>
-          <StyledButton
-            disabled={validation}
-            onClick={handleAddEditProduct}
-          >
+          <StyledButton disabled={validation} onClick={handleAddEditProduct}>
             Save
           </StyledButton>
         </div>
       </div>
-      <hr style={{ backgroundColor: "#d0d0d0", height: "1px" }} />
+      <hr style={{ backgroundColor: '#d0d0d0', height: '1px' }} />
       <Container>
-        <p style={{ fontSize: "32px" }}>Product COAs</p>
+        <p style={{ fontSize: '32px' }}>Product COAs</p>
         <Link
           to={{
             pathname: `/COA/add/${evaluatedRouteProductID}/`,
-        }}
+          }}
         >
-          <StyledButton disabled={!productExists && props.match.params.productID}>
-            Add New COA
-          </StyledButton>
+          <StyledButton disabled={!productExists && props.match.params.productID}>Add New COA</StyledButton>
         </Link>
       </Container>
 
-      <COATable
-        tableData={tableData}
-        productID={
-          product && product.products[0] && product.products[0].coaProductID
-        }
-        refetch={refetch}
-      />
+      <COATable tableData={tableData} productID={product && product.products[0] && product.products[0].coaProductID} refetch={refetch} />
     </div>
   );
 };

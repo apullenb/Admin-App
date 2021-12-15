@@ -7,7 +7,7 @@ const getComponentData = (state) => {
     glowPermissions?.levelId === 2 ||
     glowPermissions?.levelId === 3 ||
     glowPermissions?.levelId === 4;
-  const edit = glowPermissions?.levelId === 31 || glowPermissions?.levelId === 41;
+  const edit = glowPermissions?.levelId === 3 || glowPermissions?.levelId === 4;
 
   return {
     view,

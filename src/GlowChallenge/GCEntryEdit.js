@@ -16,7 +16,6 @@ import { useToasts } from 'react-toast-notifications';
 
 function GCEntryEdit(props) {
   const {view, edit, permissionFeched, } = props;
-  console.log(props)
   const entry = props.location.state;
   const [showDelete, setShowDelete] = useState(false);
   const [showUpload, setShowUpload] = useState(true);

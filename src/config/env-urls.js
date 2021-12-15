@@ -1,4 +1,4 @@
-const environment = process.env.REACT_APP_ENV || 'develop';
+const environment = process.env.REACT_APP_ENV || 'development';
 
 const handleSetProductsURL = () => {
   switch (environment) {

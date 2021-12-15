@@ -11,7 +11,6 @@ function COAProduct(props) {
   const date = props.product.lastUpdatedOn.substr(0, props.product.lastUpdatedOn.indexOf("Z"));
   const updated = moment(date).format("MM/DD/YYYY");
   const handleDelete = () => {
-    console.log("delete", props.product.coaProductID);
   };
 
    const [showDel, setShowDel] = useState('hide')

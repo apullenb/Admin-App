@@ -19,20 +19,25 @@ const COAProductList = (props) => {
   // const products = data?.products || [];
   const { edit, view, permissionFeched, PermissionsError } = props;
   const { addToast } = useToasts();
+  const ToastError=(mes)=>{
+    addToast(`${mes}. Please refresh the page. Contact IT if the problem continues.`, {
+      appearance: 'error',
+    });
+  }
+
   useEffect(() => {
     getProducts();
   }, [data]);
+  
   useEffect(() => {
-    if (data)
+    if (data?.products)
      {
       refetch();
     } else if (error)
      {
-      addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
-        appearance: 'error',
-      });
+      ToastError('The information failed to load')
     }
-  }, []);
+  }, [data?.products,error]);
 
   useEffect(() => {
     filter();
@@ -74,7 +79,7 @@ const COAProductList = (props) => {
             {edit && (
               <Row>
                 <Col md={12} className='text-right'>
-                  <Link to={{ pathname: '/Coa/documents/0' }}>
+                 <Link to={{ pathname: '/Coa/documents/0' }}>
                     <CustomButton>Add Products</CustomButton>
                   </Link>
                 </Col>

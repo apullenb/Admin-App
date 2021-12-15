@@ -13,8 +13,10 @@ import {
   faChevronDown,
 } from "@fortawesome/fontawesome-free-solid";
 import SpinnerLoader from "../GlobalComponents/ZilisSpinnerLoader";
+import getComponentData from "./selector";
+import { connect } from "react-redux";
 
-const UserAuthorizationStatusTable = () => {
+const UserAuthorizationStatusTable = (props) => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [sortedUsers, setSortedUsers] = useState([]);
@@ -31,7 +33,7 @@ const UserAuthorizationStatusTable = () => {
   // const [sortTypeName, setSortTypeName] = useState("asc");
   // const [sortTypeEmail, setSortTypeEmail] = useState("asc");
   // const [sortTypeLastAccessed, setSortTypeLastAccessed] = useState("asc");
-
+  const {view, edit, permissionFeched} = props;
   const pageOptions = [10, 15, 20];
 
   const getUsers = async (perPage = 10, pageNo = 1) => {
@@ -224,7 +226,7 @@ const UserAuthorizationStatusTable = () => {
                       {user.lastLoginDate &&
                         moment(user.lastLoginDate).format()}
                     </td>
-                    <td>
+                  {  <td>
                       <Link
                         to={{
                           pathname: `/Settings/users/edit/${user.id}`,
@@ -242,7 +244,7 @@ const UserAuthorizationStatusTable = () => {
                       >
                         <button id="edit">Delete</button>
                       </Link>
-                    </td>
+                    </td>}
                   </tr>
                 );
               }):
@@ -323,4 +325,4 @@ const StyledButton = styled.button`
   padding-right: 14px;
 `;
 
-export default UserAuthorizationStatusTable;
+export default connect(getComponentData)(UserAuthorizationStatusTable);
