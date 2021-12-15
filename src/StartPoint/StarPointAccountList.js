@@ -48,9 +48,10 @@ export const StarPointAccountList = () => {
   }, [perPageNum, skip, filterObj, sortOrder]);
 
   useEffect(() => {
-    data && setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
-    data && setStarPointData(data.starShipInventoryWithPaging.items);
-    data && setHasNextPage(data.starShipInventoryWithPaging.pageInfo.hasNextPage);
+   if(data){ 
+     setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
+     setStarPointData(data.starShipInventoryWithPaging.items);
+     setHasNextPage(data.starShipInventoryWithPaging.pageInfo.hasNextPage);}
   }, [data]);
 
   const applyFilter = () => {
