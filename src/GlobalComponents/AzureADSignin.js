@@ -3,30 +3,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useMsal } from '@azure/msal-react';
 import { loginRequest } from '../services/azureAD/authConfig';
-import Button from 'react-bootstrap/Button';
 import * as AZACTIONS from '../redux/actions/azure/azureAdActionTypes';
-
+import { LOGGED_IN, LOG_OUT } from '../redux/actions/app/appActionTypes';
 import { graphConfig } from '../services/azureAD/authConfig';
+import styled from 'styled-components';
 
 export const AADSignInButton = () => {
   const dispatch = useDispatch();
+  const { loggedIn } = useSelector((state) => state.app);
   const { instance, accounts, inProgress } = useMsal();
   const [accessToken, setAccessToken] = useState(null);
-  const [graphData, setGraphData] = useState(null);
-  const [picture, setPicture] = useState('');
 
   function handleLogin(instance) {
     instance
       .loginPopup(loginRequest)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         dispatch({ type: AZACTIONS.SETAZADACCESSTOKEN, payload: res.accessToken });
       })
       .then((res) => {
         RequestAccessToken();
       })
       .catch((e) => {
-        console.error(e);
+        // console.error(e);
       });
   }
 
@@ -40,7 +39,7 @@ export const AADSignInButton = () => {
       .acquireTokenSilent(request)
       .then((response) => {
         setAccessToken(response.accessToken);
-        console.log(response.accessToken);
+        //console.log(response.accessToken);
         callMsGraph(response.accessToken);
       })
       .catch((e) => {
@@ -51,50 +50,64 @@ export const AADSignInButton = () => {
   }
 
   function callMsGraph(accessToken) {
-    const headers = new Headers();
     const bearer = `Bearer ${accessToken}`;
-
-    headers.append('Authorization', bearer);
-
-    const header = {
+    const options = {
       headers: {
         Authorization: bearer,
       },
     };
 
-    const options = {
-      headers: headers,
-    };
-
     axios
-      .get(graphConfig.graphMeEndpoint, header)
+      .get(graphConfig.graphMeEndpoint, options)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         dispatch({ type: AZACTIONS.GETAZPROFILESUCCESS, payload: response.data });
+        dispatch({ type: LOGGED_IN, payload: true });
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         dispatch({ type: AZACTIONS.GETAZPROFILEFAILURE, payload: error });
       });
 
     axios
-      .get('https://graph.microsoft.com/v1.0/me/photos/48x48/$value', header)
+      .get('https://graph.microsoft.com/v1.0/me/photo/$value', { ...options, responseType: 'blob' })
       .then((res) => {
-        console.log(res.data);
         const url = window.URL || window.webkitURL;
         var imageLink = url.createObjectURL(new Blob([res.data]), { type: 'image/jpeg' });
-        console.log(imageLink);
-        setPicture(imageLink);
+        dispatch({ type: AZACTIONS.GETAZPROFILEIMAGESUCCESS, payload: imageLink });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        //console.log(error);
+        dispatch({ type: AZACTIONS.GETAZPROFILEIMAGEFAILURE, payload: error });
+      });
+  }
+
+  function handleLogout(instance) {
+    instance
+      .logoutPopup()
+      .then(() => {
+        dispatch({ type: LOG_OUT });
+        dispatch({ type: AZACTIONS.RESETSTATE });
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   return (
     <>
-      <Button variant='secondary' className='ml-auto' onClick={() => handleLogin(instance)}>
-        Sign in Azure AD
-      </Button>
-      <img src={picture} style={{ width: '150px', height: '150px' }} />
+      {!loggedIn ? (
+        <LinkButton onClick={() => handleLogin(instance)}>Sign In</LinkButton>
+      ) : (
+        <LinkButton onClick={() => handleLogout(instance)}>Sign Out</LinkButton>
+      )}
     </>
   );
 };
+
+const LinkButton = styled.button`
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #0f4b8f;
+  font-weight: 700;
+`;

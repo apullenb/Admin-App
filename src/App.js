@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+import PrivateRoute from './auth/PrivateRoute';
 import './App.scss';
 import Login from './Login';
 import Dashboard from './Pages/Dashboard';
@@ -45,125 +46,149 @@ const allRoutes = [
     path: '/',
     exact: true,
     component: Dashboard,
+    protected: false,
   },
   {
     path: '/Shopping/Countries',
     exact: true,
     component: ShoppingCountries,
+    protected: true,
   },
   {
     path: '/Shopping/Kits',
     exact: true,
     component: ShoppingKits,
+    protected: true,
   },
   {
     path: '/Shopping/Categories',
     exact: true,
     component: ShoppingCategories,
+    protected: true,
   },
   {
     path: '/Shopping/Products',
     exact: true,
     component: ShoppingProducts,
+    protected: true,
   },
   {
     exact: true,
     path: '/Challenge/Accounts',
     component: AccountList,
+    protected: true,
   },
   {
     exact: true,
     path: '/Challenge/Glow-Submission/:submissionId',
     component: GCEntryEdit,
+    protected: true,
   },
   {
     exact: true,
     path: '/Challenge/Glow-Entry/:accountid',
     component: GlowEntry,
+    protected: true,
   },
   {
     exact: true,
     path: '/Challenge/Accounts/:accountid',
     component: AccountEdit,
+    protected: true,
   },
   {
     exact: true,
     path: '/Challenge/Entries',
     component: EntryList,
+    protected: true,
   },
   {
     exact: true,
     path: '/Challenge/Glow-Entries',
     component: GlowEntryList,
+    protected: true,
   },
   {
     exact: true,
     path: '/Challenge/Entry/:entryId',
     component: EntryEdit,
+    protected: true,
   },
   {
     exact: true,
     path: '/Coa/documents/:productID',
     component: COADocument,
+    protected: true,
   },
   {
     exact: true,
     path: '/COA/edit/:productID/:coaDocumentID',
     component: EditCOA,
+    protected: true,
   },
   {
     exact: true,
     path: '/COAs',
     component: COAProductList,
+    protected: true,
   },
   {
     exact: true,
     path: '/Events',
     component: Events,
+    protected: true,
   },
   {
     exact: true,
     path: '/Incentive',
     component: Incentive,
+    protected: true,
   },
   {
     exact: true,
     path: '/Permissions',
     component: Permissions,
+    protected: true,
   },
   {
     exact: true,
     path: '/COA/:productID',
     component: COA,
+    protected: true,
   },
   {
     exact: true,
     path: '/Settings/users/add',
     component: UserAuthorizationStatusAddEdit,
+    protected: true,
   },
   {
     exact: true,
     path: '/Settings/users/edit/:userID',
     component: UserAuthorizationStatusAddEdit,
+    protected: true,
   },
   {
     exact: true,
     path: '/Settings/users',
     component: UserAuthorizationStatusTable,
+    protected: true,
   },
   {
     exact: true,
     path: '/StarPoint/',
     component: StarPointAccountList,
+    protected: true,
   },
   {
     exact: true,
     path: '/StartPoint/Edit/:inventoryId',
     component: EditStarPoint,
+    protected: true,
   },
 ];
 const client = new ApolloClient({
-  uri:config.ORDERAPIURL,
+  uri: config.ORDERAPIURL,
 });
 
 function App() {
@@ -174,39 +199,28 @@ function App() {
 
   useEffect(() => {
     dispatch({ type: APP_STARTED });
+
     //dispatch(SkincareAdminPermissions())
   }, []);
 
   return (
     <ApolloProvider client={client}>
       <div className='app'>
-        <Switch>
-          {/* <Route exact path='/login' component={Login} /> */}
-          {allRoutes.map((route, index) => {
-            return (
-              <Route
-                key={index}
-                path={route.path}
-                exact={route.exact}
-                render={(props) => {
-                  // localStorage.getItem('Token') ? (
-                  //   <>
-                     return <Page>
-                        <route.component {...props} />
-                      </Page>
-                     }
-                    //</>
-                 // ) : (
-                   // <Redirect to={'/login'} />
-                    }
-                   />
-
-                  )
-                
-              ///>
-            //);
-          })}
-        </Switch>
+        <Page>
+          <Switch>
+            {allRoutes.map((route, index) => {
+              return route.protected ? (
+                <PrivateRoute key={index} path={route.path} exact={route.exact}>
+                  <route.component />
+                </PrivateRoute>
+              ) : (
+                <Route key={index} path={route.path} exact={route.exact}>
+                  <route.component />
+                </Route>
+              );
+            })}
+          </Switch>
+        </Page>
       </div>
     </ApolloProvider>
   );

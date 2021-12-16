@@ -1,8 +1,8 @@
 import * as AZADACTIONS from '../../actions/azure/azureAdActionTypes';
 
 const initalState = {
-  profileData: {},
-  profileImage: {},
+  profileData: null,
+  profileImage: null,
   azAccessToken: null,
   graphToken: null,
   loading: false,
@@ -46,6 +46,10 @@ export const azureADReducer = (state = initalState, action) => {
         ...state,
         graphToken: action.payload,
       };
+      case AZADACTIONS.RESETSTATE: 
+      return {
+        ...initalState
+      }
 
     default:
       return state;
