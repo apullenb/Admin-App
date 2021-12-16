@@ -46,7 +46,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
 
       setUserPermission(data);
     } catch (err) {
-      
+      console.log(err);
     }
   };
 
