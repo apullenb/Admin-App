@@ -176,7 +176,7 @@ const allRoutes = [
   },
   {
     exact: true,
-    path: '/StarPoint/',
+    path: '/StarPoint',
     component: StarPointAccountList,
     protected: true,
   },

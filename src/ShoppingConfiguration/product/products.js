@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Button from "react-bootstrap/Button";
-import Product from "./product";
-import AddProduct from "./addProduct";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
-import ZilisLoader from "../../GlobalComponents/ZilisLoader";
-import { handleFetchProductsAsync } from "../../redux/actions/Configuration/productConfig/productActions";
-import "../../App.scss";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Button from 'react-bootstrap/Button';
+import Product from './product';
+import AddProduct from './addProduct';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import ZilisLoader from '../../GlobalComponents/ZilisLoader';
+import { handleFetchProductsAsync } from '../../redux/actions/Configuration/productConfig/productActions';
+import '../../App.scss';
 
-import Styled from "styled-components";
-import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
+import Styled from 'styled-components';
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 const Products = (props) => {
   const dispatch = useDispatch();
@@ -21,6 +21,7 @@ const Products = (props) => {
 
   useEffect(() => {
     dispatch(handleFetchProductsAsync());
+    console.log(location);
   }, []);
 
   useEffect(() => {
@@ -29,9 +30,7 @@ const Products = (props) => {
 
   const filterItems = (filter) => {
     //search products
-    const filterdItems = productsArray.filter((item) =>
-      item.sku.includes(filter.toUpperCase())
-    );
+    const filterdItems = productsArray.filter((item) => item.sku.includes(filter.toUpperCase()));
     setProducts(filterdItems);
   };
 
@@ -40,31 +39,25 @@ const Products = (props) => {
       <ProductsWrapper>
         <SearchWrapper>
           <h2>Products page</h2>
-          <InputGroup className="mb-2 mr-sm-2">
+          <InputGroup className='mb-2 mr-sm-2'>
             <InputGroup.Prepend>
               <InputGroup.Text>
-                <i className="fas fa-binoculars"></i>
+                <i className='fas fa-binoculars'></i>
               </InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              type="text"
-              name="search"
+              type='text'
+              name='search'
               onChange={(e) => {
                 filterItems(e.target.value);
               }}
-              placeholder="Search..."
+              placeholder='Search...'
             />
           </InputGroup>
         </SearchWrapper>
 
-        <div style={{ marginTop: "40%" }}>
-          <div>
-            {fetching ? (
-              <ZilisLoader width={50} height={50} />
-            ) : (
-              <b>Products List</b>
-            )}
-          </div>
+        <div style={{ marginTop: '40%' }}>
+          <div>{fetching ? <ZilisLoader width={50} height={50} /> : <b>Products List</b>}</div>
           <ListWrapper>
             {productsArray &&
               productsArray.map((product) => {
@@ -81,11 +74,9 @@ const Products = (props) => {
       <ProductWapper>
         <AddProductWrapper>
           <AddProductButtonWrapper>
-            <label className="add-button-label form-labels">
-              Create A New Product
-            </label>
+            <label className='add-button-label form-labels'>Create A New Product</label>
             <Link to={`${url}/addProduct`}>
-              <Button variant="success" style={{ fontSize: 30, width: "50px" }}>
+              <Button variant='success' style={{ fontSize: 30, width: '50px' }}>
                 &#43;
               </Button>
             </Link>
@@ -93,7 +84,9 @@ const Products = (props) => {
         </AddProductWrapper>
 
         <Switch>
-          <Route exact path={path}></Route>
+          <Route path={path}>
+            <p>View or Create a new Product</p>
+          </Route>
           <Route path={`${path}/addProduct`}>
             <AddProduct />
           </Route>
