@@ -210,13 +210,9 @@ function App() {
           <Switch>
             {allRoutes.map((route, index) => {
               return route.protected ? (
-                <PrivateRoute key={index} path={route.path} exact={route.exact}>
-                  <route.component />
-                </PrivateRoute>
+                <PrivateRoute key={index} path={route.path} exact={route.exact} component={route.component} />
               ) : (
-                <Route key={index} path={route.path} exact={route.exact}>
-                  <route.component />
-                </Route>
+                <Route key={index} path={route.path} exact={route.exact} render={(props) => <route.component {...props} />} />
               );
             })}
           </Switch>

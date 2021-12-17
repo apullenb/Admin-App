@@ -21,7 +21,7 @@ const Products = (props) => {
 
   useEffect(() => {
     dispatch(handleFetchProductsAsync());
-    console.log(location);
+    console.log(props);
   }, []);
 
   useEffect(() => {
@@ -90,7 +90,6 @@ const Products = (props) => {
           <Route path={`${path}/addProduct`}>
             <AddProduct />
           </Route>
-
           <Route path={`${path}/:id`}>
             <Product />
           </Route>

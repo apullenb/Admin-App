@@ -1,9 +1,21 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import ZilisCarousel from '../GlobalComponents/ZilisCarousel';
+import * as Auth from '../auth/Authorize';
+import { handleLogin } from '../redux/actions/azure/azureActions';
+import { useMsal } from '@azure/msal-react';
 
 function Dashboard() {
+  const dispatch = useDispatch();
+  const { instance } = useMsal();
   const { loggedIn } = useSelector((state) => state.app);
+
+  useEffect(() => {
+    if (!loggedIn && !Auth.validateToken()) {
+      dispatch(handleLogin(instance));
+    }
+  }, []);
+
   const carouselData = [
     {
       image: 'https://zilis.com/wp-content/uploads/2021/10/Group-791-1024x403.jpg',
@@ -38,7 +50,7 @@ function Dashboard() {
         <div
           style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%', position: 'relative' }}
         >
-          <h1>Admin App Dashboard</h1>
+          <h1>Admin App</h1>
           <h4>Welcome to the Dashboard</h4>
           <ZilisCarousel carouselData={carouselData} />
         </div>

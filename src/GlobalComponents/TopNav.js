@@ -42,16 +42,14 @@ function TopNav() {
     },
   ];
 
-  useEffect(() => {}, []);
-
   return (
     <HeaderWrapper>
       <Top>
         <div className='top-wrapper'>
           <div className='inner-wrapper'>
-            <a href='/'>
+            <Link to='/'>
               <img src={Logo} alt='Zilis Logo' style={{ maxWidth: '170px', margin: '1px auto' }} />
-            </a>
+            </Link>
             <ProfileWrapper>
               <ProfileImg src={profileImage || ProfileImage} alt='Profile Image' />
               <h6>{profileData && profileData.displayName}</h6>
@@ -105,7 +103,7 @@ function TopNav() {
                 return (
                   <LinkWrap key={i}>
                     <div style={{ marginTop: '10px' }}>
-                      <Link to={link.link} style={{ color: 'rgba(0,0,0,.5)', textDecoration: 'none' }}>
+                      <Link to={link.link} style={{ color: 'rgba(0,0,0,0.5)', textDecoration: 'none' }}>
                         {link.name}
                       </Link>
                     </div>
@@ -117,7 +115,11 @@ function TopNav() {
             </Nav>
             <Nav>
               <NavDropdown title='Admin Settings' id='basic-nav-dropdown'>
-                <NavDropdown.Item href='/Settings/users'>Permissions</NavDropdown.Item>
+                <LinkWrap>
+                  <StyledLink to='/Settings/users' style={{ color: 'rgba(0,0,0,.5)', textDecoration: 'none' }}>
+                    Permissions
+                  </StyledLink>
+                </LinkWrap>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
@@ -200,11 +202,11 @@ const ProfileHover = styled.div`
   border-radius: 12px;
   padding: 8px;
   position: absolute;
-  top: 120px;
+  top: 100px;
   right: 10px;
   opacity: 0;
-  z-index: 999;
-  box-shadow: 0 8px 18px 0 rgba(0, 0, 0, 0.3);
+  z-index: 900;
+  box-shadow: 0 8px 18px 0 rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease-in-out;
 `;
 
@@ -222,8 +224,8 @@ const ProfileWrapper = styled.div`
   :hover {
     background-color: #0f4b8f;
     border-radius: 12px 12px 0 0;
-    box-shadow: 0 8px 18px 0 rgba(0, 0, 0, 0.5);
-    z-index: 999;
+    box-shadow: 0px -15px 8px 1px rgba(0, 0, 0, 0.1);
+    z-index: 901;
     color: #fff;
     width: 200px;
     right: 10px;

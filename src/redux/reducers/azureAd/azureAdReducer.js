@@ -46,10 +46,10 @@ export const azureADReducer = (state = initalState, action) => {
         ...state,
         graphToken: action.payload,
       };
-      case AZADACTIONS.RESETSTATE: 
+    case AZADACTIONS.RESETSTATE:
       return {
-        ...initalState
-      }
+        ...initalState,
+      };
 
     default:
       return state;
