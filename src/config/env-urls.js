@@ -65,6 +65,19 @@ const handleOrderAPIURL = () => {
   }
 };
 
+const handlAzureADURL = () => {
+  switch (environment) {
+    case 'development':
+      return 'http://localhost:3000';
+    case 'test':
+      return 'http://localhost:3000'; //https://adminapp-test-zilis.azurewebsites.net
+    case 'production':
+      return 'https://adminappzilis.azurewebsites.net';
+    default:
+      return 'http://localhost:3000';
+  }
+};
+
 const skincareUser = {
   username: 'AdminApp',
   password: 'vHIsAQ7FWR1tDz',
@@ -76,6 +89,7 @@ const config = {
   SCTARGETURL: handleSCTargetURL(),
   ADMINEPERMISSIONS: handleAdminPermissions(),
   ORDERAPIURL: handleOrderAPIURL(),
+  AZUREADURL: handlAzureADURL(),
   SKINCAREUSER: skincareUser,
 };
 

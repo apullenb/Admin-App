@@ -1,8 +1,10 @@
+import Config from '../../config/env-urls';
+
 export const msalConfig = {
   auth: {
     clientId: '28be827a-4b33-4101-bc00-8e74691fd4da',
     authority: 'https://login.microsoftonline.com/a00f60f9-cf7f-47c9-9e94-9d796802ec9d', // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
-    redirectUri: ' http://localhost:3000',
+    redirectUri: Config.AZUREADURL,
   },
   cache: {
     cacheLocation: 'sessionStorage', // This configures where your cache will be stored

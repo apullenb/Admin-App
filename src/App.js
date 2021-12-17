@@ -50,138 +50,115 @@ const allRoutes = [
   },
   {
     path: '/Shopping/Countries',
-    exact: true,
     component: ShoppingCountries,
     protected: true,
   },
   {
     path: '/Shopping/Kits',
-    exact: true,
     component: ShoppingKits,
     protected: true,
   },
   {
     path: '/Shopping/Categories',
-    exact: true,
     component: ShoppingCategories,
     protected: true,
   },
   {
     path: '/Shopping/Products',
-    exact: true,
     component: ShoppingProducts,
     protected: true,
   },
   {
-    exact: true,
     path: '/Challenge/Accounts',
     component: AccountList,
     protected: true,
   },
   {
-    exact: true,
     path: '/Challenge/Glow-Submission/:submissionId',
     component: GCEntryEdit,
     protected: true,
   },
   {
-    exact: true,
     path: '/Challenge/Glow-Entry/:accountid',
     component: GlowEntry,
     protected: true,
   },
   {
-    exact: true,
     path: '/Challenge/Accounts/:accountid',
     component: AccountEdit,
     protected: true,
   },
   {
-    exact: true,
     path: '/Challenge/Entries',
     component: EntryList,
     protected: true,
   },
   {
-    exact: true,
     path: '/Challenge/Glow-Entries',
     component: GlowEntryList,
     protected: true,
   },
   {
-    exact: true,
     path: '/Challenge/Entry/:entryId',
     component: EntryEdit,
     protected: true,
   },
   {
-    exact: true,
     path: '/Coa/documents/:productID',
     component: COADocument,
     protected: true,
   },
   {
-    exact: true,
     path: '/COA/edit/:productID/:coaDocumentID',
     component: EditCOA,
     protected: true,
   },
   {
-    exact: true,
     path: '/COAs',
     component: COAProductList,
     protected: true,
   },
   {
-    exact: true,
     path: '/Events',
     component: Events,
     protected: true,
   },
   {
-    exact: true,
     path: '/Incentive',
     component: Incentive,
     protected: true,
   },
   {
-    exact: true,
     path: '/Permissions',
     component: Permissions,
     protected: true,
   },
   {
-    exact: true,
     path: '/COA/:productID',
     component: COA,
     protected: true,
   },
   {
-    exact: true,
     path: '/Settings/users/add',
     component: UserAuthorizationStatusAddEdit,
     protected: true,
   },
   {
-    exact: true,
     path: '/Settings/users/edit/:userID',
     component: UserAuthorizationStatusAddEdit,
     protected: true,
   },
   {
-    exact: true,
     path: '/Settings/users',
     component: UserAuthorizationStatusTable,
     protected: true,
   },
   {
-    exact: true,
     path: '/StarPoint',
     component: StarPointAccountList,
     protected: true,
   },
   {
-    exact: true,
     path: '/StartPoint/Edit/:inventoryId',
     component: EditStarPoint,
     protected: true,
@@ -210,7 +187,7 @@ function App() {
           <Switch>
             {allRoutes.map((route, index) => {
               return route.protected ? (
-                <PrivateRoute key={index} path={route.path} exact={route.exact} component={route.component} />
+                <PrivateRoute key={index} path={route.path} component={route.component} />
               ) : (
                 <Route key={index} path={route.path} exact={route.exact} render={(props) => <route.component {...props} />} />
               );

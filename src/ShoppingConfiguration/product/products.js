@@ -84,15 +84,11 @@ const Products = (props) => {
         </AddProductWrapper>
 
         <Switch>
-          <Route path={path}>
-            <p>View or Create a new Product</p>
+          <Route exact path={path}>
+            <h3>View or Add Products</h3>
           </Route>
-          <Route path={`${path}/addProduct`}>
-            <AddProduct />
-          </Route>
-          <Route path={`${path}/:id`}>
-            <Product />
-          </Route>
+          <Route path={`${path}/addProduct`} render={(props) => <AddProduct {...props} />}></Route>
+          <Route path={`${path}/:id`} render={(props) => <Product {...props} />}></Route>
         </Switch>
       </ProductWapper>
     </ProductBodyWrapper>
