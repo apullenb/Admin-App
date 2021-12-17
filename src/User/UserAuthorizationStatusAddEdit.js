@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import moment from "moment";
+import { connect } from "react-redux";
+import getComponentData from "./selector";
 
 const options = [
   { id: 1, value: "Not Allowed" },
@@ -16,28 +18,20 @@ const options = [
 const UserAuthorizationStatusAddEdit = (props) => {
 
   const [userPermission, setUserPermission] = useState([]);
-  const [shopConfigCountryPermssion, setShopConfigCountryPermission] =
-    useState(null);
+  const [shopConfigCountryPermssion, setShopConfigCountryPermission] = useState(null);
   const [shopConfigKitsPermssion, setShopConfigKitsPermission] = useState(null);
-  const [shopConfigCategoriesPermssion, setShopConfigCategoriesPermission] =
-    useState(null);
-  const [shopConfigProductsPermssion, setShopConfigProductsPermission] =
-    useState(null);
+  const [shopConfigCategoriesPermssion, setShopConfigCategoriesPermission] = useState(null);
+  const [shopConfigProductsPermssion, setShopConfigProductsPermission] = useState(null);
   const [skinAccountsPermission, setSkinAccountPermission] = useState(null);
   const [skinEntriesPermission, setSkinEntriesPermission] = useState(null);
-  const [eventCalendarCorpPermsission, setEventCalendarCorpPermission] =
-    useState(null);
-  const [eventCalendarAMBPermsission, setEventCalendarAMBPermission] =
-    useState(null);
+  const [eventCalendarCorpPermsission, setEventCalendarCorpPermission] = useState(null);
+  const [eventCalendarAMBPermsission, setEventCalendarAMBPermission] = useState(null);
   const [incentiveTripPermission, setIncentiveTripPermission] = useState(null);
   const [coaCountriesPermission, setCoaCountriesPermission] = useState(null);
   const [coaKitsPermission, setCoaKitsPermission] = useState(null);
-  const [
-    adminSettingsCategoriesPermission,
-    setAdminSettingsCategoriesPermission,
-  ] = useState(null);
-  const [adminSettingsProductsPermission, setAdminSettingsProductsPermission] =
-    useState(null);
+  const [adminSettingsCategoriesPermission,setAdminSettingsCategoriesPermission] = useState(null);
+  const [adminSettingsProductsPermission, setAdminSettingsProductsPermission] = useState(null);
+  const {view, edit, permissionFeched} = props;
 
   const getPermissions = async (email) => {
     try {
@@ -95,10 +89,10 @@ const UserAuthorizationStatusAddEdit = (props) => {
       <AccountDetailsContainer>
         <div>
           <label>Email</label>
-          <StyledInput defaultValue={props.location.state &&props.location.state.email || ''} />
+          <StyledInput readOnly={!edit} defaultValue={props.location.state &&props.location.state.email || ''} />
           <br />
           <label>Name: </label>
-          <StyledInput defaultValue={props.location.state && props.location.state.name || ''} />
+          <StyledInput readOnly={!edit} defaultValue={props.location.state && props.location.state.name || ''} />
           <br />
           <span
             style={{
@@ -153,7 +147,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
               value={
                 shopConfigCountryPermssion || generateDefaultValue("Countries")
               }
-              onChange={(e) => setShopConfigCountryPermission(e.target.value)}
+              onChange={(e) => edit && setShopConfigCountryPermission(e.target.value)}
             >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
@@ -164,7 +158,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
             <label name="kits">Kits</label>
             <StyledSelect
               value={shopConfigKitsPermssion || generateDefaultValue("Kits")}
-              onChange={(e) => setShopConfigKitsPermission(e.target.value)}
+              onChange={(e) => edit && setShopConfigKitsPermission(e.target.value)}
             >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
@@ -178,7 +172,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
                 shopConfigCategoriesPermssion ||
                 generateDefaultValue("Categories")
               }
-              onChange={(e) => setShopConfigCategoriesPermission(e.target.value)}
+              onChange={(e) => edit && setShopConfigCategoriesPermission(e.target.value)}
             >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
@@ -191,7 +185,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
               value={
                 shopConfigProductsPermssion || generateDefaultValue("Products")
               }
-              onChange={(e) => setShopConfigProductsPermission(e.target.value)}
+              onChange={(e) => edit && setShopConfigProductsPermission(e.target.value)}
             >
               {options.map((option) => (
                 <option key={option.id}>{option.value}</option>
@@ -213,7 +207,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
           <div>
             <label name="countries">Countries</label>
             <StyledSelect
-             onChange={(e) => setCoaCountriesPermission(e.target.value)}
+             onChange={(e) => edit && setCoaCountriesPermission(e.target.value)}
               value={coaCountriesPermission || generateDefaultValue("Products")}
             >
               {options.map((option) => (
@@ -224,7 +218,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
           <div>
             <label name="kits">Kits</label>
             <StyledSelect
-              onChange={(e) => setCoaKitsPermission(e.target.value)}
+              onChange={(e) => edit && setCoaKitsPermission(e.target.value)}
               value={coaKitsPermission || generateDefaultValue("Kits")}
             >
               {options.map((option) => (
@@ -245,7 +239,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
           <div>
             <label name="categories">Categories</label>
             <StyledSelect
-            onChange={(e) => setAdminSettingsCategoriesPermission(e.target.value)}
+            onChange={(e) => edit && setAdminSettingsCategoriesPermission(e.target.value)}
               value={
                 adminSettingsCategoriesPermission ||
                 generateDefaultValue("Categories")
@@ -259,7 +253,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
           <div>
             <label name="products">Products</label>
             <StyledSelect
-            onChange={(e) => setAdminSettingsProductsPermission(e.target.value)}
+            onChange={(e) => edit && setAdminSettingsProductsPermission(e.target.value)}
               value={
                 adminSettingsProductsPermission ||
                 generateDefaultValue("Products")
@@ -288,7 +282,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
           <div>
             <label name="countries">Accounts</label>
             <StyledSelect
-             onChange={(e) => setSkinAccountPermission(e.target.value)}
+             onChange={(e) => edit && setSkinAccountPermission(e.target.value)}
               value={skinAccountsPermission || generateDefaultValue("Accounts")}
             >
               {options.map((option) => (
@@ -299,7 +293,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
           <div>
             <label name="kits">Entries</label>
             <StyledSelect
-            onChange={(e) => setSkinEntriesPermission(e.target.value)}
+            onChange={(e) => edit && setSkinEntriesPermission(e.target.value)}
               value={skinEntriesPermission || generateDefaultValue("Entries")}
             >
               {options.map((option) => (
@@ -321,7 +315,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
             <div>
               <label name="countries">Corp Events</label>
               <StyledSelect
-               onChange={(e) => setEventCalendarCorpPermission(e.target.value)}
+               onChange={(e) => edit && setEventCalendarCorpPermission(e.target.value)}
                 value={
                   eventCalendarCorpPermsission ||
                   generateDefaultValue("Corp Events")
@@ -335,7 +329,7 @@ const UserAuthorizationStatusAddEdit = (props) => {
             <div>
               <label name="kits">AMB Events</label>
               <StyledSelect
-               onChange={(e) => setEventCalendarAMBPermission(e.target.value)}
+               onChange={(e) => edit && setEventCalendarAMBPermission(e.target.value)}
                 value={
                   eventCalendarAMBPermsission ||
                   generateDefaultValue("AMB Events")
@@ -361,14 +355,15 @@ const UserAuthorizationStatusAddEdit = (props) => {
             <div>
               <label name="countries">Incentive Trip</label>
               <StyledSelect
-              onChange={(e) => setIncentiveTripPermission(e.target.value)}
+              onChange={(e) => edit && setIncentiveTripPermission(e.target.value)}
+              value={
+                incentiveTripPermission ||
+                generateDefaultValue("Incentive Trip")
+              }
               >
                 {options.map((option) => (
                   <option
-                    value={
-                      incentiveTripPermission ||
-                      generateDefaultValue("Incentive Trip")
-                    }
+                 
                     key={option.id}
                   >
                     {option.value}
@@ -476,5 +471,4 @@ const DateCreatedContainer = styled.div`
 const DateModifiedContainer = styled.div`
 padding-right: min(150px, 70%);
 `
-
-export default UserAuthorizationStatusAddEdit;
+export default connect(getComponentData)(UserAuthorizationStatusAddEdit);

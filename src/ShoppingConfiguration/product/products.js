@@ -1,21 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Product from "./product";
 import AddProduct from "./addProduct";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
-import ZilisLoader from "../../GlobalComponents/ZilisLoader";
 import { handleFetchProductsAsync } from "../../redux/actions/Configuration/productConfig/productActions";
-import "../../App.scss";
+import "../../App.scss";import Styled from "styled-components";
+import { Link, Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
+import SpinnerLoader from "../../GlobalComponents/ZilisSpinnerLoader";
+import getComponentData from "./selector";
+import { connect } from "react-redux";
 
-import Styled from "styled-components";
-import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
-
-const Products = (props) => {
+const Products = ({view,edit,permissionFeched,PermissionsError,products}) => {
   const dispatch = useDispatch();
-  const { products, fetching } = useSelector((state) => state.products);
   let { path, url } = useRouteMatch();
   const [productsArray, setProducts] = useState([]);
 
@@ -35,8 +34,8 @@ const Products = (props) => {
     setProducts(filterdItems);
   };
 
-  return (
-    <ProductBodyWrapper>
+  return (<>
+   {permissionFeched ? (view ? <ProductBodyWrapper>
       <ProductsWrapper>
         <SearchWrapper>
           <h2>Products page</h2>
@@ -59,18 +58,15 @@ const Products = (props) => {
 
         <div style={{ marginTop: "40%" }}>
           <div>
-            {fetching ? (
-              <ZilisLoader width={50} height={50} />
-            ) : (
-              <b>Products List</b>
-            )}
+            <b>Products List</b>
           </div>
           <ListWrapper>
             {productsArray &&
               productsArray.map((product) => {
                 return (
                   <li key={product.id}>
-                    <Link to={`${url}/${product.id}`}>{product.sku}</Link>
+                    {/* <Link to={`${url}/${product.id}`}>{product.sku}</Link> */}
+                    <Link to='#'>{product.sku}</Link>
                   </li>
                 );
               })}
@@ -103,11 +99,12 @@ const Products = (props) => {
           </Route>
         </Switch>
       </ProductWapper>
-    </ProductBodyWrapper>
+    </ProductBodyWrapper>:<Redirect to='/NoPermission'/>):<SpinnerLoader/>}
+    </>
   );
 };
 
-export default Products;
+export default connect(getComponentData)(Products);
 
 const ProductBodyWrapper = Styled.div`
     width:90%;

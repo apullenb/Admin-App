@@ -7,16 +7,15 @@ import { Link } from 'react-router-dom';
 import config from '../config/env-urls';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import Moment from 'react-moment';
-import Select from 'react-select';
 import { useToasts } from 'react-toast-notifications';
-import { LoginSkincareAdmin } from '../redux/actions/Skincare/skincareActions';
-import { relativeTimeRounding } from 'moment';
+// import { relativeTimeRounding } from 'moment';
 import Model from './Model';
 import getComponentData from './selector';
 import { getGlowEntries } from './../redux/actions/Skincare/skincareActions';
+import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
 
 function GlowEntry(props) {
 const user = props.location.state
@@ -24,12 +23,13 @@ const user = props.location.state
   
   const dispatch = useDispatch();
   const [entry, setEntry] = useState({})  
-  const [goals, setGoals] = useState([]);
-  const [change, setChange] = useState(false);
+  // const [goals, setGoals] = useState([]);
+  // const [change, setChange] = useState(false);
   const [show, setShow] = useState('hide');
   const [blank, setBlank] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const { view, edit } = props;
+  const { addToast } = useToasts();
+  const { view, edit, permissionFeched} = props;
  
   const filter = [{column: 'glowEntryId', value: user.glowEntryId}]
   const handlePopUp = () => {
@@ -54,7 +54,11 @@ useEffect(() => {
     axios.delete(`${config.SKINCAREBASEURL}/api/challenge/delete-glow-entry-admin/${entry.glowEntryId}`).then((res) => {
       setShowDelete(!showDelete);
       props.history.push('/Challenge/Glow-Entries');
-    });
+    }).catch(error=>{
+      addToast ('Delete was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', { appearance: 'error', autoDismiss: true });
+      
+    })
+    
   };
   const handleShow = () => (show === 'hide' ? setShow('show') : setShow('hide'));
 
@@ -63,7 +67,8 @@ useEffect(() => {
   }, [show]);
 
     return (
-      <div style={{margin:'0 8%'}}>
+      <>
+     {permissionFeched?(view? <div style={{margin:'0 8%'}}>
         <h1>
           Glow Challenge Entry 
           </h1>
@@ -186,7 +191,8 @@ useEffect(() => {
         </Col>
         </Row>
       </EntryDetails>
-    </div>
+    </div>:<Redirect to='/NoPermission' />):<SpinnerLoader/> }
+    </>
   );
 }
 

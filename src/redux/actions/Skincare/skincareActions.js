@@ -110,10 +110,7 @@ export const SkincareAdminPermissions = () => {
       return permissions;
     }
     function onError(error) {
-      dispatch({
-        type: PERMISSIONS_SKINCARE_FAILURE,
-        payload: error,
-      });
+      dispatch({type: PERMISSIONS_SKINCARE_FAILURE,payload: error});
       return error;
     }
     try {

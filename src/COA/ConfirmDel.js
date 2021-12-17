@@ -2,29 +2,26 @@ import React, {useEffect}from "react";
 import styled from "styled-components";
 import { REMOVE_PRODUCT, REMOVE_COA_DOCUMENT  } from '../utils/mutations'
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import {  ToastProvider, useToasts } from "react-toast-notifications";
 import { GET_PRODUCTS } from '../utils/GQLqueries';
+import { useToasts } from 'react-toast-notifications';
 
 function ConfirmDel(props) {
-    const [removeProduct, { error }] = useMutation(REMOVE_PRODUCT)
-    const [removeDocument] = useMutation(REMOVE_COA_DOCUMENT)
+    const [removeProduct, ] = useMutation(REMOVE_PRODUCT)
+    const [removeDocument ,error] = useMutation(REMOVE_COA_DOCUMENT)
     const { addToast } = useToasts();
     const { loading, data } = useQuery(GET_PRODUCTS);
-
 
     const handleDeleteProduct = async () => {
         const id = props.product.coaProductID
         try{
           const response = await removeProduct({variables: {coaProductID: id}  })
           if (response) {
-            addToast('Product has been deleted.', {appearance: 'success', autoDismiss: true})
             props.show()
            window.location.reload(true);
           }
         }
         catch (error) {
-            console.log(error)
-            addToast('There was an error deleting this product.', {appearance: 'error', autoDismiss: true})
+            addToast('Delete was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', {appearance: 'error'})
         }
     }
 
@@ -38,12 +35,11 @@ function ConfirmDel(props) {
          window.location.reload(true);
         }
       }
-      catch (error) {
-          console.log(error)
-          addToast('There was an error deleting this COA.', {appearance: 'error', autoDismiss: true})
+      catch (err) {
+        console.error(err.message);
+          addToast('There was an error deleting this COA.', {appearance: 'error'})
       }
   }
-
 
     return (
         <Delete>
