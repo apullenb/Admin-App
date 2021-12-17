@@ -67,14 +67,14 @@ useEffect(() => {
   }, [show]);
 
     return (
-      <>
-     {permissionFeched?(view? <div style={{margin:'0 8%'}}>
+      
+    <div style={{margin:'0 9%'}}>
         <h1>
           Glow Challenge Entry 
           </h1>
          
     <PopUp style={showDelete ? {display: 'block'} : {display:'none'}}><Model type='entry' close={handlePopUp} delete={handleDelete} text="Deleting this entry will delete all submissions associated with the entry as well. This action can not be undone." /></PopUp>
-        <EntryDetails>
+    {permissionFeched? (view?  <EntryDetails>
         
             <div className="page-header-link"><Link style={{color:'#0F4B8F'}} to="/Challenge/Glow-Entries">Back to List</Link></div>
           <Row>
@@ -146,6 +146,8 @@ useEffect(() => {
                       </div>
                </GrayBox>
 </div>
+</Col>
+        </Row>
         <SubmissionTable>
           <table>
             <thead>
@@ -183,16 +185,16 @@ useEffect(() => {
            </tbody>
         </table>
         </SubmissionTable>
+        
         {edit && (
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'right' }}>
             <Delete onClick={handlePopUp}>Delete Entry</Delete>
           </div>
         )}
-        </Col>
-        </Row>
-      </EntryDetails>
-    </div>:<Redirect to='/NoPermission' />):<SpinnerLoader/> }
-    </>
+       
+      </EntryDetails> :<Redirect to='/NoPermission' />):<SpinnerLoader/> }
+    </div>
+   
   );
 }
 
@@ -209,7 +211,7 @@ const showMore = {
 const SubmissionTable = styled.div`
   padding: 1px;
   margin: 3% 0;
-
+ 
   table {
     width: 100%;
     td {
@@ -291,18 +293,19 @@ const Success = styled.p`
     color: rgb(94, 93, 93);
     font-weight: 400;
     font-size: 17px;
-    padding: 1px 1%;
+    padding: 1px 0%;
     text-align: left;
+    
   
     label {
       display: inline-block;
-      min-width: 150px;
+      min-width: 120px;
       vertical-align: top;
     }
   
     .read-only-value {
       display: inline-block;
-      margin: 0 10px;
+      margin: 0 1px;
     }
     .check {
         display: grid;
