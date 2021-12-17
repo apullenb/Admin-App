@@ -98,8 +98,8 @@ function GlowEntryList(props) {
 
  
   return (
-    <div style={{ margin: "0 8%" }}>
-      <h1 style={{textAlign:'center'}}>Glow Challenge Entries</h1>
+    <div style={{ margin: "0 1%" }}>
+      <h1 style={{textAlign:'left'}}>Glow Challenge Entries</h1>
     
       {permissionFeched ? (
        !error && (view?
@@ -476,7 +476,7 @@ function GlowEntryList(props) {
 export default connect(getComponentData)(GlowEntryList);
 
 const AccountTable = styled.div`
-  padding: 1px;
+  padding: 1px ;
   margin: 3% 0;
 
   .check {
@@ -516,6 +516,7 @@ const AccountTable = styled.div`
 
   table {
     width: 100%;
+    
 
     tr {
       &:nth-child(even) {
@@ -524,7 +525,7 @@ const AccountTable = styled.div`
 
       td {
         text-align: left;
-        padding: 5px 4px 5px 0;
+        padding: 5px 10px;
       }
     }
   }
@@ -534,7 +535,7 @@ const AccountTable = styled.div`
     font-weight: 400;
     color: rgb(94, 93, 93);
     margin: 3px;
-    padding: 5px 1px;
+    padding: 5px 10px;
     border-bottom: 1px solid #094a8a;
     text-align: left;
   }
