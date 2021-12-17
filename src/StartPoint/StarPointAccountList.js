@@ -27,7 +27,7 @@ export const StarPointAccountList = (props) => {
     { name: 'StarPoints', colId: 'points' },
     { name: 'Actions', coloId: 'actions' },
   ];
-  const {view, edit, permissionFeched}=props;
+  const {view, edit, permissionFeched, PermissionsError}=props;
   const [starPointDataFiltered, setStarPointDataFiltered] = useState([]);
   const [starPointData, setStarPointData] = useState([]);
   const [tHeaderData, setTHeadData] = useState();
@@ -48,13 +48,13 @@ export const StarPointAccountList = (props) => {
   }, []);
 
   useEffect(() => {
-   if (!error) 
-   { applyFilter();}
+   if (data) 
+   {applyFilter();}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perPageNum, skip, filterObj, sortOrder]);
 
   useEffect(() => {
-   if(data?.starShipInventoryWithPaging){ 
+   if(data?.starShipInventoryWithPaging){
      setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
      setStarPointData(data.starShipInventoryWithPaging.items);
      setHasNextPage(data.starShipInventoryWithPaging.pageInfo.hasNextPage);}
@@ -160,7 +160,7 @@ export const StarPointAccountList = (props) => {
     <TableWrapper>
       <PageTitle>StarPoint Products</PageTitle>
       {permissionFeched ?
-      (view?<>
+      (!PermissionsError && view?<>
       <Table>
         <thead style={{ height: '50px' }}>
           <tr style={{ height: '30px' }}>

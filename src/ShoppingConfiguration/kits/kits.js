@@ -33,7 +33,7 @@ const Kits = ({view,edit,permissionFeched,PermissionsError,}) => {
   }, []);
 
   return (<>
-   {permissionFeched? (view ? <KitWrapper>
+   {permissionFeched? (!PermissionsError && view ? <KitWrapper>
       <ListWrapper>
         <h3>Kit List</h3>
         <ul>

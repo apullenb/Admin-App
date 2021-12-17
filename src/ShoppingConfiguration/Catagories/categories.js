@@ -8,7 +8,7 @@ const Categories = ({view,edit,permissionFeched,PermissionsError,}) => {
 
     return(
       <>
-       {permissionFeched?(view? <div>
+       {permissionFeched?(!PermissionsError && view? <div>
           <h2>You are at the Categories Page</h2>       
         </div>:<Redirect to='/NoPermission'/>):<SpinnerLoader/>}
    </>

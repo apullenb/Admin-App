@@ -4,7 +4,7 @@ import config from "../config/env-urls";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment";
-
+import { useToasts } from 'react-toast-notifications';
 import _ from "lodash";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,7 @@ import {
 import SpinnerLoader from "../GlobalComponents/ZilisSpinnerLoader";
 import getComponentData from "./selector";
 import { connect } from "react-redux";
+import { Redirect } from 'react-router-dom';
 
 const UserAuthorizationStatusTable = (props) => {
   const [users, setUsers] = useState([]);
@@ -33,7 +34,8 @@ const UserAuthorizationStatusTable = (props) => {
   // const [sortTypeName, setSortTypeName] = useState("asc");
   // const [sortTypeEmail, setSortTypeEmail] = useState("asc");
   // const [sortTypeLastAccessed, setSortTypeLastAccessed] = useState("asc");
-  const {view, edit, permissionFeched} = props;
+  const {view, edit, permissionFeched,PermissionsError} = props;
+  const { addToast } = useToasts();
   const pageOptions = [10, 15, 20];
 
   const getUsers = async (perPage = 10, pageNo = 1) => {
@@ -53,6 +55,9 @@ const UserAuthorizationStatusTable = (props) => {
       setTotalPages(data.data.length / data.pagination.perPage);
     } catch (err) {
       console.error(err.message);
+      addToast(`The information failed to load. Please refresh the page. Contact IT if the problem continues.`, {
+        appearance: 'error',
+      });
     }
   };
 
@@ -115,16 +120,17 @@ const UserAuthorizationStatusTable = (props) => {
       <div>
         <UserTitleContainer>
           <Title>User Accounts</Title>
-          <Link
+         { edit && <Link
             to={{
               pathname: `/Settings/users/add`,
             }}
           >
             <StyledButton>Add User</StyledButton>
-          </Link>
+          </Link>}
         </UserTitleContainer>
       </div>
-      <PermissionTable>
+      {permissionFeched ? (!PermissionsError && view ?  <>
+      <PermissionTable> 
         <table>
           <thead>
             <tr>
@@ -214,7 +220,7 @@ const UserAuthorizationStatusTable = (props) => {
             </tr>
           </thead>
             <tbody>
-              {currentUsers.length > 0? currentUsers.map((user, i) => {
+              {currentUsers?.map((user, i) => {
                 return (
                   <tr key={i} id="row">
                     <td>{user.name}</td>
@@ -247,17 +253,18 @@ const UserAuthorizationStatusTable = (props) => {
                     </td>}
                   </tr>
                 );
-              }):
+              })}
+            </tbody>
+        </table>
+      </PermissionTable>
+      <Pagination getRows={getUsers} pageOptions={pageOptions} />
+          </> :<Redirect to='/NoPermission' />):
               <tr id='row'>
               <td colSpan="5">
         <SpinnerLoader/>
         </td>
 
-        </tr>}
-            </tbody>
-        </table>
-      </PermissionTable>
-      <Pagination getRows={getUsers} pageOptions={pageOptions} />
+        </tr> }
     </Wrapper>
   );
 };

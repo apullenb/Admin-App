@@ -49,6 +49,7 @@ const AddCOA = () => {
             }
         })
         .catch(err => {
+            console.error(err.message);
             addToast("Error occured while uploading COA or you did not choose a file to upload. ", {appearance: 'error', autoDismiss: true})
         })
 

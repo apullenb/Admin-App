@@ -1,5 +1,5 @@
 const getComponentData = (state) => {
-  const { skincarePermissions,accounts,permissionFeched ,error} = state.entries;
+  const { skincarePermissions,accounts,permissionFeched,PermissionsError ,error} = state.entries;
   
   const glowPermissions = skincarePermissions?.find(
     (skincarePermission) => skincarePermission.areaId === 1
@@ -15,7 +15,8 @@ const getComponentData = (state) => {
     edit,
     accounts,
     permissionFeched,
-    error
+    error,
+    PermissionsError
   };
 };
 

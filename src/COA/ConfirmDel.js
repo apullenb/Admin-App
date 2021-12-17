@@ -35,7 +35,8 @@ function ConfirmDel(props) {
          window.location.reload(true);
         }
       }
-      catch (error) {
+      catch (err) {
+        console.error(err.message);
           addToast('There was an error deleting this COA.', {appearance: 'error'})
       }
   }

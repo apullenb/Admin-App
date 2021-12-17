@@ -10,7 +10,7 @@ import { useToasts } from 'react-toast-notifications';
 import { connect } from "react-redux";
 import SpinnerLoader from "../GlobalComponents/ZilisSpinnerLoader";
 
-function IncentiveList({view,edit,permissionFeched}) {
+function IncentiveList({view,edit,permissionFeched,PermissionsError}) {
   const [users, setUsers] = useState("");
   // const [filter, setFilter] = useState("");
   // const [category, setCategory] = useState("");
@@ -32,6 +32,7 @@ function IncentiveList({view,edit,permissionFeched}) {
       setMessage(!message);
       setTotalUsers(data.totalRows);
     } catch (err) {
+      console.error(err.message);
       addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
         appearance: 'error',
       })
@@ -57,7 +58,7 @@ function IncentiveList({view,edit,permissionFeched}) {
   return (
     <PageWrapper>
         <h1>Skincare Challenge Accounts</h1>
-       {permissionFeched ? (view?<><IncentiveTable>
+       {permissionFeched ? (!PermissionsError && view?<><IncentiveTable>
           <table>
             <thead>
               <tr>

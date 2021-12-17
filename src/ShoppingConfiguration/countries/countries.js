@@ -7,7 +7,6 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Country from './country';
 import AddCountry from './addCountry';
-import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 import {
   Link,
   Route,
@@ -40,8 +39,8 @@ const Countries = ({view, edit, countries, permissionFeched, PermissionsError,})
     setCountriesData(filterdItems);
   }
 
-  return (<>
-    {permissionFeched?(view?<CountryBodyWrapper>
+  return (
+    <CountryBodyWrapper>
       <CountriesWrapper>
         <SearchWrapper>
           <h2>Countries Page</h2>
@@ -52,6 +51,7 @@ const Countries = ({view, edit, countries, permissionFeched, PermissionsError,})
             <FormControl type='text' name='search' readOnly onChange={(e) => { filterItems(e.target.value) }} placeholder="Search..." />
           </InputGroup>
         </SearchWrapper>
+        {permissionFeched? (!PermissionsError&&view?<>
         <AddCountryWrapper>
           <AddCountryButtonWrapper>
             <Link to='#'>New Country</Link>
@@ -74,6 +74,7 @@ const Countries = ({view, edit, countries, permissionFeched, PermissionsError,})
             })}
           </ListWrapper>
         </div>
+        </>:<Redirect to='/NoPermission'/> ):<SpinnerLoader/>}
       </CountriesWrapper>
 
 
@@ -90,7 +91,7 @@ const Countries = ({view, edit, countries, permissionFeched, PermissionsError,})
         </Switch>
 
       </CountryWapper>
-    </CountryBodyWrapper>:<Redirect to='/NoPermission'/> ):<SpinnerLoader/>}</>
+    </CountryBodyWrapper>
   )
 
 }

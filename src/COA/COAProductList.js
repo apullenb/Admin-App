@@ -71,12 +71,13 @@ const COAProductList = (props) => {
   };
 
   return (
-    <>
-      {!loading && permissionFeched ? (
-        view ? (
+    
+      
           <Table>
             <h1>COA Products</h1>
-            {edit && (
+            {!loading && permissionFeched ? (!PermissionsError&&
+        view ? (<>
+           { edit && (
               <Row>
                 <Col md={12} className='text-right'>
                  <Link to={{ pathname: '/Coa/documents/0' }}>
@@ -127,14 +128,15 @@ const COAProductList = (props) => {
               ) : (
                 <Redirect to='/NoPermission' />
               ))}
+               </>): (
+                <Redirect to='NoPermission' />
+              )
+            ) : (
+              <SpinnerLoader />
+            )}
           </Table>
-        ) : (
-          <Redirect to='NoPermission' />
-        )
-      ) : (
-        <SpinnerLoader />
-      )}
-    </>
+      
+    
   );
 };
 export default connect(getPermissions)(COAProductList);
