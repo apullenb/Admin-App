@@ -2,9 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMsal } from '@azure/msal-react';
 import styled from 'styled-components';
-
 import { useHistory } from 'react-router';
-
 import * as AZACTIONTYPES from '../redux/actions/azure/azureActions';
 
 export const AADSignInButton = () => {
@@ -13,9 +11,20 @@ export const AADSignInButton = () => {
   const { loggedIn } = useSelector((state) => state.app);
   const { instance } = useMsal();
 
-  const login = () => {
-    dispatch(AZACTIONTYPES.handleLogin(instance));
+  const login = async () => {
+    try {
+      const success = await dispatch(AZACTIONTYPES.handleLogin(instance));
+      console.log(success);
+      if (success.account) {
+        dispatch(AZACTIONTYPES.handleLoginZilis(instance, success.account));
+      } else {
+        throw new Error('Cannot get Zilis Access token');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   const logout = () => {
     dispatch(AZACTIONTYPES.handleLogout(instance));
     history.push('/');

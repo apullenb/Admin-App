@@ -11,42 +11,42 @@ const initalState = {
 
 export const azureADReducer = (state = initalState, action) => {
   switch (action.type) {
-    case AZADACTIONS.GETAZPROFILESUCCESS:
+    case AZADACTIONS.GET_AZPROFILE_SUCCESS:
       return {
         ...state,
         profileData: action.payload,
         fetching: false,
         error: null,
       };
-    case AZADACTIONS.GETAZPROFILEFAILURE:
+    case AZADACTIONS.GET_AZPROFILE_FAILURE:
       return {
         ...state,
         fetching: false,
         error: action.payload,
       };
-    case AZADACTIONS.GETAZPROFILEIMAGESUCCESS:
+    case AZADACTIONS.GET_AZPROFILE_IMAGE_SUCCESS:
       return {
         ...state,
         fetching: false,
         profileImage: action.payload,
       };
-    case AZADACTIONS.GETAZPROFILEIMAGEFAILURE:
+    case AZADACTIONS.GET_AZPROFILE_IMAGE_FAILURE:
       return {
         ...state,
         fetching: false,
         error: action.payload,
       };
-    case AZADACTIONS.SETAZADACCESSTOKEN:
+    case AZADACTIONS.SET_AZAD_ACCESS_TOKEN:
       return {
         ...state,
         azAccessToken: action.payload,
       };
-    case AZADACTIONS.SETGRAPHTOKEN:
+    case AZADACTIONS.SET_GRAPH_TOKEN:
       return {
         ...state,
         graphToken: action.payload,
       };
-    case AZADACTIONS.RESETSTATE:
+    case AZADACTIONS.RESET_STATE:
       return {
         ...initalState,
       };

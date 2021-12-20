@@ -10,7 +10,7 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        loggedIn && !Auth.validateToken() ? (
+        loggedIn && !Auth.validateToken(Auth.aZAdminToken) ? (
           <RouteComponent {...props} />
         ) : (
           <Redirect

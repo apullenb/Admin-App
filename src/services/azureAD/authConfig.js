@@ -15,11 +15,15 @@ export const msalConfig = {
 // Add scopes here for ID token to be used at Microsoft identity platform endpoints.
 export const loginRequest = {
   scopes: ['User.Read'],
-  //scopes: ['api://226b21db-5c3f-4395-b3c1-48b2cebb06e6/access_as_user'],
 };
 
 // Add the endpoints here for Microsoft Graph API services you'd like to use.
 export const graphConfig = {
   graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me',
   graphPofileImgEndpoint: 'https://graph.microsoft.com/v1.0/me/photo/$value',
+};
+
+//Add scopes for Zilis Api services. As a note we must creates scopes for each API service.
+export const loginZilisReq = {
+  scopes: ['api://226b21db-5c3f-4395-b3c1-48b2cebb06e6/access_as_user'],
 };

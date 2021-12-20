@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ZilisCarousel from '../GlobalComponents/ZilisCarousel';
 import * as Auth from '../auth/Authorize';
-import { handleLogin, handleLogout } from '../redux/actions/azure/azureActions';
+import * as AZACTIONTYPES  from '../redux/actions/azure/azureActions';
 import { useMsal } from '@azure/msal-react';
 
 function Dashboard() {
   const dispatch = useDispatch();
-  const { instance, accounts } = useMsal();
+  const { instance } = useMsal();
   const { loggedIn } = useSelector((state) => state.app);
 
   useEffect(() => {
@@ -36,25 +36,27 @@ function Dashboard() {
   ];
 
   const handleLoginStates = () => {
-    if (!loggedIn && !Auth.validateToken()) {
+    if (!loggedIn && !Auth.validateToken(Auth.aZAdminToken)) {
       //token is valid
-      dispatch(handleLogin(instance));
-    } else if (loggedIn && Auth.validateToken()) {
+      login();
+    } else if (loggedIn && Auth.validateToken(Auth.aZAdminToken)) {
       //token is expired
-      dispatch(handleLogout(instance));
+      dispatch(AZACTIONTYPES.handleLogout(instance));
     }
   };
 
-  const getToken = () => {
-    const request = { scopes: ['api://226b21db-5c3f-4395-b3c1-48b2cebb06e6/access_as_user'], account: accounts[0] };
-    instance
-      .acquireTokenSilent(request)
-      .then((res) => {
-        console.log('token', res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const login = async () => {
+    try {
+      const success = await dispatch(AZACTIONTYPES.handleLogin(instance));
+      console.log(success);
+      if (success.account) {
+        dispatch(AZACTIONTYPES.handleLoginZilis(instance, success.account));
+      } else {
+        throw new Error('Cannot get Zilis access token');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -73,12 +75,12 @@ function Dashboard() {
           <h1>Admin App</h1>
           <h4>Welcome to the Dashboard</h4>
           <button
-            onClick={(e) => {
+            onClick={(e) => { //DELETE THIS BUTTON AND TEST ENDPOINT
               e.preventDefault();
-              getToken();
+              dispatch(AZACTIONTYPES.testingEndpoint());
             }}
           >
-            Get Token
+            Test Auth API Here
           </button>
           <ZilisCarousel carouselData={carouselData} />
         </div>

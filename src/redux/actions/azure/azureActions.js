@@ -3,18 +3,26 @@ import * as AZACTIONS from '../azure/azureAdActionTypes';
 import { LOGGED_IN, LOG_OUT } from '../app/appActionTypes';
 import { graphConfig, loginRequest } from '../../../services/azureAD/authConfig';
 import * as Auth from '../../../auth/Authorize';
+import { loginZilisReq } from '../../../services/azureAD/authConfig';
 
-export const handleLogin = (instance) => (dispatch) => {
-  instance
-    .loginPopup(loginRequest)
-    .then((res) => {
-      dispatch({ type: AZACTIONS.SETAZADACCESSTOKEN, payload: res.accessToken });
-      Auth.setToken(res.accessToken);
+export const handleLogin = (instance) => {
+  return async (dispatch) => {
+    function onSuccess(success) {
+      return success;
+    }
+    function onError(error) {
+      return error;
+    }
+    try {
+      const res = await instance.loginPopup(loginRequest);
+      dispatch({ type: AZACTIONS.SET_AZAD_ACCESS_TOKEN, payload: res.accessToken });
+      Auth.setToken(Auth.aZAdminToken, res.accessToken);
       dispatch(callMsGraph(res.accessToken));
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      return onSuccess({ account: res.account });
+    } catch (error) {
+      return onError(error);
+    }
+  };
 };
 
 export const callMsGraph = () => (dispatch) => {
@@ -22,11 +30,11 @@ export const callMsGraph = () => (dispatch) => {
     .get(graphConfig.graphMeEndpoint)
     .then((response) => {
       dispatch(getProfileImage());
-      dispatch({ type: AZACTIONS.GETAZPROFILESUCCESS, payload: response.data });
+      dispatch({ type: AZACTIONS.GET_AZPROFILE_SUCCESS, payload: response.data });
       dispatch({ type: LOGGED_IN, payload: true });
     })
     .catch((error) => {
-      dispatch({ type: AZACTIONS.GETAZPROFILEFAILURE, payload: error });
+      dispatch({ type: AZACTIONS.GET_AZPROFILE_FAILURE, payload: error });
     });
 };
 
@@ -36,11 +44,11 @@ export const getProfileImage = () => (dispatch) => {
     .then((res) => {
       const url = window.URL || window.webkitURL;
       var imageLink = url.createObjectURL(new Blob([res.data]), { type: 'image/jpeg' });
-      dispatch({ type: AZACTIONS.GETAZPROFILEIMAGESUCCESS, payload: imageLink });
+      dispatch({ type: AZACTIONS.GET_AZPROFILE_IMAGE_SUCCESS, payload: imageLink });
     })
     .catch((error) => {
       console.log(error);
-      dispatch({ type: AZACTIONS.GETAZPROFILEIMAGEFAILURE, payload: error });
+      dispatch({ type: AZACTIONS.GET_AZPROFILE_IMAGE_FAILURE, payload: error });
     });
 };
 
@@ -57,6 +65,32 @@ export const handleLogout = (instance) => (dispatch) => {
 
 const logoutCleanup = () => (dispatch) => {
   dispatch({ type: LOG_OUT });
-  dispatch({ type: AZACTIONS.RESETSTATE });
-  Auth.removeToken();
+  dispatch({ type: AZACTIONS.RESET_STATE });
+  Auth.removeToken(Auth.aZAdminToken);
+  Auth.removeToken(Auth.zilisAdminToken);
+};
+
+export const handleLoginZilis = (instance, account) => (dispatch) => {
+  const request = { ...loginZilisReq, account };
+  instance
+    .acquireTokenSilent(request)
+    .then((res) => {
+      Auth.setToken(Auth.zilisAdminToken, res.accessToken);
+      dispatch({ type: AZACTIONS.GET_ZILIS_SERVICE_TOKEN_SUCCESS });
+    })
+    .catch((err) => {
+      dispatch({ type: AZACTIONS.GET_ZILIS_SERVICE_TOKEN_FAILURE });
+      console.log(err);
+    });
+};
+
+export const testingEndpoint = (token) => (dispatch) => {
+  custAxios
+    .get('https://localhost:5001/weatherForecast')
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
