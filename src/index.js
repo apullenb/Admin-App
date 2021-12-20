@@ -30,7 +30,6 @@ import * as Auth from './auth/Authorize';
 
 const authLink = setContext((_, { headers }) => {
   const token = Auth.getToken(Auth.zilisAdminToken);
-  console.log(token);
   return {
     headers: {
       ...headers,
