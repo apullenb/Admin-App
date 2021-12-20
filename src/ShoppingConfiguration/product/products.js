@@ -21,7 +21,6 @@ const Products = (props) => {
 
   useEffect(() => {
     dispatch(handleFetchProductsAsync());
-    console.log(props);
   }, []);
 
   useEffect(() => {

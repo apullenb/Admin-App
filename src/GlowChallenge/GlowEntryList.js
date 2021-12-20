@@ -30,7 +30,6 @@ function GlowEntryList(props) {
 
   useEffect(() => {
     dispatch(getGlowEntries(perPage, pageNo, colSort, sortDirection, filter));
-    console.log('Glow props', props);
   }, []);
 
   useEffect(() => {

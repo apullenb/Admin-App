@@ -98,14 +98,10 @@ export const StarPointAccountList = () => {
   };
 
   const truncateText = (maxCount, textToTruncate) => {
-    return textToTruncate.length > maxCount
-      ? textToTruncate
-          .split('')
-          .map((char, i) => {
-            if (i <= maxCount) return char;
-          })
-          .join('')
-      : textToTruncate;
+    //console.log(textToTruncate.split(''));
+    //const texttrimmed = textToTruncate.trim();
+    //console.log(texttrimmed.split(''));
+    return textToTruncate.length > maxCount ? textToTruncate.trim().slice(0, 10) : textToTruncate;
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -158,9 +154,9 @@ export const StarPointAccountList = () => {
           <tr style={{ height: '30px' }}>
             <TH>
               <SearchInput
-                id="inventoryId"
-                type="text"
-                placeholder=" Inventory ID"
+                id='inventoryId'
+                type='text'
+                placeholder=' Inventory ID'
                 onKeyUp={(e) => {
                   handleEnterKey(e);
                 }}
@@ -171,14 +167,14 @@ export const StarPointAccountList = () => {
             </TH>
             <TH>
               <select
-                defaultValue="no-value"
-                id="isActive"
+                defaultValue='no-value'
+                id='isActive'
                 style={{ width: '80%', border: '1px solid #0f4b8f', height: '35px', color: '#707070' }}
                 onChange={(e) => {
                   updateInputValue(e);
                 }}
               >
-                <option disabled value="no-value">
+                <option disabled value='no-value'>
                   Yes / No
                 </option>
                 <option value={1}>Yes</option>
@@ -188,9 +184,9 @@ export const StarPointAccountList = () => {
             </TH>
             <TH>
               <SearchInput
-                id="productSku"
-                type="text"
-                placeholder=" SKU"
+                id='productSku'
+                type='text'
+                placeholder=' SKU'
                 onKeyUp={(e) => {
                   handleEnterKey(e);
                 }}
@@ -201,9 +197,9 @@ export const StarPointAccountList = () => {
             </TH>
             <TH>
               <SearchInput
-                id="description"
-                type="text"
-                placeholder="Name"
+                id='description'
+                type='text'
+                placeholder='Name'
                 onKeyUp={(e) => {
                   handleEnterKey(e);
                 }}
@@ -214,9 +210,9 @@ export const StarPointAccountList = () => {
             </TH>
             <TH>
               <SearchInput
-                id="category"
-                type="text"
-                placeholder="Category"
+                id='category'
+                type='text'
+                placeholder='Category'
                 onKeyUp={(e) => {
                   handleEnterKey(e);
                 }}
@@ -236,14 +232,14 @@ export const StarPointAccountList = () => {
                       {data.name !== 'Actions' && (
                         <SORTICONWRAPPER>
                           <CaretUp
-                            className="caretIcons"
+                            className='caretIcons'
                             id={data.colId}
                             onClick={() => {
                               handleSort(data.colId, 'ASC');
                             }}
                           />
                           <CaretDown
-                            className="caretIcons"
+                            className='caretIcons'
                             id={data.colId}
                             onClick={() => {
                               handleSort(data.colId, 'DESC');
@@ -276,16 +272,17 @@ export const StarPointAccountList = () => {
                   <OverlayTrigger
                     trigger={['hover', 'hover']}
                     key={index}
-                    placement="bottom"
+                    placement='bottom'
                     overlay={
-                      <Tooltip bsPrefix="zls-tooltip" id={`tooltip-${data.productSku}-desc`}>
+                      <Tooltip bsPrefix='zls-tooltip' id={`tooltip-${data.productSku}-desc`}>
                         {/*zls-tooltip class is in app.scss to override Boostrap styling*/}
                         {data.description}
                       </Tooltip>
                     }
                   >
                     <TD>
-                      {data.description ? truncateText(10, data.description) : 'No Text'} <FontAwesomeIcon style={{ color: '#0f4b8f' }} icon={faInfoCircle} />
+                      {data.description ? truncateText(10, data.description) : 'No Text'}{' '}
+                      <FontAwesomeIcon style={{ color: '#0f4b8f' }} icon={faInfoCircle} />
                     </TD>
                   </OverlayTrigger>
                   <TD>{data.category}</TD>

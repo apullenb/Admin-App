@@ -30,6 +30,7 @@ export const removeToken = () => {
  * No Params Required
  */
 export const validateToken = () => {
+  //TODO: Implement refresh tokens
   const token = getToken();
   const expired = isExpired(token);
   return expired;

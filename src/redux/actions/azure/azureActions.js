@@ -1,4 +1,4 @@
-import axios from 'axios';
+import custAxios from '../../../services/interceptors/httpService';
 import * as AZACTIONS from '../azure/azureAdActionTypes';
 import { LOGGED_IN, LOG_OUT } from '../app/appActionTypes';
 import { graphConfig, loginRequest } from '../../../services/azureAD/authConfig';
@@ -17,18 +17,11 @@ export const handleLogin = (instance) => (dispatch) => {
     });
 };
 
-export const callMsGraph = (accessToken) => (dispatch) => {
-  const bearer = `Bearer ${accessToken}`;
-  const options = {
-    headers: {
-      Authorization: bearer,
-    },
-  };
-
-  axios
-    .get(graphConfig.graphMeEndpoint, options)
+export const callMsGraph = () => (dispatch) => {
+  custAxios
+    .get(graphConfig.graphMeEndpoint)
     .then((response) => {
-      dispatch(getProfileImage(accessToken));
+      dispatch(getProfileImage());
       dispatch({ type: AZACTIONS.GETAZPROFILESUCCESS, payload: response.data });
       dispatch({ type: LOGGED_IN, payload: true });
     })
@@ -37,15 +30,9 @@ export const callMsGraph = (accessToken) => (dispatch) => {
     });
 };
 
-export const getProfileImage = (accessToken) => (dispatch) => {
-  const bearer = `Bearer ${accessToken}`;
-  const options = {
-    headers: {
-      Authorization: bearer,
-    },
-  };
-  axios
-    .get(graphConfig.graphPofileImgEndpoint, { ...options, responseType: 'blob' })
+export const getProfileImage = () => (dispatch) => {
+  custAxios
+    .get(graphConfig.graphPofileImgEndpoint, { responseType: 'blob' })
     .then((res) => {
       const url = window.URL || window.webkitURL;
       var imageLink = url.createObjectURL(new Blob([res.data]), { type: 'image/jpeg' });

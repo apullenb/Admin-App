@@ -2,18 +2,16 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ZilisCarousel from '../GlobalComponents/ZilisCarousel';
 import * as Auth from '../auth/Authorize';
-import { handleLogin } from '../redux/actions/azure/azureActions';
+import { handleLogin, handleLogout } from '../redux/actions/azure/azureActions';
 import { useMsal } from '@azure/msal-react';
 
 function Dashboard() {
   const dispatch = useDispatch();
-  const { instance } = useMsal();
+  const { instance, accounts } = useMsal();
   const { loggedIn } = useSelector((state) => state.app);
 
   useEffect(() => {
-    if (!loggedIn && !Auth.validateToken()) {
-      dispatch(handleLogin(instance));
-    }
+    handleLoginStates();
   }, []);
 
   const carouselData = [
@@ -37,6 +35,28 @@ function Dashboard() {
     },
   ];
 
+  const handleLoginStates = () => {
+    if (!loggedIn && !Auth.validateToken()) {
+      //token is valid
+      dispatch(handleLogin(instance));
+    } else if (loggedIn && Auth.validateToken()) {
+      //token is expired
+      dispatch(handleLogout(instance));
+    }
+  };
+
+  const getToken = () => {
+    const request = { scopes: ['api://226b21db-5c3f-4395-b3c1-48b2cebb06e6/access_as_user'], account: accounts[0] };
+    instance
+      .acquireTokenSilent(request)
+      .then((res) => {
+        console.log('token', res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       {!loggedIn && (
@@ -52,6 +72,14 @@ function Dashboard() {
         >
           <h1>Admin App</h1>
           <h4>Welcome to the Dashboard</h4>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              getToken();
+            }}
+          >
+            Get Token
+          </button>
           <ZilisCarousel carouselData={carouselData} />
         </div>
       )}

@@ -5,6 +5,7 @@ import * as Auth from '../auth/Authorize';
 
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
   const { loggedIn } = useSelector((state) => state.app);
+
   return (
     <Route
       {...rest}
