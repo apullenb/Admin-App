@@ -30,8 +30,6 @@ import Page from './GlobalComponents/PageWrapper';
 import { APP_STARTED } from './redux/actions/app/appActionTypes';
 import COA from './COA/COA';
 import COAProductList from './COA/COAProductList';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
 import COADocument from './COA/COADocuments';
 import UserAuthorizationStatusTable from './User/UserAuthorizationStatusTable';
 import UserAuthorizationStatusAddEdit from './User/UserAuthorizationStatusAddEdit';
@@ -39,8 +37,8 @@ import GlowEntryList from './GlowChallenge/GlowEntryList';
 import GCEntryEdit from './GlowChallenge/GCEntryEdit';
 import GlowEntry from './GlowChallenge/GlowEntry';
 
-import config from './config/env-urls';
 import { SkincareAdminPermissions } from './redux/actions/Skincare/skincareActions';
+
 const allRoutes = [
   {
     path: '/',
@@ -164,38 +162,31 @@ const allRoutes = [
     protected: true,
   },
 ];
-const client = new ApolloClient({
-  uri: config.ORDERAPIURL,
-});
 
 function App() {
   // SAMPLE USER VALIDATION (Needs to be created)---------->
   // Currently defaulted to true..needs to default to false once authentication is set up
   const dispatch = useDispatch();
-  // function to verify if the user is logged in.. once user is verified, this function should call the setAuth function to return true
 
   useEffect(() => {
     dispatch({ type: APP_STARTED });
-
-    //dispatch(SkincareAdminPermissions())
+    dispatch(SkincareAdminPermissions());
   }, []);
 
   return (
-    <ApolloProvider client={client}>
-      <div className='app'>
-        <Page>
-          <Switch>
-            {allRoutes.map((route, index) => {
-              return route.protected ? (
-                <PrivateRoute key={index} path={route.path} component={route.component} />
-              ) : (
-                <Route key={index} path={route.path} exact={route.exact} render={(props) => <route.component {...props} />} />
-              );
-            })}
-          </Switch>
-        </Page>
-      </div>
-    </ApolloProvider>
+    <div className='app'>
+      <Page>
+        <Switch>
+          {allRoutes.map((route, index) => {
+            return route.protected ? (
+              <PrivateRoute key={index} path={route.path} component={route.component} />
+            ) : (
+              <Route key={index} path={route.path} exact={route.exact} render={(props) => <route.component {...props} />} />
+            );
+          })}
+        </Switch>
+      </Page>
+    </div>
   );
 }
 

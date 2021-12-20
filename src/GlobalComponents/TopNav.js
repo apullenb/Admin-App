@@ -110,7 +110,6 @@ function TopNav() {
                   </LinkWrap>
                 );
               })}
-
               <AADSignInButton />
             </Nav>
             <Nav>

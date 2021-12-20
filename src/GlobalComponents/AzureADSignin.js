@@ -14,7 +14,6 @@ export const AADSignInButton = () => {
   const login = async () => {
     try {
       const success = await dispatch(AZACTIONTYPES.handleLogin(instance));
-      console.log(success);
       if (success.account) {
         dispatch(AZACTIONTYPES.handleLoginZilis(instance, success.account));
       } else {

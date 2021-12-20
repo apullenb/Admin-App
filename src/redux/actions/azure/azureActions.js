@@ -83,14 +83,3 @@ export const handleLoginZilis = (instance, account) => (dispatch) => {
       console.log(err);
     });
 };
-
-export const testingEndpoint = (token) => (dispatch) => {
-  custAxios
-    .get('https://localhost:5001/weatherForecast')
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};

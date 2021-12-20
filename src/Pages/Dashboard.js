@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ZilisCarousel from '../GlobalComponents/ZilisCarousel';
 import * as Auth from '../auth/Authorize';
-import * as AZACTIONTYPES  from '../redux/actions/azure/azureActions';
+import * as AZACTIONTYPES from '../redux/actions/azure/azureActions';
 import { useMsal } from '@azure/msal-react';
 
 function Dashboard() {
@@ -48,7 +48,6 @@ function Dashboard() {
   const login = async () => {
     try {
       const success = await dispatch(AZACTIONTYPES.handleLogin(instance));
-      console.log(success);
       if (success.account) {
         dispatch(AZACTIONTYPES.handleLoginZilis(instance, success.account));
       } else {
@@ -64,7 +63,7 @@ function Dashboard() {
       {!loggedIn && (
         <div>
           <h1>Admin App Dashboard</h1>
-          <p>Please log in.</p>
+          <p>Please log in</p>
         </div>
       )}
 
@@ -74,14 +73,6 @@ function Dashboard() {
         >
           <h1>Admin App</h1>
           <h4>Welcome to the Dashboard</h4>
-          <button
-            onClick={(e) => { //DELETE THIS BUTTON AND TEST ENDPOINT
-              e.preventDefault();
-              dispatch(AZACTIONTYPES.testingEndpoint());
-            }}
-          >
-            Test Auth API Here
-          </button>
           <ZilisCarousel carouselData={carouselData} />
         </div>
       )}

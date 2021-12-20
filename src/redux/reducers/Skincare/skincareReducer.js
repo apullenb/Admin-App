@@ -22,14 +22,7 @@ const initalState = {
   fetching: false,
   error: null,
   skincareAuthToken: null,
-  skincarePermissions: [
-    { levelId: 2, level: 'View', areaId: 1, area: 'Accounts' },
-    { levelId: 4, level: 'View, Edit and Approve', areaId: 3, area: 'Entries' },
-    { levelId: 2, level: 'View', areaId: 4, area: 'Products' },
-    { levelId: 2, level: 'View', areaId: 6, area: 'Countries' },
-    { levelId: 3, level: 'View and Edit', areaId: 7, area: 'Kits' },
-    { levelId: 4, level: 'View, Edit and Approve', areaId: 9, area: 'Products' },
-  ],
+  skincarePermissions: null,
 };
 
 export const entriesConfigReducer = (state = initalState, action) => {
