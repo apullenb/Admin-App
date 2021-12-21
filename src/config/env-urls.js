@@ -70,7 +70,7 @@ const handlAzureADURL = () => {
     case 'development':
       return 'http://localhost:3000';
     case 'test':
-      return 'http://localhost:3000'; //https://adminapp-test-zilis.azurewebsites.net
+      return 'https://adminapp-test-zilis.azurewebsites.net';
     case 'production':
       return 'https://adminappzilis.azurewebsites.net';
     default:
