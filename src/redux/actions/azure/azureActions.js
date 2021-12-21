@@ -4,6 +4,7 @@ import { LOGGED_IN, LOG_OUT } from '../app/appActionTypes';
 import { graphConfig, loginRequest } from '../../../services/azureAD/authConfig';
 import * as Auth from '../../../auth/Authorize';
 import { loginZilisReq } from '../../../services/azureAD/authConfig';
+import { SkincareAdminPermissions } from '../../actions/Skincare/skincareActions';
 
 export const handleLogin = (instance) => {
   return async (dispatch) => {
@@ -32,6 +33,10 @@ export const callMsGraph = () => (dispatch) => {
       dispatch(getProfileImage());
       dispatch({ type: AZACTIONS.GET_AZPROFILE_SUCCESS, payload: response.data });
       dispatch({ type: LOGGED_IN, payload: true });
+      return response.data;
+    })
+    .then((response) => {
+      dispatch(SkincareAdminPermissions(response.mail));
     })
     .catch((error) => {
       dispatch({ type: AZACTIONS.GET_AZPROFILE_FAILURE, payload: error });

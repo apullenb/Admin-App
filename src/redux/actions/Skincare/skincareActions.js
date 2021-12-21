@@ -102,7 +102,7 @@ export const LoginSkincareAdmin = (skincareUser) => {
   };
 };
 
-export const SkincareAdminPermissions = () => {
+export const SkincareAdminPermissions = (email) => {
   return async (dispatch) => {
     dispatch({ type: PERMISSIONS_SKINCARE_START });
     function onSuccess(permissions) {
@@ -110,11 +110,11 @@ export const SkincareAdminPermissions = () => {
       return permissions;
     }
     function onError(error) {
-      dispatch({type: PERMISSIONS_SKINCARE_FAILURE,payload: error});
+      dispatch({ type: PERMISSIONS_SKINCARE_FAILURE, payload: error });
       return error;
     }
     try {
-      const permissions = await axios.get(`${config.ADMINEPERMISSIONS}/Permission?email=kevin.broce@zilis.com`);
+      const permissions = await axios.get(`${config.ADMINEPERMISSIONS}/Permission?email=${email}`);
       return onSuccess(permissions);
     } catch (error) {
       return onError(error);
