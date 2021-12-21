@@ -24,34 +24,34 @@ export const getEntries =
   (dispatch) => {
     dispatch({ type: GET_ENTRIES_START });
     return axios
-    .get(`${config.SKINCAREBASEURL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
-    .then(res=>{
-        dispatch({type:GET_ENTRIES_SUCCESS, payload:res.data});
-    })
-    .catch(error=>{
-        dispatch({type:GET_ENTRIES_FAILURE, payload:error});
-    })
-};
-export const getGlowEntries = (perPage = 10, pageNo = 1, sort = "glowEntryId", sortDirection = "asc", filter = [], photo= '') => (dispatch) => { 
-  dispatch({type: GET_ENTRIES_START});
-  return axios 
-  .post(`${config.SKINCAREBASEURL}/api/challenge/all-glow-entries`, {pageNo, perPage, orderBy: sort,sortDirection, filter, img:photo})
-  .then(res=>{
-      dispatch({type:GET_ENTRIES_SUCCESS, payload:res.data});
-  })
-  .catch(error=>{
-      dispatch({type:GET_ENTRIES_FAILURE, payload:error});
-  })
-};
+      .get(`${config.SKINCAREBASEURL}/api/challenge/all-entries?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
+      .then((res) => {
+        dispatch({ type: GET_ENTRIES_SUCCESS, payload: res.data });
+      })
+      .catch((error) => {
+        dispatch({ type: GET_ENTRIES_FAILURE, payload: error });
+      });
+  };
+export const getGlowEntries =
+  (perPage = 10, pageNo = 1, sort = 'glowEntryId', sortDirection = 'asc', filter = [], photo = '') =>
+  (dispatch) => {
+    dispatch({ type: GET_ENTRIES_START });
+    return axios
+      .post(`${config.SKINCAREBASEURL}/api/challenge/all-glow-entries`, { pageNo, perPage, orderBy: sort, sortDirection, filter, img: photo })
+      .then((res) => {
+        dispatch({ type: GET_ENTRIES_SUCCESS, payload: res.data });
+      })
+      .catch((error) => {
+        dispatch({ type: GET_ENTRIES_FAILURE, payload: error });
+      });
+  };
 
 export const getAccounts =
   (perPage = 10, pageNo = 1, sort = 'users.id', sortDirection = 'asc') =>
   (dispatch) => {
     dispatch({ type: GET_ACCOUNTS_START });
     return axios
-      .get(
-        `${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`
-      )
+      .get(`${config.SKINCAREBASEURL}/api/challenge/all-users?perPage=${perPage}&pageNo=${pageNo}&orderBy=${sort}&sortDirection=${sortDirection}`)
       .then((res) => {
         dispatch({ type: GET_ACCOUNTS_SUCCESS, payload: res.data });
       })
@@ -102,7 +102,7 @@ export const LoginSkincareAdmin = (skincareUser) => {
   };
 };
 
-export const SkincareAdminPermissions = () => {
+export const SkincareAdminPermissions = (email) => {
   return async (dispatch) => {
     dispatch({ type: PERMISSIONS_SKINCARE_START });
     function onSuccess(permissions) {
@@ -110,11 +110,11 @@ export const SkincareAdminPermissions = () => {
       return permissions;
     }
     function onError(error) {
-      dispatch({type: PERMISSIONS_SKINCARE_FAILURE,payload: error});
+      dispatch({ type: PERMISSIONS_SKINCARE_FAILURE, payload: error });
       return error;
     }
     try {
-      const permissions = await axios.get(`${config.ADMINEPERMISSIONS}/Permission?email=kevin.broce@zilis.com`);
+      const permissions = await axios.get(`${config.ADMINEPERMISSIONS}/Permission?email=${email}`);
       return onSuccess(permissions);
     } catch (error) {
       return onError(error);

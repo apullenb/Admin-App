@@ -3,83 +3,90 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect, useDispatch } from 'react-redux';
 import Styled from 'styled-components';
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
 import Country from './country';
 import AddCountry from './addCountry';
-import {
-  Link,
-  Route,
-  Switch,
-  useRouteMatch,
-} from "react-router-dom";
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 import '../../App.scss';
 
 import { handleFetchCountriesAsync } from '../../redux/actions/Configuration/countryConfig/countryActions';
 import getPermissions from './selector';
 import SpinnerLoader from '../../GlobalComponents/ZilisSpinnerLoader';
 
-
-const Countries = ({view, edit, countries, permissionFeched, PermissionsError,}) => {
+const Countries = ({ view, edit, countries, permissionFeched, PermissionsError }) => {
   const dispatch = useDispatch();
   let { path, url } = useRouteMatch();
   const [countriesData, setCountriesData] = useState([]);
 
   useEffect(() => {
     dispatch(handleFetchCountriesAsync());
-  }, [])
-
+  }, []);
 
   useEffect(() => {
-    setCountriesData(countries)
-  }, [countries])
+    setCountriesData(countries);
+  }, [countries]);
 
   const filterItems = (filter) => {
-    const filterdItems = countries.filter(item => item.name.includes(filter.toUpperCase()));
+    const filterdItems = countries.filter((item) => item.name.includes(filter.toUpperCase()));
     setCountriesData(filterdItems);
-  }
+  };
 
   return (
     <CountryBodyWrapper>
       <CountriesWrapper>
         <SearchWrapper>
           <h2>Countries Page</h2>
-          <InputGroup className="mb-2 mr-sm-2">
+          <InputGroup className='mb-2 mr-sm-2'>
             <InputGroup.Prepend>
-              <InputGroup.Text><i className="fas fa-binoculars"></i></InputGroup.Text>
+              <InputGroup.Text>
+                <i className='fas fa-binoculars'></i>
+              </InputGroup.Text>
             </InputGroup.Prepend>
-            <FormControl type='text' name='search' readOnly onChange={(e) => { filterItems(e.target.value) }} placeholder="Search..." />
+            <FormControl
+              type='text'
+              name='search'
+              readOnly
+              onChange={(e) => {
+                filterItems(e.target.value);
+              }}
+              placeholder='Search...'
+            />
           </InputGroup>
         </SearchWrapper>
-        {permissionFeched? (!PermissionsError&&view?<>
-        <AddCountryWrapper>
-          <AddCountryButtonWrapper>
-            <Link to='#'>New Country</Link>
-            {/* <Link to={`${url}/addCountry`}>New Country</Link> */}
-          </AddCountryButtonWrapper>
-        </AddCountryWrapper>
+        {permissionFeched ? (
+          !PermissionsError && view ? (
+            <>
+              <AddCountryWrapper>
+                <AddCountryButtonWrapper>
+                  <Link to={`${url}/addCountry`}>New Country</Link>
+                </AddCountryButtonWrapper>
+              </AddCountryWrapper>
 
-        <div>
-          <div>
-            <b>Countries List</b>
-          </div>
-          <ListWrapper>
-            {countriesData?.map((country) => {
-              return (
-                <li key={country.id}>
-                  <Link to='#'>{country.name}</Link>
-                  {/* <Link to={`${url}/${country.id}`}>{country.name}</Link> */}
-                </li>
-              );
-            })}
-          </ListWrapper>
-        </div>
-        </>:<Redirect to='/NoPermission'/> ):<SpinnerLoader/>}
+              <div>
+                <div>
+                  <b>Countries List</b>
+                </div>
+                <ListWrapper>
+                  {countriesData?.map((country) => {
+                    return (
+                      <li key={country.id}>
+                        <Link to={`${url}/${country.id}`}>{country.name}</Link>
+                      </li>
+                    );
+                  })}
+                </ListWrapper>
+              </div>
+            </>
+          ) : (
+            <Redirect to='/NoPermission' />
+          )
+        ) : (
+          <SpinnerLoader />
+        )}
       </CountriesWrapper>
 
-
       <CountryWapper>
-
         <Switch>
           <Route exact path={path}></Route>
           <Route path={`${path}/addCountry`}>
@@ -89,13 +96,11 @@ const Countries = ({view, edit, countries, permissionFeched, PermissionsError,})
             <Country />
           </Route>
         </Switch>
-
       </CountryWapper>
     </CountryBodyWrapper>
-  )
-
-}
-export default connect(getPermissions )(Countries);
+  );
+};
+export default connect(getPermissions)(Countries);
 
 const CountryBodyWrapper = Styled.div`
     width:1400px;

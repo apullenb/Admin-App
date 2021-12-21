@@ -64,3 +64,12 @@ body::selection {
   border: 10px solid transparent;
   border-bottom-color: #0f4b8f;
 }
+
+
+
+.app-selected-link {
+  color: #fff;
+  font-weight: 700;
+  background-color: #0f4b8f;
+  padding: 1%;
+}

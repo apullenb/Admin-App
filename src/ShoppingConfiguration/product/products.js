@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import Button from "react-bootstrap/Button";
-import Product from "./product";
-import AddProduct from "./addProduct";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
-import { handleFetchProductsAsync } from "../../redux/actions/Configuration/productConfig/productActions";
-import "../../App.scss";import Styled from "styled-components";
-import { Link, Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
-import SpinnerLoader from "../../GlobalComponents/ZilisSpinnerLoader";
-import getComponentData from "./selector";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/Button';
+import Product from './product';
+import AddProduct from './addProduct';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import { handleFetchProductsAsync } from '../../redux/actions/Configuration/productConfig/productActions';
+import '../../App.scss';
+import Styled from 'styled-components';
+import { Link, Route, Switch, useRouteMatch, Redirect } from 'react-router-dom';
+import SpinnerLoader from '../../GlobalComponents/ZilisSpinnerLoader';
+import getComponentData from './selector';
+import { connect } from 'react-redux';
 
-const Products = ({view,edit,permissionFeched,PermissionsError,products}) => {
+const Products = ({ view, edit, permissionFeched, PermissionsError, products }) => {
   const dispatch = useDispatch();
   let { path, url } = useRouteMatch();
   const [productsArray, setProducts] = useState([]);
@@ -28,78 +29,79 @@ const Products = ({view,edit,permissionFeched,PermissionsError,products}) => {
 
   const filterItems = (filter) => {
     //search products
-    const filterdItems = productsArray.filter((item) =>
-      item.sku.includes(filter.toUpperCase())
-    );
+    const filterdItems = productsArray.filter((item) => item.sku.includes(filter.toUpperCase()));
     setProducts(filterdItems);
   };
 
-  return (<>
-   {permissionFeched ? (view ? <ProductBodyWrapper>
-      <ProductsWrapper>
-        <SearchWrapper>
-          <h2>Products page</h2>
-          <InputGroup className="mb-2 mr-sm-2">
-            <InputGroup.Prepend>
-              <InputGroup.Text>
-                <i className="fas fa-binoculars"></i>
-              </InputGroup.Text>
-            </InputGroup.Prepend>
-            <FormControl
-              type="text"
-              name="search"
-              onChange={(e) => {
-                filterItems(e.target.value);
-              }}
-              placeholder="Search..."
-            />
-          </InputGroup>
-        </SearchWrapper>
+  return (
+    <>
+      {permissionFeched ? (
+        view ? (
+          <ProductBodyWrapper>
+            <ProductsWrapper>
+              <SearchWrapper>
+                <h2>Products page</h2>
+                <InputGroup className='mb-2 mr-sm-2'>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text>
+                      <i className='fas fa-binoculars'></i>
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl
+                    type='text'
+                    name='search'
+                    onChange={(e) => {
+                      filterItems(e.target.value);
+                    }}
+                    placeholder='Search...'
+                  />
+                </InputGroup>
+              </SearchWrapper>
 
-        <div style={{ marginTop: "40%" }}>
-          <div>
-            <b>Products List</b>
-          </div>
-          <ListWrapper>
-            {productsArray &&
-              productsArray.map((product) => {
-                return (
-                  <li key={product.id}>
-                    {/* <Link to={`${url}/${product.id}`}>{product.sku}</Link> */}
-                    <Link to='#'>{product.sku}</Link>
-                  </li>
-                );
-              })}
-          </ListWrapper>
-        </div>
-      </ProductsWrapper>
+              <div style={{ marginTop: '40%' }}>
+                <div>
+                  <b>Products List</b>
+                </div>
+                <ListWrapper>
+                  {productsArray &&
+                    productsArray.map((product) => {
+                      return (
+                        <li key={product.id}>
+                          <Link to={`${url}/${product.id}`}>{product.sku}</Link>
+                        </li>
+                      );
+                    })}
+                </ListWrapper>
+              </div>
+            </ProductsWrapper>
 
-      <ProductWapper>
-        <AddProductWrapper>
-          <AddProductButtonWrapper>
-            <label className="add-button-label form-labels">
-              Create A New Product
-            </label>
-            <Link to={`${url}/addProduct`}>
-              <Button variant="success" style={{ fontSize: 30, width: "50px" }}>
-                &#43;
-              </Button>
-            </Link>
-          </AddProductButtonWrapper>
-        </AddProductWrapper>
+            <ProductWapper>
+              <AddProductWrapper>
+                <AddProductButtonWrapper>
+                  <label className='add-button-label form-labels'>Create A New Product</label>
+                  <Link to={`${url}/addProduct`}>
+                    <Button variant='success' style={{ fontSize: 30, width: '50px' }}>
+                      &#43;
+                    </Button>
+                  </Link>
+                </AddProductButtonWrapper>
+              </AddProductWrapper>
 
-        <Switch>
-          <Route exact path={path}></Route>
-          <Route path={`${path}/addProduct`}>
-            <AddProduct />
-          </Route>
-
-          <Route path={`${path}/:id`}>
-            <Product />
-          </Route>
-        </Switch>
-      </ProductWapper>
-    </ProductBodyWrapper>:<Redirect to='/NoPermission'/>):<SpinnerLoader/>}
+              <Switch>
+                <Route exact path={path}>
+                  <h3>View or Add Products</h3>
+                </Route>
+                <Route path={`${path}/addProduct`} render={(props) => <AddProduct {...props} />}></Route>
+                <Route path={`${path}/:id`} render={(props) => <Product {...props} />}></Route>
+              </Switch>
+            </ProductWapper>
+          </ProductBodyWrapper>
+        ) : (
+          <Redirect to='/NoPermission' />
+        )
+      ) : (
+        <SpinnerLoader />
+      )}
     </>
   );
 };
