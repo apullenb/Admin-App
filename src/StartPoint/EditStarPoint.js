@@ -3,18 +3,25 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { GET_STAR_PODUCTS_BY_ID, GET_STAR_PRODUCTS_WITH_PAGE } from '../utils/StartPointQueries';
+import { Redirect } from 'react-router-dom';
 import { UPDATE_STAR_PRODUCT } from '../utils/StartPointMutations';
 import { useToasts } from 'react-toast-notifications';
-
 import ZilisLoader from '../GlobalComponents/ZilisLoader';
 import ImageOverlay from '../GlobalComponents/ImageOveralay';
+import getPermissions from './Selector';
+import { connect } from 'react-redux';
+import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
 
-const EditStarPoint = () => {
+const EditStarPoint = (props) => {
   const sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large', 'XXX-Large', 'XXXX-Large'];
   const assetRootUrl = 'https://extranet.securefreedom.com/zilis/Shopping/Images/';
   const placeHolderImg = 'https://res.cloudinary.com/zilis/image/upload/v1637998439/zilis/Common_Images/placeholder_image_grey_yg9qaj.png';
   const { inventoryId } = useParams();
-  const { loading, data, refetch } = useQuery(GET_STAR_PODUCTS_BY_ID, { variables: { inventoryId: parseInt(inventoryId) }, refetchPolicy: 'no-cache' });
+  const { loading, data, refetch } = useQuery(GET_STAR_PODUCTS_BY_ID, {
+    variables: { inventoryId: parseInt(inventoryId) },
+    refetchPolicy: 'no-cache',
+  });
+  const {view,edit,permissionFeched} = props
   const [productData, setProductData] = useState({});
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
@@ -26,13 +33,15 @@ const EditStarPoint = () => {
   const { addToast } = useToasts();
 
   useEffect(() => {
-    data && setProductData(data.starShipInventory[0]);
-    data && setCategory(data.starShipInventory[0].category);
-    data && setDescription(data.starShipInventory[0].description);
-    data && setPoints(data.starShipInventory[0].points);
-    data && setIsActive(data.starShipInventory[0].isActive);
-    data && setSize(data.starShipInventory[0].size);
-  }, [data]);
+    if (data?.starShipInventory) {
+      setProductData(data.starShipInventory[0]);
+      setCategory(data.starShipInventory[0].category);
+      setDescription(data.starShipInventory[0].description);
+      setPoints(data.starShipInventory[0].points);
+      setIsActive(data.starShipInventory[0].isActive);
+      setSize(data.starShipInventory[0].size);
+    }
+  }, [data?.starShipInventory]);
 
   const updateStartProduct = async (e) => {
     e.preventDefault();
@@ -56,9 +65,8 @@ const EditStarPoint = () => {
       });
       refetch();
     } catch (error) {
-      addToast('An error occured while updating!', {
+      addToast('Save was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', {
         appearance: 'error',
-        autoDismiss: true,
       });
     }
   };
@@ -69,7 +77,8 @@ const EditStarPoint = () => {
 
   return (
     <MainWrapper>
-      {loading && <ZilisLoader isFullPage={true} />}
+      {permissionFeched? 
+      (view?<>
       <TopContentWrapper>
         <PageTitle>Edit StarPoint Product</PageTitle>
         <Link style={{ color: '#0F4B8F', textDecoration: 'underline', width: '50%', display: 'flex', justifyContent: 'flex-end' }} to={'/StarPoint'}>
@@ -83,10 +92,10 @@ const EditStarPoint = () => {
               e.preventDefault();
               productData.smallImage && setShow(true);
             }}
-            title="Click to zoom"
+            title='Click to zoom'
             style={productData.smallImage ? { width: '350px', height: '350px', cursor: 'pointer' } : { width: '350px' }}
             src={productData.smallImage ? `${assetRootUrl + productData.smallImage}` : placeHolderImg}
-            alt="Product"
+            alt='Product'
           />
         </ImageWrapper>
 
@@ -130,7 +139,8 @@ const EditStarPoint = () => {
                     <TDLable>StarPoint Value</TDLable>
                     <TDContent>
                       <CustomInput
-                        type="text"
+                        type='text'
+                        readOnly={!edit}
                         value={points}
                         onChange={(e) => {
                           setPoints(e.target.value);
@@ -142,7 +152,8 @@ const EditStarPoint = () => {
                     <td> Category</td>
                     <td>
                       <CustomInput
-                        type="text"
+                        type='text'
+                        readOnly={!edit}
                         value={category}
                         onChange={(e) => {
                           setCategory(e.target.value);
@@ -155,8 +166,9 @@ const EditStarPoint = () => {
                     <td>
                       <textarea
                         style={{ margin: '3% 0', width: '235px', border: '1px solid #0F4B8F' }}
-                        rows="3"
-                        type="text"
+                        rows='3'
+                        type='text'
+                        readOnly={!edit}
                         value={description}
                         onChange={(e) => {
                           setDescription(e.target.value);
@@ -176,14 +188,15 @@ const EditStarPoint = () => {
                     <TDContent>
                       {size ? (
                         <CustomSelect
-                          defaultValue="no-value"
+                          defaultValue='no-value'
                           style={{ width: '235px', height: '36px', border: '1px solid #0F4B8F' }}
+                          readOnly={!edit}
                           value={size}
                           onChange={(e) => {
                             setSize(e.target.value);
                           }}
                         >
-                          <option disabled value="no-value">
+                          <option disabled value='no-value'>
                             --Size--
                           </option>
                           {sizes.map((size, index) => {
@@ -203,13 +216,13 @@ const EditStarPoint = () => {
                     <td> Is Active</td>
                     <td>
                       <CustomSelect
-                        defaultValue="no-value"
+                        defaultValue='no-value'
                         value={parseInt(isActive)}
                         onChange={(e) => {
-                          setIsActive(parseInt(e.target.value));
+                          {edit && setIsActive(parseInt(e.target.value))};
                         }}
                       >
-                        <option disabled value="no-value">
+                        <option disabled value='no-value'>
                           Yes/No
                         </option>
                         <option value={1}>Yes</option>
@@ -224,7 +237,7 @@ const EditStarPoint = () => {
           <BottomContentWrapper>
             <SaveButton
               onClick={(e) => {
-                updateStartProduct(e);
+                edit && updateStartProduct(e);
               }}
             >
               Save
@@ -233,11 +246,12 @@ const EditStarPoint = () => {
         </ContentWrapper>
       </ContentOuterWrapper>
       <ImageOverlay show={show} handleHide={handleHide} src={productData.smalleImage ? productData.smallImage : ''} rootUrl={assetRootUrl} />
+      </>:<Redirect to='/NoPermission'/> ) : <SpinnerLoader/>}
     </MainWrapper>
   );
 };
 
-export default EditStarPoint;
+export default connect(getPermissions)(EditStarPoint);
 
 const MainWrapper = styled.div`
   display: flex;

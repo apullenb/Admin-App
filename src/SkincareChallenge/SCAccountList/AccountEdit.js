@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import './AccountList.scss';
 import config from '../../config/env-urls';
 import { useToasts } from 'react-toast-notifications';
 import Button from 'react-bootstrap/Button';
 import { connect } from 'react-redux';
 import getComponentData from './selector';
+import ZilisLoader from '../../GlobalComponents/ZilisLoader';
 
 function AccountEdit(props) {
   const user = props.location.state;
   if (user.userId) {
     user.id = user.userId;
   }
-  const { edit } = props;
+  const {view, edit, permissionFeched, } = props;
   const [inputs, setInputs] = useState({
     ambassadorId: user.ambassadorId,
     name: user.name,
@@ -27,25 +29,31 @@ function AccountEdit(props) {
   const handleChange = (e) => setInputs({ ...inputs, [e.target.name]: e.target.value });
 
   const handleSubmit = async () => {
-    const body = { ambassadorId, username, name, email };
-    const requestOptions = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    };
-    const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-user/${user.id}`, requestOptions);
-    const parseRes = await response.json();
-    if (parseRes.error) {
-      addToast(parseRes.error, { appearance: 'error', autoDismiss: true });
-    } else {
-      addToast('Your Changes Have Been Saved Successfully', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
+   
+    try{
+      const body = { ambassadorId, username, name, email };
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      };
+      const response = await fetch(`${config.SKINCAREBASEURL}/api/challenge/update-user/${user.id}`, requestOptions);
+      const parseRes = await response.json();
+      if(parseRes) {
+        addToast('Your Changes Have Been Saved Successfully', { appearance: 'success',autoDismiss: true,});
+      }
+    
     }
+    catch( err){
+        addToast('Save was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', { appearance: 'error'});
+    }
+    
+
+    
   };
 
   const handlePasswordReset = async () => {
+    try{
     const body = { email: inputs.email, targetURL: config.SCTARGETURL };
     const requestOptions = {
       method: 'POST',
@@ -54,19 +62,19 @@ function AccountEdit(props) {
     };
     const request = await fetch(`${config.SKINCAREBASEURL}/api/challenge/reset-password`, requestOptions);
     const parseRes = await request.json();
-    if (parseRes.error) {
-      console.error(parseRes.error);
-      addToast(parseRes.error, { appearance: 'error', autoDismiss: true });
-    } else {
-      addToast('Password Reset Email Sent!', {
-        appearance: 'success',
-        autoDismiss: true,
-      });
+    if(parseRes) {addToast('Password Reset Email Sent!', {appearance: 'success',autoDismiss: true,});
     }
+  }
+  catch (err){
+    
+      addToast('Reset password  was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', { appearance: 'error', autoDismiss: true });
+    
+  }
   };
 
   return (
-    <div>
+    <>
+   { permissionFeched ? ( edit?<div>
       <div className='page-header'>
         Skincare Challenge Edit Account
         <div className='page-header-link'>
@@ -124,7 +132,8 @@ function AccountEdit(props) {
           )}
         </div>
       </Main>
-    </div>
+    </div>:<Redirect to='/NoPermission'/> ) : <ZilisLoader/> }
+    </>
   );
 }
 

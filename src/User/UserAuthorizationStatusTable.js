@@ -4,7 +4,7 @@ import config from "../config/env-urls";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import moment from "moment";
-
+import { useToasts } from 'react-toast-notifications';
 import _ from "lodash";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,8 +13,11 @@ import {
   faChevronDown,
 } from "@fortawesome/fontawesome-free-solid";
 import SpinnerLoader from "../GlobalComponents/ZilisSpinnerLoader";
+import getComponentData from "./selector";
+import { connect } from "react-redux";
+import { Redirect } from 'react-router-dom';
 
-const UserAuthorizationStatusTable = () => {
+const UserAuthorizationStatusTable = (props) => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [sortedUsers, setSortedUsers] = useState([]);
@@ -31,7 +34,8 @@ const UserAuthorizationStatusTable = () => {
   // const [sortTypeName, setSortTypeName] = useState("asc");
   // const [sortTypeEmail, setSortTypeEmail] = useState("asc");
   // const [sortTypeLastAccessed, setSortTypeLastAccessed] = useState("asc");
-
+  const {view, edit, permissionFeched,PermissionsError} = props;
+  const { addToast } = useToasts();
   const pageOptions = [10, 15, 20];
 
   const getUsers = async (perPage = 10, pageNo = 1) => {
@@ -51,6 +55,9 @@ const UserAuthorizationStatusTable = () => {
       setTotalPages(data.data.length / data.pagination.perPage);
     } catch (err) {
       console.error(err.message);
+      addToast(`The information failed to load. Please refresh the page. Contact IT if the problem continues.`, {
+        appearance: 'error',
+      });
     }
   };
 
@@ -113,16 +120,17 @@ const UserAuthorizationStatusTable = () => {
       <div>
         <UserTitleContainer>
           <Title>User Accounts</Title>
-          <Link
+         { edit && <Link
             to={{
               pathname: `/Settings/users/add`,
             }}
           >
             <StyledButton>Add User</StyledButton>
-          </Link>
+          </Link>}
         </UserTitleContainer>
       </div>
-      <PermissionTable>
+      {permissionFeched ? (!PermissionsError && view ?  <>
+      <PermissionTable> 
         <table>
           <thead>
             <tr>
@@ -212,7 +220,7 @@ const UserAuthorizationStatusTable = () => {
             </tr>
           </thead>
             <tbody>
-              {currentUsers.length > 0? currentUsers.map((user, i) => {
+              {currentUsers?.map((user, i) => {
                 return (
                   <tr key={i} id="row">
                     <td>{user.name}</td>
@@ -224,7 +232,7 @@ const UserAuthorizationStatusTable = () => {
                       {user.lastLoginDate &&
                         moment(user.lastLoginDate).format()}
                     </td>
-                    <td>
+                  {  <td>
                       <Link
                         to={{
                           pathname: `/Settings/users/edit/${user.id}`,
@@ -242,20 +250,21 @@ const UserAuthorizationStatusTable = () => {
                       >
                         <button id="edit">Delete</button>
                       </Link>
-                    </td>
+                    </td>}
                   </tr>
                 );
-              }):
+              })}
+            </tbody>
+        </table>
+      </PermissionTable>
+      <Pagination getRows={getUsers} pageOptions={pageOptions} />
+          </> :<Redirect to='/NoPermission' />):
               <tr id='row'>
               <td colSpan="5">
         <SpinnerLoader/>
         </td>
 
-        </tr>}
-            </tbody>
-        </table>
-      </PermissionTable>
-      <Pagination getRows={getUsers} pageOptions={pageOptions} />
+        </tr> }
     </Wrapper>
   );
 };
@@ -323,4 +332,4 @@ const StyledButton = styled.button`
   padding-right: 14px;
 `;
 
-export default UserAuthorizationStatusTable;
+export default connect(getComponentData)(UserAuthorizationStatusTable);

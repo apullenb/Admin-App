@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
+import { Redirect } from "react-router";
 import "./EntryList.scss";
 import Entries from "./Entries";
 import Pagination from "./Pagination";
@@ -9,22 +10,28 @@ import { connect, useDispatch} from "react-redux";
 import { getEntries } from "../../redux/actions/Skincare/skincareActions";
 import getComponentData from "./selector";
 import SpinnerLoader from "../../GlobalComponents/ZilisSpinnerLoader";
+import { useToasts } from 'react-toast-notifications';
 
 const EntryList = (props) => {
   const [pageNo, setPageNo] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [colSort, setColSort] = useState("entries.id");
   const [sortDirection, setSortDirection] = useState("asc");
-
-  // const [approvedpermission, setApprovedPermission] = useState(false);
+  const { addToast } = useToasts();
 
   const dispatch = useDispatch();
 
-  const { view, edit ,entries} = props;
+  const { view, edit ,entries ,permissionFeched ,error} = props;
 
   useEffect(() => {
-    dispatch(getEntries());
-  }, []);
+   
+    if(error){
+      addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', { appearance: 'error'}) 
+ }
+ else{
+  dispatch(getEntries());
+ }
+  }, [error]);
 
   const entriesSort = (numPerPage, pageNoVal, sortInfo, sortBy) => {
     setColSort(sortInfo);
@@ -44,8 +51,9 @@ const EntryList = (props) => {
 
   return (
     <div>
-      <h1>Skincare Challenge Entries</h1>
-      {view && (
+      <h1 style={{textAlign:'center'}}>Skincare Challenge Entries</h1>
+      {permissionFeched ? (!error&&( 
+        view ? 
         <>
           <EntryTable>
             <section className="button-row">
@@ -165,17 +173,12 @@ const EntryList = (props) => {
                 </tr>
               </thead>
               <tbody>
-              {entries?.data?.length > 1 ?
+              {entries?.data?.length > 0 &&
                 entries.data.map((entry, i) => {
                   return (
                     <Entries key={i} entry={entry} editPermission={edit} />
                   );
-                }):
-                <tr id='row'>
-                <td colSpan="10">
-          <SpinnerLoader/>
-          </td>
-          </tr>}
+                })}
                 </tbody>
             </table>
           </EntryTable>
@@ -185,8 +188,10 @@ const EntryList = (props) => {
             updatePerPage={updatePerPage}
             updatePageNo={updatePageNo}
           />
-        </>
-      )}
+        </>:
+        <Redirect to='/NoPermission'/>
+      )):<SpinnerLoader/>
+      }
     </div>
   );
 };

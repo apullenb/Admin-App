@@ -11,7 +11,6 @@ function COAProduct(props) {
   const date = props.product.lastUpdatedOn.substr(0, props.product.lastUpdatedOn.indexOf("Z"));
   const updated = moment(date).format("MM/DD/YYYY");
   const handleDelete = () => {
-    console.log("delete", props.product.coaProductID);
   };
 
    const [showDel, setShowDel] = useState('hide')
@@ -29,9 +28,9 @@ function COAProduct(props) {
         <Col>{props.product.category}</Col>
         <Col>{props.product.region}</Col>
         <Col>{updated}</Col>
-        <Col> <Link to={{ pathname: `/Coa/documents/${props.product.coaProductID}`, state: props.product}}>
+       {props.edit && <Col> <Link to={{ pathname: `/Coa/documents/${props.product.coaProductID}`, state: props.product}}>
                         <button id="edit">Edit</button>
-                      </Link> |  <button id="edit" onClick={showDelete}>Delete</button> </Col>
+                      </Link> |  <button id="edit" onClick={showDelete}>Delete</button> </Col>}
         </Row>
         <Delete><div className={showDel}><ConfirmDel product={props.product} type={'Product'} fetch={props.fetch} show={showDelete} name={productName}/></div></Delete>
         <Overlay showDel={showDel}/>

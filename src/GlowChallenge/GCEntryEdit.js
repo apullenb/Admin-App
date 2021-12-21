@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
@@ -10,15 +11,17 @@ import Model from './Model';
 import config from '../config/env-urls';
 import getComponentData from './selector';
 import CloudUpload from "./CloudUpload";
+import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
+import { useToasts } from 'react-toast-notifications';
 
 function GCEntryEdit(props) {
-  const { edit } = props;
-  console.log(props)
+  const {view, edit, permissionFeched, } = props;
   const entry = props.location.state;
   const [showDelete, setShowDelete] = useState(false);
   const [showUpload, setShowUpload] = useState(true);
   const [photoUrl, setPhotoUrl] = useState('');
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
+  const { addToast } = useToasts();
   
   const handlePopUp = () => {
     setShowDelete(!showDelete);
@@ -42,6 +45,8 @@ function GCEntryEdit(props) {
       setPhotoUrl(newUrl)
       } else {
         setMessage('There was an Error Uploading Your Photo. Please try Again.')
+        addToast ('Upload was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', { appearance: 'error', autoDismiss: true });
+
       }
     })
   }
@@ -50,7 +55,10 @@ function GCEntryEdit(props) {
     axios.delete(`${config.SKINCAREBASEURL}/api/challenge/delete-glow-submission-admin/${entry.glowSubmissionId}`).then((res) => {
       setShowDelete(!showDelete);
       props.history.push('/Challenge/Glow-Entries');
-    });
+    }).catch(err=>{
+      addToast ('Delete was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.', { appearance: 'error'});
+
+    })
   };
 
   const checkProduct = (p) => {
@@ -63,21 +71,21 @@ function GCEntryEdit(props) {
   const goBack = () => props.history.goBack();
 
   return (
-    <div style={{ margin: '0 8%' }}>
+    <div style= {{width: '75%'}}>
       <h1>Glow Challenge Submission</h1>
       <PopUp style={showDelete ? { display: "block" } : { display: "none" }}>
         <Model type="submission" close={handlePopUp} delete={handleDelete} text="Deleting this submission will delete all photos, questionnaire answers and other information associated with the submission as well. This action can not be undone." />
       </PopUp>
-      <EntryDetails>
+      {permissionFeched?(view? <EntryDetails>
         <div className='page-header-link'>
           <button id='edit' onClick={goBack}>
             Back to Entry
           </button>
         </div>
         <Row>
-          <Col style={{ marginRight: '9%' }}>
+          <Col style={{ marginRight: '0%' }}>
             <div>
-              <label>Glow Submission ID</label>
+              <label>Submission ID</label>
               <span className='read-only-value'>{entry.glowSubmissionId}</span>
             </div>
             <div>
@@ -95,8 +103,8 @@ function GCEntryEdit(props) {
               <span className='read-only-value'>{entry.challenge}</span>
             </div>
           </Col>
-
-          <Col>
+        
+          <Col style={{ marginLeft: '5%' }}>
             <div>
               <label>Day</label>
               <span className='read-only-value'>{entry.day}</span>
@@ -119,7 +127,7 @@ function GCEntryEdit(props) {
         </Row>
         <hr />
         <Row>
-          <Col style={{ marginRight: '9%' }}>
+          <Col style={{ marginRight: '0%' }}>
             <Row>
               <label style={{ marginLeft: '16px' }}>Products</label>
               <Col>
@@ -128,7 +136,7 @@ function GCEntryEdit(props) {
                   style={{
                     marginTop: '5px',
                     marginLeft: '-10px',
-                    paddingRight: '-25px',
+                    
                   }}
                 >
                   {entry.allProducts.slice(0, 7).map((p, i) => (
@@ -151,7 +159,7 @@ function GCEntryEdit(props) {
                 </div>
               </Col>
             </Row>
-
+                    
             <div style={{ marginTop: '15px' }}>
               <label>Questionaire</label>
               <span className='read-only-value'>{entry.answers.length}/23</span>
@@ -198,8 +206,8 @@ function GCEntryEdit(props) {
               </GrayBox>
             </div>
           </Col>
-
-          <Col>
+            
+          <Col  style={{ marginLeft: '4%' }}>
             <div style={{ marginBottom: '3%' }}>Day {entry.day} Photo </div>
             <ContestImage>
               <img src={photoUrl === '' ? entry.photoUrl : photoUrl} />
@@ -216,12 +224,13 @@ function GCEntryEdit(props) {
           <Col></Col>
           <Col></Col>
           <Col></Col>
-          <Col>
-            <Delete onClick={edit && handlePopUp}>Delete Submission</Delete>
-          </Col>
+         {edit && <Col>
+            <Delete onClick={handlePopUp}>Delete Submission</Delete>
+          </Col>}
         </Row>
-      </EntryDetails>
+      </EntryDetails>:<Redirect to='/NoPermission'/> ):<SpinnerLoader/> }
     </div>
+    
   );
 }
 
@@ -234,7 +243,7 @@ const GrayBox = styled.div`
 
 const ContestImage = styled.div`
   display: inline-block;
-  max-width: 65%;
+  width: 300px;
   margin: 0%;
   padding: 1%;
   vertical-align: top;
@@ -253,18 +262,19 @@ const EntryDetails = styled.section`
   color: rgb(94, 93, 93);
   font-weight: 400;
   font-size: 17px;
-  padding: 1px 1%;
+  padding: 1px 0%;
   text-align: left;
+
 
   label {
     display: inline-block;
-    min-width: 150px;
+    min-width: 110px;
     vertical-align: top;
   }
 
   .read-only-value {
     display: inline-block;
-    margin: 0 10px;
+    margin: 0 0 0 5px ;
   }
 
   .check {

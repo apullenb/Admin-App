@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import PrivateRoute from './auth/PrivateRoute';
 import './App.scss';
-import Login from './Login';
+import Page from './GlobalComponents/PageWrapper';
+import { APP_STARTED } from './redux/actions/app/appActionTypes';
 import Dashboard from './Pages/Dashboard';
 
 import AccountList from './SkincareChallenge/SCAccountList/AccountList';
@@ -18,7 +19,7 @@ import AddCOA from './COA/AddCOA';
 import ShoppingCountries from './ShoppingConfiguration/countries/countries';
 import ShoppingKits from './ShoppingConfiguration/kits/kits';
 import ShoppingProducts from './ShoppingConfiguration/product/products';
-import ShoppingCategories from './ShoppingConfiguration/categories';
+import ShoppingCategories from './ShoppingConfiguration/Catagories/categories';
 import StarPointAccountList from './StartPoint/StarPointAccountList';
 import EditStarPoint from './StartPoint/EditStarPoint';
 
@@ -26,8 +27,6 @@ import Events from './Events/EventList';
 import Incentive from './Incentive/IncentiveList';
 import Permissions from './Permissions/PermissionList';
 
-import Page from './GlobalComponents/PageWrapper';
-import { APP_STARTED } from './redux/actions/app/appActionTypes';
 import COA from './COA/COA';
 import COAProductList from './COA/COAProductList';
 import COADocument from './COA/COADocuments';
@@ -164,8 +163,6 @@ const allRoutes = [
 ];
 
 function App() {
-  // SAMPLE USER VALIDATION (Needs to be created)---------->
-  // Currently defaulted to true..needs to default to false once authentication is set up
   const dispatch = useDispatch();
 
   useEffect(() => {

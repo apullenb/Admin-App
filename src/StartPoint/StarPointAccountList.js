@@ -10,10 +10,13 @@ import { faInfoCircle } from '@fortawesome/fontawesome-free-solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CaretUp, CaretDown } from 'react-bootstrap-icons';
 
-import ZilisLoader from '../GlobalComponents/ZilisLoader';
+import { Redirect } from 'react-router-dom';
 import Pagination from './Pagination';
+import getPermissions from './Selector';
+import { connect } from 'react-redux';
+import SpinnerLoader from '../GlobalComponents/ZilisSpinnerLoader';
 
-export const StarPointAccountList = () => {
+export const StarPointAccountList = (props) => {
   const tableHeadings = [
     { name: 'Inventory', colId: 'inventoryId' },
     { name: 'Active', colId: 'isActive' },
@@ -24,6 +27,7 @@ export const StarPointAccountList = () => {
     { name: 'StarPoints', colId: 'points' },
     { name: 'Actions', coloId: 'actions' },
   ];
+  const {view, edit, permissionFeched, PermissionsError}=props;
   const [starPointDataFiltered, setStarPointDataFiltered] = useState([]);
   const [starPointData, setStarPointData] = useState([]);
   const [tHeaderData, setTHeadData] = useState();
@@ -33,25 +37,28 @@ export const StarPointAccountList = () => {
   const [filterObj, setFilterObj] = useState({});
   const [filter, setFilter] = useState(null);
   const [sortOrder, setSortOrder] = useState({ ['inventoryId']: 'ASC' });
-  const { loading, data, refetch } = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, {
+  const { loading, data, refetch ,error} = useQuery(GET_STAR_PRODUCTS_WITH_PAGE, {
     variables: { skip: skip, take: perPageNum, filterJson: filter, order: sortOrder },
     refetchPolicy: 'no-cache',
   });
 
   useEffect(() => {
-    setTHeadData(tableHeadings);
+    if (!error) 
+    {setTHeadData(tableHeadings);}
   }, []);
 
   useEffect(() => {
-    applyFilter();
+   if (data) 
+   {applyFilter();}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perPageNum, skip, filterObj, sortOrder]);
 
   useEffect(() => {
-    data && setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
-    data && setStarPointData(data.starShipInventoryWithPaging.items);
-    data && setHasNextPage(data.starShipInventoryWithPaging.pageInfo.hasNextPage);
-  }, [data]);
+   if(data?.starShipInventoryWithPaging){
+     setStarPointDataFiltered(data.starShipInventoryWithPaging.items);
+     setStarPointData(data.starShipInventoryWithPaging.items);
+     setHasNextPage(data.starShipInventoryWithPaging.pageInfo.hasNextPage);}
+  }, [data?.starShipInventoryWithPaging]);
 
   const applyFilter = () => {
     var localObject = {};
@@ -148,7 +155,8 @@ export const StarPointAccountList = () => {
   return (
     <TableWrapper>
       <PageTitle>StarPoint Products</PageTitle>
-      {loading && <ZilisLoader isFullPage={true} />}
+      {permissionFeched ?
+      (!PermissionsError && view?<>
       <Table>
         <thead style={{ height: '50px' }}>
           <tr style={{ height: '30px' }}>
@@ -228,7 +236,7 @@ export const StarPointAccountList = () => {
                 return (
                   <TH style={{ width: '12.5%', flexDirection: 'row', backgroundColor: '#f4fafe' }} key={index}>
                     <SORTWRAPPER>
-                      <SORTCOLUMNTITLE>{data.name}</SORTCOLUMNTITLE>
+                      {data.name == 'Actions' ? (edit&&<SORTCOLUMNTITLE>{data.name}</SORTCOLUMNTITLE>):<SORTCOLUMNTITLE>{data.name}</SORTCOLUMNTITLE>}
                       {data.name !== 'Actions' && (
                         <SORTICONWRAPPER>
                           <CaretUp
@@ -289,8 +297,7 @@ export const StarPointAccountList = () => {
                   <TD>{data.country}</TD>
                   <TD>{data.points}</TD>
                   <TD>
-                    {
-                      <Link style={{ textDecoration: 'underline', color: '#0f4b8f' }} to={{ pathname: `/StartPoint/Edit/${data.inventoryId}` }}>
+                    {edit && <Link style={{ textDecoration: 'underline', color: '#0f4b8f' }} to={{ pathname: `/StartPoint/Edit/${data.inventoryId}` }}>
                         Edit
                       </Link>
                     }
@@ -303,11 +310,12 @@ export const StarPointAccountList = () => {
       </Table>
 
       <Pagination updatePerPage={updatePerPage} handleUpdateSkip={handleUpdateSkip} hasNextPage={hasNextPage} />
+      </>: <Redirect to='/NoPermission'/> ):<SpinnerLoader/> }
     </TableWrapper>
   );
 };
 
-export default StarPointAccountList;
+export default connect(getPermissions)(StarPointAccountList);
 
 const TableWrapper = styled.div`
   display: flex;

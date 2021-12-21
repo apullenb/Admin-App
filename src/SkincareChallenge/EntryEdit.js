@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import { Redirect } from "react-router";
 import { connect, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -14,6 +15,7 @@ import Select from 'react-select';
 import { useToasts } from 'react-toast-notifications';
 import { LoginSkincareAdmin } from '../redux/actions/Skincare/skincareActions';
 import getComponentData from './SCEntryList/selector';
+import ZilisLoader from '../GlobalComponents/ZilisLoader';
 
 function EntryEdit(props) {
   const [entry, setEntry] = useState({ products: [] });
@@ -31,7 +33,7 @@ function EntryEdit(props) {
   const dispatch = useDispatch();
   const { addToast } = useToasts();
 
-  const { skincareAuthToken, edit } = props;
+  const { skincareAuthToken, view, edit ,permissionFeched ,} = props;
   // this.handleChange = this.handleChange.bind(this);
   // this.handleSubmit = this.handleSubmit.bind(this);
   // const base_url = 'http://localhost:4000';
@@ -75,9 +77,8 @@ function EntryEdit(props) {
         await updateEntry(authToken);
       }
     } catch (err) {
-      addToast(`An error occured while saving: ${err.message}`, {
+      addToast(`Save was unsuccessful. Please refresh the page and try again. Contact IT if the problem continues.`, {
         appearance: 'error',
-        autoDismiss: true,
       });
     }
   };
@@ -153,7 +154,9 @@ function EntryEdit(props) {
   const handlePasswordReset = () => {};
 
   return (
-    <div>
+    <>
+   { permissionFeched ?
+    (edit? <div>
       <h1>Skincare Challenge Edit Entry</h1>
       <div className='page-header-link'>
         <Link to='/Challenge/Entries'>Back to list</Link>
@@ -297,7 +300,9 @@ function EntryEdit(props) {
           <Success>{message}</Success>
         </Row>
       </EntryDetails>
-    </div>
+    </div>:<Redirect to='/NoPermission'/> )
+    :<ZilisLoader/>}
+     </>
   );
 }
 

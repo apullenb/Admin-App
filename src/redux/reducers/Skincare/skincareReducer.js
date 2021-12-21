@@ -23,6 +23,8 @@ const initalState = {
   error: null,
   skincareAuthToken: null,
   skincarePermissions: null,
+  permissionFeched: false,
+  PermissionsError: false,
 };
 
 export const entriesConfigReducer = (state = initalState, action) => {
@@ -112,15 +114,14 @@ export const entriesConfigReducer = (state = initalState, action) => {
     case PERMISSIONS_SKINCARE_SUCCESS:
       return {
         ...state,
-        fetching: false,
-        error: null,
+        permissionFeched: true,
         skincarePermissions: action.payload,
       };
     case PERMISSIONS_SKINCARE_FAILURE:
       return {
         ...state,
-        fetching: false,
-        error: action.payload,
+        PermissionsError: action.payload,
+        permissionFeched: true,
       };
     default:
       return state;
