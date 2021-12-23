@@ -37,7 +37,8 @@ import GCEntryEdit from './GlowChallenge/GCEntryEdit';
 import GlowEntry from './GlowChallenge/GlowEntry';
 
 import { SkincareAdminPermissions } from './redux/actions/Skincare/skincareActions';
-
+import PermissionNotGranted from './GlobalComponents/PermissionNotGranted';
+import AllRoutes from './routes';
 const allRoutes = [
   {
     path: '/',
@@ -160,6 +161,11 @@ const allRoutes = [
     component: EditStarPoint,
     protected: true,
   },
+  {
+    exact: true,
+    path: '/NoPermission',
+    component: PermissionNotGranted,
+  },
 ];
 
 function App() {
@@ -176,7 +182,7 @@ function App() {
         <Switch>
           {allRoutes.map((route, index) => {
             return route.protected ? (
-              <PrivateRoute key={index} path={route.path} component={route.component} />
+              <PrivateRoute key={index} path={route.path} exact={true} component={route.component} />
             ) : (
               <Route key={index} path={route.path} exact={route.exact} render={(props) => <route.component {...props} />} />
             );
