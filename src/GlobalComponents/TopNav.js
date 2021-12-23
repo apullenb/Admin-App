@@ -14,34 +14,45 @@ import { Link } from 'react-router-dom';
 function TopNav() {
   const isAuthenticated = useIsAuthenticated();
 
+  const { skincarePermissions} = useSelector(state => state.entries);
+  const getPermission = (id) => {
+    const glowPermissions = skincarePermissions?.find(
+      (skincarePermission) => skincarePermission.areaId == id
+    );
+    const view =
+      glowPermissions?.levelId === 2 ||
+      glowPermissions?.levelId === 3 ||
+      glowPermissions?.levelId === 4;
+    return view;
+  };
   const { profileData, profileImage } = useSelector((state) => state.azProfile);
   const navLinks = [
-    { name: 'Event Calendar', link: '/Events', isPrivate: true },
-    { name: 'Incentive Trip', link: '/Incentive', isPrivate: true },
-    { name: "COA's", link: '/COAs', isPrivate: true },
-    { name: 'StarPoint', link: '/StarPoint', isPrivate: true },
+    { name: 'Event Calendar', link: '/Events', isPrivate: true ,areaid:'10'},
+    { name: 'Incentive Trip', link: '/Incentive', isPrivate: true ,areaid:'12'},
+    { name: "COA's", link: '/COAs', isPrivate: true ,areaid:'5'},
+    { name: 'StarPoint', link: '/StarPoint', isPrivate: true , areaid:'9'},
   ];
 
   const subNavLinks = [
     {
       linkTitle: 'Shopping Configuration',
       subLinks: [
-        { name: 'Countries', link: '/Shopping/Countries', isPrivate: true },
-        { name: 'Kits', link: '/Shopping/Kits', isPrivate: true },
-        { name: 'Categories', link: '/Shopping/Categories', isPrivate: true },
-        { name: 'Products', link: '/Shopping/Products', isPrivate: true },
+        { name: 'Countries', link: '/Shopping/Countries', isPrivate: true ,areaid:'12'},
+        { name: 'Kits', link: '/Shopping/Kits', isPrivate: true ,areaid:'7'},
+        { name: 'Categories', link: '/Shopping/Categories', isPrivate: true ,areaid:'8'},
+        { name: 'Products', link: '/Shopping/Products', isPrivate: true ,areaid:'4'},
       ],
     },
     {
       linkTitle: 'Challenges',
       subLinks: [
-        { name: 'Accounts', link: '/Challenge/Accounts', isPrivate: true },
-        { name: 'Skincare Entries', link: '/Challenge/Entries', isPrivate: true },
-        { name: 'Glow Entries', link: '/Challenge/Glow-Entries', isPrivate: true },
+        { name: 'Accounts', link: '/Challenge/Accounts', isPrivate: true ,areaid:'1'},
+        { name: 'Skincare Entries', link: '/Challenge/Entries', isPrivate: true ,areaid:'3'},
+        { name: 'Glow Entries', link: '/Challenge/Glow-Entries', isPrivate: true ,areaid:'3'},
       ],
     },
   ];
-
+  
   return (
     <HeaderWrapper>
       <Top>
@@ -87,32 +98,38 @@ function TopNav() {
                 return (
                   <NavDropdown title={link.linkTitle} key={index} id='basic-nav-dropdown'>
                     {link.subLinks.map((subLink, i) => {
-                      return (
-                        <LinkWrap key={i}>
+                          let id=subLink.areaid
+                          const permission = getPermission(id)
+                      return (<>
+                      { permission && <LinkWrap key={i}>
                           <StyledLink to={subLink.link} key={i} style={{ color: 'rgba(0,0,0,.5)', textDecoration: 'none' }}>
                             {subLink.name}
                           </StyledLink>
-                        </LinkWrap>
-                      );
+                        </LinkWrap>}
+                        </> );
                     })}
                   </NavDropdown>
                 );
               })}
               {/*SINGLE NAV LINKS BELOW*/}
               {navLinks.map((link, i) => {
+                let id=link.areaid
+                const permission = getPermission(id)
                 return (
-                  <LinkWrap key={i}>
+                  <>
+                 {permission && <LinkWrap key={i}>
                     <div style={{ marginTop: '10px' }}>
                       <Link to={link.link} style={{ color: 'rgba(0,0,0,0.5)', textDecoration: 'none' }}>
                         {link.name}
                       </Link>
                     </div>
-                  </LinkWrap>
+                  </LinkWrap>}
+                  </>
                 );
               })}
               <AADSignInButton />
             </Nav>
-            <Nav>
+          { getPermission('14') && <Nav>
               <NavDropdown title='Admin Settings' id='basic-nav-dropdown'>
                 <LinkWrap>
                   <StyledLink to='/Settings/users' style={{ color: 'rgba(0,0,0,.5)', textDecoration: 'none' }}>
@@ -120,7 +137,7 @@ function TopNav() {
                   </StyledLink>
                 </LinkWrap>
               </NavDropdown>
-            </Nav>
+            </Nav>}
           </Navbar.Collapse>
         </Navbar>
       </div>
