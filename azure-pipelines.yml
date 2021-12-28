@@ -7,7 +7,7 @@ trigger:
 - master
 - develop
 - release*
-- feature*
+# - feature*
 
 
 pool:
@@ -17,22 +17,34 @@ variables:
 
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: 'zilis-microservices'
-  azureSubscriptionNew: 'Zilis-Applications'
 
   #resource group
-  resourceGroupName: 'Zilis-Microservices'
-  resourceGroupNameNew: 'Zilis-Applications'
+  azureResourceGroup: 'Zilis-Microservices'
+  azureResourceGroupNew: 'Zilis-Applications'
 
   # Web app name
-  webAppNameDev: 'adminapp-test-zilis'
-  webAppNameProd: 'AdminAppZilis'
+  appNameTest: 'adminapp-test-zilis'
+  appNameProd: 'AdminAppZilis'
+
+  # Available deployment slots
+  uatSlot: 'uat'
+  stageSlot: 'stage'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
+# Pull from ado-templates repo
+resources:
+  repositories:
+  - repository: ado-templates
+    name: Zilis Ecosystem/ado-templates
+    type: git
+    ref: main
+
 stages:
-- stage: BuildTest
+- stage: Build
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+  # condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
   displayName: Build Test Code
   jobs:
   - job: Build
@@ -41,54 +53,33 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '14.x'
-      displayName: 'Install Node.js'
-      
-    - task: Npm@1
-      displayName: NPM Install
-      inputs:
-        command: 'install'
-        workingDir: '$(System.DefaultWorkingDirectory)'
-        verbose: true
-    - task: Npm@1
-      displayName: NPM Build
-      inputs:
-        command: 'custom'
-        workingDir: '$(System.DefaultWorkingDirectory)'
-        customCommand: 'run build'
-
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish build artifact'
-      inputs:
-        targetPath: '$(System.DefaultWorkingDirectory)/build'
-        artifactName: dev
-        artifactType: pipeline
-
+    - template: 'buildReact.yml@ado-templates'
+      parameters:
+        artifactName: 'test'
+    
+         
 - stage: DeployTest
   displayName: Deploy To Test
-  dependsOn: BuildTest
+  dependsOn: Build
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  # condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: $(webAppNameDev)
+    environment: $(appNameTest)
     pool:
       vmImage: $(vmImageName)
     strategy:
       runOnce:
         deploy:
           steps:
-          - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy'
-            inputs:
-              azureSubscription: $(azureSubscriptionNew)
-              resourceGroupName: $(resourceGroupNameNew)
-              appName: $(webAppNameDev)
-              appType: webAppLinux
-              package: '$(Pipeline.Workspace)/dev/'
-              runtimeStack: 'node|14.x'
+            - template: 'deployReact.yml@ado-templates'
+              parameters:
+                azureSubscription: $(azureResourceGroupNew)
+                azureResourceGroup: $(azureResourceGroupNew)
+                appName: $(appNameTest)
+                artifactName: 'test'
+              
 
 - stage: BuildProd
   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
@@ -133,7 +124,7 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: $(webAppNameProd)
+    environment: $(appNameProd)
     pool:
       vmImage: $(vmImageName)
     strategy:
@@ -145,7 +136,7 @@ stages:
             inputs:
               azureSubscription: $(azureSubscription)
               resourceGroupName: $(resourceGroupName)
-              appName: $(webAppNameProd)
+              appName: $(appNameProd)
               appType: webApp
               package: '$(Pipeline.Workspace)/prod/'
               runtimeStack: 'node|14.x'
