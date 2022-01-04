@@ -4,7 +4,8 @@ import { LOGGED_IN, LOG_OUT } from '../app/appActionTypes';
 import { graphConfig, loginRequest } from '../../../services/azureAD/authConfig';
 import * as Auth from '../../../auth/Authorize';
 import { loginZilisReq } from '../../../services/azureAD/authConfig';
-import { SkincareAdminPermissions } from '../../actions/Skincare/skincareActions';
+import { SkincareAdminPermissions, LoginSkincareAdmin } from '../../actions/Skincare/skincareActions';
+import config from '../../../config/env-urls';
 
 export const handleLogin = (instance) => {
   return async (dispatch) => {
@@ -19,6 +20,7 @@ export const handleLogin = (instance) => {
       dispatch({ type: AZACTIONS.SET_AZAD_ACCESS_TOKEN, payload: res.accessToken });
       Auth.setToken(Auth.aZAdminToken, res.accessToken);
       dispatch(callMsGraph(res.accessToken));
+      dispatch(LoginSkincareAdmin(config.SKINCAREUSER))
       return onSuccess({ account: res.account });
     } catch (error) {
       return onError(error);
