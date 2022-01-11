@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from "react";
-import { Row, Col, FormControl, Button } from "react-bootstrap/";
+import React, {useState} from "react";
+import { Row, Col} from "react-bootstrap/";
 import styled from "styled-components";
 import ReactHtmlParser from "react-html-parser";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import ConfirmDel from "./ConfirmDel";
 
-
-
 function COAProduct(props) {
+  const productName = ReactHtmlParser(props.product.productName);
+  const date = props.product.lastUpdatedOn.substr(0, props.product.lastUpdatedOn.indexOf("Z"));
+  const updated = moment(date).format("MM/DD/YYYY");
+  const handleDelete = () => {
+  };
 
    const [showDel, setShowDel] = useState('hide')
-   const productName = ReactHtmlParser(props.product.productName);
-   const date = props.product.lastUpdatedOn;
-   const updated = moment(date).format("L");
-   
+
  
 
    const showDelete = () => {
@@ -28,16 +28,28 @@ function COAProduct(props) {
         <Col>{props.product.category}</Col>
         <Col>{props.product.region}</Col>
         <Col>{updated}</Col>
-        <Col> <Link to={{ pathname: `/COA/${props.product.coaProductID}`, state: props.product}}>
+       {props.edit && <Col> <Link to={{ pathname: `/Coa/documents/${props.product.coaProductID}`, state: props.product}}>
                         <button id="edit">Edit</button>
-                      </Link> |  <button id="edit" onClick={showDelete}>Delete</button> </Col>
+                      </Link> |  <button id="edit" onClick={showDelete}>Delete</button> </Col>}
         </Row>
-        <Delete><div className={showDel}><ConfirmDel product={props.product} fetch={props.fetch} show={showDelete} name={productName}/></div></Delete>
+        <Delete><div className={showDel}><ConfirmDel product={props.product} type={'Product'} fetch={props.fetch} show={showDelete} name={productName}/></div></Delete>
+        <Overlay showDel={showDel}/>
         </div>
     )
 }
 
 export default COAProduct
+
+const Overlay = styled.div`
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 10;
+background-color: rgba(0,0,0,0.5);
+visibility: ${(props) => props.showDel === 'show' ? 'visible': 'hidden'};
+`
 
 const Delete = styled.div `
 .hide {
@@ -45,7 +57,7 @@ const Delete = styled.div `
 }
 
 .show {
-  z-index: 2;
+  z-index: 11;
   position: absolute;
   left: 35%;
   top: 35%;

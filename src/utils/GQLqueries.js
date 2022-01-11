@@ -1,5 +1,4 @@
-import gql from 'graphql-tag';
-
+import gql from "graphql-tag";
 
 export const GET_PRODUCTS = gql`
    {
@@ -9,48 +8,58 @@ export const GET_PRODUCTS = gql`
             region
             lastUpdatedOn
             category
+            categoryID
    } 
    }
 `;
 
-
-
 export const GET_PRODUCT_BY_ID = gql`
- query products($coaProductID: Int!) {
-   products(
-   where: {
-            coaProductID: {
-                eq: $coaProductID
-            }
-  }) 
-      { 
+  query products($coaProductID: Int!) {
+    products(where: { coaProductID: { eq: $coaProductID } }) {
+      coaProductID
+      productName
+      categoryID
+      region
+      coaDocuments {
         coaProductID
-        productName 
-        categoryID
-        region
-        coaDocuments {
-            coaProductID
-            coaDocumentID
-            batchNumber
-            isExternal
-            uploadedOn
-            fileUrl
-            sortOrder
-        }
+        coaDocumentID
+        batchNumber
+        isExternal
+        uploadedOn
+        fileUrl
+        sortOrder
       }
-  
-}
+    }
+  }
 `;
 
+export const GET_DOCUMENTS_BY_PRODUCT_ID = gql`
+  query fetchDocs($productID: Int!) {
+    documents(
+      where: { coaProductID: { eq: $productID } }
+      order: { sortOrder: ASC }
+    ) {
+      coaDocumentID
+      batchNumber
+      isExternal
+      uploadedOn
+      fileUrl
+      sortOrder
+    }
+  }
+`;
+
+
+
 export const GET_DOCUMENT_BY_ID = gql`
-query documents($coaDocumentID: Int!){ 
+ query fetch($coaDocumentID: Int!, $coaProductID: Int!) {
     documents(
         where: {
             coaDocumentID: {
                 eq: $coaDocumentID
             }
         })
-    { 
+    {
         coaDocumentID
         coaProductID
         batchNumber
@@ -58,9 +67,31 @@ query documents($coaDocumentID: Int!){
         uploadedOn
         fileUrl
         sortOrder
-        product {
-            coaProductID
-            productName
-        }
-    } 
-}`;
+    }
+   
+    products(
+        where: {
+            coaProductID: {
+                eq: $coaProductID
+            }
+        })
+    {
+       productName
+       region
+       categoryID
+      category
+    }
+}
+ 
+`;
+      
+
+export const GET_CATEGORIES = gql`
+  query {
+    categories {
+      categoryID
+      name
+    }
+  }
+`;
+

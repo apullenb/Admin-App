@@ -7,35 +7,87 @@ trigger:
 - master
 - develop
 - release*
+# - feature*
+
+
+pool:
+  vmImage: ubuntu-latest
 
 variables:
 
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '862e851f-da1c-42a6-8591-f72fa38cf11c'
+  azureSubscription: 'zilis-microservices'
 
   #resource group
-  ResourceGroupName: 'Zilis-Frontends'
+  azureResourceGroup: 'Zilis-Microservices'
+  azureResourceGroupNew: 'Zilis-Applications'
 
   # Web app name
-  webAppNameDev: 'AdminAppZilis'
-  webAppNameProd: 'do we need prod?'
+  appNameTest: 'adminapp-test-zilis'
+  appNameProd: 'AdminAppZilis'
 
-  # Environment name
-  dev: 'AdminAppZilis'
-  prod: 'do we need prod?'
+  # Available deployment slots
+  uatSlot: 'uat'
+  stageSlot: 'stage'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
+# Pull from ado-templates repo
+resources:
+  repositories:
+  - repository: ado-templates
+    name: Zilis Ecosystem/ado-templates
+    type: git
+    ref: main
+
 stages:
-- stage: BuildDev
+- stage: Build
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
-  displayName: Build Dev/test Code
+  # condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
+  displayName: Build Test Code
   jobs:
   - job: Build
-    displayName: Build
     variables:
        REACT_APP_ENV: 'test'
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - template: 'buildReact.yml@ado-templates'
+      parameters:
+        artifactName: 'test'
+    
+         
+- stage: DeployTest
+  displayName: Deploy To Test
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  # condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: $(appNameTest)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: 'deployReact.yml@ado-templates'
+              parameters:
+                azureSubscription: $(azureResourceGroupNew)
+                azureResourceGroup: $(azureResourceGroupNew)
+                appName: $(appNameTest)
+                artifactName: 'test'
+              
+
+- stage: BuildProd
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+  displayName: Build Production Code
+  jobs:
+  - job: Build
+    variables:
+      REACT_APP_ENV: 'production'
     pool:
       vmImage: $(vmImageName)
     steps:
@@ -43,137 +95,48 @@ stages:
       inputs:
         versionSpec: '14.x'
       displayName: 'Install Node.js'
-    - script: |
-        npm install
-        npm run build --if-present
-        npm install -g serve
-        npm run tests --if-present
-      displayName: 'npm install, build and test'
-      workingDirectory: '$(System.DefaultWorkingDirectory)'
-    - task: ArchiveFiles@2
-      displayName: 'Archive Build as zip'
+
+    - task: Npm@1
+      displayName: NPM Install
       inputs:
-        rootFolderOrFile: $(System.DefaultWorkingDirectory)
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-        replaceExistingArchive: true
+        command: 'install'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+        verbose: true
+
+    - task: Npm@1
+      displayName: NPM Build
+      inputs:
+        command: 'custom'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+        customCommand: 'run build'    
+
     - task: PublishPipelineArtifact@1
       displayName: 'Publish build artifact'
       inputs:
-        targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        artifactName: dev
+        targetPath: $(Build.ArtifactStagingDirectory)/build
+        artifactName: prod
         publishLocation: pipeline
 
-# - stage: BuildProd
-#   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-#   displayName: Build Production Code
-#   jobs:
-#   - job: Build
-#     displayName: Build
-#     variables:
-#       REACT_APP_ENV: 'production'
-#     pool:
-#       vmImage: $(vmImageName)
-
-#     steps:
-#     - task: NodeTool@0
-#       inputs:
-#         versionSpec: '10.x'
-#       displayName: 'Install Node.js'
-#     - script: |
-#         npm install
-#         npm run build --if-present
-#         npm install -g serve
-#         npm run tests --if-present
-#       displayName: 'npm install, build and test'
-#       workingDirectory: '$(System.DefaultWorkingDirectory)'
-#     - task: ArchiveFiles@2
-#       displayName: 'Archive Build as zip'
-#       inputs:
-#         rootFolderOrFile: $(System.DefaultWorkingDirectory)
-#         includeRootFolder: false
-#         archiveType: 'zip'
-#         archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-#         replaceExistingArchive: true
-#     - task: PublishPipelineArtifact@1
-#       displayName: 'Publish build artifact'
-#       inputs:
-#         targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-#         artifactName: prod
-#         publishLocation: pipeline
-
-
-- stage: DeployDev
-  displayName: Deploy To Dev Env
-  dependsOn: BuildDev
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+- stage: DeployProd
+  displayName: Deploy to Prod Env
+  dependsOn: BuildProd
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: $(dev)
+    environment: $(appNameProd)
     pool:
       vmImage: $(vmImageName)
     strategy:
       runOnce:
         deploy:
           steps:
-          - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: $(webAppNameDev)'
+          - task: AzureWebApp@1
+            displayName: 'Azure Web App Deploy'
             inputs:
               azureSubscription: $(azureSubscription)
+              resourceGroupName: $(resourceGroupName)
+              appName: $(appNameProd)
               appType: webApp
-              WebAppName: $(webAppNameDev)
-              packageForLinux: '$(Pipeline.Workspace)/dev/$(Build.BuildId).zip'
-              RuntimeStack: 'NODE|14-lts'
-              StartupCommand: 'serve -s build'
-
-
-# - stage: DeployStage
-#   displayName: Deploy to Stage Env
-#   dependsOn: BuildProd
-#   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     environment: $(prod)
-#     pool:
-#       vmImage: $(vmImageName)
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: AzureRmWebAppDeployment@4
-#             inputs:
-#               ConnectionType: 'AzureRM'
-#               azureSubscription: $(azureSubscription) 
-#               appType: 'webApp'
-#               WebAppName: $(webAppNameProd)
-#               deployToSlotOrASE: true
-#               ResourceGroupName: $(ResourceGroupName)
-#               SlotName: 'stage'
-#               packageForLinux: '$(Pipeline.Workspace)/prod/$(Build.BuildId).zip'
-#               RuntimeStack: 'NODE|10.10'
-#               StartupCommand: 'serve -s build'
-
-# - stage: SwapStageToProd
-#   displayName: Swap Stage to Production Slot
-#   dependsOn: DeployStage
-#   condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
-#   jobs:
-#   - deployment: SwapSlots
-#     displayName: Swap Slots
-#     environment: swapslots
-#     pool:
-#       vmImage: $(vmImageName)
-#     strategy:
-#      runOnce:
-#        deploy:
-#         steps:
-#           - task: AzureAppServiceManage@0
-#             inputs:
-#               azureSubscription: $(azureSubscription)
-#               Action: 'Swap Slots'
-#               WebAppName: $(webAppNameProd)
-#               ResourceGroupName: $(ResourceGroupName)
-#               SourceSlot: 'stage'
+              package: '$(Pipeline.Workspace)/prod/'
+              runtimeStack: 'node|14.x'

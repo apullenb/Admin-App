@@ -1,19 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-
+import { Redirect } from 'react-router-dom';
+import getComponentData from './Selector';
 import config from "../config/env-urls";
 import Pagination from "../GlobalComponents/Pagination";
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
+import { useToasts } from 'react-toast-notifications';
+import { connect } from "react-redux";
+import SpinnerLoader from "../GlobalComponents/ZilisSpinnerLoader";
 
-function IncentiveList() {
+function IncentiveList({view,edit,permissionFeched,PermissionsError}) {
   const [users, setUsers] = useState("");
   // const [filter, setFilter] = useState("");
   // const [category, setCategory] = useState("");
   const [message, setMessage] = useState(true);
   const [totalUsers, setTotalUsers] = useState(0);
   const [blank, setBlank] = useState(false);
-
+  const { addToast } = useToasts();
   const pageOptions = [10, 15, 20];
 
   const getUsers = async (perPage=10, pageNo=1) => {
@@ -29,6 +33,9 @@ function IncentiveList() {
       setTotalUsers(data.totalRows);
     } catch (err) {
       console.error(err.message);
+      addToast('The information failed to load. Please refresh the page. Contact IT if the problem continues.', {
+        appearance: 'error',
+      })
     }
   };
 
@@ -51,7 +58,7 @@ function IncentiveList() {
   return (
     <PageWrapper>
         <h1>Skincare Challenge Accounts</h1>
-        <IncentiveTable>
+       {permissionFeched ? (!PermissionsError && view?<><IncentiveTable>
           <table>
             <thead>
               <tr>
@@ -61,7 +68,7 @@ function IncentiveList() {
                 <th className="head">Ambassador ID </th>
                 <th className="head">Last Login </th>
                 <th className="head">Last Challenge </th>
-                <th className="head">Actions </th>
+                {edit && <th className="head">Actions </th>}
               </tr>
             </thead>
             {users && users.length > 1 && <tbody>
@@ -74,7 +81,7 @@ function IncentiveList() {
                     <td>{user.ambassadorId}</td>
                     <td>{user.lastLoginDate}</td>
                     <td>{user.lastChallenge}{message}</td>
-                    <td>
+                   {edit &&<td>
                       <Link
                         to={{
                           pathname: `/Challenge/Account/${user.id}`,
@@ -83,7 +90,7 @@ function IncentiveList() {
                       >
                         <button id="edit">Edit</button>
                       </Link>
-                    </td>
+                    </td>}
                   </tr>
                 )
               })}              
@@ -93,12 +100,11 @@ function IncentiveList() {
           <h3>{message}</h3>
         </IncentiveTable>
 
-        <Pagination getRows={getUsers} totalRows={totalUsers} pageOptions={pageOptions} />
+        <Pagination getRows={getUsers} totalRows={totalUsers} pageOptions={pageOptions} /> </>:<Redirect to='NoPermission'/> ):<SpinnerLoader/>}
     </PageWrapper>
   );
 }
-
-export default IncentiveList;
+export default connect(getComponentData )(IncentiveList);
 
 const PageWrapper = styled.div`
   width: 1400px;

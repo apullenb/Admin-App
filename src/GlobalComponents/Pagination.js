@@ -43,11 +43,11 @@ function Pagination(props) {
           disabled={pageNo === 1}
         >
           {"< Prev"}
-        </button>{" "}
-        Page:{" "}
+        </button>
+        Page:
         <div className="current">
-          {" "}
-          {pageNo} of {totalPages}
+
+          {props.totalPages ? pageNo + 'of ' + totalPages : pageNo}
         </div>
         Per Page:
         <select
